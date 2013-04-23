@@ -1,0 +1,21 @@
+{
+  "folders":
+  [
+    // {
+    //  "path": ".",
+    //   "name": "unfiltered"
+    // },
+    {
+      "path": "thesis",
+      "file_exclude_patterns": ["*.aux", "*.bbl", "*.blg", "*.fdb_latexmk", "*.fls", "*.idx", "*.ilg", "*.ind", "*.log", "*.lol", "*.nlo", "*.out", "*.synctex.gz", "*.toc"],
+      "folder_exclude_patterns": ["logo"]
+    },
+    {
+      "path": "code"
+    }
+  ],
+  "settings":
+  {
+    "rulers": [66]
+  }
+}

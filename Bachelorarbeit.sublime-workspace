@@ -1,0 +1,1489 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"ls",
+				"lstlisting"
+			],
+			[
+				"stre",
+				"streams_ueberblick"
+			],
+			[
+				"Rea",
+				"Real-Time-Web"
+			],
+			[
+				"entw",
+				"entwicklung_des_webs"
+			],
+			[
+				"Real-T",
+				"Real-Time-Web-Anwendungen"
+			],
+			[
+				"Re",
+				"Real-Time-Web-Anwendungen"
+			],
+			[
+				"real",
+				" Play2: A New Era of Web Application Development"
+			],
+			[
+				"un",
+				"uncle_or_aunt_of"
+			],
+			[
+				"cou",
+				"cousin_of"
+			],
+			[
+				"rh",
+				"rhaego"
+			],
+			[
+				"ma",
+				"male"
+			],
+			[
+				"Sib",
+				"SiblingOfParent"
+			],
+			[
+				"mar",
+				"married_to"
+			],
+			[
+				"Sis",
+				"SisterInLaw"
+			],
+			[
+				"bro",
+				"brother_in_law_of"
+			],
+			[
+				"sin",
+				"sibling_in_law_of"
+			],
+			[
+				"Bro",
+				"BrotherInLaw"
+			],
+			[
+				"pa",
+				"parent_of"
+			],
+			[
+				"Mo",
+				"MotherOfBrother"
+			],
+			[
+				"F",
+				"FatherOfBrother"
+			],
+			[
+				"fa",
+				"father_of"
+			],
+			[
+				"mo",
+				"mother_of"
+			],
+			[
+				"fat",
+				"Father"
+			],
+			[
+				"ae",
+				"aerys_ii"
+			],
+			[
+				"r",
+				"rhaenys"
+			],
+			[
+				"equ",
+				"equalsSet"
+			],
+			[
+				"eq",
+				"equalsSet"
+			],
+			[
+				"Set",
+				"SetCombinator"
+			],
+			[
+				"fl",
+				"false"
+			],
+			[
+				"for",
+				"forall"
+			],
+			[
+				"fo",
+				"forall"
+			],
+			[
+				"in",
+				"intersect"
+			],
+			[
+				"com",
+				"combineWith"
+			],
+			[
+				"cont",
+				"contains"
+			],
+			[
+				"Test",
+				"TestSets"
+			],
+			[
+				"visi",
+				"visibilityChange"
+			],
+			[
+				"with",
+				"withSession"
+			],
+			[
+				"obj",
+				"object	object"
+			],
+			[
+				"ob",
+				"obj	shortcut - object"
+			],
+			[
+				"imp",
+				"import"
+			],
+			[
+				"re",
+				"refresh"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"init",
+				"init_defaults"
+			],
+			[
+				"opt",
+				"options"
+			],
+			[
+				"att",
+				"attribute"
+			],
+			[
+				"value",
+				"values"
+			],
+			[
+				"wind",
+				"window"
+			],
+			[
+				"full",
+				"fullscreen_observer"
+			],
+			[
+				"back",
+				"background_alpha"
+			],
+			[
+				"bak",
+				"background_alpha"
+			],
+			[
+				"set",
+				"setup_clocks"
+			],
+			[
+				"fade",
+				"fade_in"
+			],
+			[
+				"Clocks",
+				"ClocksController"
+			],
+			[
+				"win",
+				"windows"
+			],
+			[
+				"clocks",
+				"clocks_controller"
+			],
+			[
+				"simp",
+				"simplify"
+			],
+			[
+				"eve",
+				"evenManager"
+			],
+			[
+				"data",
+				"dataTransfer"
+			],
+			[
+				"grou",
+				"groupWithPhotos"
+			],
+			[
+				"page",
+				"pageNumber"
+			],
+			[
+				"gr",
+				"groupPhoto"
+			],
+			[
+				"url",
+				"urlWithParams"
+			],
+			[
+				"photo",
+				"photoForGroup"
+			],
+			[
+				"KE",
+				"KEventMenuBarShown"
+			],
+			[
+				"MAX",
+				"MAX_ADJUSTMENT_TIME"
+			],
+			[
+				"Se",
+				"SendingTimeDifferenceQueue"
+			],
+			[
+				"Sen",
+				"SendingTimeDifference"
+			],
+			[
+				"atom",
+				"atom_to_list"
+			],
+			[
+				"Enc",
+				"EncodedData"
+			],
+			[
+				"E",
+				"EncodedTimestamp"
+			],
+			[
+				"req",
+				"require_login"
+			],
+			[
+				"RSAKeyGenParameterSpe",
+				"RSAKeyGenParameterSpec"
+			],
+			[
+				"RSAK",
+				"RSAKeyGenParameterSpec"
+			],
+			[
+				"sta",
+				"state_name"
+			],
+			[
+				"has",
+				"has_many"
+			],
+			[
+				"have",
+				"have_many"
+			],
+			[
+				"shou",
+				"should"
+			],
+			[
+				"res",
+				"resources"
+			],
+			[
+				"resol",
+				"resolve_neighbor_to_pid"
+			],
+			[
+				"unbin",
+				"unbind_from_name_service"
+			],
+			[
+				"Ne",
+				"NewNumberSafe"
+			],
+			[
+				"SER",
+				"ServiceName"
+			],
+			[
+				"typ",
+				"type_is"
+			],
+			[
+				"Ser",
+				"ServiceNode"
+			],
+			[
+				"log",
+				"log_error"
+			],
+			[
+				"neig",
+				"neighbors"
+			],
+			[
+				"Clien",
+				"Clients"
+			],
+			[
+				"nameser",
+				"nameservice_lookup"
+			],
+			[
+				"Serv",
+				"ServiceName"
+			],
+			[
+				"Prod",
+				"ProductOfGCD"
+			],
+			[
+				"Nu",
+				"Number"
+			],
+			[
+				"New",
+				"NewNumber"
+			],
+			[
+				"Sta",
+				"State"
+			],
+			[
+				"start",
+				"start_vote"
+			],
+			[
+				"vot",
+				"vote_timer"
+			],
+			[
+				"tim",
+				"timeMilliSecond"
+			],
+			[
+				"initi",
+				"initiate_vote"
+			],
+			[
+				"Name",
+				"NameService"
+			],
+			[
+				"t",
+				"timeMilliSecond"
+			],
+			[
+				"C",
+				"Coordinator"
+			],
+			[
+				"_",
+				"_Initiator"
+			],
+			[
+				"Number",
+				"NumberRetrievalTime"
+			],
+			[
+				"Ter",
+				"TerminationTime"
+			],
+			[
+				"Term",
+				"TerminationTimeInS"
+			],
+			[
+				"Del",
+				"DelayTimeInS"
+			],
+			[
+				"clie",
+				"client_name"
+			],
+			[
+				"Termin",
+				"TerminationTime"
+			],
+			[
+				"Vote",
+				"VoteTimer"
+			],
+			[
+				"Coor",
+				"CoordinatorName"
+			],
+			[
+				"Log",
+				"LogMessage"
+			],
+			[
+				"ki",
+				"kill_nameservice"
+			],
+			[
+				"name",
+				"name_service"
+			],
+			[
+				"Co",
+				"CoordinatorName"
+			],
+			[
+				"Coo",
+				"Coordinator"
+			],
+			[
+				"k",
+				"kill_nameservice"
+			],
+			[
+				"Nam",
+				"NameService"
+			],
+			[
+				"Clie",
+				"ClientName"
+			],
+			[
+				"sendy",
+				"send_y"
+			],
+			[
+				"LeftN",
+				"LeftNeighbor"
+			],
+			[
+				"sen",
+				"send_number_to_neighbors"
+			],
+			[
+				"rig",
+				"right_neighbor"
+			],
+			[
+				"left",
+				"left_neighbor"
+			],
+			[
+				"ri",
+				"right_neighbor"
+			],
+			[
+				"lef",
+				"left_neighbor"
+			],
+			[
+				"nam",
+				"name_service"
+			],
+			[
+				"cli",
+				"client_name"
+			],
+			[
+				"tell",
+				"tell_mi"
+			],
+			[
+				"Cli",
+				"ClientName"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "thesis/thesis.tex",
+			"settings":
+			{
+				"buffer_size": 10867,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "thesis/thesis.bib",
+			"settings":
+			{
+				"buffer_size": 2733,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 49.0,
+		"selected_items":
+		[
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"lower",
+				"Convert Case: Lower Case"
+			],
+			[
+				"lowe",
+				"Convert Case: Lower Case"
+			],
+			[
+				"build",
+				"Build: Build"
+			],
+			[
+				"latex",
+				"LaTeXTools: View PDF"
+			],
+			[
+				"open files",
+				"View: Toggle Open Files in Side Bar"
+			],
+			[
+				"open",
+				"View: Toggle Open Files in Side Bar"
+			],
+			[
+				"sidebar",
+				"View: Toggle Open Files in Side Bar"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 579.0
+	},
+	"console":
+	{
+		"height": 127.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/Bachelorarbeit.sublime-project",
+		"/Users/till/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/till/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/till/Dropbox/Entwicklung/Studium/ISP/a1/bloodline.pl",
+		"/Users/till/Dropbox/Entwicklung/Studium/ISP/p1/bloodline.pl",
+		"/Users/till/Dropbox/Entwicklung/scala/progfun/funsets/src/main/scala/funsets/Main.scala",
+		"/var/folders/d0/fmyndhpd0jd3tbygjv5klxt00000gn/T/sbt1460601328027460305.log",
+		"/Users/till/Dropbox/Smooth Gestures/Smooth_Gestures_Settings.html",
+		"/Users/till/Library/Application Support/Firefox/Profiles/ogfghv2n.default/gm_scripts/Hacker_News_Enhancements/Hacker_News_Enhancements.user.js",
+		"/Users/till/.profile",
+		"/Users/till/Library/Application Support/Firefox/Profiles/ogfghv2n.default/gm_scripts/HackemUp/100977.user.js",
+		"/Users/till/Dropbox/Entwicklung/Chrome Addons/hacker-news-enhancements/yt-fullwindow.sublime-workspace",
+		"/Users/till/Dropbox/Entwicklung/haskell/propositional-logic/index.html",
+		"/Users/till/Dropbox/Entwicklung/haskell/propositional-logic/src/main.prof",
+		"/Users/till/Dropbox/Entwicklung/github/tilltheis.github.com/index.html",
+		"/Users/till/Downloads/Timetable.wdgt/main.html",
+		"/Users/till/Dropbox/Entwicklung/misc/Info.plist",
+		"/Users/till/Dropbox/Entwicklung/github/tilltheis.github.com/stylesheets/styles.css",
+		"/Users/till/Dropbox/Entwicklung/github/timetable-widget/index.html",
+		"/Users/till/Dropbox/Entwicklung/MacRuby/fullscreenclock/index.html",
+		"/Users/till/Dropbox/Entwicklung/github/pile-the-pieces/index.html",
+		"/Users/till/Dropbox/Entwicklung/github/tilltheis.github.com/projects/index.html",
+		"/Users/till/Dropbox/Entwicklung/github/tilltheis.github.com/projects/timetable-widget/index.html",
+		"/Users/till/Dropbox/Entwicklung/github/tilltheis.github.com/projects/fullscreenclock/index.html",
+		"/Users/till/Dropbox/Entwicklung/github/tilltheis.github.com/projects/pile-the-pieces/index.html",
+		"/Users/till/Dropbox/Entwicklung/github/tilltheis.github.com/projects/timetable-widget/Timetable.wdgt.zip",
+		"/Users/till/Desktop/Stundenplan Kopie.csv",
+		"/Users/till/Library/Preferences/org.virtualbox.app.VirtualBox.plist",
+		"/Users/till/Dropbox/Entwicklung/scala/playground/test/IntegrationSpec.scala",
+		"/Users/till/Dropbox/Entwicklung/scala/playground/test/ApplicationSpec.scala",
+		"/Users/till/Dropbox/Entwicklung/scala/playground/conf/routes",
+		"/Users/till/Dropbox/Entwicklung/scala/playground/app/views/groupPhoto.scala.html",
+		"/Users/till/Dropbox/Entwicklung/scala/playground/app/views/groupSearch.scala.html",
+		"/Users/till/Dropbox/Entwicklung/scala/playground/app/controllers/Application.scala",
+		"/Users/till/Dropbox/Entwicklung/scala/playground/app/views/groups.scala.html",
+		"/Users/till/Dropbox/Entwicklung/scala/RandomTurtlePhoto/src/Flickr.scala",
+		"/Users/till/Dropbox/Entwicklung/scala/playground/app/views/photo.scala.html",
+		"/Users/till/Dropbox/Entwicklung/scala/playground/app/views/index.scala.html",
+		"/Users/till/Dropbox/Entwicklung/scala/RandomTurtlePhoto/src/RandomTurtlePhoto.scala",
+		"/Users/till/Dropbox/Entwicklung/MacRuby/fullscreenclock/fullscreenclock/AppDelegate.rb",
+		"/Users/till/Library/Application Support/Steam/SteamApps/common/Counter-Strike/cstrike/userconfig.cfg",
+		"/Users/till/Library/Application Support/Steam/SteamApps/common/Counter-Strike/cstrike/user",
+		"/Users/till/Dropbox/Entwicklung/Studium/VS-2012-WS-A4-PDTTDLFH/receiver.erl",
+		"/Users/till/Dropbox/Entwicklung/Studium/VS-2012-WS-A4-PDTTDLFH/app",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/Gemfile",
+		"/Users/till/.rbenv/versions/1.9.3-p286/lib/ruby/gems/1.9.1/gems/mysql2-0.3.11/ext/mysql2/gem_make.out",
+		"/Users/till/Dropbox/Entwicklung/Studium/D-MARLA/Documentation/DoxygenDocumentation/html/doxygen.css",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/sessions/new.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/parents/new.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/children/new.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/groups/new.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/accounts/new.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/kindergartens/new.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/fees/new.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/admin/managers/new.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/admin/kindergartens/new.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/parents/index.html.slim",
+		"/Users/till/Desktop/filiale/branch_access/ManagerSkeletonThread.java",
+		"/Users/till/Dropbox/Entwicklung/Studium/wpitsec/a3/RSAKeyCreation.java",
+		"/Users/till/.gitconfig",
+		"/Users/till/.gitignore",
+		"/Users/till/Dropbox/Entwicklung/Studium/wpitsec/a3/crypto.scala",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/schema.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/oauths_controller.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/manager.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/admin/managers_controller.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/groups/edit.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/config/routes.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/groups/index.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/groups/waitlist.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/manager/groups_controller.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/kindergarten.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/admin/kindergartens/index.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/state.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/models/state_spec.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/models/kindergarten_spec.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121122022947_add_state_id_to_kindergarten.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/controllers/accounts_controller_spec.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/rate.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/models/rate_spec.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/models/fee_spec.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/fee.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/seeds.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121122015606_remove_state_id_from_rates.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121122015538_add_state_id_to_fees.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/admin/kindergartens_controller.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121122012340_add_state_id_to_rates.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/factories/states.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121122010226_create_states.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/manager/resource_controller.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/manager/parents_controller.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/parent/children/index.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/parent.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/dashboards/show.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121121233612_remove_kindergarten_id_from_parent.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/models/parent_spec.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/config/locales/de.yml",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121121232502_add_kindergarten_id_to_parent.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/admin/managers/show.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/admin/kindergartens/show.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/parent/children_controller.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/kindergartens/show.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/manager/dashboards_controller.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/dashboards_controller.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/layouts/application.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/helpers/base_helper.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/groups/edit.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/helpers/application_helper.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/dashboards/show.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/helpers/parent/base_helper.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/helpers/manager/base_helper.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/admin/dashboards/show.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/factories/managers.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/admin/managers/edit.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/admin/managers/index.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/children/new.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/child.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/models/manager_spec.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/models/child_spec.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121121093304_create_managers.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/admin/base_controller.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/groups_controller.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/waitlist.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/models/waitlist_spec.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/parent/children/show.html.slim",
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/factories/waitlists.rb",
+		"/Users/till/Dropbox/Entwicklung/Studium/Zaphod/app/controllers/current_users_controller.rb",
+		"/Users/till/Dropbox/thingstoinstall.txt"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"/Users/till/Dropbox/Entwicklung/Studium/VS-2012-WS-A4-PDTTDLFH",
+			"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"streams_ueberblick",
+			"sec",
+			"section",
+			" ",
+			"subsubsection",
+			",",
+			". ",
+			".",
+			"zum Beispiel",
+			"zum",
+			"pages",
+			"{",
+			"bib",
+			"MaleCousin",
+			"Uncle",
+			"Left",
+			"Brother",
+			"\\==",
+			"Person",
+			"Brother",
+			"Father",
+			"father_of",
+			"(-bound to +bound)",
+			"exists",
+			"forall",
+			"combineWith",
+			"filter",
+			"SetResultCombinator",
+			"defaults",
+			"clock_windows",
+			"FullscreenObserver.sharedFullscreenObserver",
+			"clock_windows",
+			"clean_up",
+			"t",
+			"scr",
+			"w",
+			"simplify",
+			"petrick",
+			"file",
+			"g(file.n",
+			"/projects/timetable-widget",
+			"h4",
+			"h3",
+			"src=\"",
+			"io:format",
+			"calculate",
+			"calc_free",
+			"==",
+			"random",
+			"dict:",
+			"regist",
+			"slot_wishes",
+			"timer",
+			"0",
+			"25",
+			"sending_time_difference",
+			"log",
+			"calculate_free",
+			"calc",
+			"calculate_free_sloe",
+			"calculate_free_slot",
+			"revise",
+			"kill",
+			"{input",
+			"send_message",
+			"{slot",
+			"Sample",
+			"sample_b",
+			"HAW_Logo",
+			"logout",
+			"listOptions",
+			" :",
+			"losable",
+			"Kindergartenleiter",
+			"leiter",
+			"username",
+			"resolve_neighbor_to_pid",
+			"servicepid",
+			"register_gcd_client",
+			"bind",
+			"NameService",
+			"lookup",
+			"setneigh",
+			"timer fir",
+			"log",
+			"calculate_gcd",
+			"calculate_gc",
+			"unbind_from_name_service",
+			"register",
+			"ServiceNode",
+			"ServiceName",
+			"Coordinator !",
+			"setpm",
+			"trying to find is: ",
+			"briefterm",
+			"get_clients",
+			"send_message_to_service",
+			"error",
+			"log",
+			"setpm",
+			"New Number:",
+			"but got",
+			"send_message_to_service",
+			"start_calculation_for_a_few_gcd_clients",
+			"finis",
+			"restart",
+			"51",
+			"kill",
+			"has_started_vote",
+			"HasVoted",
+			"has_voted",
+			"get_ready",
+			"list_to",
+			"ClientName",
+			"log(",
+			"log",
+			"log(",
+			"send_message_to_service",
+			"register_gcd_client",
+			"{hello,",
+			"gcd:s",
+			"start_gcd_process",
+			"start_",
+			"start",
+			"Nameservice",
+			"bind",
+			"getsteering",
+			"io:format"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			".\n",
+			"\n.",
+			".\n.\n",
+			".\n",
+			".\\r",
+			".\\n",
+			"Sibling",
+			"images",
+			"h3",
+			"h2",
+			"src=\"www.tilltheis.de",
+			"loseable",
+			"Leiter",
+			"resolve_client_name_to_pid",
+			"stop",
+			"HasStartedVote",
+			"has_started_vote",
+			" = ,\\n  ",
+			"\\n, ",
+			"\\n#",
+			"#",
+			"Rate"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "thesis/thesis.tex",
+					"settings":
+					{
+						"buffer_size": 10867,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10004,
+								10004
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": false,
+							"sublimelinter_mark_style": "outline",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/LaTeX/LaTeX.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 4476.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "thesis/thesis.bib",
+					"settings":
+					{
+						"buffer_size": 2733,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": false,
+							"sublimelinter_mark_style": "outline",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/LaTeX/Bibtex.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 773.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 36.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 102.0
+	},
+	"replace":
+	{
+		"height": 66.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"bib",
+				"thesis.bib"
+			],
+			[
+				"tex",
+				"thesis.tex"
+			],
+			[
+				"main",
+				"src/main/scala/funsets/Main.scala"
+			],
+			[
+				"rout",
+				"conf/routes"
+			],
+			[
+				"html",
+				"app/views/groups.scala.html"
+			],
+			[
+				"",
+				"src/manager.js"
+			],
+			[
+				"route",
+				"config/routes.rb"
+			],
+			[
+				"gem",
+				"Gemfile"
+			],
+			[
+				"data",
+				"config/database.yml"
+			],
+			[
+				"acc",
+				"app/controllers/manager/accounts_controller.rb"
+			],
+			[
+				"viewaccnew",
+				"app/views/manager/accounts/new.html.slim"
+			],
+			[
+				"viemanchnew",
+				"app/views/manager/children/new.html.slim"
+			],
+			[
+				"viwmanchishow",
+				"app/views/manager/children/show.html.slim"
+			],
+			[
+				"viewmandash",
+				"app/views/manager/dashboards/show.html.slim"
+			],
+			[
+				"modacc",
+				"app/models/account.rb"
+			],
+			[
+				"accountscont",
+				"app/controllers/manager/accounts_controller.rb"
+			],
+			[
+				"app/controllers/oauths_controller.rb",
+				"app/controllers/oauths_controller.rb"
+			],
+			[
+				"viewmapa",
+				"app/views/manager/parents/index.html.slim"
+			],
+			[
+				"s",
+				"db/schema.rb"
+			],
+			[
+				"manag",
+				"app/models/manager.rb"
+			],
+			[
+				"admmancon",
+				"app/controllers/admin/managers_controller.rb"
+			],
+			[
+				"sche",
+				"db/schema.rb"
+			],
+			[
+				"viemangroued",
+				"app/views/manager/groups/edit.html.slim"
+			],
+			[
+				"routes",
+				"config/routes.rb"
+			],
+			[
+				"modkin",
+				"app/models/kindergarten.rb"
+			],
+			[
+				"modstat",
+				"app/models/state.rb"
+			],
+			[
+				"modkinder",
+				"app/models/kindergarten.rb"
+			],
+			[
+				"statesp",
+				"spec/models/state_spec.rb"
+			],
+			[
+				"kinderspe",
+				"spec/models/kindergarten_spec.rb"
+			],
+			[
+				"accounconsp",
+				"spec/controllers/accounts_controller_spec.rb"
+			],
+			[
+				"statspe",
+				"spec/models/state_spec.rb"
+			],
+			[
+				"see",
+				"db/seeds.rb"
+			],
+			[
+				"modfee",
+				"app/models/fee.rb"
+			],
+			[
+				"state",
+				"app/models/state.rb"
+			],
+			[
+				"feespe",
+				"spec/models/fee_spec.rb"
+			],
+			[
+				"ratespe",
+				"spec/models/rate_spec.rb"
+			],
+			[
+				"rate",
+				"app/models/rate.rb"
+			],
+			[
+				"contrkon",
+				"app/controllers/admin/kindergartens_controller.rb"
+			],
+			[
+				"modstate",
+				"app/models/state.rb"
+			],
+			[
+				"statspec",
+				"spec/models/state_spec.rb"
+			],
+			[
+				"modrate",
+				"app/models/rate.rb"
+			],
+			[
+				"schema",
+				"db/schema.rb"
+			],
+			[
+				"sees",
+				"db/seeds.rb"
+			],
+			[
+				"vieparchil",
+				"app/views/parent/children/index.html.slim"
+			],
+			[
+				"viewmanparn",
+				"app/views/manager/parents/index.html.slim"
+			],
+			[
+				"schem",
+				"db/schema.rb"
+			],
+			[
+				"kin",
+				"app/models/kindergarten.rb"
+			],
+			[
+				"par",
+				"app/models/parent.rb"
+			],
+			[
+				"parentsp",
+				"spec/models/parent_spec.rb"
+			],
+			[
+				"specrate",
+				"spec/models/rate_spec.rb"
+			],
+			[
+				"fee",
+				"app/models/fee.rb"
+			],
+			[
+				"facgrou",
+				"spec/factories/groups.rb"
+			],
+			[
+				"facwait",
+				"spec/factories/waitlists.rb"
+			],
+			[
+				"sch",
+				"db/schema.rb"
+			],
+			[
+				"factwai",
+				"spec/factories/waitlists.rb"
+			],
+			[
+				"wa",
+				"spec/factories/waitlists.rb"
+			],
+			[
+				"childrengou",
+				"app/models/children_group.rb"
+			],
+			[
+				"wai",
+				"app/models/waitlist.rb"
+			],
+			[
+				"group",
+				"app/models/group.rb"
+			],
+			[
+				"chil",
+				"app/models/child.rb"
+			],
+			[
+				"groupcon",
+				"app/controllers/groups_controller.rb"
+			],
+			[
+				"config",
+				"config/environment.rb"
+			],
+			[
+				"waitlis",
+				"spec/factories/waitlists.rb"
+			],
+			[
+				"w",
+				"app/models/waitlist.rb"
+			],
+			[
+				"list",
+				"spec/models/waitlist_spec.rb"
+			],
+			[
+				"agent",
+				"src/haw/po/la/cliff/Agent.java"
+			],
+			[
+				"simu",
+				"src/haw/po/la/cliff/Simulation.java"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 269.0,
+	"status_bar_visible": true
+}
