@@ -280,26 +280,79 @@ In nebenläufigen Systemen können gleich mehrere solcher Datenströme unabhäng
 Reaktive Prozesse haben die Eigenschaft, schrittweise, immer wenn sie neue Daten empfangen, ein Ergebnis aufzubauen.
 Deshalb sind sie bei Berechnungen essentiell, bei denen nicht nur das Endergebnis wichtig ist, sondern auch die Schritte, die dazu geführt haben \cite[vgl.][S.~2]{reactive_programming1}.
 
-Iteratees, Enumerators und Enumeratees mit den bisherigen Quellen \citealt{kiselyov2012} \cite[vgl.][]{kiselyov2012} und \citealt{drobi2012} \cite[vgl.][]{drobi2012}.
 
-
-\section{Serverseitig} % (fold)
-\label{sec:serverseitig}
-
-
-\subsection{Futures und Promises} % (fold)
-\label{ssec:futures_und_promises}
+\section{Futures und Promises} % (fold)
+\label{sec:futures_und_promises}
 
 Futures und Promises mit den Quellen \citealt{haller2013} und \citealt{typesafe2013}.
 
-% subsection futures_und_promises (end)
+% section futures_und_promises (end)
 
 
-\subsection{Streams} % (fold)
-\label{ssec:streams}
+\section{Streams} % (fold)
+\label{sec:streams}
 
 Streams sind inkrementelle Datenströme, die nicht-blockierendes Lesen erlauben und kombiniert und transformiert werden können.
 Streams eignen sich, IO-Operationen performant und in funktionalem Stil durchzuführen.
+Anwendungsbeispiele für Streams sind beispielsweise die Implementierung von Web-Servern oder Datenkompression.
+Die in diesem Kapitel vorgestellten Streams entstanden im Umfeld der Programmiersprache Haskell und wurden von Oleg Kiselyov  vorgestellt \cite[vgl.][S.~19]{monad_reader}.
+
+
+\subsection{Streams nach Kiselyov} % (fold)
+\label{sub:streams_nach_kiselyov}
+
+Weil die Iteratee IO-Streams von Oleg Kiselyov öffentlich vorgestellt wurden, werden in diesem Abschnitt die Hintergründe dieser Streams nach Kiselyov vorgestellt.
+Als Quellen hierfür dienen \citealt{kiselyov2012} und \citealt{iteratee_io}.
+
+
+\subsubsection{Motivation} % (fold)
+\label{ssub:motivation}
+
+Motivation für die Entwicklung der Iteratee basierten Streams war der Wunsch nach inkrementeller, deklarativer Datenverarbeitung mit voller Kontrolle über den Ressourcenverbrauch.
+Die einzelnen Komponenten der zu entwickelnden Bibliothek sollten möglichst leicht zu mächtigeren Komponenten kombinierbar sein.
+
+% subsubsection motivation (end)
+
+
+\subsubsection{Design} % (fold)
+\label{ssub:design}
+
+Iteratee IO-Streams besteht aus vier Komponenten.
+\lstinline|Stream|, \lstinline|Iteratee|, \lstinline|Enumerator| und \lstinline|Enumeratee|.
+\lstinline|Stream| beinhaltet die gestreamten Elemente.
+\lstinline|Iteratee| konsumiert \lstinline|Stream|-Elemente.
+\lstinline|Enumerator| generiert \lstinline|Stream|-Elemente.
+Und \lstinline|Enumeratee| transformiert einen \lstinline|Enumerator|.
+\lstinline|Enumeratee| ist also sowohl in der Rolle eines \lstinline|Iteratee|s, der die zu transformierenden Elemente konsumiert, als auch in der Rolle eines \lstinline|Enumerators|, der die transformierten Elemente bereitstellt.
+
+
+\paragraph{Stream} % (fold)
+\label{par:stream}\mbox{}
+
+\lstinline|Stream| hat den Typ
+\begin{lstlisting}[language=Haskell]
+data Stream el = EOF (Maybe ErrMsg) | Chunk [el]
+\end{lstlisting}
+
+Dieser Typ ist parametrisiert über den Typ der gehaltenen Elemente \lstinline|el|.
+
+Für den Fall, dass die Datenquelle nicht erschöpft ist, existiert der Konstruktor \lstinline|Chunk el|.
+Dieser hält eine, möglicherweise leere, Liste von Elementen aus der Datenquelle.
+Elemente werden nicht einzeln aus der Datenquelle empfangen, sondern in beliebig großen Mengen.
+
+Für den Fall, dass die Datenquelle erschöpft, oder ein Fehler aufgetreten ist, existiert der Konstruktor \lstinline|EOF (Maybe ErrMsg)|.
+
+% paragraph stream (end)
+
+
+% subsubsection design (end)
+
+
+% subsection streams_nach_kiselyov (end)
+
+
+\subsection{Streams in Play} % (fold)
+\label{sub:streams_in_play}
 
 
 \subsubsection{Überblick} % (fold)
@@ -377,8 +430,10 @@ i >>= \x -> (k1 x |> k2 x) = (i >>= k1) |> (i >>= k2)
 
 % subsubsection regeln (end)
 
+% subsection streams_in_play (end)
 
-% subsection streams (end)
+
+% section streams (end)
 
 
 % section serverseitig (end)
