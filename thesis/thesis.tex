@@ -404,6 +404,31 @@ Ein Wert vom Typ \lstinline|Iteratee| hat also auch wieder drei mögliche Zustä
 % paragraph iteratees (end)
 
 
+\paragraph{Enumerators} % (fold)
+\label{par:enumerators}\mbox{} % force new line
+
+Ein \lstinline|Enumerator| ist die Datenquelle, die ihre Daten, in \lstinline|Stream|s verpackt, bereitstellt.
+Der Datentyp \lstinline|Enumerator| ist definiert als
+\begin{lstlisting}[language=Haskell]
+type Enumerator el m a = Iteratee el m a -> m (Iteratee el m a)
+\end{lstlisting}
+
+Ein \lstinline|Enumerator| ist eine Funktion von \lstinline|Iteratee| nach \lstinline|Iteratee| und ist über die Typen des übergebenen \lstinline|Iteratee|s parametrisiert.
+Der Eingabewert ist der \lstinline|Iteratee|, an den die generierten Elemente gesendet werden.
+Der Rückgabewert ist der übergebene \lstinline|Iteratee| nach Fertigstellung oder Abbruch seiner Berechnung.
+Der zurückgegebene \lstinline|Iteratee| befindet sich in der Monade \lstinline|m|.
+Diese Monade gilt sowohl für den \lstinline|Iteratee|, als auch für den \lstinline|Enumerator|.
+Dadurch ist es für Werte beider Typen möglich, bei passender Monade, Seiteneffekte zu verursachen.
+Es ist zwar denkbar und durch Anpassung des \lstinline|Enumerator|-Typs auch umsetzbar, dass \lstinline|Enumerator| und \lstinline|Iteratee| in unterschiedlichen Monaden ausgeführt werden, doch wird diese Funktionalität in aller Regel nicht benötigt.
+
+Bei der Anwendung dieser Funktion werden dem \lstinline|Iteratee| so lange Daten übergeben, bis die Datenquelle erschöpft ist, oder bis der \lstinline|Iteratee| keine Daten mehr annimmt.
+Die Herkunft der Daten, die der \lstinline|Enumerator| an den \lstinline|Iteratee| sendet, ist durch die Monade \lstinline|m| bestimmt.
+Weil Seiteneffekte nur in der \lstinline|IO|-Monade möglich sind, ist \lstinline|m| typischerweise \lstinline|IO|.
+Dadurch ist es beispielsweise möglich, die Daten aus Dateien oder dem Netzwerk zu empfangen.
+
+% paragraph enumerators (end)
+
+
 % subsubsection design (end)
 
 
