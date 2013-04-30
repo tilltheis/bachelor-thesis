@@ -373,7 +373,7 @@ Und \lstinline|a| ist der Typ des zu berechnenden Ergebnisses.
 
 Die Monade ist typischerweise \lstinline|IO|, damit der \lstinline|Iteratee| Seiteneffekte ausführen kann.
 Das ist z.~B. notwendig, um in eine Datei zu schreiben, oder Daten über das Netzwerk zu verschicken.
-In Haskell sind Seiteneffekte ausserhalb der \lstinline|IO|-Monade nicht zulässig \cite[vgl.][]{haskell_io}.
+In Haskell sind Seiteneffekte außerhalb der \lstinline|IO|-Monade nicht zulässig \cite[vgl.][]{haskell_io}.
 
 Ein \lstinline|Iteratee|, der mit seiner Berechnung fertig ist, wird mit dem Datenkonstruktor \lstinline[breaklines=true]|IE_done a| erstellt.
 Ein solcher \lstinline|Iteratee| hält nur sein berechnetes Ergebnis und nimmt keine weiteren Elemente an.
