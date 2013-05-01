@@ -401,6 +401,10 @@ Ein Wert vom Typ \lstinline|Iteratee| hat also auch wieder drei mögliche Zustä
   \item Es ist ein Fehler aufgetreten, von dem sich das System aber wieder erholen kann (\lstinline|IE_cont| mit Fehlernachricht).
 \end{enumerate}
 
+Der \lstinline|Iteratee|-Typ ist eine Monade.
+Dadurch ist es möglich, einen beliebigen Wert in die Monade zu heben (unit).
+Außerdem kann dadurch ein erfolgreich berechneter Wert innerhalb der Monade transformiert werden (bind).
+
 % paragraph iteratees (end)
 
 
@@ -427,6 +431,35 @@ Weil Seiteneffekte nur in der \lstinline|IO|-Monade möglich sind, ist \lstinlin
 Dadurch ist es beispielsweise möglich, die Daten aus Dateien oder dem Netzwerk zu empfangen.
 
 % paragraph enumerators (end)
+
+
+\paragraph{Enumeratees} % (fold)
+\label{par:enumeratees}\mbox{} % force new line
+
+Ein \lstinline|Enumeratee| ist ein Stream-Transformator, der \lstinline|Iteratee|s eines bestimmten Element-Typs zu \lstinline|Iteratee|s eines anderen Element-Typs konvertiert.
+Der Datentyp \lstinline|Enumeratee| ist definiert als
+\begin{lstlisting}[language=Haskell]
+type Enumeratee elo eli m a =
+  Iteratee eli m a -> Iteratee elo m (Iteratee eli m a)
+\end{lstlisting}
+
+Ein \lstinline|Enumeratee| ist eine Funktion von \lstinline|Iteratee| nach \lstinline|Iteratee|.
+Der Eingabewert ist der zu transformierende \lstinline|Iteratee| vom äußeren Element-Typ \lstinline|elo|.
+Der Ausgabewert ist ein \lstinline|Iteratee| vom inneren Element-Typ \lstinline|eli|.
+Der neue \lstinline|Iteratee| nimmt Elemente vom Typ \lstinline|elo| an, transformiert sie nach \lstinline|eli|.
+Diese transformierten Werte werden dann an den ursprünglichen \lstinline|Iteratee| weitergegeben.
+Die Transformation muss dabei aber nicht ein Element nach genau einem anderen Element abbilden.
+Ein äußeres Element \lstinline|elo| kann zu einem, keinem oder auch mehreren inneren Elementen \lstinline|eli| abgebildet werden.
+Genauso ist es möglich, dass mehrere äußere Elemente zu einem inneren Element zusammengefasst werden.
+
+Jeder \lstinline|Enumeratee| ist auch ein \lstinline|Enumerator|.
+Dies kommt daher, dass \lstinline|Iteratee|s Monaden sind.
+Ein \lstinline|Enumeratee| ist ein \lstinline|Enumerator| mit \lstinline|m = Iteratee elo m'|, wobei \lstinline|m'| das \lstinline|m| des \lstinline|Enumeratee|-Typkonstruktors ist.
+
+Ein \lstinline|Enumeratee| ist also sowohl \lstinline|Iteratee|, als auch \lstinline|Enumerator|.
+Er ist ein \lstinline|Iteratee| des äußeren Typs \lstinline|elo| (nach Ausführung der Funktion) und ein \lstinline|Enumerator| des inneren Typs \lstinline|eli| (vor Ausführung der Funktion).
+
+% paragraph enumeratees (end)
 
 
 % subsubsection design (end)
