@@ -465,6 +465,38 @@ Er ist ein \lstinline|Iteratee| des äußeren Typs \lstinline|elo| (nach Ausfüh
 % subsubsection design (end)
 
 
+\subsubsection{Komposition} % (fold)
+\label{ssub:komposition}
+
+\lstinline|Iteratee|s und \lstinline|Enumerator|s können sequentiell oder parallel komponiert werden.
+Bei der Komposition werden zwei \lstinline|Iteratee|s oder \lstinline|Enumerator|s zu einem neuen \lstinline|Iteratee| oder \lstinline|Enumerator| kombiniert.
+
+Sequenzielle Komposition zweier \lstinline|Iteratee|s funktioniert noch folgendem Prinzip:
+Zuerst wird der erste \lstinline|Iteratee| angewendet, bis er keine Elemente mehr annimmt, oder die Datenquelle erschöpft ist.
+Dann wird der zweite \lstinline|Iteratee| auf die noch übrigen Elemente der Datenquelle angewendet, bis auch dieser \lstinline|Iteratee| keine Elemente mehr annimmt, oder die Datenquelle erschöpft ist.
+Anschließend werden beide \lstinline|Iteratee|s kombiniert.
+Z.~B. als Paar.
+
+Bei der parallelen Komposition werden die Elemente der Datenquelle immer an beide \lstinline|Iteratee|s weitergegeben.
+Dies geschieht so lange, bis beide \lstinline|Iteratee|s keine weiteren Elemente mehr annehmen.
+Anschließend werden beide \lstinline|Iteratee|s kombiniert.
+
+Die sequentielle Komposition zweier \lstinline|Enumerator|s erfolgt ähnlich, wie die sequentielle Kompositionen von \lstinline|Iteratee|s.
+Der resultierende \lstinline|Enumerator| generiert erst alle Elemente des ersten \lstinline|Enumerator|s und dann alle Elemente des zweiten \lstinline|Enumerator|s.
+Die sequentielle Komposition von \lstinline|Enumerator|s entspricht also der Verkettung ihrer Ausgaben.
+
+Parallele Komposition von \lstinline|Enumerator|s bedeutet, dass mehrere \lstinline|Enumerator|s auf nicht-sequentielle Weise kombiniert werden.
+So kann beliebig gewählt werden, aus welchem der zur Verfügung stehenden \lstinline|Enumerator|s gelesen wird.
+Dabei ist es durchaus denkbar, dass Elemente mehrerer \lstinline|Enumerator|s zu einem Element kombiniert werden.
+Auch ist es möglich, dass in Abhängigkeit der Elemente eines \lstinline|Enumerator|s, ein anderer \lstinline|Enumerator| für das nächste Element ausgesucht wird.
+Beispielsweise kann abwechselnd ein Name aus der einen Datei und dazugehörige Informationen aus einer anderen Datei gelesen und anschließend zusammengefasst werden.
+
+Es können auch Kompositionen mit anderen Abhängigkeiten zwischen zwei \lstinline|Iteratee|s oder \lstinline|Enumerator|s gebildet werden.
+Sequenzielle und parallele Komposition sind allerdings zwei typische Varianten.
+
+% subsubsection komposition (end)
+
+
 % subsection streams_nach_kiselyov (end)
 
 
