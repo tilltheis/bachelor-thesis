@@ -25,6 +25,7 @@
 \usepackage{hawstyle}
 \usepackage{lipsum} %% for sample text
 \usepackage{scrhack} %% remove warning http://tex.stackexchange.com/questions/51867/koma-warning-about-toc
+\usepackage{todonotes}
 
 \bibpunct[, ]{(}{)}{,}{a}{}{;} % correct citation format (no comma before year)
 
@@ -528,26 +529,54 @@ Enumeratees sind dazu da, Datenströme zu transformieren, sind also Zwischenhän
 % subsubsection streams_ueberblick
 
 
+\subsubsection{Input} % (fold)
+\label{ssub:input}
+
+\lstinline|Input| entspricht Kiselyovs \lstinline|Stream|.
+\lstinline|Input| hat im Gegensatz zu \lstinline|Stream| allerdings drei Konstruktoren:
+\begin{lstlisting}
+sealed trait Input[+E]
+object Input {
+  case class El[+E](e: E) extends Input[E]
+  case object Empty extends Input[Nothing]
+  case object EOF extends Input[Nothing]
+}
+\end{lstlisting}
+
+Mehrere Elemente werden in Play nicht in Chunks verpackt, sondern es wird höchstens ein Element verpackt.
+Dafür gibt es einen expliziten Konstruktor für das leere Element.
+
+% subsubsection input (end)
+
+
 \subsubsection{Iteratees} % (fold)
 \label{sssec:iteratees}
 
-Iteratees nehmen Elemente kontinuierlich Elemente auf und berechnen daraus ein Ergebnis.
-Statt eines Ergebnisses können auch Seiteneffekte ausgeführt werden.
-Ein einfacher Iteratee ist beispielsweise ein Iteratee, der jedes Element, das er empfängt, auf der Kommandozeile ausgibt.
+\lstinline|Step| entspricht Kiselyovs \lstinline|Iteratee|.
+\lstinline|Step| hat für Fehler allerdings einen dritten Konstruktor.
 \begin{lstlisting}
-val loggerIteratee: Iteratee[String, Unit] =
-  Iteratee.foreach(println)
-\end{lstlisting}
-Um den Iteratee auszuführen benötigen wir einen Enumerator, der Daten an den Iteratee sendet.
+sealed trait Step[E, +A]
+object Step {
+  case class Done[+A, E](a: A, remaining: Input[E])
+    extends Step[E, A]
+  case class Cont[E, +A](k: Input[E] => Iteratee[E, A])
+    extends Step[E, A]
+  case class Error[E](msg: String, input: Input[E])
+    extends Step[E, Nothing]
+}
+\end{lstlisting}\todo{Testen, ob ``extends''  auf neuer Zeile erlaubt ist.}
+
+Plays \lstinline|Iteratee|s bilden einen Container für ihren \lstinline|Step|-Zustand.
+Dadurch werden, wie bei objektorientierten Sprachen üblich\todo{Zitat}, Daten und Operationen gebündelt.
+Die elementare Methode dieser Klasse ist \lstinline|fold|.
 \begin{lstlisting}
-val namesEnumerator: Enumerator[String] =
-  Enumerator("Foo", "Bar", "Baz")
+  def fold[B](folder: Step[E, A] => Future[B]): Future[B]
 \end{lstlisting}
-Und schließlich müssen diese Daten an den Iteratee gesendet werden.
-\begin{lstlisting}
-val appliedLoggerIteratee: Future[Iteratee[String, Unit]] =
-  namesEnumerator(loggerIteratee)
-\end{lstlisting}
+
+Mit Hilfe von \lstinline|fold| lässt sich der Zustand des \lstinline|Iteratee|s transformieren.
+Deshalb sind sehr viele Methoden in der \lstinline|Iteratee|-Klasse auf Basis von \lstinline|fold| definiert.
+Durch Angabe der Schrittfunktion im \lstinline|Cont|-Konstruktor bestimmt die konkrete \lstinline|Iteratee|-Implementierung, wie mit übergebenen Elementen umzugehen ist.
+Dadurch wird der zu berechnende Wert aufgebaut.
 
 % subsubsection iteratees
 
