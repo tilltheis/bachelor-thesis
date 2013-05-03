@@ -552,6 +552,9 @@ Dafür gibt es einen expliziten Konstruktor für das leere Element.
 \subsubsection{Iteratees} % (fold)
 \label{sssec:iteratees}
 
+\paragraph{Grundlagen} % (fold)
+\label{par:grundlagen}
+
 \lstinline|Step| entspricht Kiselyovs \lstinline|Iteratee|.
 \lstinline|Step| hat für Fehler allerdings einen dritten Konstruktor.
 \begin{lstlisting}
@@ -564,7 +567,7 @@ object Step {
   case class Error[E](msg: String, input: Input[E])
     extends Step[E, Nothing]
 }
-\end{lstlisting}\todo{Testen, ob ``extends''  auf neuer Zeile erlaubt ist.}
+\end{lstlisting}
 
 Plays \lstinline|Iteratee|s bilden einen Container für ihren \lstinline|Step|-Zustand.
 Dadurch werden, wie bei objektorientierten Sprachen üblich\todo{Zitat}, Daten und Operationen gebündelt.
@@ -576,7 +579,54 @@ Die elementare Methode dieser Klasse ist \lstinline|fold|.
 Mit Hilfe von \lstinline|fold| lässt sich der Zustand des \lstinline|Iteratee|s transformieren.
 Deshalb sind sehr viele Methoden in der \lstinline|Iteratee|-Klasse auf Basis von \lstinline|fold| definiert.
 Durch Angabe der Schrittfunktion im \lstinline|Cont|-Konstruktor bestimmt die konkrete \lstinline|Iteratee|-Implementierung, wie mit übergebenen Elementen umzugehen ist.
+Nur durch diese Funktion können neue Elemente gelesen werden.
 Dadurch wird der zu berechnende Wert aufgebaut.
+
+% paragraph grundlagen (end)
+
+\paragraph{Iteratees erstellen} % (fold)
+\label{par:iteratees_erstellen}\mbox{} % force new line
+
+Es gibt drei Möglichkeiten, einen neuen \lstinline|Iteratee| zu erstellen.
+\begin{enumerate}
+  \item Durch Erstellung einer neuen Klasse, die von \lstinline|Iteratee| erbt und \lstinline|fold| implementiert.
+  \item Durch Benutzung einer Konstruktorfunktion analog zu den \lstinline|Step|-Zuständen (\lstinline|Done|, \lstinline|Cont| oder \lstinline|Error|).
+  \item Durch Benutzung einer Hilfsfunktion des Companion-Objekts (\lstinline|fold|, \lstinline|foreach|, u.a.).
+\end{enumerate}
+
+Zu Demonstrationszwecken soll nun ein \lstinline|Iteratee| erstellt werden, das alle Elemente aufsummiert.
+Es wird dabei nach jeder der der drei möglichen Varianten implementiert.
+
+Die erste Variante ist von \lstinline|Iteratee| zu erben und die \lstinline|fold|-Method zu implementieren.
+Dies erfordert viel Schreibarbeit, weil nur die sehr generische \lstinline|fold|-Methode verwendet werden kann.
+Der Code sieht so aus:
+\begin{lstlisting}
+case class SumIteratee(sum: Int = 0) extends Iteratee[Int, Int] {
+  def fold[B](folder: Step[Int, Int] => Future[B]): Future[B] = {
+    folder(Step.Cont(_ match {
+      case Input.El(i) => SumIteratee(sum + i)
+      case Input.Empty => this
+      case Input.EOF   => new Iteratee[Int, Int] {
+        def fold[B](folder: Step[Int, Int] => Future[B]) = {
+          folder(Step.Done(sum, Input.EOF))
+        }
+      }
+    }))
+  }
+}
+
+val sumIterateeFromInheritance: Iteratee[Int, Int] = SumIteratee()
+\end{lstlisting}
+
+Der \lstinline|folder|-Funktion muss der aktuelle \lstinline|Step|-Zustand übergeben werden.
+Diese Funktion soll den \lstinline|Iteratee| dann ausführen, d.~h. ihn mit Elementen versorgen.
+Anschließend soll der \lstinline|folder| dann aus dem finalen Zustand ein Ergebnis berechnen.
+Solange noch weitere Elemente kommen können, also solange kein \lstinline|Input.EOF|-Element empfangen wurde, geht der \lstinline|Iteratee| in einen neuen \lstinline|Cont|-Zustand über.
+Bei diesem Zustandsübergang wird auch die interne Berechnung fortgesetzt.
+Es wird also in einen \lstinline|Cont|-Zustand übergegangen, der die aktualisierte Summe hält.
+Sobald keine weiteren Elemente mehr kommen können, wird die Berechnung beendet und in den \lstinline|Done|-Zustand übergegangen.
+
+% paragraph iteratees_erstellen (end)
 
 % subsubsection iteratees
 
