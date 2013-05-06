@@ -553,7 +553,7 @@ Dafür gibt es einen expliziten Konstruktor für das leere Element.
 \label{sssec:iteratees}
 
 \paragraph{Grundlagen} % (fold)
-\label{par:grundlagen}
+\label{par:grundlagen}\mbox{} % force new line
 
 \lstinline|Step| entspricht Kiselyovs \lstinline|Iteratee|.
 \lstinline|Step| hat für Fehler allerdings einen dritten Konstruktor.
@@ -590,16 +590,20 @@ Dadurch wird der zu berechnende Wert aufgebaut.
 Es gibt drei Möglichkeiten, einen neuen \lstinline|Iteratee| zu erstellen.
 \begin{enumerate}
   \item Durch Erstellung einer neuen Klasse, die von \lstinline|Iteratee| erbt und \lstinline|fold| implementiert.
-  \item Durch Benutzung einer Konstruktorfunktion analog zu den \lstinline|Step|-Zuständen (\lstinline|Done|, \lstinline|Cont| oder \lstinline|Error|).
-  \item Durch Benutzung einer Hilfsfunktion des Companion-Objekts (\lstinline|fold|, \lstinline|foreach|, u.a.).
+  \item Durch Benutzung einer Konstruktorfunktion analog zu den \lstinline|Step|-Zuständen (\lstinline|Done|, \lstinline|Cont| und \lstinline|Error|).
+  \item Durch Benutzung einer Hilfsfunktion des Companion-Objekts (\lstinline|fold|, \lstinline|foreach|, u.~a.).
 \end{enumerate}
 
 Zu Demonstrationszwecken soll nun ein \lstinline|Iteratee| erstellt werden, das alle Elemente aufsummiert.
 Es wird dabei nach jeder der der drei möglichen Varianten implementiert.
 
-Die erste Variante ist von \lstinline|Iteratee| zu erben und die \lstinline|fold|-Method zu implementieren.
+\subparagraph{Erstellung durch Vererbung} % (fold)
+\label{subp:erstellung_durch_vererbung}\mbox{} % force new line
+
+Die erste Variante ist von \lstinline|Iteratee| zu erben und die \lstinline|fold|-Methode zu implementieren.
 Dies erfordert viel Schreibarbeit, weil nur die sehr generische \lstinline|fold|-Methode verwendet werden kann.
 Der Code sieht so aus:
+
 \begin{lstlisting}
 case class SumIteratee(sum: Int = 0) extends Iteratee[Int, Int] {
   def fold[B](folder: Step[Int, Int] => Future[B]): Future[B] = {
@@ -624,7 +628,50 @@ Anschließend soll der \lstinline|folder| dann aus dem finalen Zustand ein Ergeb
 Solange noch weitere Elemente kommen können, also solange kein \lstinline|Input.EOF|-Element empfangen wurde, geht der \lstinline|Iteratee| in einen neuen \lstinline|Cont|-Zustand über.
 Bei diesem Zustandsübergang wird auch die interne Berechnung fortgesetzt.
 Es wird also in einen \lstinline|Cont|-Zustand übergegangen, der die aktualisierte Summe hält.
-Sobald keine weiteren Elemente mehr kommen können, wird die Berechnung beendet und in den \lstinline|Done|-Zustand übergegangen.
+Wenn ein leeres Element (\lstinline|Input.Empty|) verarbeitet werden soll, wird der \lstinline|Iteratee| unverändert zurückgegeben, weil sich an der Gesamtsumme nichts geändert hat.
+Sobald keine weiteren Elemente mehr kommen können, wird die Berechnung beendet und ein \lstinline|Iteratee| an den \lstinline|folder| übergeben, der sich immer im \lstinline|Done|-Zustand befindet.
+
+% subparagraph erstellung_durch_vererbung (end)
+
+\subparagraph{Erstellung durch Konstruktorfunktion} % (fold)
+\label{subp:erstellung_durch_konstruktorfunktion}\mbox{} % force new line
+
+Die zweite Möglichkeit, einen \lstinline|Iteratee| zu erstellen, ist mit Hilfe einer der Konstruktorfunktionen.
+Es gibt die Konstruktorfunktionen \lstinline|Done|, \lstinline|Cont| und \lstinline|Error|, die jeweils einen \lstinline|Iteratee| im gleichnamigen \lstinline|Step|-Zustand erstellen.
+
+\begin{lstlisting}
+def sumIteratee(sum: Int = 0): Iteratee[Int, Int] = Cont(_ match {
+  case Input.El(i) => sumIteratee(sum + i)
+  case Input.Empty => sumIteratee(sum)
+  case Input.EOF   => Done(sum, Input.EOF)
+})
+
+val sumIterateeFromConstructor: Iteratee[Int, Int] = sumIteratee()
+\end{lstlisting}
+
+Der Code ist dem in \nameref{subp:erstellung_durch_vererbung} vorgestellten Code sehr ähnlich.
+Im Gegensatz dazu muss hier jedoch nicht mehr explizit von \lstinline|Iteratee| geerbt und die \lstinline|fold|-Methode implementiert werden.
+Dies macht den Code schon wesentlich kürzer und einfacher.
+Der Code ist auf die elementaren Aufgaben reduziert und es ist nun klar zu erkennen, was bei welcher Eingabe geschieht.
+
+% subparagraph erstellung_durch_konstruktorfunktion (end)
+
+\subparagraph{Erstellung durch Hilfsfunktion} % (fold)
+\label{subp:erstellung_durch_hilfsfunktion}\mbox{} % force new line
+
+Die dritte und letzte Möglichkeit nutzt eine problemspezifische Hilfsfunktion.
+Das Aufsummieren von Menge von Zahlen lässt sich sehr einfach mit Hilfe eines Folds implementieren\todo{Erklären, was ein Fold ist}.
+Das \lstinline|Iteratee|-Companion-Objekt beinhaltet u.~a. die \lstinline|fold|-Hilfsfunktion, die für solche Operationen gedacht ist.
+Durch Einsatz dieser Funktion wird die Lösung zum Einzeiler.
+
+\begin{lstlisting}
+val sumIterateeFromHelper: Iteratee[Int, Int] =
+  Iteratee.fold(0)(_ + _)
+\end{lstlisting}
+
+Vom Filtern der unterschiedlichen \lstinline|Input|-Typen ist hierbei abstrahiert und es muss sich nur noch um tatsächliche Eingabeelemente gekümmert werden.
+
+% subparagraph erstellung_durch_hilfsfunktion (end)
 
 % paragraph iteratees_erstellen (end)
 

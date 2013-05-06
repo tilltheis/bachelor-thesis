@@ -1,13 +1,15 @@
 import org.specs2.mutable._
+import org.specs2.time.NoTimeConversions
 
 import scala.concurrent._
 import scala.concurrent.duration._
 
 import play.api.libs.iteratee._
+import play.api.libs.iteratee.Enumerator.enumInput
 
 import examples.reactive.streams.Iteratees
 
-class IterateesSpec extends Specification {
+class IterateesSpec extends Specification with NoTimeConversions {
   // "The logger iteratee" should {
   //   "do side effects" in {
   //     val flattened = Iteratee.flatten(Iteratees.appliedLoggerIteratee)
@@ -25,13 +27,16 @@ class IterateesSpec extends Specification {
 
     kind + " sum iteratees" should {
       "have a sum of zero after creation" in {
-        Await.result(iteratee.run, Duration(1, "second")) === 0
+        Await.result(iteratee.run, 1 second) === 0
       }
 
       "sum correctly" in {
-        val e = Enumerator(3, 4, -2)
+        val e = Enumerator(3, 4) >>>
+                enumInput(Input.Empty) >>>
+                Enumerator(-2) >>>
+                enumInput(Input.Empty)
         val summed = Iteratee.flatten(e(iteratee))
-        Await.result(summed.run, Duration(1, "second")) === 5
+        Await.result(summed.run, 1 second) === 5
       }
     }
   }
