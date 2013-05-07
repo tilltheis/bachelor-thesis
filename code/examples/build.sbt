@@ -1,5 +1,7 @@
 scalaVersion := "2.10.1"
 
+scalacOptions ++= Seq("-deprecation", "-feature")
+
 scalaSource in Compile := file("src")
 
 scalaSource in Test := file("test")
