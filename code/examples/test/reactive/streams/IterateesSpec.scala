@@ -10,14 +10,6 @@ import play.api.libs.iteratee.Enumerator.enumInput
 import examples.reactive.streams.Iteratees
 
 class IterateesSpec extends Specification with NoTimeConversions {
-  // "The logger iteratee" should {
-  //   "do side effects" in {
-  //     val flattened = Iteratee.flatten(Iteratees.appliedLoggerIteratee)
-  //     println(flattened)
-  //     Await.result(flattened.run, Duration(1, "second")) === ()
-  //   }
-  // }
-
   Seq(
     ("inheritance", Iteratees.Creation.sumIterateeFromInheritance),
     ("constructor", Iteratees.Creation.sumIterateeFromConstructor),
@@ -38,6 +30,17 @@ class IterateesSpec extends Specification with NoTimeConversions {
         val summed = Iteratee.flatten(e(iteratee))
         Await.result(summed.run, 1 second) === 5
       }
+
+      "sum correctly with folder" in {
+        val result = iteratee.fold(Iteratees.Creation.folder(List(1, 4, -2)))
+        Await.result(result, 1 second) === 3
+      }
+    }
+  }
+
+  "sum result with folder" should {
+    "be correct" in {
+      Await.result(Iteratees.Creation.sumResult, 1 second) === 3
     }
   }
 }

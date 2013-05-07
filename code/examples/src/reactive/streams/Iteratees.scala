@@ -1,18 +1,10 @@
 package examples.reactive.streams
 
 import play.api.libs.iteratee._
-import scala.concurrent.Future
+import scala.concurrent._
+import ExecutionContext.Implicits.global
 
 object Iteratees extends App {
-  // val loggerIteratee: Iteratee[String, Unit] =
-  //   Iteratee.foreach(println)
-  // val namesEnumerator: Enumerator[String] =
-  //   Enumerator("Foo", "Bar", "Baz")
-  // val appliedLoggerIteratee: Future[Iteratee[String, Unit]] =
-  //   namesEnumerator(loggerIteratee)
-  // // loggerIteratee.run
-
-
   object Creation {
 
     case class SumIteratee(sum: Int = 0) extends Iteratee[Int, Int] {
@@ -44,10 +36,23 @@ object Iteratees extends App {
     val sumIterateeFromHelper: Iteratee[Int, Int] =
       Iteratee.fold(0)(_ + _)
 
-  }
 
-  // Thread.sleep(1000)
-  // // sys.exit
-  // val threadSet = Thread.getAllStackTraces.keySet
-  // threadSet.toArray(new Thread(threadSet.size)).foreach(_.interrupt)
+    def folder(xs: List[Int])(step: Step[Int, Int]): Future[Int] =
+      xs match {
+        case Nil => step match {
+          case Step.Cont(k) => k(Input.EOF).fold(_ match {
+            case Step.Done(sum, Input.EOF) => Future(sum)
+            case _ => throw new Exception("invalid state")
+          })
+          case _ => throw new Exception("invalid state")
+        }
+        case x :: xs => step match {
+          case Step.Cont(k) => k(Input.El(x)).fold(folder(xs))
+          case _ => throw new Exception("invalid state")
+        }
+      }
+
+    val sumResult: Future[Int] =
+      sumIterateeFromHelper.fold(folder(List(1, 4, -2)))
+  }
 }

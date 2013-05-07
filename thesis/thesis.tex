@@ -675,7 +675,48 @@ Vom Filtern der unterschiedlichen \lstinline|Input|-Typen ist hierbei abstrahier
 
 % paragraph iteratees_erstellen (end)
 
-% subsubsection iteratees
+\paragraph{Iteratees ausführen} % (fold)
+\label{par:iteratees_ausfuehren}\mbox{} % force new line
+
+Um die \lstinline|Iteratee|s mit Daten zu versorgen existiert, wie in \nameref{par:iteratees_erstellen} beschrieben, die Methode \lstinline|fold|.
+\lstinline|fold| nimmt als Argument eine Funktion \lstinline|folder| vom Typ \lstinline|Step[E, A] => Future[B]|.
+Diese Funktion übergibt ein Element an den \lstinline|Iteratee| und muss daraufhin den Zustand des neuen \lstinline|Iteratee|s überprüfen, ob weitere Elemente akzeptiert werden, oder nicht nicht.
+Erst nach dieser Analyse kann entschieden werden, ob ein weiteres Element übergeben wird oder nicht.
+Das übergeben von Daten mittels der \lstinline|fold|-Methode ist, wie im Folgenden zu erkennen, recht aufwändig.
+
+\begin{lstlisting}
+def folder(xs: List[Int])(step: Step[Int, Int]): Future[Int] =
+  xs match {
+    case Nil => step match {
+      case Step.Cont(k) => k(Input.EOF).fold(_ match {
+        case Step.Done(sum, Input.EOF) => Future(sum)
+        case _ => throw new Exception("invalid state")
+      })
+      case _ => throw new Exception("invalid state")
+    }
+    case x :: xs => step match {
+      case Step.Cont(k) => k(Input.El(x)).fold(folder(xs))
+      case _ => throw new Exception("invalid state")
+    }
+  }
+
+val sumResult: Future[Int] =
+  sumIterateeFromHelper.fold(folder(List(1, 4, -2)))
+\end{lstlisting}
+
+Durch Verwendung von \lstinline|Enumerator|s wird dies allerdings wesentlich einfacher.
+
+% paragraph iteratees_ausfuehren (end)
+
+% subsubsection iteratees (end)
+
+\subsubsection{Enumerators} % (fold)
+\label{ssub:enumerators}
+
+Mit Hilfe von \lstinline|Enumerator|s können auf einfache Weise Daten an einen \lstinline|Iteratee| übergeben werden.
+Das Ergebnis der Anwendung eines \lstinline|Enumerator|s ist der \lstinline|Iteratee| nach Konsum der Elemente in der \lstinline|Future|-Monade.
+
+% subsubsection enumerators (end)
 
 
 \subsubsection{Regeln} % (fold)
