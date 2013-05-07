@@ -294,29 +294,15 @@ Futures und Promises mit den Quellen \citealt{haller2013} und \citealt{typesafe2
 \label{sec:streams}
 
 Streams sind inkrementelle Datenströme, die nicht-blockierendes Lesen erlauben und kombiniert und transformiert werden können.
-Streams eignen sich, IO-Operationen performant und in funktionalem Stil durchzuführen.
+Sie erlauben inkrementelle, deklarative und funktionale Datenverarbeitung mit voller Kontrolle über den Ressourcenverbrauch.
 Anwendungsbeispiele für Streams sind beispielsweise die Implementierung von Web-Servern oder Datenkompression.
-Die in diesem Kapitel vorgestellten Streams entstanden im Umfeld der Programmiersprache Haskell und wurden von Oleg Kiselyov  vorgestellt \cite[vgl.][S.~19]{monad_reader}.
+Die in diesem Kapitel vorgestellten Streams sind auch bekannt als Iteratee I/O.
+Sie entstanden im Umfeld der Programmiersprache Haskell und wurden von Oleg Kiselyov vorgestellt \cite[vgl.][S.~19]{monad_reader}.
+Als Quellen hierfür dienen \citealt{kiselyov2012}, \citealt{iteratee_io}, \citealt{monad_reader} und die Seiten der offiziellen Play-Dokumentation (\citealt{iteratees}, \cite{enumerators}).
 
 
-\subsection{Streams nach Kiselyov} % (fold)
-\label{sub:streams_nach_kiselyov}
-
-Weil die Iteratee IO-Streams durch Oleg Kiselyov begründet wurden, werden in diesem Abschnitt die Hintergründe dieser Streams nach Kiselyov vorgestellt.
-Als Quellen hierfür dienen \citealt{kiselyov2012}, \citealt{iteratee_io} und \citealt{monad_reader}.
-
-
-\subsubsection{Motivation} % (fold)
-\label{ssub:motivation}
-
-Motivation für die Entwicklung der Iteratee basierten Streams war der Wunsch nach inkrementeller, deklarativer Datenverarbeitung mit voller Kontrolle über den Ressourcenverbrauch.
-Die einzelnen Komponenten der zu entwickelnden Bibliothek sollten möglichst leicht zu mächtigeren Komponenten kombinierbar sein.
-
-% subsubsection motivation (end)
-
-
-\subsubsection{Design} % (fold)
-\label{ssub:design}
+\subsection{Design} % (fold)
+\label{sub:design}
 
 Iteratee IO-Streams bestehen aus vier Komponenten.
 \lstinline|Stream|, \lstinline|Iteratee|, \lstinline|Enumerator| und \lstinline|Enumeratee|.
@@ -327,90 +313,96 @@ Und \lstinline|Enumeratee| transformiert einen \lstinline|Enumerator|.
 \lstinline|Enumeratee| ist also sowohl in der Rolle eines \lstinline|Iteratee|s, der die zu transformierenden Elemente konsumiert, als auch in der Rolle eines \lstinline|Enumerators|, der die transformierten Elemente bereitstellt.
 
 
-\paragraph{Streams} % (fold)
-\label{par:streams}\mbox{} % force new line
+\subsubsection{Input} % (fold)
+\label{ssub:input}
 
-Die von der Datenquelle generierten Elemente werden in \lstinline|Stream|s verpackt.
-Der Datentyp \lstinline|Stream| ist definiert als
-\begin{lstlisting}[language=Haskell]
-data Stream el = EOF (Maybe ErrMsg) | Chunk [el]
+Die von der Datenquelle generierten Elemente werden in \lstinline|Input|s verpackt.
+Der Datentyp \lstinline|Input| ist definiert, wie in Listing~\ref{lst:der_input_datentyp} gezeigt.
+
+\begin{lstlisting}[caption=Der \lstinline|Input|-Datentyp, label=lst:der_input_datentyp]
+sealed trait Input[+E]
+object Input {
+  case class El[+E](e: E) extends Input[E]
+  case object Empty extends Input[Nothing]
+  case object EOF extends Input[Nothing]
+}
 \end{lstlisting}
 
-Der Typkonstruktor ist parametrisiert über den Typ der gehaltenen Elemente \lstinline|el|.
+Der Datentyp ist parametrisiert über den Typ der gehaltenen Elemente \lstinline|E|.
 
-Für den Fall, dass die Datenquelle nicht erschöpft ist, existiert der Datenkonstruktor \lstinline|Chunk el|.
-Dieser hält eine, möglicherweise leere, Liste von Elementen aus der Datenquelle.
-Elemente werden nicht einzeln aus der Datenquelle empfangen, sondern in beliebig großen Mengen.
+Für den Fall, dass die Datenquelle nicht erschöpft ist, existiert im Companion-Objekt die Unterklasse \lstinline|Input.El| mit dazugehöriger Konstruktorfunktion.
+Diese Implementierung hält genau ein Element aus der Datenquelle.
+Das \lstinline|Input.Empty| "`signifies a stream with no immediately available data but which is still continuing"' \cite[vgl.][]{iteratee_io}\todo{Ist Übernehmen von Kiselyovs Definition für Plays Implementierung erlaubt?}.
+Außerdem findet es im Kontext von \lstinline|Iteratee|s Verwendung, um zu signalisieren, dass keine Eingabe übriggebliebenen ist.
+Um zu signalisieren, dass die Datenquelle erschöpft ist, existiert das Objekt \lstinline|Input.EOF|.
 
-Für den Fall, dass die Datenquelle erschöpft, oder ein Fehler aufgetreten ist, existiert der Datenkonstruktor \lstinline|EOF|.
-Wenn diesem Datenkonstruktor keine Fehlernachricht übergeben wird, bedeutet das, dass die Datenquelle ohne jede Fehler erschöpft ist.
-
-Ein Wert vom Typ \lstinline|Stream| hat also drei mögliche Zustände:
+Ein Wert vom Typ \lstinline|Input| hat also drei mögliche Zustände:
 \begin{enumerate}
-  \item Es gibt neue Elemente (\lstinline|Chunk|).
-  \item Die Datenquelle ist erschöpft (\lstinline|EOF| ohne Fehlernachricht).
-  \item Es ist ein Fehler aufgetreten und es können keine neuen Elemente erzeugt werden (\lstinline|EOF| mit Fehlernachricht).
+  \item Es gibt ein neues Element (\lstinline|Input.El|).
+  \item Es gibt noch kein neues Element, doch die Datenquelle ist noch aktiv (\lstinline|Input.Empty|)
+  \item Die Datenquelle ist erschöpft (\lstinline|Input.EOF|).
 \end{enumerate}
 
-% paragraph streams (end)
+% subsubsection input (end)
 
 
-\paragraph{Iteratees} % (fold)
-\label{par:iteratees}\mbox{} % force new line
+\subsubsection{Iteratee} % (fold)
+\label{ssub:design_iteratee}
 
-Die von der Datenquelle in \lstinline|Stream|s verpackten Elemente werden von \lstinline|Iteratee|s konsumiert, um daraus ein Ergebnis aufzubauen.
-Der Datentyp \lstinline|Iteratee| ist definiert als
-\begin{lstlisting}[language=Haskell]
-data Iteratee el m a =
-    IE_done a
-  | IE_cont (Maybe ErrMsg)
-            (Stream el -> m (Iteratee el m a, Stream el))
+Die von der Datenquelle in \lstinline|Input|s verpackten Elemente werden von \lstinline|Iteratee|s konsumiert, um daraus ein Ergebnis aufzubauen.
+\lstinline|Iteratee|s bilden einen Container um ihren Zustand \lstinline|Step|, der den Verarbeitungszustand widerspiegelt.
+Der Typ des \lstinline|Step|-Zustands ist wie in Listing \ref{lst:der_step_datentyp} gezeigt.
+\begin{lstlisting}[caption=Der \lstinline|Step|-Datentyp, label=lst:der_step_datentyp]
+sealed trait Step[E, +A]
+object Step {
+  case class Done[+A, E](a: A, remaining: Input[E])
+    extends Step[E, A]
+  case class Cont[E, +A](k: Input[E] => Iteratee[E, A])
+    extends Step[E, A]
+  case class Error[E](msg: String, input: Input[E])
+    extends Step[E, Nothing]
+}
 \end{lstlisting}
 
-Der Typkonstruktor ist über die drei Typen \lstinline|el|, \lstinline|m| und \lstinline|a| parametrisiert.
-\lstinline|el| ist der Typ der zu konsumierenden Elemente.
-\lstinline|m| ist die Monade, in dessen Kontext der \lstinline|Iteratee| agiert.
-Und \lstinline|a| ist der Typ des zu berechnenden Ergebnisses.
+Der Typ ist über die zwei Typen \lstinline|E| und \lstinline|A| parametrisiert.
+\lstinline|E| ist der Typ der zu konsumierenden Elemente.
+\lstinline|A| ist der Typ des zu berechnenden Ergebnisses.
 
-Die Monade ist typischerweise \lstinline|IO|, damit der \lstinline|Iteratee| Seiteneffekte ausführen kann.
-Das ist z.~B. notwendig, um in eine Datei zu schreiben, oder Daten über das Netzwerk zu verschicken.
-In Haskell sind Seiteneffekte außerhalb der \lstinline|IO|-Monade nicht zulässig \cite[vgl.][]{haskell_io}.
-
-Ein \lstinline|Iteratee|, der mit seiner Berechnung fertig ist, wird mit dem Datenkonstruktor \lstinline[breaklines=true]|IE_done a| erstellt.
+Ein \lstinline|Iteratee|, der mit seiner Berechnung fertig ist, ist im Zustand \lstinline[breaklines=true]|Step.Done|.
 Ein solcher \lstinline|Iteratee| hält nur sein berechnetes Ergebnis und nimmt keine weiteren Elemente an.
 
-Um einen \lstinline|Iteratee| zu erstellen, der noch kein Endergebnis berechnet hat, wird der Datenkonstruktor \lstinline|IE_cont| verwendet.
-Im Falle eines Fehlers wird als erstes Argument eine Fehlernachricht an den Datenkonstruktor übergeben.
-Falls kein Fehler aufgetreten ist, wird als erstes Argument keine Fehlernachricht (\lstinline|Nothing|) übergeben.
+Ein \lstinline|Iteratee|, der noch kein Endergebnis berechnet hat, ist im Zustand \lstinline|Step.Cont|.
+%Im Falle eines Fehlers wird als erstes Argument eine Fehlernachricht an den Datenkonstruktor übergeben.
+%Falls kein Fehler aufgetreten ist, wird als erstes Argument keine Fehlernachricht (\lstinline|Nothing|) übergeben.
+Das Argument von \lstinline|Step.Cont| ist die Schritt-Funktion \lstinline[breaklines=true]|Input[E] => Iteratee[E, A]|\todo{Continuation}.
+Die Eingabe der Schritt-Funktion ist ein \lstinline|Input| mit einem neuen zu verarbeitenden Element.
+Die Ausgabe der Schritt-Funktion ist ein neuer \lstinline|Iteratee|, der den neuen Berechnungsstand nach dem Verarbeiten des Eingabeelements hält.
+%Das zweite Element des Ergebnispaars ist der Rest des Eingabe-\lstinline|Stream|s, der nicht konsumiert wurde.
+%Die Eingabe wird nicht vollständig konsumiert, wenn bei der Verarbeitung ein Fehler auftritt, oder wenn das Endergebnis auch ohne Konsum der gesamten Eingabe berechnet werden kann.
+%Ein Beispiel dafür ist die Suche nach einem bestimmten Element: Sobald das gesuchte Element gefunden wurde, müssen alle weiteren Elemente nicht mehr betrachtet werden.
 
-Das zweite Argument für \lstinline|IE_cont| ist die Schritt-Funktion \lstinline[breaklines=true]|Stream el -> m (Iteratee el m a, Stream el)|.
-Die Eingabe der Schritt-Funktion ist ein \lstinline|Stream| mit neuen zu verarbeitenden Elementen.
-Die Ausgabe der Schritt-Funktion ist ein Paar.
-Das erste Element des Ergebnispaars ist ein neuer \lstinline|Iteratee|, der den neuen Berechnungsstand nach dem Verarbeiten des Eingabe-\lstinline|Stream|s hält.
-Das zweite Element des Ergebnispaars ist der Rest des Eingabe-\lstinline|Stream|s, der nicht konsumiert wurde.
-Die Eingabe wird nicht vollständig konsumiert, wenn bei der Verarbeitung ein Fehler auftritt, oder wenn das Endergebnis auch ohne Konsum der gesamten Eingabe berechnet werden kann.
-Ein Beispiel dafür ist die Suche nach einem bestimmten Element: Sobald das gesuchte Element gefunden wurde, müssen alle weiteren Elemente nicht mehr betrachtet werden.
+Falls bei der Verarbeitung eines Elements ein Fehler auftritt, wird dies durch den Zustand \lstinline|Step.Error| signalisiert.
+Ein solcher Fehler wird durch eine Fehlermeldung und durch das verursachende Eingabeelement dargestellt.
+Beispielsweise kann ein \lstinline|Iteratee| nach dem Empfang eines \lstinline|Input.EOF|-Elements signalisieren, dass es noch mehr Daten benötigt.
+%In diesem Fall kann das System versuchen doch noch mehr Daten zu finden, sodass der \lstinline|Iteratee| erfolgreich zu einem Ergebnis kommen kann.
 
-Der Grund dafür, dass auch im Fehlerfall eine Schritt-Funktion übergeben wird, ist der, dass es dadurch für das System möglich ist, sich von Fehlern zu erholen.
-Beispielsweise kann ein \lstinline|Iteratee| nach dem Empfang eines \lstinline|EOF Nothing|-Elements signalisieren, dass es noch mehr Daten benötigt.
-In diesem Fall kann das System versuchen doch noch mehr Daten zu finden, sodass der \lstinline|Iteratee| erfolgreich zu einem Ergebnis kommen kann.
-
-Ein Wert vom Typ \lstinline|Iteratee| hat also auch wieder drei mögliche Zustände:
+Ein \lstinline|Iteratee| hat also einen Verarbeitungszustand vom Typ \lstinline|Step| mit drei möglichen Zuständen:
 \begin{enumerate}
-  \item Es wurde erfolgreich ein Ergebnis berechnet (\lstinline|IE_Done|).
-  \item Es werden weitere Daten zur Berechnung benötigt (\lstinline|IE_cont| ohne Fehlernachricht).
-  \item Es ist ein Fehler aufgetreten, von dem sich das System aber wieder erholen kann (\lstinline|IE_cont| mit Fehlernachricht).
+  \item Es wurde erfolgreich ein Ergebnis berechnet (\lstinline|Step.Done|).
+  \item Es werden weitere Daten zur Berechnung benötigt (\lstinline|Step.Cont|).
+  \item Es ist ein Fehler aufgetreten (\lstinline|Step.Error|).
 \end{enumerate}
 
-Der \lstinline|Iteratee|-Typ ist eine Monade.
-Dadurch ist es möglich, einen beliebigen Wert in die Monade zu heben (unit).
-Außerdem kann dadurch ein erfolgreich berechneter Wert innerhalb der Monade transformiert werden (bind).
+\todo{\lstinline|Iteratee| ist eine Monade}
+% Der \lstinline|Iteratee|-Typ ist eine Monade.
+% Dadurch ist es möglich, einen beliebigen Wert in die Monade zu heben (unit).
+% Außerdem kann dadurch ein erfolgreich berechneter Wert innerhalb der Monade transformiert werden (bind).
 
-% paragraph iteratees (end)
+% subsubsection design_iteratee (end)
 
 
-\paragraph{Enumerators} % (fold)
-\label{par:enumerators}\mbox{} % force new line
+\subsubsection{Enumerator} % (fold)
+\label{ssub:design_enumerator}
 
 Ein \lstinline|Enumerator| ist die Datenquelle, die ihre Daten, in \lstinline|Stream|s verpackt, bereitstellt.
 Der Datentyp \lstinline|Enumerator| ist definiert als
@@ -431,11 +423,11 @@ Die Herkunft der Daten, die der \lstinline|Enumerator| an den \lstinline|Iterate
 Weil Seiteneffekte nur in der \lstinline|IO|-Monade möglich sind, ist \lstinline|m| typischerweise \lstinline|IO|.
 Dadurch ist es beispielsweise möglich, die Daten aus Dateien oder dem Netzwerk zu empfangen.
 
-% paragraph enumerators (end)
+% subsubsection design_enumerator (end)
 
 
-\paragraph{Enumeratees} % (fold)
-\label{par:enumeratees}\mbox{} % force new line
+\subsubsection{Enumeratees} % (fold)
+\label{ssub:enumeratees}
 
 Ein \lstinline|Enumeratee| ist ein Stream-Transformator, der \lstinline|Iteratee|s eines bestimmten Element-Typs zu \lstinline|Iteratee|s eines anderen Element-Typs konvertiert.
 Der Datentyp \lstinline|Enumeratee| ist definiert als
@@ -460,10 +452,7 @@ Ein \lstinline|Enumeratee| ist ein \lstinline|Enumerator| mit \lstinline|m = Ite
 Ein \lstinline|Enumeratee| ist also sowohl \lstinline|Iteratee|, als auch \lstinline|Enumerator|.
 Er ist ein \lstinline|Iteratee| des äußeren Typs \lstinline|elo| (nach Ausführung der Funktion) und ein \lstinline|Enumerator| des inneren Typs \lstinline|eli| (vor Ausführung der Funktion).
 
-% paragraph enumeratees (end)
-
-
-% subsubsection design (end)
+% subsubsection enumeratees (end)
 
 
 \subsubsection{Komposition} % (fold)
@@ -509,6 +498,9 @@ Dann wird der andere \lstinline|Enumerator| ausgewählt, aus dem die folgenden E
 % paragraph komposition_von_enumerators (end)
 
 % subsubsection komposition (end)
+
+
+% subsection design (end)
 
 
 % subsection streams_nach_kiselyov (end)
