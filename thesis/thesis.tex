@@ -313,8 +313,8 @@ Und \lstinline|Enumeratee| transformiert einen \lstinline|Enumerator|.
 \lstinline|Enumeratee| ist also sowohl in der Rolle eines \lstinline|Iteratee|s, der die zu transformierenden Elemente konsumiert, als auch in der Rolle eines \lstinline|Enumerators|, der die transformierten Elemente bereitstellt.
 
 
-\subsubsection{Input} % (fold)
-\label{ssub:input}
+\subsubsection{Inputs} % (fold)
+\label{ssub:design_inputs}
 
 Die von der Datenquelle generierten Elemente werden in \lstinline|Input|s verpackt.
 Der Datentyp \lstinline|Input| ist definiert, wie in Listing~\ref{lst:der_input_datentyp} gezeigt.
@@ -343,11 +343,11 @@ Ein Wert vom Typ \lstinline|Input| hat also drei mögliche Zustände:
   \item Die Datenquelle ist erschöpft (\lstinline|Input.EOF|).
 \end{enumerate}
 
-% subsubsection input (end)
+% subsubsection design_inputs (end)
 
 
-\subsubsection{Iteratee} % (fold)
-\label{ssub:design_iteratee}
+\subsubsection{Iteratees} % (fold)
+\label{ssub:design_iteratees}
 
 Die von der Datenquelle in \lstinline|Input|s verpackten Elemente werden von \lstinline|Iteratee|s konsumiert, um daraus ein Ergebnis aufzubauen.
 \lstinline|Iteratee|s bilden einen Container um ihren Zustand \lstinline|Step|, der den Verarbeitungszustand widerspiegelt.
@@ -397,11 +397,11 @@ Ein \lstinline|Iteratee| hat also einen Verarbeitungszustand vom Typ \lstinline|
 % Dadurch ist es möglich, einen beliebigen Wert in die Monade zu heben (unit).
 % Außerdem kann dadurch ein erfolgreich berechneter Wert innerhalb der Monade transformiert werden (bind).
 
-% subsubsection design_iteratee (end)
+% subsubsection design_iteratees (end)
 
 
-\subsubsection{Enumerator} % (fold)
-\label{ssub:design_enumerator}
+\subsubsection{Enumerators} % (fold)
+\label{ssub:design_enumerators}
 
 Ein \lstinline|Enumerator| ist die Datenquelle, die ihre Daten, in \lstinline|Input|s verpackt, bereitstellt.
 Der Datentyp \lstinline|Enumerator| ist definiert, wie in Listing~\ref{lst:der_enumerator_datentyp} vereinfacht dargestellt.
@@ -421,11 +421,11 @@ Die Herkunft der Daten, die der \lstinline|Enumerator| an den \lstinline|Iterate
 Weil der Rückgabetyp sich in der \lstinline|Future|-Monade befindet können auch zeitintensive Berechnungen durchgeführt werden, ohne den Programmfluss zu unterbrechen.
 Dadurch ist es beispielsweise möglich, die Daten aus Dateien oder dem Netzwerk zu empfangen.
 
-% subsubsection design_enumerator (end)
+% subsubsection design_enumerators (end)
 
 
 \subsubsection{Enumeratees} % (fold)
-\label{ssub:enumeratees}
+\label{ssub:design_enumeratees}
 
 Ein \lstinline|Enumeratee| ist ein Stream-Transformator, der \lstinline|Iteratee|s eines bestimmten Element-Typs zu \lstinline|Iteratee|s eines anderen Element-Typs konvertiert.
 Der Datentyp \lstinline|Enumeratee| ist definiert als
@@ -450,7 +450,7 @@ Ein \lstinline|Enumeratee| ist ein \lstinline|Enumerator| mit \lstinline|m = Ite
 Ein \lstinline|Enumeratee| ist also sowohl \lstinline|Iteratee|, als auch \lstinline|Enumerator|.
 Er ist ein \lstinline|Iteratee| des äußeren Typs \lstinline|elo| (nach Ausführung der Funktion) und ein \lstinline|Enumerator| des inneren Typs \lstinline|eli| (vor Ausführung der Funktion).
 
-% subsubsection enumeratees (end)
+% subsubsection design_enumeratees (end)
 
 
 \subsubsection{Komposition} % (fold)
