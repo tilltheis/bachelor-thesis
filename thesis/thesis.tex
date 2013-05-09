@@ -332,7 +332,7 @@ Der Datentyp ist parametrisiert über den Typ der gehaltenen Elemente \lstinline
 
 Für den Fall, dass die Datenquelle nicht erschöpft ist, existiert im Companion-Objekt die Unterklasse \lstinline|Input.El| mit dazugehöriger Konstruktorfunktion.
 Diese Implementierung hält genau ein Element aus der Datenquelle.
-Das \lstinline|Input.Empty| "`signifies a stream with no immediately available data but which is still continuing"' \cite[vgl.][]{iteratee_io}\todo{Ist Übernehmen von Kiselyovs Definition für Plays Implementierung erlaubt?}.
+\lstinline|Input.Empty| "`signifies a stream with no immediately available data but which is still continuing"' \cite[vgl.][]{iteratee_io}\todo{Ist Übernehmen von Kiselyovs Definition für Plays Implementierung erlaubt?}.
 Außerdem findet es im Kontext von \lstinline|Iteratee|s Verwendung, um zu signalisieren, dass keine Eingabe übriggebliebenen ist.
 Um zu signalisieren, dass die Datenquelle erschöpft ist, existiert das Objekt \lstinline|Input.EOF|.
 
@@ -368,18 +368,17 @@ Der Typ ist über die zwei Typen \lstinline|E| und \lstinline|A| parametrisiert.
 \lstinline|E| ist der Typ der zu konsumierenden Elemente.
 \lstinline|A| ist der Typ des zu berechnenden Ergebnisses.
 
-Ein \lstinline|Iteratee|, der mit seiner Berechnung fertig ist, ist im Zustand \lstinline[breaklines=true]|Step.Done|.
-Ein solcher \lstinline|Iteratee| hält nur sein berechnetes Ergebnis und nimmt keine weiteren Elemente an.
+Ein \lstinline|Iteratee|, der mit seiner Berechnung fertig ist, ist im Zustand \lstinline|Step.Done|.
+Ein solcher \lstinline|Iteratee| hält sein berechnetes Ergebnis und den Teil der letzten Eingabe, der nicht mehr verarbeitet wurde.
+Ein \lstinline|Iteratee| in diesem Zustand nimmt keine weiteren Elemente an.
+Häufig ist der Eingaberest \lstinline|Input.Empty|, weil die gesamte Eingabe konsumiert wurde.
+Ein Beispiel für einen nicht leeren Eingaberest ist, wenn ein \lstinline|Iteratee| zeilenweise Dateiinhalte empfängt und darin nach einem Wort sucht.
+Wenn das gesuchte Wort gefunden wurde, wird als Restwert der bisher nicht angesehene Rest der Zeile verwendet.
 
 Ein \lstinline|Iteratee|, der noch kein Endergebnis berechnet hat, ist im Zustand \lstinline|Step.Cont|.
-%Im Falle eines Fehlers wird als erstes Argument eine Fehlernachricht an den Datenkonstruktor übergeben.
-%Falls kein Fehler aufgetreten ist, wird als erstes Argument keine Fehlernachricht (\lstinline|Nothing|) übergeben.
 Das Argument von \lstinline|Step.Cont| ist die Schritt-Funktion \lstinline[breaklines=true]|Input[E] => Iteratee[E, A]|\todo{Continuation}.
 Die Eingabe der Schritt-Funktion ist ein \lstinline|Input| mit einem neuen zu verarbeitenden Element.
 Die Ausgabe der Schritt-Funktion ist ein neuer \lstinline|Iteratee|, der den neuen Berechnungsstand nach dem Verarbeiten des Eingabeelements hält.
-%Das zweite Element des Ergebnispaars ist der Rest des Eingabe-\lstinline|Stream|s, der nicht konsumiert wurde.
-%Die Eingabe wird nicht vollständig konsumiert, wenn bei der Verarbeitung ein Fehler auftritt, oder wenn das Endergebnis auch ohne Konsum der gesamten Eingabe berechnet werden kann.
-%Ein Beispiel dafür ist die Suche nach einem bestimmten Element: Sobald das gesuchte Element gefunden wurde, müssen alle weiteren Elemente nicht mehr betrachtet werden.
 
 Falls bei der Verarbeitung eines Elements ein Fehler auftritt, wird dies durch den Zustand \lstinline|Step.Error| signalisiert.
 Ein solcher Fehler wird durch eine Fehlermeldung und durch das verursachende Eingabeelement dargestellt.
