@@ -473,14 +473,13 @@ Sequenzielle Komposition zweier \lstinline|Iteratee|s funktioniert noch folgende
 Zuerst wird der erste \lstinline|Iteratee| angewendet, bis er keine Elemente mehr annimmt, oder die Datenquelle erschöpft ist.
 Dann wird der zweite \lstinline|Iteratee| auf die noch übrigen Elemente der Datenquelle angewendet, bis auch dieser \lstinline|Iteratee| keine Elemente mehr annimmt, oder die Datenquelle erschöpft ist.
 Anschließend werden beide \lstinline|Iteratee|s kombiniert.
-Z.~B. als Paar.
+Z.~B. als Paar. % Iteratee#map/flatMap
 
 Bei der parallelen Komposition werden die Elemente der Datenquelle immer an beide \lstinline|Iteratee|s weitergegeben.
 Dies geschieht so lange, bis beide \lstinline|Iteratee|s keine weiteren Elemente mehr annehmen.
-Anschließend werden beide \lstinline|Iteratee|s kombiniert.
+Anschließend werden beide \lstinline|Iteratee|s kombiniert. % Enumeratee.zip/zipWith
 
 \lstinline|Iteratee|s könnnen auch frei kombiniert werden, sodass z.~B. nur bestimmte Elemente an den einen \lstinline|Iteratee| delegiert werden und alle anderen Elemente an den anderen \lstinline|Iteratee| delegiert werden.
-\todo{Note about remaining \lstinline|Input| elements in \lstinline|Iteratee|'s \lstinline|Done| state}
 
 % paragraph komposition_von_iteratees (end)
 
@@ -489,11 +488,10 @@ Anschließend werden beide \lstinline|Iteratee|s kombiniert.
 
 Die sequentielle Komposition zweier \lstinline|Enumerator|s erfolgt ähnlich, wie die sequentielle Kompositionen von \lstinline|Iteratee|s.
 Der resultierende \lstinline|Enumerator| generiert erst alle Elemente des ersten \lstinline|Enumerator|s und dann alle Elemente des zweiten \lstinline|Enumerator|s.
-Die sequentielle Komposition von \lstinline|Enumerator|s entspricht also der Verkettung ihrer Ausgaben.
+Die sequentielle Komposition von \lstinline|Enumerator|s entspricht also der Verkettung ihrer Ausgaben. %Enumerator.andThen
 
-Parallele Komposition von \lstinline|Enumerator|s bedeutet, dass jedes Element des kombinierten \lstinline|Enumerator|s aus einem Element jedes ursprünglichen \lstinline|Enumerator|s entstanden ist.
-So besteht das erste Element der Komposition aus dem ersten Element des ersten \lstinline|Enumerator|s und aus dem ersten Element des zweiten \lstinline|Enumerator|s.
-Das zweite Element besteht aus dem zweiten Element des ersten und dem zweiten Element des zweiten \lstinline|Enumerator|s und so weiter.
+Parallele Komposition von \lstinline|Enumerator|s bedeutet, dass jedes Element des kombinierten \lstinline|Enumerator|s entweder aus dem ersten, oder aus dem zweiten \lstinline|Enumerator| stammt.
+Die Reihenfolge der Elemente ist dadurch bestimmt, welcher \lstinline|Enumerator| zuerst ein neues Element zur Verfügung stellt. % Enumerator.interleave
 
 \lstinline|Enumerator|s können auch frei kombiniert werden, wobei beliebig gewählt werden kann, aus welchem der zur Verfügung stehenden \lstinline|Enumerator|s gelesen wird.
 Dabei ist es durchaus denkbar, dass Elemente mehrerer \lstinline|Enumerator|s zu einem Element kombiniert werden.
