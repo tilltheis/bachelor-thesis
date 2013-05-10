@@ -428,27 +428,34 @@ Dadurch ist es beispielsweise möglich, die Daten aus Dateien oder dem Netzwerk 
 \label{ssub:design_enumeratees}
 
 Ein \lstinline|Enumeratee| ist ein Stream-Transformator, der \lstinline|Iteratee|s eines bestimmten Element-Typs zu \lstinline|Iteratee|s eines anderen Element-Typs konvertiert.
-Der Datentyp \lstinline|Enumeratee| ist definiert als
-\begin{lstlisting}[language=Haskell]
-type Enumeratee elo eli m a =
-  Iteratee eli m a -> Iteratee elo m (Iteratee eli m a)
+Der Datentyp \lstinline|Enumeratee| ist definiert, wie in Listing~\ref{lst:der_enumeratee_datentyp} vereinfacht dargestellt.
+\begin{lstlisting}[caption=Der \lstinline|Enumeratee|-Datentyp, label=lst:der_enumeratee_datentyp]
+trait Enumeratee[From, To] {
+  def apply[A](inner: Iteratee[To, A]):
+    Iteratee[From, Iteratee[To, A]]
+}
 \end{lstlisting}
 
 Ein \lstinline|Enumeratee| ist eine Funktion von \lstinline|Iteratee| nach \lstinline|Iteratee|.
-Der Eingabewert ist der zu transformierende \lstinline|Iteratee| vom äußeren Element-Typ \lstinline|elo|.
-Der Ausgabewert ist ein \lstinline|Iteratee| vom inneren Element-Typ \lstinline|eli|.
-Der neue \lstinline|Iteratee| nimmt Elemente vom Typ \lstinline|elo| an, transformiert sie nach \lstinline|eli|.
+Der Eingabewert ist der zu transformierende \lstinline|Iteratee| vom inneren Element-Typ \lstinline|To|.
+Der Ausgabewert ist ein \lstinline|Iteratee| vom "a"seren Element-Typ \lstinline|From|.
+Der neue \lstinline|Iteratee| nimmt Elemente vom Typ \lstinline|From| an und transformiert sie nach \lstinline|To|.
 Diese transformierten Werte werden dann an den ursprünglichen \lstinline|Iteratee| weitergegeben.
+
+Elemente vom Typ \lstinline|From| hei"sen "a"sere Elemente, weil sie vom resultierenden \lstinline|Iteratee| zuerst empfangen werden.
+Elemente vom Typ \lstinline|To| hei"sen innere Elemente, weil sie zum \lstinline|Iteratee| geh"oren, das sich im R"uckgabetyp des resultierenden \lstinline|Iteratee|s befindet.
+Die Elemente des "au"seren \lstinline|Iteratees| werden nach der Transformation an den inneren \lstinline|Iteratee| weitergereicht.
+
 Die Transformation muss dabei aber nicht ein Element nach genau einem anderen Element abbilden.
-Ein äußeres Element \lstinline|elo| kann zu einem, keinem oder auch mehreren inneren Elementen \lstinline|eli| abgebildet werden.
+Ein äußeres Element \lstinline|From| kann zu einem, keinem oder auch mehreren inneren Elementen \lstinline|To| abgebildet werden.
 Genauso ist es möglich, dass mehrere äußere Elemente zu einem inneren Element zusammengefasst werden.
 
-Jeder \lstinline|Enumeratee| ist auch ein \lstinline|Enumerator|.
+Jeder \lstinline|Enumeratee| ist eigentlich auch ein \lstinline|Enumerator|.
 Dies kommt daher, dass \lstinline|Iteratee|s Monaden sind.
-Ein \lstinline|Enumeratee| ist ein \lstinline|Enumerator| mit \lstinline|m = Iteratee elo m'|, wobei \lstinline|m'| das \lstinline|m| des \lstinline|Enumeratee|-Typkonstruktors ist.
-
-Ein \lstinline|Enumeratee| ist also sowohl \lstinline|Iteratee|, als auch \lstinline|Enumerator|.
-Er ist ein \lstinline|Iteratee| des äußeren Typs \lstinline|elo| (nach Ausführung der Funktion) und ein \lstinline|Enumerator| des inneren Typs \lstinline|eli| (vor Ausführung der Funktion).
+Ein \lstinline|Enumeratee| ist ein \lstinline|Enumerator|, dessen Ergebnis nicht in der \lstinline|Future|-Monade, sondern in der \lstinline|Iteratee|-Monade liegt.
+Jeder \lstinline|Enumeratee| ist auch ein \lstinline|Iteratee|, wenn man seinen Rückgabewert betrachtet, der vom Typ \lstinline|Iteratee| ist.
+Ein \lstinline|Enumeratee| ist also sowohl in der Rolle eines \lstinline|Iteratee|s, als auch in der Rolle eines \lstinline|Enumerator|s.
+Er ist ein \lstinline|Iteratee| des äußeren Typs \lstinline|From| und ein \lstinline|Enumerator| des inneren Typs \lstinline|To|, weil er Elemente des "au"seren Typs konsumiert und Elemente des inneren Typs generiert.
 
 % subsubsection design_enumeratees (end)
 
@@ -473,6 +480,7 @@ Dies geschieht so lange, bis beide \lstinline|Iteratee|s keine weiteren Elemente
 Anschließend werden beide \lstinline|Iteratee|s kombiniert.
 
 \lstinline|Iteratee|s könnnen auch frei kombiniert werden, sodass z.~B. nur bestimmte Elemente an den einen \lstinline|Iteratee| delegiert werden und alle anderen Elemente an den anderen \lstinline|Iteratee| delegiert werden.
+\todo{Note about remaining \lstinline|Input| elements in \lstinline|Iteratee|'s \lstinline|Done| state}
 
 % paragraph komposition_von_iteratees (end)
 
