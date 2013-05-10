@@ -305,12 +305,12 @@ Als Quellen hierfür dienen \citealt{kiselyov2012}, \citealt{iteratee_io}, \cite
 \label{sub:design}
 
 Iteratee IO-Streams bestehen aus vier Komponenten.
-\lstinline|Stream|, \lstinline|Iteratee|, \lstinline|Enumerator| und \lstinline|Enumeratee|.
-\lstinline|Stream| beinhaltet die gestreamten Elemente.
-\lstinline|Iteratee| konsumiert \lstinline|Stream|-Elemente und dient somit als Datensenke.
-\lstinline|Enumerator| generiert \lstinline|Stream|-Elemente und dient somit als Datenquelle.
-Und \lstinline|Enumeratee| transformiert einen \lstinline|Enumerator|.
-\lstinline|Enumeratee| ist also sowohl in der Rolle eines \lstinline|Iteratee|s, der die zu transformierenden Elemente konsumiert, als auch in der Rolle eines \lstinline|Enumerators|, der die transformierten Elemente bereitstellt.
+\lstinline|Input|, \lstinline|Iteratee|, \lstinline|Enumerator| und \lstinline|Enumeratee|.
+\lstinline|Input| beinhaltet die gestreamten Elemente.
+\lstinline|Iteratee| konsumiert \lstinline|Input|-Elemente und dient somit als Datensenke.
+\lstinline|Enumerator| generiert \lstinline|Input|-Elemente und dient somit als Datenquelle.
+Und \lstinline|Enumeratee| transformiert einen \lstinline|Iteratee|.
+Diese Komponenten und ihr jeweiliger Verwendungszweck wird in diesem Kapitel vorgestellt.
 
 
 \subsubsection{Inputs} % (fold)
