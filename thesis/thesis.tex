@@ -507,42 +507,11 @@ Dann wird der andere \lstinline|Enumerator| ausgewählt, aus dem die folgenden E
 % subsection design (end)
 
 
-% subsection streams_nach_kiselyov (end)
+\subsection{Anwendung} % (fold)
+\label{sub:anwendung}
 
-
-\subsection{Streams in Play} % (fold)
-\label{sub:streams_in_play}
-
-
-\subsubsection{Überblick} % (fold)
-\label{sssec:streams_ueberblick}
-
-Das Stream Paket \lstinline|play.api.libs.iteratee| beinhaltet die drei wesentlichen Bestandteile der Stream-API.
-Diese sind \lstinline|Iteratee|, \lstinline|Enumerator| und \lstinline|Enumeratee|.
-Ein Iteratee ist die Datensenke, die Daten eines Enumerators, der Datenquelle, konsumiert.
-Enumeratees sind dazu da, Datenströme zu transformieren, sind also Zwischenhändler zwischen Iteratees und Enumerators.
-
-% subsubsection streams_ueberblick
-
-
-\subsubsection{Input} % (fold)
-\label{ssub:input}
-
-\lstinline|Input| entspricht Kiselyovs \lstinline|Stream|.
-\lstinline|Input| hat im Gegensatz zu \lstinline|Stream| allerdings drei Konstruktoren:
-\begin{lstlisting}
-sealed trait Input[+E]
-object Input {
-  case class El[+E](e: E) extends Input[E]
-  case object Empty extends Input[Nothing]
-  case object EOF extends Input[Nothing]
-}
-\end{lstlisting}
-
-Mehrere Elemente werden in Play nicht in Chunks verpackt, sondern es wird höchstens ein Element verpackt.
-Dafür gibt es einen expliziten Konstruktor für das leere Element.
-
-% subsubsection input (end)
+Im vorigen Kapitel wurden die einzelnen Komponenten vorgestellt.
+In diesem Kapitel soll der ihr Einsatz mit Hilfe von konkreten Code-Beispielen gezeigt werden.
 
 
 \subsubsection{Iteratees} % (fold)
@@ -551,25 +520,12 @@ Dafür gibt es einen expliziten Konstruktor für das leere Element.
 \paragraph{Grundlagen} % (fold)
 \label{par:grundlagen}\mbox{} % force new line
 
-\lstinline|Step| entspricht Kiselyovs \lstinline|Iteratee|.
-\lstinline|Step| hat für Fehler allerdings einen dritten Konstruktor.
-\begin{lstlisting}
-sealed trait Step[E, +A]
-object Step {
-  case class Done[+A, E](a: A, remaining: Input[E])
-    extends Step[E, A]
-  case class Cont[E, +A](k: Input[E] => Iteratee[E, A])
-    extends Step[E, A]
-  case class Error[E](msg: String, input: Input[E])
-    extends Step[E, Nothing]
-}
-\end{lstlisting}
-
 Plays \lstinline|Iteratee|s bilden einen Container für ihren \lstinline|Step|-Zustand.
 Dadurch werden, wie bei objektorientierten Sprachen üblich\todo{Zitat}, Daten und Operationen gebündelt.
 Die elementare Methode dieser Klasse ist \lstinline|fold|.
-\begin{lstlisting}
-  def fold[B](folder: Step[E, A] => Future[B]): Future[B]
+Die Signatur dazu ist in Listing~\ref{lst:fold_signatur} zu lesen.
+\begin{lstlisting}[caption=Die Signatur von \lstinline|fold|, label=lst:fold_signatur]
+def fold[B](folder: Step[E, A] => Future[B]): Future[B]
 \end{lstlisting}
 
 Mit Hilfe von \lstinline|fold| lässt sich der Zustand des \lstinline|Iteratee|s transformieren.
@@ -590,17 +546,17 @@ Es gibt drei Möglichkeiten, einen neuen \lstinline|Iteratee| zu erstellen.
   \item Durch Benutzung einer Hilfsfunktion des Companion-Objekts (\lstinline|fold|, \lstinline|foreach|, u.~a.).
 \end{enumerate}
 
-Zu Demonstrationszwecken soll nun ein \lstinline|Iteratee| erstellt werden, das alle Elemente aufsummiert.
-Es wird dabei nach jeder der der drei möglichen Varianten implementiert.
+Zu Demonstrationszwecken soll nun ein \lstinline|Iteratee| erstellt werden, der alle Elemente aufsummiert.
+Es wird dabei nach jeder der drei möglichen Varianten implementiert.
 
 \subparagraph{Erstellung durch Vererbung} % (fold)
 \label{subp:erstellung_durch_vererbung}\mbox{} % force new line
 
-Die erste Variante ist von \lstinline|Iteratee| zu erben und die \lstinline|fold|-Methode zu implementieren.
+Die erste Variante ist, von \lstinline|Iteratee| zu erben und die \lstinline|fold|-Methode zu implementieren.
 Dies erfordert viel Schreibarbeit, weil nur die sehr generische \lstinline|fold|-Methode verwendet werden kann.
-Der Code sieht so aus:
+Der Code dazu ist in Listing~\ref{lst:iteratee_durch_vererbung} zu sehen.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=Erstellung eines \lstinline|Iteratee|s durch Vererbung, label=lst:iteratee_durch_vererbung]
 case class SumIteratee(sum: Int = 0) extends Iteratee[Int, Int] {
   def fold[B](folder: Step[Int, Int] => Future[B]): Future[B] = {
     folder(Step.Cont(_ match {
@@ -634,8 +590,9 @@ Sobald keine weiteren Elemente mehr kommen können, wird die Berechnung beendet 
 
 Die zweite Möglichkeit, einen \lstinline|Iteratee| zu erstellen, ist mit Hilfe einer der Konstruktorfunktionen.
 Es gibt die Konstruktorfunktionen \lstinline|Done|, \lstinline|Cont| und \lstinline|Error|, die jeweils einen \lstinline|Iteratee| im gleichnamigen \lstinline|Step|-Zustand erstellen.
+Der Code, der einen \lstinline|Iteratee| mit Hilfe dieser Funktionen erstellt, ist in Listing~\ref{lst:iteratee_durch_konstruktorfunktion} zu sehen.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=Erstellung eines \lstinline|Iteratee|s durch eine Konstruktorfunktion, label=lst:iteratee_durch_konstruktorfunktion]
 def sumIteratee(sum: Int = 0): Iteratee[Int, Int] = Cont(_ match {
   case Input.El(i) => sumIteratee(sum + i)
   case Input.Empty => sumIteratee(sum)
@@ -652,35 +609,35 @@ Der Code ist auf die elementaren Aufgaben reduziert und es ist nun klar zu erken
 
 % subparagraph erstellung_durch_konstruktorfunktion (end)
 
-\subparagraph{Erstellung durch Hilfsfunktion} % (fold)
-\label{subp:erstellung_durch_hilfsfunktion}\mbox{} % force new line
+\subparagraph{Erstellung durch Hilfsmethode} % (fold)
+\label{subp:erstellung_durch_hilfsmethode}\mbox{} % force new line
 
-Die dritte und letzte Möglichkeit nutzt eine problemspezifische Hilfsfunktion.
+Die dritte und letzte Möglichkeit nutzt eine problemspezifische Hilfsmethode.
 Das Aufsummieren von Menge von Zahlen lässt sich sehr einfach mit Hilfe eines Folds implementieren\todo{Erklären, was ein Fold ist}.
-Das \lstinline|Iteratee|-Companion-Objekt beinhaltet u.~a. die \lstinline|fold|-Hilfsfunktion, die für solche Operationen gedacht ist.
-Durch Einsatz dieser Funktion wird die Lösung zum Einzeiler.
+Das \lstinline|Iteratee|-Companion-Objekt beinhaltet u.~a. die \lstinline|fold|-Hilfsmethode, die für solche Operationen gedacht ist.
+Durch Einsatz dieser Methode wird die Lösung, wie in Listing~\ref{lst:iteratee_durch_hilfsmethode} zu erkennen, zum Einzeiler.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=Erstellung eines \lstinline|Iteratee|s durch eine Hilfsmethode, label=lst:iteratee_durch_hilfsmethode]
 val sumIterateeFromHelper: Iteratee[Int, Int] =
   Iteratee.fold(0)(_ + _)
 \end{lstlisting}
 
 Vom Filtern der unterschiedlichen \lstinline|Input|-Typen ist hierbei abstrahiert und es muss sich nur noch um tatsächliche Eingabeelemente gekümmert werden.
 
-% subparagraph erstellung_durch_hilfsfunktion (end)
+% subparagraph erstellung_durch_hilfsmethode (end)
 
 % paragraph iteratees_erstellen (end)
 
 \paragraph{Iteratees ausführen} % (fold)
 \label{par:iteratees_ausfuehren}\mbox{} % force new line
 
-Um die \lstinline|Iteratee|s mit Daten zu versorgen existiert, wie in \nameref{par:iteratees_erstellen} beschrieben, die Methode \lstinline|fold|.
+Um die \lstinline|Iteratee|s mit Daten zu versorgen, existiert, wie in \nameref{par:iteratees_erstellen} beschrieben, die Methode \lstinline|fold|.
 \lstinline|fold| nimmt als Argument eine Funktion \lstinline|folder| vom Typ \lstinline|Step[E, A] => Future[B]|.
 Diese Funktion übergibt ein Element an den \lstinline|Iteratee| und muss daraufhin den Zustand des neuen \lstinline|Iteratee|s überprüfen, ob weitere Elemente akzeptiert werden, oder nicht nicht.
 Erst nach dieser Analyse kann entschieden werden, ob ein weiteres Element übergeben wird oder nicht.
-Das übergeben von Daten mittels der \lstinline|fold|-Methode ist, wie im Folgenden zu erkennen, recht aufwändig.
+Das übergeben von Daten mittels der \lstinline|fold|-Methode ist, wie in Listing~\ref{lst:iterateeausfuehrung_durch_folder} zu erkennen, recht aufwändig.
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=Ausführung eines \lstinline|Iteratee|s durch \lstinline|folder|-Funktion, label=lst:iterateeausfuehrung_durch_folder]
 def folder(xs: List[Int])(step: Step[Int, Int]): Future[Int] =
   xs match {
     case Nil => step match {
@@ -755,7 +712,7 @@ i >>= \x -> (k1 x |> k2 x) = (i >>= k1) |> (i >>= k2)
 
 % subsubsection regeln (end)
 
-% subsection streams_in_play (end)
+% subsection anwendung (end)
 
 
 % section streams (end)
