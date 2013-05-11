@@ -376,7 +376,7 @@ Ein Beispiel für einen nicht leeren Eingaberest ist, wenn ein \lstinline|Iterat
 Wenn das gesuchte Wort gefunden wurde, wird als Restwert der bisher nicht angesehene Rest der Zeile verwendet.
 
 Ein \lstinline|Iteratee|, der noch kein Endergebnis berechnet hat, ist im Zustand \lstinline|Step.Cont|.
-Das Argument von \lstinline|Step.Cont| ist die Schritt-Funktion \lstinline[breaklines=true]|Input[E] => Iteratee[E, A]|\todo{Continuation}.
+Das Argument von \lstinline|Step.Cont| ist die Schritt-Funktion \lstinline[breaklines=true]|Input[E] => Iteratee[E, A]|\todo{Continuation? Weil nicht genau nach Definition}.
 Die Eingabe der Schritt-Funktion ist ein \lstinline|Input| mit einem neuen zu verarbeitenden Element.
 Die Ausgabe der Schritt-Funktion ist ein neuer \lstinline|Iteratee|, der den neuen Berechnungsstand nach dem Verarbeiten des Eingabeelements hält.
 
@@ -392,10 +392,9 @@ Ein \lstinline|Iteratee| hat also einen Verarbeitungszustand vom Typ \lstinline|
   \item Es ist ein Fehler aufgetreten (\lstinline|Step.Error|).
 \end{enumerate}
 
-\todo{\lstinline|Iteratee| ist eine Monade}
-% Der \lstinline|Iteratee|-Typ ist eine Monade.
-% Dadurch ist es möglich, einen beliebigen Wert in die Monade zu heben (unit).
-% Außerdem kann dadurch ein erfolgreich berechneter Wert innerhalb der Monade transformiert werden (bind).
+Außerdem ist anzumerken, dass der \lstinline|Iteratee|-Typ ist eine Monade.
+Dadurch ist es möglich, einen beliebigen Wert in die Monade zu heben, die dann im \lstinline|Step.Done|-Zustand ist.
+Auch kann ein erfolgreich berechneter Wert innerhalb der Monade transformiert werden.
 
 % subsubsection design_iteratees (end)
 
