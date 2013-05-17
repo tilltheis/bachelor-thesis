@@ -328,8 +328,7 @@ object Input {
 }
 \end{lstlisting}
 
-Der Datentyp ist parametrisiert über den Typ der gehaltenen Elemente \lstinline|E|.
-
+Der Datentyp ist über den Typ \lstinline|E| der gehaltenen Elemente parametrisiert.
 Für den Fall, dass die Datenquelle nicht erschöpft ist, existiert im Companion-Objekt die Unterklasse \lstinline|Input.El| mit dazugehöriger Konstruktorfunktion.
 Diese Implementierung hält genau ein Element aus der Datenquelle.
 \lstinline|Input.Empty| "`signifies a stream with no immediately available data but which is still continuing"' \cite[vgl.][]{iteratee_io}\todo{Ist Übernehmen von Kiselyovs Definition für Plays Implementierung erlaubt?}.
@@ -350,8 +349,8 @@ Ein Wert vom Typ \lstinline|Input| hat also drei mögliche Zustände:
 \label{ssub:design_iteratees}
 
 Die von der Datenquelle in \lstinline|Input|s verpackten Elemente werden von \lstinline|Iteratee|s konsumiert, um daraus ein Ergebnis aufzubauen.
-\lstinline|Iteratee|s bilden einen Container um ihren Zustand \lstinline|Step|, der den Verarbeitungszustand widerspiegelt.
-Der Typ des \lstinline|Step|-Zustands ist wie in Listing \ref{lst:der_step_datentyp} gezeigt.
+\lstinline|Iteratee|s kapseln ihren Zustand \lstinline|Step|, der den Verarbeitungszustand widerspiegelt.
+Der Typ des \lstinline|Step|-Zustands ist wie in Listing~\ref{lst:der_step_datentyp} gezeigt.
 \begin{lstlisting}[caption=Der \lstinline|Step|-Datentyp, label=lst:der_step_datentyp]
 sealed trait Step[E, +A]
 object Step {
@@ -469,10 +468,9 @@ Bei der Komposition werden zwei oder mehr \lstinline|Iteratee|s oder \lstinline|
 \label{par:komposition_von_iteratees}\mbox{} % force new line
 
 Sequenzielle Komposition zweier \lstinline|Iteratee|s funktioniert noch folgendem Prinzip:
-Zuerst wird der erste \lstinline|Iteratee| angewendet, bis er keine Elemente mehr annimmt, oder die Datenquelle erschöpft ist.
+Zuerst wird der erste \lstinline|Iteratee| angewendet, bis er keine Elemente mehr annimmt oder die Datenquelle erschöpft ist.
 Dann wird der zweite \lstinline|Iteratee| auf die noch übrigen Elemente der Datenquelle angewendet, bis auch dieser \lstinline|Iteratee| keine Elemente mehr annimmt, oder die Datenquelle erschöpft ist.
-Anschließend werden beide \lstinline|Iteratee|s kombiniert.
-Z.~B. als Paar. % Iteratee#map/flatMap
+Anschließend werden beide \lstinline|Iteratee|s kombiniert, z.~B. als Paar. % Iteratee#map/flatMap
 
 Bei der parallelen Komposition werden die Elemente der Datenquelle immer an beide \lstinline|Iteratee|s weitergegeben.
 Dies geschieht so lange, bis beide \lstinline|Iteratee|s keine weiteren Elemente mehr annehmen.

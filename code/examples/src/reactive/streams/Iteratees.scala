@@ -42,13 +42,13 @@ object Iteratees extends App {
         case Nil => step match {
           case Step.Cont(k) => k(Input.EOF).fold(_ match {
             case Step.Done(sum, Input.EOF) => Future(sum)
-            case _ => throw new Exception("invalid state")
+            case _ => Future.failed(new Exception("invalid state"))
           })
-          case _ => throw new Exception("invalid state")
+          case _ => Future.failed(new Exception("invalid state"))
         }
         case x :: xs => step match {
           case Step.Cont(k) => k(Input.El(x)).fold(folder(xs))
-          case _ => throw new Exception("invalid state")
+          case _ => Future.failed(new Exception("invalid state"))
         }
       }
 

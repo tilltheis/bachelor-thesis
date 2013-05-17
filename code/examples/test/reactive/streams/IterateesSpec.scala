@@ -3,6 +3,7 @@ import org.specs2.time.NoTimeConversions
 
 import scala.concurrent._
 import scala.concurrent.duration._
+import scala.util.{Try, Failure}
 
 import play.api.libs.iteratee._
 import play.api.libs.iteratee.Enumerator.enumInput
@@ -41,6 +42,25 @@ class IterateesSpec extends Specification with NoTimeConversions {
   "sum result with folder" should {
     "be correct" in {
       Await.result(Iteratees.Creation.sumResult, 1 second) === 3
+    }
+
+    Seq(
+      ("Done", Done(1): Iteratee[Int, Int]),
+      ("Error", Error("error", Input.Empty): Iteratee[Int, Int]),
+      ("Cont then Cont", Cont(_ => Cont(_ => Done(1))): Iteratee[Int, Int]),
+      ("Cont then Error", Cont(_ => Error("error", Input.Empty)): Iteratee[Int, Int])
+    ).foreach { pair =>
+      val (kind, iteratee) = pair
+
+      s"fail for $kind iteratees" in {
+        (iteratee.fold(Iteratees.Creation.folder(List(1))).value) must beLike {
+          case Some(Failure(_)) => ok
+        }
+
+        iteratee.fold(Iteratees.Creation.folder(List.empty)).value must beLike {
+          case Some(Failure(_)) => ok
+        }
+      }
     }
   }
 }
