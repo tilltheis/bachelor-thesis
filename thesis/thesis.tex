@@ -516,10 +516,7 @@ In diesem Kapitel soll der ihr Einsatz mit Hilfe von konkreten Code-Beispielen g
 \subsubsection{Iteratees} % (fold)
 \label{sssec:iteratees}
 
-\paragraph{Grundlagen} % (fold)
-\label{par:grundlagen}\mbox{} % force new line
-
-Plays \lstinline|Iteratee|s bilden einen Container für ihren \lstinline|Step|-Zustand.
+Plays \lstinline|Iteratee|s bilden einen Container um ihren \lstinline|Step|-Zustand.
 Dadurch werden, wie bei objektorientierten Sprachen üblich\todo{Zitat}, Daten und Operationen gebündelt.
 Die elementare Methode dieser Klasse ist \lstinline|fold|.
 Die Signatur dazu ist in Listing~\ref{lst:fold_signatur} zu lesen.
@@ -532,8 +529,6 @@ Deshalb sind sehr viele Methoden in der \lstinline|Iteratee|-Klasse auf Basis vo
 Durch Angabe der Schrittfunktion im \lstinline|Cont|-Konstruktor bestimmt die konkrete \lstinline|Iteratee|-Implementierung, wie mit übergebenen Elementen umzugehen ist.
 Nur durch diese Funktion können neue Elemente gelesen werden.
 Dadurch wird der zu berechnende Wert aufgebaut.
-
-% paragraph grundlagen (end)
 
 \paragraph{Iteratees erstellen} % (fold)
 \label{par:iteratees_erstellen}\mbox{} % force new line
@@ -631,7 +626,7 @@ Vom Filtern der unterschiedlichen \lstinline|Input|-Typen ist hierbei abstrahier
 \label{par:iteratees_ausfuehren}\mbox{} % force new line
 
 Um die \lstinline|Iteratee|s mit Daten zu versorgen, existiert, wie in \nameref{par:iteratees_erstellen} beschrieben, die Methode \lstinline|fold|.
-\lstinline|fold| nimmt als Argument eine Funktion \lstinline|folder| vom Typ \lstinline|Step[E, A] => Future[B]|.
+\lstinline|fold| nimmt als Argument eine Funktion \lstinline|folder| vom Typ \lstinline[breaklines=true]|Step[E, A] => Future[B]|.
 Diese Funktion übergibt ein Element an den \lstinline|Iteratee| und muss daraufhin den Zustand des neuen \lstinline|Iteratee|s überprüfen, ob weitere Elemente akzeptiert werden, oder nicht nicht.
 Erst nach dieser Analyse kann entschieden werden, ob ein weiteres Element übergeben wird oder nicht.
 Das übergeben von Daten mittels der \lstinline|fold|-Methode ist, wie in Listing~\ref{lst:iterateeausfuehrung_durch_folder} zu erkennen, recht aufwändig.
@@ -667,6 +662,8 @@ Durch Verwendung von \lstinline|Enumerator|s wird dies allerdings wesentlich ein
 
 Mit Hilfe von \lstinline|Enumerator|s können auf einfache Weise Daten an einen \lstinline|Iteratee| übergeben werden.
 Das Ergebnis der Anwendung eines \lstinline|Enumerator|s ist der \lstinline|Iteratee| nach Konsum der Elemente in der \lstinline|Future|-Monade.
+Ein \lstinline|Enumerator| sendet selber kein \lstinline|Input.EOF|-Element, wenn er keine Elemente mehr hat, sodass es möglich ist, noch einen weiteren \lstinline|Enumerator| auf ein \lstinline|Iteratee| anzuwenden.
+Um ein \lstinline|Input.EOF|-Element an ein \lstinline|Iteratee| zu senden, wird die \lstinline|run|-Methode des \lstinline|Iteratee|-Traits aufgerufen.
 
 % subsubsection enumerators (end)
 
