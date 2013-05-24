@@ -4,12 +4,168 @@
 		"selected_items":
 		[
 			[
+				"iter",
+				"iteratee"
+			],
+			[
+				"it",
+				"iteratee"
+			],
+			[
+				"er",
+				"errorI"
+			],
+			[
+				"para",
+				"parametrisiert"
+			],
+			[
+				"sumI",
+				"sumIterateeAfterE1"
+			],
+			[
+				"En",
+				"Enumerator"
+			],
+			[
+				"fol",
+				"fold_signatur"
+			],
+			[
+				"en",
+				"enumerator"
+			],
+			[
+				"enumer",
+				"enumerators"
+			],
+			[
+				"ob",
+				"object	object"
+			],
+			[
+				"It",
+				"Iteratee"
+			],
+			[
+				"der",
+				"der_enumeratee_datentyp"
+			],
+			[
+				"Enum",
+				"Enumerator"
+			],
+			[
+				"sum",
+				"sumIterateeFromHelper"
+			],
+			[
+				"erst",
+				"subp:erstellung_durch_vererbung"
+			],
+			[
+				"enu",
+				"enumInput"
+			],
+			[
+				"su",
+				"sumIterateeByInheritance"
+			],
+			[
+				"cre",
+				"Creation"
+			],
+			[
+				"cas",
+				"case	case"
+			],
+			[
+				"In",
+				"Input"
+			],
+			[
+				"Ie",
+				"Iteratees"
+			],
+			[
+				"sh",
+				"sharedSumIterateSpec"
+			],
+			[
+				"Sum",
+				"SumIteratee"
+			],
+			[
+				"Su",
+				"SumStep"
+			],
+			[
+				"Ite",
+				"Iteratee"
+			],
+			[
+				"repo",
+				"repository"
+			],
+			[
+				"fo",
+				"foreach"
+			],
+			[
+				"Kisel",
+				"Kiselyov"
+			],
+			[
+				"Enumer",
+				"Enumerators"
+			],
+			[
+				"Iter",
+				"Iteratee"
+			],
+			[
+				"belie",
+				"beliebig"
+			],
+			[
+				"Kom",
+				"Kompositionen"
+			],
+			[
+				"Enu",
+				"Enumerator"
+			],
+			[
+				"Elem",
+				"Element-Typ"
+			],
+			[
+				"has",
+				"Haskell"
+			],
+			[
+				"lang",
+				"language"
+			],
+			[
+				"Sch",
+				"Schritt-Funktion"
+			],
+			[
+				"rea",
+				"reactive_programming"
+			],
+			[
 				"ls",
+				"lstinline"
+			],
+			[
+				"lst",
 				"lstlisting"
 			],
 			[
-				"stre",
-				"streams_ueberblick"
+				"l",
+				"lstlisting"
 			],
 			[
 				"Rea",
@@ -124,10 +280,6 @@
 				"forall"
 			],
 			[
-				"fo",
-				"forall"
-			],
-			[
 				"in",
 				"intersect"
 			],
@@ -154,10 +306,6 @@
 			[
 				"obj",
 				"object	object"
-			],
-			[
-				"ob",
-				"obj	shortcut - object"
 			],
 			[
 				"imp",
@@ -300,10 +448,6 @@
 				"state_name"
 			],
 			[
-				"has",
-				"has_many"
-			],
-			[
 				"have",
 				"have_many"
 			],
@@ -370,150 +514,6 @@
 			[
 				"New",
 				"NewNumber"
-			],
-			[
-				"Sta",
-				"State"
-			],
-			[
-				"start",
-				"start_vote"
-			],
-			[
-				"vot",
-				"vote_timer"
-			],
-			[
-				"tim",
-				"timeMilliSecond"
-			],
-			[
-				"initi",
-				"initiate_vote"
-			],
-			[
-				"Name",
-				"NameService"
-			],
-			[
-				"t",
-				"timeMilliSecond"
-			],
-			[
-				"C",
-				"Coordinator"
-			],
-			[
-				"_",
-				"_Initiator"
-			],
-			[
-				"Number",
-				"NumberRetrievalTime"
-			],
-			[
-				"Ter",
-				"TerminationTime"
-			],
-			[
-				"Term",
-				"TerminationTimeInS"
-			],
-			[
-				"Del",
-				"DelayTimeInS"
-			],
-			[
-				"clie",
-				"client_name"
-			],
-			[
-				"Termin",
-				"TerminationTime"
-			],
-			[
-				"Vote",
-				"VoteTimer"
-			],
-			[
-				"Coor",
-				"CoordinatorName"
-			],
-			[
-				"Log",
-				"LogMessage"
-			],
-			[
-				"ki",
-				"kill_nameservice"
-			],
-			[
-				"name",
-				"name_service"
-			],
-			[
-				"Co",
-				"CoordinatorName"
-			],
-			[
-				"Coo",
-				"Coordinator"
-			],
-			[
-				"k",
-				"kill_nameservice"
-			],
-			[
-				"Nam",
-				"NameService"
-			],
-			[
-				"Clie",
-				"ClientName"
-			],
-			[
-				"sendy",
-				"send_y"
-			],
-			[
-				"LeftN",
-				"LeftNeighbor"
-			],
-			[
-				"sen",
-				"send_number_to_neighbors"
-			],
-			[
-				"rig",
-				"right_neighbor"
-			],
-			[
-				"left",
-				"left_neighbor"
-			],
-			[
-				"ri",
-				"right_neighbor"
-			],
-			[
-				"lef",
-				"left_neighbor"
-			],
-			[
-				"nam",
-				"name_service"
-			],
-			[
-				"cli",
-				"client_name"
-			],
-			[
-				"tell",
-				"tell_mi"
-			],
-			[
-				"Cli",
-				"ClientName"
 			]
 		]
 	},
@@ -523,7 +523,7 @@
 			"file": "thesis/thesis.tex",
 			"settings":
 			{
-				"buffer_size": 10867,
+				"buffer_size": 35021,
 				"line_ending": "Unix"
 			}
 		},
@@ -531,7 +531,64 @@
 			"file": "thesis/thesis.bib",
 			"settings":
 			{
-				"buffer_size": 2733,
+				"buffer_size": 5424,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "code/examples/src/reactive/streams/Enumerators.scala",
+			"settings":
+			{
+				"buffer_size": 489,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "code/examples/test/reactive/streams/EnumeratorsSpec.scala",
+			"settings":
+			{
+				"buffer_size": 333,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "code/examples/src/reactive/streams/Iteratees.scala",
+			"settings":
+			{
+				"buffer_size": 1786,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "code/examples/test/reactive/streams/IterateesSpec.scala",
+			"settings":
+			{
+				"buffer_size": 2023,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "in\nto\nof\nthe\nat\nfor\na\nis\nvia\ns\nby\non\ncan\nare\nor\nout\nhad\nand\nit\nbut\nall\ninto\nbe\nafter\nthat\nits\nyour\nno\nhas\nyou\nwhat\nthis\nas\n\nBBCBreaking\nBBCWorld\nTIME\nCBSNews\nTheEconomist\nWATCH\nTheOnion\nTIMEHealthland\nTIMEWorld\nUPDATE\nGizmodo\nTechland\nHarvardBiz",
+			"settings":
+			{
+				"buffer_size": 245,
+				"line_ending": "Unix",
+				"name": "in"
+			}
+		},
+		{
+			"file": "code/examples/src/reactive/streams/Composition.scala",
+			"settings":
+			{
+				"buffer_size": 1348,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "code/examples/test/reactive/streams/CompositionSpec.scala",
+			"settings":
+			{
+				"buffer_size": 1411,
 				"line_ending": "Unix"
 			}
 		}
@@ -539,16 +596,64 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 49.0,
+		"height": 115.0,
 		"selected_items":
 		[
 			[
-				"remove",
-				"Package Control: Remove Package"
+				"scala",
+				"Set Syntax: Scala"
+			],
+			[
+				"surch",
+				"Surround: change surround"
+			],
+			[
+				"sursel",
+				"Surround: surround selection"
 			],
 			[
 				"install",
 				"Package Control: Install Package"
+			],
+			[
+				"surr",
+				"Surround: surround selection"
+			],
+			[
+				"remve",
+				"Package Control: Remove Package"
+			],
+			[
+				"listing",
+				"Snippet: Listing"
+			],
+			[
+				"remove ",
+				"Package Control: Remove Package"
+			],
+			[
+				"install ",
+				"Package Control: Install Package"
+			],
+			[
+				"install p",
+				"Package Control: Install Package"
+			],
+			[
+				"title",
+				"Convert Case: Title Case"
+			],
+			[
+				"snip inlin",
+				"Snippet: Turn selection into LaTeX environment"
+			],
+			[
+				"Snippet: lst",
+				"Snippet: Listing"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
 			],
 			[
 				"lower",
@@ -581,10 +686,6 @@
 			[
 				"instal",
 				"Package Control: Install Package"
-			],
-			[
-				"install ",
-				"Package Control: Install Package"
 			]
 		],
 		"width": 579.0
@@ -604,9 +705,30 @@
 	},
 	"file_history":
 	[
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/build.sbt",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/EnumeratorsSpec",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/Streams.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/IterateesSpec",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/Iteratees.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/reactive/streams/Iteratees.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/Examples.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/reactive/streams/iteratees.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/app/examples/streams/iteratees.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/test.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/test.scaal",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/hawstyle.sty",
+		"/Users/till/.dotfiles/SublimeText2/latex-inline-listing.sublime-snippet",
+		"/Users/till/Library/Application Support/Sublime Text 2/Packages/User/WordCount.sublime-settings",
+		"/Users/till/Library/Application Support/Sublime Text 2/Packages/WordCount/WordCount.sublime-settings",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/.gitignore",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/.gitignore",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/.gitignore",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/Bachelorarbeit.sublime-project",
-		"/Users/till/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
 		"/Users/till/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/app/examples/streams/iteratees/logger.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/streams/iteratees/logger.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/Bachelorarbeit.sublime-workspace",
+		"/Users/till/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
 		"/Users/till/Dropbox/Entwicklung/Studium/ISP/a1/bloodline.pl",
 		"/Users/till/Dropbox/Entwicklung/Studium/ISP/p1/bloodline.pl",
 		"/Users/till/Dropbox/Entwicklung/scala/progfun/funsets/src/main/scala/funsets/Main.scala",
@@ -710,28 +832,7 @@
 		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/dashboards_controller.rb",
 		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/layouts/application.html.slim",
 		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/helpers/base_helper.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/groups/edit.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/helpers/application_helper.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/dashboards/show.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/helpers/parent/base_helper.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/helpers/manager/base_helper.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/admin/dashboards/show.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/factories/managers.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/admin/managers/edit.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/admin/managers/index.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/children/new.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/child.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/models/manager_spec.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/models/child_spec.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121121093304_create_managers.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/admin/base_controller.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/groups_controller.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/waitlist.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/models/waitlist_spec.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/parent/children/show.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/factories/waitlists.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/Zaphod/app/controllers/current_users_controller.rb",
-		"/Users/till/Dropbox/thingstoinstall.txt"
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/groups/edit.html.slim"
 	],
 	"find":
 	{
@@ -751,10 +852,54 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"streams_ueberblick",
+			"folder",
+			"package examples.reactive.streams\n\nimport play.api.libs.iteratee._\nimport scala.concurrent._\nimport ExecutionContext.Implicits.global\n",
+			"folder",
+			"\nfolder",
+			"folder",
+			"gekaps",
+			"input",
+			"Container",
+			"EOF",
+			"Funktion",
+			"funktion",
+			"streams_in_play",
+			"Stream",
+			"stream",
+			"Stream",
+			"der_enumeratee_datentyp",
+			"input",
+			"ssub:input",
+			"enumerators",
+			"Enumerators",
+			"IDE",
+			"ide",
+			"ssub:iteratee",
+			"ssub",
+			"subsubsection",
+			"par",
+			"paragraph",
+			"ssub",
+			"subsubsection",
+			"enumeratees",
+			"By",
+			"\"",
+			"bib",
+			"par:iteratee",
+			"iteratee",
+			"itemize",
+			"ist somit die",
+			"Konstruktor",
+			"Sec",
 			"sec",
-			"section",
-			" ",
+			"Sec",
+			"sec",
+			"ssub",
+			"subsection",
+			"ssec",
+			"style",
+			"bib",
+			"desweiteren",
 			"subsubsection",
 			",",
 			". ",
@@ -834,51 +979,7 @@
 			"NameService",
 			"lookup",
 			"setneigh",
-			"timer fir",
-			"log",
-			"calculate_gcd",
-			"calculate_gc",
-			"unbind_from_name_service",
-			"register",
-			"ServiceNode",
-			"ServiceName",
-			"Coordinator !",
-			"setpm",
-			"trying to find is: ",
-			"briefterm",
-			"get_clients",
-			"send_message_to_service",
-			"error",
-			"log",
-			"setpm",
-			"New Number:",
-			"but got",
-			"send_message_to_service",
-			"start_calculation_for_a_few_gcd_clients",
-			"finis",
-			"restart",
-			"51",
-			"kill",
-			"has_started_vote",
-			"HasVoted",
-			"has_voted",
-			"get_ready",
-			"list_to",
-			"ClientName",
-			"log(",
-			"log",
-			"log(",
-			"send_message_to_service",
-			"register_gcd_client",
-			"{hello,",
-			"gcd:s",
-			"start_gcd_process",
-			"start_",
-			"start",
-			"Nameservice",
-			"bind",
-			"getsteering",
-			"io:format"
+			"timer fir"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -886,6 +987,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"From",
 			".\n",
 			"\n.",
 			".\n.\n",
@@ -918,7 +1020,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 6,
 			"sheets":
 			[
 				{
@@ -926,15 +1028,15 @@
 					"file": "thesis/thesis.tex",
 					"settings":
 					{
-						"buffer_size": 10867,
+						"buffer_size": 35021,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								10004,
-								10004
+								21282,
+								21282
 							]
 						],
 						"settings":
@@ -944,6 +1046,49 @@
 								"TODO",
 								"README",
 								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
 							],
 							"csslint_options":
 							{
@@ -1006,6 +1151,7 @@
 							[
 							],
 							"pyflakes_ignore_import_*": true,
+							"spell_check": true,
 							"sublimelinter": true,
 							"sublimelinter_delay": 2.0,
 							"sublimelinter_disable":
@@ -1013,10 +1159,12 @@
 							],
 							"sublimelinter_executable_map":
 							{
+								"ruby": "~/bin/rbenv-auto-ruby"
 							},
 							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": false,
-							"sublimelinter_mark_style": "outline",
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
 							"sublimelinter_notes": false,
 							"sublimelinter_objj_check_ascii": false,
 							"sublimelinter_popup_errors_on_save": false,
@@ -1032,7 +1180,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4476.0,
+						"translation.y": 7384.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1042,15 +1190,15 @@
 					"file": "thesis/thesis.bib",
 					"settings":
 					{
-						"buffer_size": 2733,
+						"buffer_size": 5424,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								4190,
+								4190
 							]
 						],
 						"settings":
@@ -1129,10 +1277,12 @@
 							],
 							"sublimelinter_executable_map":
 							{
+								"ruby": "~/bin/rbenv-auto-ruby"
 							},
 							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": false,
-							"sublimelinter_mark_style": "outline",
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
 							"sublimelinter_notes": false,
 							"sublimelinter_objj_check_ascii": false,
 							"sublimelinter_popup_errors_on_save": false,
@@ -1148,7 +1298,827 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 773.0,
+						"translation.y": 1868.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "code/examples/src/reactive/streams/Enumerators.scala",
+					"settings":
+					{
+						"buffer_size": 489,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								134,
+								134
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+								"ruby": "~/bin/rbenv-auto-ruby"
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Scala/Scala.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "code/examples/test/reactive/streams/EnumeratorsSpec.scala",
+					"settings":
+					{
+						"buffer_size": 333,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								331,
+								331
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+								"ruby": "~/bin/rbenv-auto-ruby"
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Scala/Scala.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "code/examples/src/reactive/streams/Iteratees.scala",
+					"settings":
+					{
+						"buffer_size": 1786,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1416,
+								1416
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+								"ruby": "~/bin/rbenv-auto-ruby"
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Scala/Scala.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 365.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "code/examples/test/reactive/streams/IterateesSpec.scala",
+					"settings":
+					{
+						"buffer_size": 2023,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2023,
+								2023
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+								"ruby": "~/bin/rbenv-auto-ruby"
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Scala/Scala.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 628.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"settings":
+					{
+						"buffer_size": 245,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								245,
+								245
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"auto_name": "in",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+								"ruby": "~/bin/rbenv-auto-ruby"
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 3.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "code/examples/src/reactive/streams/Composition.scala",
+					"settings":
+					{
+						"buffer_size": 1348,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								945,
+								945
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+								"ruby": "~/bin/rbenv-auto-ruby"
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Scala/Scala.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "code/examples/test/reactive/streams/CompositionSpec.scala",
+					"settings":
+					{
+						"buffer_size": 1411,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1405,
+								1405
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+								"ruby": "~/bin/rbenv-auto-ruby"
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Scala/Scala.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1201,6 +2171,22 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"exam",
+				"code/examples/build.sbt"
+			],
+			[
+				"build",
+				"code/examples/build.sbt"
+			],
+			[
+				"haw",
+				"thesis/hawstyle.sty"
+			],
+			[
+				".giti",
+				"code/.gitignore"
+			],
 			[
 				"bib",
 				"thesis.bib"
@@ -1484,6 +2470,6 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 269.0,
+	"side_bar_width": 215.0,
 	"status_bar_visible": true
 }
