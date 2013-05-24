@@ -328,12 +328,20 @@ object Input {
 }
 \end{lstlisting}
 
-Der Datentyp ist über den Typ \lstinline|E| der gehaltenen Elemente parametrisiert.
+Der Datentyp ist über den kovarianten Typ \lstinline|E| der gehaltenen Elemente parametrisiert.
+Kovarianz bedeutet, dass wenn \lstinline|F| ein spezialisierter Typ von \lstinline|E| ist, dann ist \lstinline|Input[F]| auch ein spezialisierter Typ von \lstinline|Input[E]| \cite[vgl.][S.~11]{variance}.
+Dadurch wären beispielsweise sowohl \lstinline|Input[Cat]|, also auch \lstinline|Input[Dog]| Spezialisierungen von \lstinline|Input[Animal]|.
+Wäre \lstinline|Input| nicht kovariant über den Typ der der gehaltenen Elemente, wären \lstinline|Input[Cat]|, \lstinline|Input[Dog]| und \lstinline|Input[Animal]| völlig unterschiedliche Typen.
+
 Für den Fall, dass die Datenquelle nicht erschöpft ist, existiert im Companion-Objekt die Unterklasse \lstinline|Input.El| mit dazugehöriger Konstruktorfunktion.
 Diese Implementierung hält genau ein Element aus der Datenquelle.
 \lstinline|Input.Empty| "`signifies a stream with no immediately available data but which is still continuing"' \cite[vgl.][]{iteratee_io}\todo{Ist Übernehmen von Kiselyovs Definition für Plays Implementierung erlaubt?}.
-Außerdem findet es im Kontext von \lstinline|Iteratee|s Verwendung, um zu signalisieren, dass keine Eingabe übriggebliebenen ist.
+Außerdem findet es im Kontext von \lstinline|Iteratee|s Verwendung, um zu signalisieren, dass kein Teil Eingabe übriggebliebenen ist.
 Um zu signalisieren, dass die Datenquelle erschöpft ist, existiert das Objekt \lstinline|Input.EOF|.
+
+Sowohl \lstinline|Input.Empty|, als auch \lstinline|Input.EOF| sind vom Typ \lstinline|Input[Nothing]|.
+\lstinline|Nothing| ist ein besonderer Typ in Scala, der eine Spezialisierung jedes anderen Typs ist \cite[vgl.][S.~32]{scala_specification}.
+Weil der Typparameter des \lstinline|Input|-Datentyps kovariant ist, lassen sich \lstinline|Input.Empty| und \lstinline|Input.EOF| mit jedem anderen \lstinline|Input| kombinieren.
 
 Ein Wert vom Typ \lstinline|Input| hat also drei mögliche Zustände:
 \begin{enumerate}
