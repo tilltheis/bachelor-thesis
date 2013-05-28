@@ -333,6 +333,17 @@ Kovarianz bedeutet, dass wenn \lstinline|F| ein spezialisierter Typ von \lstinli
 Dadurch wären beispielsweise sowohl \lstinline|Input[Cat]|, also auch \lstinline|Input[Dog]| Spezialisierungen von \lstinline|Input[Animal]|.
 Wäre \lstinline|Input| nicht kovariant über den Typ der der gehaltenen Elemente, wären \lstinline|Input[Cat]|, \lstinline|Input[Dog]| und \lstinline|Input[Animal]| völlig unterschiedliche Typen.
 
+Des Weiteren ist anzumerken, dass \lstinline|Input| ein algebraischer Datentyp ist.
+Ein algebraischer Datentyp ist ein Datentyp mit mehreren, alternativen Konstruktoren, die jeweils eigene Felder besitzen.
+Mittels Pattern Matching kann von einem Wert eines solchen Datentyps auf den verwendeten Konstruktor geschlossen werden \cite[vgl.][S.~14--15]{algebraic_data_type}.
+
+In Scala werden algebraische Datentypen mit Hilfe von einem Marker-Trait und \lstinline|case|-Klassen und -Objekten implementiert.
+Das Marker-Trait ist der algebraische Datentyp und die \lstinline|case|-Klassen und -Objekte sind die Konstruktoren.
+Die Nutzung von \lstinline|case|-Klassen und -Objekten hat den Vorteil, dass diese mittels Pattern Matching zerlegt werden können.
+Dadurch, dass das Marker-Trait \lstinline|sealed| ist, wird verhindert, dass von außerhalb der Quellcode-Datei weitere Konstruktoren hinzugefügt werden können \cite[vgl.][]{algebraic_data_type_scala}.
+In diesem Fall besitzt der algebraische Datentyp \lstinline|Input| die Konstruktoren \lstinline|El|, \lstinline|Empty| und \lstinline|EOF|.
+Der Konstruktor \lstinline|El| besitzt ein Feld, \lstinline|Empty| und \lstinline|EOF| besitzen keine Felder.
+
 Für den Fall, dass die Datenquelle nicht erschöpft ist, existiert im Companion-Objekt die Unterklasse \lstinline|Input.El| mit dazugehöriger Konstruktorfunktion.
 Diese Implementierung hält genau ein Element aus der Datenquelle.
 \lstinline|Input.Empty| "`signifies a stream with no immediately available data but which is still continuing"' \cite[vgl.][]{iteratee_io}\todo{Ist Übernehmen von Kiselyovs Definition für Plays Implementierung erlaubt?}.
@@ -643,13 +654,13 @@ def folder(xs: List[Int])(step: Step[Int, Int]): Future[Int] =
     case Nil => step match {
       case Step.Cont(k) => k(Input.EOF).fold(_ match {
         case Step.Done(sum, Input.EOF) => Future(sum)
-        case _ => throw new Exception("invalid state")
+        case _ => Future.failed(new Exception("invalid state"))
       })
-      case _ => throw new Exception("invalid state")
+      case _ => Future.failed(new Exception("invalid state"))
     }
     case x :: xs => step match {
       case Step.Cont(k) => k(Input.El(x)).fold(folder(xs))
-      case _ => throw new Exception("invalid state")
+      case _ => Future.failed(new Exception("invalid state"))
     }
   }
 
