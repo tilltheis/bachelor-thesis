@@ -645,7 +645,7 @@ Um die \lstinline|Iteratee|s mit Daten zu versorgen, existiert, wie in \nameref{
 \lstinline|fold| nimmt als Argument eine Funktion \lstinline|folder| vom Typ \lstinline[breaklines=true]|Step[E, A] => Future[B]|.
 Diese Funktion übergibt ein Element an den \lstinline|Iteratee| und muss daraufhin den Zustand des neuen \lstinline|Iteratee|s überprüfen, ob weitere Elemente akzeptiert werden, oder nicht nicht.
 Erst nach dieser Analyse kann entschieden werden, ob ein weiteres Element übergeben wird oder nicht.
-Das übergeben von Daten mittels der \lstinline|fold|-Methode ist, wie in Listing~\ref{lst:iterateeausfuehrung_durch_folder} zu erkennen, recht aufwändig.
+In Listing~\ref{lst:iterateeausfuehrung_durch_folder} wird gezeigt, wie dies implementiert werden kann.
 
 \begin{lstlisting}[caption=Ausführung eines \lstinline|Iteratee|s durch \lstinline|folder|-Funktion, label=lst:iterateeausfuehrung_durch_folder]
 def folder(xs: List[Int])(step: Step[Int, Int]): Future[Int] =
@@ -667,6 +667,7 @@ val sumResult: Future[Int] =
   sumIterateeFromHelper.fold(folder(List(1, 4, -2)))
 \end{lstlisting}
 
+Das Übergeben von Daten mittels der \lstinline|fold|-Methode ist, wie in Listing~\ref{lst:iterateeausfuehrung_durch_folder} zu erkennen, recht aufwändig.
 Durch Verwendung von \lstinline|Enumerator|s wird dies allerdings wesentlich einfacher.
 
 % paragraph iteratees_ausfuehren (end)
@@ -676,10 +677,83 @@ Durch Verwendung von \lstinline|Enumerator|s wird dies allerdings wesentlich ein
 \subsubsection{Enumerators} % (fold)
 \label{ssub:enumerators}
 
-Mit Hilfe von \lstinline|Enumerator|s können auf einfache Weise Daten an einen \lstinline|Iteratee| übergeben werden.
+Mit Hilfe von \lstinline|Enumerator|s können auf einfache Weise Daten an \lstinline|Iteratee|s übergeben werden.
 Das Ergebnis der Anwendung eines \lstinline|Enumerator|s ist der \lstinline|Iteratee| nach Konsum der Elemente in der \lstinline|Future|-Monade.
-Ein \lstinline|Enumerator| sendet selber kein \lstinline|Input.EOF|-Element, wenn er keine Elemente mehr hat, sodass es möglich ist, noch einen weiteren \lstinline|Enumerator| auf ein \lstinline|Iteratee| anzuwenden.
+Nachdem ein \lstinline|Enumerator| alle Elemente an einen \lstinline|Iteratee| übergeben hat, sendet er allerdings kein \lstinline|Input.EOF|-Element.
+Dadurch ist es möglich, mehrere \lstinline|Enumerator|s auf einen \lstinline|Iteratee| anzuwenden.
 Um ein \lstinline|Input.EOF|-Element an ein \lstinline|Iteratee| zu senden, wird die \lstinline|run|-Methode des \lstinline|Iteratee|-Traits aufgerufen.
+
+\paragraph{Anwendung auf Iteratees} % (fold)
+\label{par:anwendung_auf_iteratees}\mbox{} % force new line
+
+\lstinline|Enumerator|s sind, wie in Kap.~\ref{ssub:design_enumerators} erklärt, Funktionen.
+Das Ergebnis der Anwendung eines \lstinline|Enumerator|s ist der \lstinline|Iteratee| nach Konsum der Elemente in der \lstinline|Future|-Monade.
+Ein Beispiel dafür ist in Listing~\ref{lst:iterateeausfuehrung1} zu sehen.
+
+\begin{lstlisting}[caption=Ausführung eines \lstinline|Iteratee|s durch einen \lstinline|Enumerator|, label=lst:iterateeausfuehrung1]
+val sumIteratee: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
+val e1: Enumerator[Int] = Enumerator(1, 2, 3)
+val sumIterateeAfterE1: Future[Iteratee[Int, Int]] =
+  e1(sumIteratee)
+\end{lstlisting}
+
+Nachdem ein \lstinline|Enumerator| alle Elemente an einen \lstinline|Iteratee| übergeben hat, sendet er allerdings kein \lstinline|Input.EOF|-Element.
+Dadurch ist es möglich, mehrere \lstinline|Enumerator|s auf einen \lstinline|Iteratee| anzuwenden, wie in Listing~\ref{lst:iterateeausfuehrung2}.
+
+\begin{lstlisting}[caption=Ausführung eines \lstinline|Iteratee|s durch einen zweiten \lstinline|Enumerator|, label=lst:iterateeausfuehrung2]
+val e2: Enumerator[Int] = Enumerator(4, 5)
+val sumIterateeAfterE2: Future[Future[Iteratee[Int, Int]]] =
+  sumIterateeAfterE1.map(e2(_))
+\end{lstlisting}
+
+Um ein \lstinline|Input.EOF|-Element an ein \lstinline|Iteratee| zu senden, wird die \lstinline|run|-Methode des \lstinline|Iteratee|-Traits aufgerufen.
+Ein Beispiel dafür ist in Listing~\ref{lst:iterateeausfuehrung3} zu sehen.
+
+\begin{lstlisting}[caption=Ausführung eines \lstinline|Iteratee|s beenden, label=lst:iterateeausfuehrung3]
+val sumResult: Future[Future[Future[Int]]] =
+  sumIterateeAfterE2.map(_.map(_.run))
+\end{lstlisting}
+
+Weil es aber sehr mühsam ist, den \lstinline|Iteratee| innerhalb der \lstinline|Future|-Monade zu bearbeiten, ist es möglich \lstinline|Future[Iteratee[E, A]]| in einen \lstinline|Iteratee[E, A]| zu transformieren.
+Beide Typen haben die gleiche Bedeutung, indem sie für ein Ergebnis stehen, das möglicherweise noch nicht vorhanden ist.
+Weil ein \lstinline|Iteratee| innerhalb der \lstinline|Future|-Monade aus diesem Betrachtungswinkel aber redundant ist, existiert die Methode \lstinline|Iteratee.flatten|.
+Unter Einsatz dieser Methode wird der Code wesentlich einfacherer und Verständlicher, wie in Listing~\ref{lst:iterateeausfuehrung_mit_flatten} zu sehen ist.
+
+\begin{lstlisting}[caption=Ausführung eines \lstinline|Iteratee|s mit Einsatz von \lstinline|Iteratee.flatten|, label=lst:iterateeausfuehrung_mit_flatten]
+val sumIterateeAfterE1: Iteratee[Int, Int] =
+  Iteratee.flatten(e1(sumIteratee))
+
+val sumIterateeAfterE2: Iteratee[Int, Int] =
+  Iteratee.flatten(e2(sumIterateeAfterE1))
+
+val sumResult: Future[Int] = sumIterateeAfterE2.run
+\end{lstlisting}
+
+Eine einfachere Art und Weise, mehrere \lstinline|Enumerator|s zu kombinieren ist mit Hilfe der \lstinline|andThen|-Methode.
+Diese Methode hat die Signatur \lstinline|Enumerator[E] => Enumerator[E]|.
+Der resultierende \lstinline|Enumerator| wendet immer erst den \lstinline|Enumerator| an, auf dem die Methode aufgerufen wurde und dann den \lstinline|Enumerator|, mit dem die Methode aufgerufen wurde.
+\lstinline|andThen| kann alternativ auch mit dem Operator \lstinline|>>>| aufgerufen werden.
+Das Beispiel unter Einsatz von \lstinline|andThen| ist in Listing~\ref{lst:enumerators_kombinieren} zu sehen.
+
+\begin{lstlisting}[caption=\lstinline|Enumerator|s kombinieren, label=lst:enumerators_kombinieren]
+val e1e2: Enumerator[Int] = e1.andThen(e2)
+
+val sumIterateeAfterE1E2: Iteratee[Int, Int] =
+  Iteratee.flatten(e1e2(sumIteratee))
+
+val sumResult: Future[Int] = sumIterateeAfterE1E2.run
+\end{lstlisting}
+
+Des Weiteren kann ein \lstinline|Iteratee| auch direkt von einem \lstinline|Enumerator| ausgeführt und anschließend das Ergebnis extrahiert werden.
+Dafür gibt es die Methode \lstinline|run| mit dazugehörigem Operator \lstinline$|>>>$ im \lstinline|Enumerator|-Trait.
+Dadurch wird unser Beispiel noch kürzer, wie in Listing~\ref{lst:iterateeausfuehrung_mit_enumerator_run} zu erkennen ist.
+
+\begin{lstlisting}[caption=Ausführung eines \lstinline|Iteratees| mit gleichzeitiger Ergebnisextraktion, label=lst:iterateeausfuehrung_mit_enumerator_run]
+val e1e2: Enumerator[Int] = e1.andThen(e2)
+val sumResult: Future[Int] = e1e2.run(sumIteratee)
+\end{lstlisting}
+
+% paragraph anwendung_auf_iteratees (end)
 
 % subsubsection enumerators (end)
 
