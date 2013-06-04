@@ -683,6 +683,113 @@ Nachdem ein \lstinline|Enumerator| alle Elemente an einen \lstinline|Iteratee| �
 Dadurch ist es möglich, mehrere \lstinline|Enumerator|s auf einen \lstinline|Iteratee| anzuwenden.
 Um ein \lstinline|Input.EOF|-Element an ein \lstinline|Iteratee| zu senden, wird die \lstinline|run|-Methode des \lstinline|Iteratee|-Traits aufgerufen.
 
+\paragraph{Enumerators erstellen} % (fold)
+\label{par:enumerators_erstellen}\mbox{} % force new line
+
+Es gibt drei unterschiedliche Techniken, einen \lstinline|Enumerator| zu erstellen.
+\begin{enumerate}
+  \item Durch Erstellung einer neuen Klasee, die von \lstinline|Enumerator| erbt und \lstinline|apply| implementiert.
+  \item Durch Benutzung einer Konstruktormethode im Companion-Objekt (\lstinline|apply|, \lstinline|generateM|, u.~a.).
+  \item Durch Benutzung einer Konstruktormethode im \lstinline|Concurrent|-Objekt (\lstinline|broadcast|, \lstinline|unicast|, u.~a.).
+\end{enumerate}
+
+Im Folgenden werden alle Herangehensweisen vorgestellt, um Zahlen für den im vorigen Kapitel vorgestellten Summierungsiteratee zu generieren.
+
+\subparagraph{Erstellung durch Vererbung} % (fold)
+\label{subp:enumeratorerstellung_durch_vererbung}\mbox{} % force new line
+
+Bei der Erstellung eines \lstinline|Enumerator|s durch Vererbung, muss das \lstinline|Enumerator|-Trait implementiert werden.
+Alles, was dafür nötig ist, ist die \lstinline|apply|-Methode zu implementieren.
+Innerhalb dieser Methode wird der übergebene \lstinline|Iteratee| mit Hilfe seiner \lstinline|fold|-Methode befüllt, wie in Listing~\ref{lst:enumeratorerstellung_durch_vererbung} zu sehen.
+
+\begin{lstlisting}[caption=Erstellung eines \lstinline|Enumerator|s durch Vererbung, label=lst:enumeratorerstellung_durch_vererbung]
+case class NumberEnumerator(xs: Int*) extends Enumerator[Int] {
+  def apply[A](iteratee: Iteratee[Int, A]):
+      Future[Iteratee[Int, A]] = {
+    xs.foldLeft(Future(iteratee)) { (futureIteratee, x) =>
+      futureIteratee.flatMap { iteratee =>
+        iteratee.fold(_ match {
+          case Step.Cont(k) => Future(k(Input.El(x)))
+          case _ => Future(iteratee)
+        })
+      }
+    }
+  }
+}
+
+val numberEnumeratorFromInheritance: Enumerator[Int] =
+  NumberEnumerator(1, 4, -2)
+\end{lstlisting}
+
+Alles was ein \lstinline|Enumerator| zu tun hat, ist seine Daten an den übergebenen \lstinline|Iteratee| zu übergeben.
+Weil zum Befüllen eines \lstinline|Iteratee|s nur die \lstinline|fold|-Methode zur Verfügung steht, wurde für dieses Beispiel die \lstinline|folder|-Funktion aus dem vorigen Kapitel übernommen.
+
+% subparagraph enumeratorerstellung_durch_vererbung (end)
+
+\subparagraph{Erstellung durch Konstruktormethode im Companion-Objekt} % (fold)
+\label{subp:erstellung_durch_konstruktormethode_im_companion-object}\mbox{} % force new line
+
+Die zweite Variante, einen \lstinline|Enumerator| zu erstellen, ist mit Hilfe einer der Konstruktormethoden des Companion-Objekts.
+Hierfür gibt es mehrere hilfreiche Methoden, die an dieser Stelle aber nicht alle vorgestellt werden können.
+Stattdessen wird exemplarisch eine Methode vorgestellt, die auch in den folgenden Beispielen verwendet werden wird.
+
+Die hier vorgestellte Methode ist die \lstinline|apply|-Methode des Companion-Objekts mit der Signatur \lstinline[breaklines=true]|def apply[E](in: E*): Enumerator[E]|.
+Diese Methode nimmmt als Parameter beliebig viele Elemente eines Typs und wird diese bei Anwendung in \lstinline|Input|-Elemente verpacken und an den \lstinline|Iteratee| übergeben.
+Wie der \lstinline|Enumerator| mit dieser Methode erstellt wird, ist in Listing~\ref{lst:enumeratorerstellung_durch_apply} zu sehen.
+
+\begin{lstlisting}[caption=Erstellung eines \lstinline|Enumerator|s durch die \lstinline|apply|-Konstruktormethode, label=lst:enumeratorerstellung_durch_apply]
+val numberEnumeratorFromApply: Enumerator[Int] =
+  Enumerator(1, 4, -2)
+\end{lstlisting}
+
+% subparagraph erstellung_durch_konstruktormethode_im_companion-object (end)
+
+\subparagraph{Erstellung durch Konstruktormethode im Concurrent-Objekt} % (fold)
+\label{subp:erstellung_durch_konstruktormethode_im_concurrent_objekt}\mbox{} % force new line
+
+Das Objekt \lstinline|Concurrent| stellt weitere Konstruktoren für \lstinline|Enumerator|s bereit.
+Unter anderem beinhaltet dieses Objekt die Methode \lstinline|unicast|, die imperatives schreiben auf einen \lstinline|Iteratee| erlaubt.
+Die Signatur von \lstinline|unicast| ist wie in Listing~\ref{lst:unicast_signatur} dargestellt.
+
+\begin{lstlisting}[caption=Die Signatur von \lstinline|Concurrent.unicast|, label=lst:unicast_signatur]
+def unicast[E](
+  onStart: (Channel[E]) => Unit,
+  onComplete: => Unit,
+  onError: (String, Input[E]) => Unit): Enumerator[E]
+\end{lstlisting}
+
+Die Methode nimmt als Argumente drei Funktionen: \lstinline|onStart|, \lstinline|onComplete| und \lstinline|onError|.
+\lstinline|onStart| wird immer aufgerufen, wenn die \lstinline|apply|-Methode des \lstinline|Enumerator|s aufgerufen wird.
+\lstinline|onComplete| wird aufgerufen, wenn der \lstinline|Iteratee| in den \lstinline|Step.Done|-Zustand übergegangen ist.
+\lstinline|onError| wird aufgerufen, wenn der \lstinline|Iteratee| in den \lstinline|Step.Error|-Zustand übergegangen ist.
+Die letzten beiden Funktionen sind optionale Argumente.
+
+Die \lstinline|onStart|-Funktion nimmt ein Argument vom Typ \lstinline|Channel|.
+Ein \lstinline|Channel| hat u.~a. die Methoden \lstinline[breaklines=true]|def push(item: E): Unit| und \lstinline[breaklines=true]|def end(): Unit|.
+Diese Methoden erlauben es, ein Element an das verbundene \lstinline|Iteratee| zu übergeben, bzw. zu signalisieren, dass der \lstinline|Enumerator| keine weiteren Elemente mehr hat.
+
+Um mit Hilfe der \lstinline|unicast|-Methode einen Zahlen generierenden \lstinline|Enumerator| zu erstellen, wird nur die \lstinline|onStart|-Funktion benötigt.
+Diese Funktion ist dafür zuständig, die Elemente an den \lstinline|Channel| und somit an den verbundenen \lstinline|Iteratee| zu übergeben.
+Wichtig ist dabei jedoch, dass nach Übergabe aller Zahlen der \lstinline|Channel| wieder geschlossen wird.
+Andernfalls wird niemals signalisiert, dass keine weiteren Elemente mehr kommen und der \lstinline|Iteratee| wird nicht in den \lstinline|Step.Done|-Zustand übergehen.
+Die Implementation dazu ist in Listing~\ref{lst:enumeratorerstellung_durch_unicast} zu sehen.
+
+\begin{lstlisting}[caption=Erstellung eines \lstinline|Enumerator|s durch die \lstinline|unicast|-Konstruktormethode, label=lst:enumeratorerstellung_durch_unicast]
+def numberEnumerator(xs: Int*): Enumerator[Int] = {
+  Concurrent.unicast { channel =>
+    xs.foreach(channel.push(_))
+    channel.end
+  }
+}
+
+val numberEnumeratorFromUnicast: Enumerator[Int] =
+      numberEnumerator(1, 4, -2)
+\end{lstlisting}
+
+% subparagraph erstellung_durch_konstruktormethode_im_concurrent_objekt (end)
+
+% paragraph enumerators_erstellen (end)
+
 \paragraph{Anwendung auf Iteratees} % (fold)
 \label{par:anwendung_auf_iteratees}\mbox{} % force new line
 
