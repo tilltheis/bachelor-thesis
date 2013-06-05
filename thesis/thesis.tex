@@ -708,10 +708,10 @@ case class NumberEnumerator(xs: Int*) extends Enumerator[Int] {
       Future[Iteratee[Int, A]] = {
     xs.foldLeft(Future(iteratee)) { (futureIteratee, x) =>
       futureIteratee.flatMap { iteratee =>
-        iteratee.fold(_ match {
+        iteratee.fold {
           case Step.Cont(k) => Future(k(Input.El(x)))
           case _ => Future(iteratee)
-        })
+        }
       }
     }
   }
@@ -722,7 +722,10 @@ val numberEnumeratorFromInheritance: Enumerator[Int] =
 \end{lstlisting}
 
 Alles was ein \lstinline|Enumerator| zu tun hat, ist seine Daten an den übergebenen \lstinline|Iteratee| zu übergeben.
-Weil zum Befüllen eines \lstinline|Iteratee|s nur die \lstinline|fold|-Methode zur Verfügung steht, wurde für dieses Beispiel die \lstinline|folder|-Funktion aus dem vorigen Kapitel übernommen.
+Dieses Vorgehen ist in diesem Beispiel als Fold über den \lstinline|Iteratee| implementiert.
+Es wird immer ein Element an den \lstinline|Iteratee| übergeben und der resultierende \lstinline|Iteratee| als neues Zwischenergebnis verwendet.
+Falls der \lstinline|Iteratee| keine weiteren Elemente akzeptiert, obwohl noch Elemente übrig sind, wird dieser als Endergebnis verwendet.
+Das hier vorgestellte Verfahren ist in leicht abgewandelter Form der Implementierung von \lstinline|Enumerator.apply| entnommen \cite[vgl.][Zeile~663 und Zeile~690]{play_enumerator_source_code}.
 
 % subparagraph enumeratorerstellung_durch_vererbung (end)
 

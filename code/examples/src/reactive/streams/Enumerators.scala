@@ -16,10 +16,10 @@ object Enumerators {
           Future[Iteratee[Int, A]] = {
         xs.foldLeft(Future(iteratee)) { (futureIteratee, x) =>
           futureIteratee.flatMap { iteratee =>
-            iteratee.fold(_ match {
+            iteratee.fold {
               case Step.Cont(k) => Future(k(Input.El(x)))
               case _ => Future(iteratee)
-            })
+            }
           }
         }
       }
