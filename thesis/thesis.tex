@@ -343,7 +343,7 @@ Dadurch, dass das Marker-Trait \lstinline|sealed| ist, wird verhindert, dass von
 In diesem Fall besitzt der algebraische Datentyp \lstinline|Input| die Konstruktoren \lstinline|El|, \lstinline|Empty| und \lstinline|EOF|.
 Der Konstruktor \lstinline|El| besitzt ein Feld, \lstinline|Empty| und \lstinline|EOF| besitzen keine Felder.
 
-Für den Fall, dass die Datenquelle nicht erschöpft ist, existiert im Companion-Objekt die Unterklasse \lstinline|Input.El| mit dazugehöriger Konstruktorfunktion.
+Für den Fall, dass die Datenquelle nicht erschöpft ist, existiert im Companion-Objekt die Unterklasse \lstinline|Input.El| mit dazugehöriger Konstruktormethode.
 Diese Implementierung hält genau ein Element aus der Datenquelle.
 \lstinline|Input.Empty| "`signifies a stream with no immediately available data but which is still continuing"' \cite[vgl.][]{iteratee_io}\todo{Ist Übernehmen von Kiselyovs Definition für Plays Implementierung erlaubt?}.
 Außerdem findet es im Kontext von \lstinline|Iteratee|s Verwendung, um zu signalisieren, dass kein Teil Eingabe übriggebliebenen ist.
@@ -552,7 +552,7 @@ Dadurch wird der zu berechnende Wert aufgebaut.
 Es gibt drei Möglichkeiten, einen neuen \lstinline|Iteratee| zu erstellen.
 \begin{enumerate}
   \item Durch Erstellung einer neuen Klasse, die von \lstinline|Iteratee| erbt und \lstinline|fold| implementiert.
-  \item Durch Benutzung einer Konstruktorfunktion analog zu den \lstinline|Step|-Zuständen (\lstinline|Done|, \lstinline|Cont| und \lstinline|Error|).
+  \item Durch Benutzung einer Konstruktormethode analog zu den \lstinline|Step|-Zuständen (\lstinline|Done|, \lstinline|Cont| und \lstinline|Error|).
   \item Durch Benutzung einer Hilfsfunktion des Companion-Objekts (\lstinline|fold|, \lstinline|foreach|, u.~a.).
 \end{enumerate}
 
@@ -595,14 +595,14 @@ Sobald keine weiteren Elemente mehr kommen können, wird die Berechnung beendet 
 
 % subparagraph erstellung_durch_vererbung (end)
 
-\subparagraph{Erstellung durch Konstruktorfunktion} % (fold)
-\label{subp:erstellung_durch_konstruktorfunktion}\mbox{} % force new line
+\subparagraph{Erstellung durch Konstruktormethode} % (fold)
+\label{subp:erstellung_durch_konstruktormethode}\mbox{} % force new line
 
-Die zweite Möglichkeit, einen \lstinline|Iteratee| zu erstellen, ist mit Hilfe einer der Konstruktorfunktionen.
-Es gibt die Konstruktorfunktionen \lstinline|Done|, \lstinline|Cont| und \lstinline|Error|, die jeweils einen \lstinline|Iteratee| im gleichnamigen \lstinline|Step|-Zustand erstellen.
-Der Code, der einen \lstinline|Iteratee| mit Hilfe dieser Funktionen erstellt, ist in Listing~\ref{lst:iteratee_durch_konstruktorfunktion} zu sehen.
+Die zweite Möglichkeit, einen \lstinline|Iteratee| zu erstellen, ist mit Hilfe einer der Konstruktormethoden.
+Es gibt die Konstruktormethoden \lstinline|Done|, \lstinline|Cont| und \lstinline|Error|, die jeweils einen \lstinline|Iteratee| im gleichnamigen \lstinline|Step|-Zustand erstellen.
+Der Code, der einen \lstinline|Iteratee| mit Hilfe dieser Methoden erstellt, ist in Listing~\ref{lst:iteratee_durch_konstruktormethode} zu sehen.
 
-\begin{lstlisting}[caption=Erstellung eines \lstinline|Iteratee|s durch eine Konstruktorfunktion, label=lst:iteratee_durch_konstruktorfunktion]
+\begin{lstlisting}[caption=Erstellung eines \lstinline|Iteratee|s durch eine Konstruktormethode, label=lst:iteratee_durch_konstruktormethode]
 def sumIteratee(sum: Int = 0): Iteratee[Int, Int] = Cont(_ match {
   case Input.El(i) => sumIteratee(sum + i)
   case Input.Empty => sumIteratee(sum)
@@ -617,7 +617,7 @@ Im Gegensatz dazu muss hier jedoch nicht mehr explizit von \lstinline|Iteratee| 
 Dies macht den Code schon wesentlich kürzer und einfacher.
 Der Code ist auf die elementaren Aufgaben reduziert und es ist nun klar zu erkennen, was bei welcher Eingabe geschieht.
 
-% subparagraph erstellung_durch_konstruktorfunktion (end)
+% subparagraph erstellung_durch_konstruktormethode (end)
 
 \subparagraph{Erstellung durch Hilfsmethode} % (fold)
 \label{subp:erstellung_durch_hilfsmethode}\mbox{} % force new line
