@@ -648,23 +648,27 @@ Erst nach dieser Analyse kann entschieden werden, ob ein weiteres Element überg
 In Listing~\ref{lst:iterateeausfuehrung_durch_folder} wird gezeigt, wie dies implementiert werden kann.
 
 \begin{lstlisting}[caption=Ausführung eines \lstinline|Iteratee|s durch \lstinline|folder|-Funktion, label=lst:iterateeausfuehrung_durch_folder]
-def folder(xs: List[Int])(step: Step[Int, Int]): Future[Int] =
-  xs match {
-    case Nil => step match {
-      case Step.Cont(k) => k(Input.EOF).fold(_ match {
-        case Step.Done(sum, Input.EOF) => Future(sum)
+def folder(xs: Int*)(step: Step[Int, Int]): Future[Int] = {
+  def folder_(xs: List[Int])(step: Step[Int, Int]): Future[Int] =
+    xs match {
+      case Nil => step match {
+        case Step.Cont(k) => k(Input.EOF).fold(_ match {
+          case Step.Done(sum, Input.EOF) => Future(sum)
+          case _ => Future.failed(new Exception("invalid state"))
+        })
         case _ => Future.failed(new Exception("invalid state"))
-      })
-      case _ => Future.failed(new Exception("invalid state"))
+      }
+      case x :: xs => step match {
+        case Step.Cont(k) => k(Input.El(x)).fold(folder_(xs))
+        case _ => Future.failed(new Exception("invalid state"))
+      }
     }
-    case x :: xs => step match {
-      case Step.Cont(k) => k(Input.El(x)).fold(folder(xs))
-      case _ => Future.failed(new Exception("invalid state"))
-    }
-  }
+
+  folder_(xs.toList)(step)
+}
 
 val sumResult: Future[Int] =
-  sumIterateeFromHelper.fold(folder(List(1, 4, -2)))
+  sumIterateeFromHelper.fold(folder(1, 4, -2))
 \end{lstlisting}
 
 Das Übergeben von Daten mittels der \lstinline|fold|-Methode ist, wie in Listing~\ref{lst:iterateeausfuehrung_durch_folder} zu erkennen, recht aufwändig.

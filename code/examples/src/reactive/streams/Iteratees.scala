@@ -37,22 +37,26 @@ object Iteratees extends App {
       Iteratee.fold(0)(_ + _)
 
 
-    def folder(xs: List[Int])(step: Step[Int, Int]): Future[Int] =
-      xs match {
-        case Nil => step match {
-          case Step.Cont(k) => k(Input.EOF).fold(_ match {
-            case Step.Done(sum, Input.EOF) => Future(sum)
+    def folder(xs: Int*)(step: Step[Int, Int]): Future[Int] = {
+      def folder_(xs: List[Int])(step: Step[Int, Int]): Future[Int] =
+        xs match {
+          case Nil => step match {
+            case Step.Cont(k) => k(Input.EOF).fold(_ match {
+              case Step.Done(sum, Input.EOF) => Future(sum)
+              case _ => Future.failed(new Exception("invalid state"))
+            })
             case _ => Future.failed(new Exception("invalid state"))
-          })
-          case _ => Future.failed(new Exception("invalid state"))
+          }
+          case x :: xs => step match {
+            case Step.Cont(k) => k(Input.El(x)).fold(folder_(xs))
+            case _ => Future.failed(new Exception("invalid state"))
+          }
         }
-        case x :: xs => step match {
-          case Step.Cont(k) => k(Input.El(x)).fold(folder(xs))
-          case _ => Future.failed(new Exception("invalid state"))
-        }
-      }
+
+      folder_(xs.toList)(step)
+    }
 
     val sumResult: Future[Int] =
-      sumIterateeFromHelper.fold(folder(List(1, 4, -2)))
+      sumIterateeFromHelper.fold(folder(1, 4, -2))
   }
 }

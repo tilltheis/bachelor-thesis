@@ -33,7 +33,7 @@ class IterateesSpec extends Specification with NoTimeConversions {
       }
 
       "sum correctly with folder" in {
-        val result = iteratee.fold(Iteratees.Creation.folder(List(1, 4, -2)))
+        val result = iteratee.fold(Iteratees.Creation.folder(1, 4, -2))
         Await.result(result, 1 second) === 3
       }
     }
@@ -53,11 +53,11 @@ class IterateesSpec extends Specification with NoTimeConversions {
       val (kind, iteratee) = pair
 
       s"fail for $kind iteratees" in {
-        (iteratee.fold(Iteratees.Creation.folder(List(1))).value) must beLike {
+        (iteratee.fold(Iteratees.Creation.folder(1)).value) must beLike {
           case Some(Failure(_)) => ok
         }
 
-        iteratee.fold(Iteratees.Creation.folder(List.empty)).value must beLike {
+        iteratee.fold(Iteratees.Creation.folder()).value must beLike {
           case Some(Failure(_)) => ok
         }
       }
