@@ -692,7 +692,7 @@ Um ein \lstinline|Input.EOF|-Element an ein \lstinline|Iteratee| zu senden, wird
 
 Es gibt drei unterschiedliche Techniken, einen \lstinline|Enumerator| zu erstellen.
 \begin{enumerate}
-  \item Durch Erstellung einer neuen Klasee, die von \lstinline|Enumerator| erbt und \lstinline|apply| implementiert.
+  \item Durch Erstellung einer neuen Klasse, die von \lstinline|Enumerator| erbt und \lstinline|apply| implementiert.
   \item Durch Benutzung einer Konstruktormethode im Companion-Objekt (\lstinline|apply|, \lstinline|generateM|, u.~a.).
   \item Durch Benutzung einer Konstruktormethode im \lstinline|Concurrent|-Objekt (\lstinline|broadcast|, \lstinline|unicast|, u.~a.).
 \end{enumerate}
@@ -741,7 +741,7 @@ Hierfür gibt es mehrere hilfreiche Methoden, die an dieser Stelle aber nicht al
 Stattdessen wird exemplarisch eine Methode vorgestellt, die auch in den folgenden Beispielen verwendet werden wird.
 
 Die hier vorgestellte Methode ist die \lstinline|apply|-Methode des Companion-Objekts mit der Signatur \lstinline[breaklines=true]|def apply[E](in: E*): Enumerator[E]|.
-Diese Methode nimmmt als Parameter beliebig viele Elemente eines Typs und wird diese bei Anwendung in \lstinline|Input|-Elemente verpacken und an den \lstinline|Iteratee| übergeben.
+Diese Methode nimmt als Parameter beliebig viele Elemente eines Typs und wird diese bei Anwendung in \lstinline|Input|-Elemente verpacken und an den \lstinline|Iteratee| übergeben.
 Wie der \lstinline|Enumerator| mit dieser Methode erstellt wird, ist in Listing~\ref{lst:enumeratorerstellung_durch_apply} zu sehen.
 
 \begin{lstlisting}[caption=Erstellung eines \lstinline|Enumerator|s durch die \lstinline|apply|-Konstruktormethode, label=lst:enumeratorerstellung_durch_apply]
