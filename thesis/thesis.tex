@@ -801,47 +801,54 @@ val numberEnumeratorFromUnicast: Enumerator[Int] =
 \label{par:anwendung_auf_iteratees}\mbox{} % force new line
 
 \lstinline|Enumerator|s sind, wie in Kap.~\ref{ssub:design_enumerators} erklärt, Funktionen.
-Das Ergebnis der Anwendung eines \lstinline|Enumerator|s ist der \lstinline|Iteratee| nach Konsum der Elemente in der \lstinline|Future|-Monade.
-Ein Beispiel dafür ist in Listing~\ref{lst:iterateeausfuehrung1} zu sehen.
+Das Ergebnis der Anwendung einer solchen \lstinline|Enumerator|-Funktion ist der übergebene \lstinline|Iteratee| nach Konsum der Elemente in der \lstinline|Future|-Monade.
+Ein Beispiel für diese ersten Schritte ist in Listing~\ref{lst:enumeratoranwendung1} zu sehen.
 
-\begin{lstlisting}[caption=Ausführung eines \lstinline|Iteratee|s durch einen \lstinline|Enumerator|, label=lst:iterateeausfuehrung1]
-val sumIteratee: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
-val e1: Enumerator[Int] = Enumerator(1, 2, 3)
-val sumIterateeAfterE1: Future[Iteratee[Int, Int]] =
-  e1(sumIteratee)
+\begin{lstlisting}[caption=Anwendung eines \lstinline|Enumerator|s auf einen \lstinline|Iteratee|, label=lst:enumeratoranwendung1]
+val iteratee: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
+val enumerator: Enumerator[Int] = Enumerator(1, 4, -2)
+val futureIterateeAfterApplication: Future[Iteratee[Int, Int]] =
+  enumerator(iteratee)
 \end{lstlisting}
 
-Nachdem ein \lstinline|Enumerator| alle Elemente an einen \lstinline|Iteratee| übergeben hat, sendet er allerdings kein \lstinline|Input.EOF|-Element.
-Dadurch ist es möglich, mehrere \lstinline|Enumerator|s auf einen \lstinline|Iteratee| anzuwenden, wie in Listing~\ref{lst:iterateeausfuehrung2}.
 
-\begin{lstlisting}[caption=Ausführung eines \lstinline|Iteratee|s durch einen zweiten \lstinline|Enumerator|, label=lst:iterateeausfuehrung2]
-val e2: Enumerator[Int] = Enumerator(4, 5)
-val sumIterateeAfterE2: Future[Future[Iteratee[Int, Int]]] =
-  sumIterateeAfterE1.map(e2(_))
-\end{lstlisting}
-
-Um ein \lstinline|Input.EOF|-Element an ein \lstinline|Iteratee| zu senden, wird die \lstinline|run|-Methode des \lstinline|Iteratee|-Traits aufgerufen.
-Ein Beispiel dafür ist in Listing~\ref{lst:iterateeausfuehrung3} zu sehen.
-
-\begin{lstlisting}[caption=Ausführung eines \lstinline|Iteratee|s beenden, label=lst:iterateeausfuehrung3]
-val sumResult: Future[Future[Future[Int]]] =
-  sumIterateeAfterE2.map(_.map(_.run))
-\end{lstlisting}
-
-Weil es aber sehr mühsam ist, den \lstinline|Iteratee| innerhalb der \lstinline|Future|-Monade zu bearbeiten, ist es möglich \lstinline|Future[Iteratee[E, A]]| in einen \lstinline|Iteratee[E, A]| zu transformieren.
+Um mit dem neuen \lstinline|Iteratee| weiterzuarbeiten wäre es möglich, alle weiteren Operationen innerhalb der \lstinline|Future|-Monade durchzuführen.
+Weil es aber mühsam ist, \lstinline|Iteratee|s innerhalb von \lstinline|Future|s zu bearbeiten, ist es möglich einen Wert vom Typ \lstinline|Future[Iteratee[E, A]]| in einen Wert vom Typ \lstinline|Iteratee[E, A]| zu transformieren.
 Beide Typen haben die gleiche Bedeutung, indem sie für ein Ergebnis stehen, das möglicherweise noch nicht vorhanden ist.
 Weil ein \lstinline|Iteratee| innerhalb der \lstinline|Future|-Monade aus diesem Betrachtungswinkel aber redundant ist, existiert die Methode \lstinline|Iteratee.flatten|.
-Unter Einsatz dieser Methode wird der Code wesentlich einfacherer und Verständlicher, wie in Listing~\ref{lst:iterateeausfuehrung_mit_flatten} zu sehen ist.
 
-\begin{lstlisting}[caption=Ausführung eines \lstinline|Iteratee|s mit Einsatz von \lstinline|Iteratee.flatten|, label=lst:iterateeausfuehrung_mit_flatten]
-val sumIterateeAfterE1: Iteratee[Int, Int] =
-  Iteratee.flatten(e1(sumIteratee))
 
-val sumIterateeAfterE2: Iteratee[Int, Int] =
-  Iteratee.flatten(e2(sumIterateeAfterE1))
+Nachdem ein \lstinline|Enumerator| alle Elemente an einen \lstinline|Iteratee| übergeben hat, sendet er allerdings kein \lstinline|Input.EOF|-Element.
+Dadurch ist es möglich, mehrere \lstinline|Enumerator|s auf einen \lstinline|Iteratee| anzuwenden, worauf in Kap.~\ref{par:anwendung_komposition_von_enumerators} näher eingegangen wird.
+Um ein \lstinline|Input.EOF|-Element an ein \lstinline|Iteratee| zu senden, wird die \lstinline|run|-Methode aus dem \lstinline|Iteratee|-Trait aufgerufen.
+Eine Weiterführung des zuvor begonnenen \lstinline|Enumerator|-Beispiels ist in Listing~\ref{lst:enumeratoranwendung2} zu finden.
+In diesem Beispiel werden die beiden oben beschriebenen Techniken angewendet, um die berechnete Summe aus dem \lstinline|Iteratee| zu extrahieren.
 
-val sumResult: Future[Int] = sumIterateeAfterE2.run
+\begin{lstlisting}[caption=Extrahierung des Ergebnisses aus einem \lstinline|Iteratee|, label=lst:enumeratoranwendung2]
+val iterateeAfterApplication: Iteratee[Int, Int] =
+  Iteratee.flatten(futureIterateeAfterApplication)
+
+val futureResult: Future[Int] = iterateeAfterApplication.run
 \end{lstlisting}
+
+Mit Hilfe der Methode \lstinline|Enumerator.run| ist es möglich, \lstinline|Enumerator|anwendung und Ergebnisextraktion zusammenzufassen.
+Diese Hilfsmethode hat die Signatur \lstinline[breaklines=true]|def run[A](i: Iteratee[E, A]): Future[A]|.
+Unter Einsatz dieser Methode wird die Verarbeitung im Aufsummierungsbeispiel, wie in Listing~\ref{lst:enumeratoranwendung3} zu sehen, auf einen Befehl verkürzt.
+
+\begin{lstlisting}[caption=Anwendung eines \lstinline|Enumerator|s mit gleichzeitiger Ergebnisextrahierung, label=lst:enumeratoranwendung3]
+val futureResult2: Future[Int] = enumerator.run(iteratee)
+\end{lstlisting}
+
+% paragraph anwendung_auf_iteratees (end)
+
+% subsubsection enumerators (end)
+
+
+\subsubsection{Komposition} % (fold)
+\label{ssub:anwendung_komposition}
+
+\paragraph{Komposition von Enumerators} % (fold)
+\label{par:anwendung_komposition_von_enumerators}
 
 Eine einfachere Art und Weise, mehrere \lstinline|Enumerator|s zu kombinieren ist mit Hilfe der \lstinline|andThen|-Methode.
 Diese Methode hat die Signatur \lstinline|Enumerator[E] => Enumerator[E]|.
@@ -867,9 +874,9 @@ val e1e2: Enumerator[Int] = e1.andThen(e2)
 val sumResult: Future[Int] = e1e2.run(sumIteratee)
 \end{lstlisting}
 
-% paragraph anwendung_auf_iteratees (end)
+% paragraph anwendung_komposition_von_enumerators (end)
 
-% subsubsection enumerators (end)
+% subsubsection anwendung_komposition (end)
 
 
 \subsubsection{Regeln} % (fold)
