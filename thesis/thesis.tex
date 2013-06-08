@@ -842,6 +842,48 @@ val futureResult2: Future[Int] = enumerator.run(iteratee)
 % subsubsection enumerators (end)
 
 
+\subsubsection{Enumeratees} % (fold)
+\label{ssub:enumeratees}
+
+\lstinline|Enumeratee|s sind Stream-Transformatoren, die \lstinline|Iteratee|s eines Typs zu \lstinline|Iteratee|s eines anderen Typs transformieren.
+Sie sind, wie in Kap.~\ref{ssub:design_enumeratees} erkärt, Funktionen von \lstinline|Iteratee| nach \lstinline|Iteratee|.
+Das Ergebnis des resultierenden \lstinline|Iteratee|s ist wiederum ein \lstinline|Iteratee|.
+Und zwar ist es der ursprünglichen \lstinline|Iteratee| nach Empfang der Elemente.
+In diesem Kapitel wird beschrieben, wie...
+
+\paragraph{Erstellung von Enumeratees} % (fold)
+\label{par:erstellung_von_enumeratees}\mbox{} % force new line
+
+Es gibt drei Möglichkeiten, einen \lstinline|Enumeratee| zu erstellen.
+
+\begin{enumerate}
+  \item Durch Erstellung einer neuen Klasse, die das \lstinline|Enumeratee|-Trait implementiert.
+  \item Durch Benutzung einer Konstruktormethode des Companion-Objekts (\lstinline|map|, \lstinline|filter|, u.~a.)
+  \item Durch Benutzung einer Konstruktormethode des \lstinline|Traversable|-Objekts (\lstinline|take|, \lstinline|drop|, u.~a.)
+\end{enumerate}
+
+Im Folgenden werden alle drei Möglichkeiten vorgestellt und mit Beispielen veranschaulicht.
+In den Beispielen wird ein \lstinline|Enumeratee| implementiert, der die Zahlen eines \lstinline|Iteratee[Int, Int]| mit 2 multipliziert.
+
+\subparagraph{Erstellung durch Vererbung} % (fold)
+\label{subp:enumerateeerstellung_durch_vererbung}\mbox{} % force new line
+
+Das \lstinline|Enumeratee|-Trait verlangt, dass die Methode \lstinline|applyOn| implementiert wird.
+Die Methode \lstinline|apply| ist als Alias für \lstinline|applyOn| definiert.
+\lstinline|applyOn| hat die Signatur, die in Kap.~\ref{ssub:design_enumeratees} für \lstinline|apply| vorgestellt wurde.
+Eine Mögliche Implementierung für einen \lstinline|Enumeratee|, der die Zahlen eines \lstinline|Iteratee|s mit 2 multipliziert ist in Listing~\ref{lst:enumerateeerstellung_durch_vererbung} zu sehen.
+
+\begin{lstlisting}[catption=Erstellung eines \lstinline|Enumeratee|s durch Vererbung, label=lst:enumerateeerstellung_durch_vererbung]
+
+\end{lstlisting}
+
+% subparagraph enumerateeerstellung_durch_vererbung (end)
+
+% paragraph erstellung_von_enumeratees (end)
+
+% subsubsection enumeratees (end)
+
+
 \subsubsection{Komposition} % (fold)
 \label{ssub:anwendung_komposition}
 
