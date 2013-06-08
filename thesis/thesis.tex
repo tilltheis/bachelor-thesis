@@ -682,10 +682,8 @@ Durch Verwendung von \lstinline|Enumerator|s wird dies allerdings wesentlich ein
 \label{ssub:enumerators}
 
 Mit Hilfe von \lstinline|Enumerator|s können auf einfache Weise Daten an \lstinline|Iteratee|s übergeben werden.
-Das Ergebnis der Anwendung eines \lstinline|Enumerator|s ist der \lstinline|Iteratee| nach Konsum der Elemente in der \lstinline|Future|-Monade.
-Nachdem ein \lstinline|Enumerator| alle Elemente an einen \lstinline|Iteratee| übergeben hat, sendet er allerdings kein \lstinline|Input.EOF|-Element.
-Dadurch ist es möglich, mehrere \lstinline|Enumerator|s auf einen \lstinline|Iteratee| anzuwenden.
-Um ein \lstinline|Input.EOF|-Element an ein \lstinline|Iteratee| zu senden, wird die \lstinline|run|-Methode des \lstinline|Iteratee|-Traits aufgerufen.
+In diesem Kapitel werden Anwendung und Funktionsweise von \lstinline|Enumerator|s gezeigt.
+Es wird erklärt, auf welche Arten \lstinline|Enumerator|s erstellt werden können, und wie sie genutzt werden können, um Daten an \lstinline|Iteratee|s zu übergeben.
 
 \paragraph{Enumerators erstellen} % (fold)
 \label{par:enumerators_erstellen}\mbox{} % force new line
