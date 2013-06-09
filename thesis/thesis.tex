@@ -873,11 +873,54 @@ Die Methode \lstinline|apply| ist als Alias für \lstinline|applyOn| definiert.
 \lstinline|applyOn| hat die Signatur, die in Kap.~\ref{ssub:design_enumeratees} für \lstinline|apply| vorgestellt wurde.
 Eine Mögliche Implementierung für einen \lstinline|Enumeratee|, der die Zahlen eines \lstinline|Iteratee|s mit 2 multipliziert ist in Listing~\ref{lst:enumerateeerstellung_durch_vererbung} zu sehen.
 
-\begin{lstlisting}[catption=Erstellung eines \lstinline|Enumeratee|s durch Vererbung, label=lst:enumerateeerstellung_durch_vererbung]
+\begin{lstlisting}[caption=Erstellung eines \lstinline|Enumeratee|s durch Vererbung, label=lst:enumerateeerstellung_durch_vererbung]
+case object MultiplyingEnumeratee extends Enumeratee[Int, Int] {
+  def applyOn[A](inner: Iteratee[Int, A]):
+      Iteratee[Int, Iteratee[Int, A]] = {
+    Iteratee.flatten(inner.fold {
+      case Step.Cont(k) => Future(Cont {
+        case Input.El(number) =>
+          MultiplyingEnumeratee(k(Input.El(number * 2)))
+        case Input.Empty => MultiplyingEnumeratee(k(Input.Empty))
+        case Input.EOF => Done(Cont(k))
+      })
+      case _ => Future(Done(inner, Input.Empty))
+    })
+  }
+}
 
+val enumerateeFromInheritance: Enumeratee[Int, Int] =
+  MultiplyingEnumeratee
 \end{lstlisting}
 
+Die Implementierung dieses \lstinline|Enumeratee|s ist der von \lstinline|Enumeratee.map| nachempfunden.
+Sie ist allerdings weniger abstrakt, als in der Referenzimplementierung \cite[vgl.][Zeile~268, 174, 81]{play_enumeratee_source_code}.
+Der \lstinline|Enumeratee| prüft, ob der innere \lstinline|Iteratee| weitere Elemente annehmen kann.
+Kann er keine weiteren Elemente annehmen, wird er als Ergebnis zurückgegeben.
+Kann er Elemente annehmen, werden diese transformiert und anschließend weitergegeben.
+Sobald ein \lstinline|Input.EOF| empfangen wird, wird in den Endzustand mit dem finalen inneren \lstinline|Iteratee| als Ergebnis übergegangen.
+
 % subparagraph enumerateeerstellung_durch_vererbung (end)
+
+\subparagraph{Erstellung durch Konstruktormethode des Companion-Objekts} % (fold)
+\label{subp:enumerateeerstellung_durch_konstruktormethode_des_companion_objekts}\mbox{} % force new line
+
+Die zweite Möglichkeit, einen \lstinline|Enumeratee| zu erstellen ist mit Hilfe seines Companion-Objekts.
+Im Companion-Objekt finden sich mehrere Konstruktormethoden, die Listenoperationen sehr ähneln, wie z.~B. \lstinline|drop|, \lstinline|filter|, \lstinline|map| oder \lstinline|zip|.
+Um alle Elemente des \lstinline|Iteratees| zu transformieren bietet sich \lstinline|map| an.
+\lstinline|map| hat folgende Signatur:
+\begin{lstlisting}
+def map[E]: AnyRef { def apply[NE](f: E => NE): Enumeratee[E,NE] }
+\end{lstlisting}
+Diese Signatur wirkt sperrig, lässt sich aber sinngemäß auf folgende Vereinfachung reduzieren:
+\begin{lstlisting}
+def map[E, NE](f: E => NE): Enumeratee[E, NE]
+\end{lstlisting}
+Der wichtige Unterschied zwischen diesen beiden Signaturen ist, dass die erste nur über einen Typ parametrisiert ist.
+Dadurch wird, so vermutet der Autor, Code, der diese Methode nutzt, kürzer, weil der Parameter \lstinline|NE| in der Regel vom Compiler abgeleitet werden kann. % es wurde von 2. auf 1. geändert https://github.com/playframework/Play20/commit/d2053af2517eddc93c1af6b05e246d470e976535
+Dadurch muss in aller Regel, sofern überhapt nötig, nur noch der erste Typ-Parameter angegeben werden.
+
+% subparagraph enumerateeerstellung_durch_konstruktormethode_des_companion_objekts (end)
 
 % paragraph erstellung_von_enumeratees (end)
 
