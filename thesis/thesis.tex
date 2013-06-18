@@ -862,8 +862,10 @@ Es gibt drei Möglichkeiten, einen \lstinline|Enumeratee| zu erstellen.
   \item Durch Benutzung einer Konstruktormethode des \lstinline|Traversable|-Objekts (\lstinline|take|, \lstinline|drop|, u.~a.)
 \end{enumerate}
 
-Im Folgenden werden alle drei Möglichkeiten vorgestellt und mit Beispielen veranschaulicht.
+Im Folgenden werden die ersten beiden Möglichkeiten vorgestellt und mit Beispielen veranschaulicht.
 In den Beispielen wird ein \lstinline|Enumeratee| implementiert, der die Zahlen eines \lstinline|Iteratee[Int, Int]| mit 2 multipliziert.
+Die dritte Möglichkeit ist an dieser Stelle nur der Vollständigkeit halber aufgeführt, weil sie vom Autor als zu speziell erachtet wird.
+Es sei hier nur erwähnt, dass das \lstinline|Traversable|-Objekt einige wenige Konstruktormethoden für \lstinline|Enumeratee|s bereitstellt, die auf Elementen vom Typ \lstinline|TraversableLike| aus der Scala-Standardbibliothek arbeiten.
 
 \subparagraph{Erstellung durch Vererbung} % (fold)
 \label{subp:enumerateeerstellung_durch_vererbung}\mbox{} % force new line
@@ -908,6 +910,7 @@ Sobald ein \lstinline|Input.EOF| empfangen wird, wird in den Endzustand mit dem 
 Die zweite Möglichkeit, einen \lstinline|Enumeratee| zu erstellen ist mit Hilfe seines Companion-Objekts.
 Im Companion-Objekt finden sich mehrere Konstruktormethoden, die Listenoperationen sehr ähneln, wie z.~B. \lstinline|drop|, \lstinline|filter|, \lstinline|map| oder \lstinline|zip|.
 Um alle Elemente des \lstinline|Iteratees| zu transformieren bietet sich \lstinline|map| an.
+Mit Hilfe dieser Methode werden alle Elemente durch eine angegebene Funktion transformiert, bevor sie an das innere \lstinline|Iteratee| gegeben werden.
 \lstinline|map| hat folgende Signatur:
 \begin{lstlisting}
 def map[E]: AnyRef { def apply[NE](f: E => NE): Enumeratee[E,NE] }
@@ -916,9 +919,20 @@ Diese Signatur wirkt sperrig, lässt sich aber sinngemäß auf folgende Vereinfa
 \begin{lstlisting}
 def map[E, NE](f: E => NE): Enumeratee[E, NE]
 \end{lstlisting}
-Der wichtige Unterschied zwischen diesen beiden Signaturen ist, dass die erste nur über einen Typ parametrisiert ist.
-Dadurch wird, so vermutet der Autor, Code, der diese Methode nutzt, kürzer, weil der Parameter \lstinline|NE| in der Regel vom Compiler abgeleitet werden kann. % es wurde von 2. auf 1. geändert https://github.com/playframework/Play20/commit/d2053af2517eddc93c1af6b05e246d470e976535
-Dadurch muss in aller Regel, sofern überhapt nötig, nur noch der erste Typ-Parameter angegeben werden.
+
+Der wichtige Unterschied zwischen diesen beiden Signaturen ist, dass die erste nur über einen Typ \lstinline|E| parametrisiert ist.
+Erst das zurückgegebene Objekt verlangt den zweiten Typ \lstinline|NE|.
+Dadurch wird, so vermutet der Autor, Code, der diese Methode nutzt, kürzer, weil der Parameter \lstinline|NE| in der Regel vom Compiler abgeleitet werden kann.
+So muss in aller Regel, sofern überhapt nötig, nur noch der erste Typ-Parameter angegeben werden.
+Zu einem früheren Entwicklungsstand des Frameworks wurde die zweite Variante verwendet und wurde erst später zur aktuellen Signatur abgeändert \cite[vgl.][]{play_enumeratee_map_signatur}.
+
+Unter Einsatz dieser \lstinline|map|-Methode ist die Transformation in einer einzigen Anweisung möglich.
+Der dazu nötige Code kann Listing~\ref{lst:enumerateeerstellung_durch_companion_konstruktormethode} entnommen werden.
+
+\begin{lstlisting}[caption=Erstellung eines \lstinline|Enumeratee|s durch die \lstinline|map|-Konstruktormethode, label=lst:enumerateeerstellung_durch_companion_konstruktormethode]
+val enumerateeFromCompanion: Enumeratee[Int, Int] =
+  Enumeratee.map(_ * 2)
+\end{lstlisting}
 
 % subparagraph enumerateeerstellung_durch_konstruktormethode_des_companion_objekts (end)
 

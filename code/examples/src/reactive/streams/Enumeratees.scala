@@ -23,30 +23,12 @@ object Enumeratees {
       }
     }
 
-//    def multiplyingEnumeratee = new Enumeratee[Int, Int] {
-//      def applyOn[A](inner: Iteratee[Int, A]):
-//          Iteratee[Int, Iteratee[Int, A]] = {
-//        Iteratee.fold(inner) { (inner, number) =>
-//          Iteratee.flatten(Enumerator(number * 2).apply(inner))
-//        }
-//
-////        new Iteratee[Int, Iteratee[Int, A]] {
-////          def fold()
-////        }
-//
-//        def step(inner: Iteratee[Int, A]) =
-//          Cont[Int, Iteratee[Int, A]] { in =>
-//            Iteratee.flatten(Enumerator.enumInput(in.map(_ * 2)).apply(inner))
-//          }
-//
-//        inner.unflatten.
-//      }
-//    }
-
-//    val enumerateeFromInheritance: Enumeratee[Int, Int] = Enumeratee.map(_ * 2)
    val enumerateeFromInheritance: Enumeratee[Int, Int] =
      MultiplyingEnumeratee
-    // val enumerateeFromInheritance: Enumeratee[Int, Int] =
-    //   multiplyingEnumeratee
+
+
+    val enumerateeFromConstructor: Enumeratee[Int, Int] =
+      Enumeratee.map(_ * 2)
+
   }
 }

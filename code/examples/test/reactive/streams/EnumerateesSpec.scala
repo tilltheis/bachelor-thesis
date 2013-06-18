@@ -12,29 +12,35 @@ import examples.reactive.streams.Enumeratees
 class EnumerateesSpec extends Specification with NoTimeConversions {
   def await[A](f: Future[A]): A = Await.result(f, 1 second)
 
-  "creating an enumeratee from inheritance" should {
-    import Enumeratees.Creation._
-    val enumerator = Enumerator(1, 4, -2)
-    val enumeratee = enumerateeFromInheritance
+  Seq(
+      ("inheritance", Enumeratees.Creation.enumerateeFromInheritance),
+      ("constructor", Enumeratees.Creation.enumerateeFromConstructor)
+    ).foreach { pair =>
+      val (kind, enumeratee) = pair
 
-    "yield a correct result" in {
-      val iteratee: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
+    "creating an enumeratee from " + kind should {
+      val enumerator = Enumerator(1, 4, -2)
+      // val enumeratee = enumerateeFromInheritance
 
-      val transformedIteratee = enumeratee.transform(iteratee)
-      await(enumerator.run(transformedIteratee)) === 6
-    }
+      "yield a correct result" in {
+        val iteratee: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
 
-    "work with prematurely done iteratees" in {
-      val iteratee = Cont[Int, Int] {
-        case Input.El(n) => Done(n, Input.Empty)
-        case in => Error("not an element", in)
+        val transformedIteratee = enumeratee.transform(iteratee)
+        await(enumerator.run(transformedIteratee)) === 6
       }
 
-      val transformedIteratee = enumeratee.transform(iteratee)
-      await(enumerator.run(transformedIteratee)) === 2
+      "work with prematurely done iteratees" in {
+        val iteratee = Cont[Int, Int] {
+          case Input.El(n) => Done(n, Input.Empty)
+          case in => Error("not an element", in)
+        }
 
-      val transformedIteratee2 = enumeratee.transform(iteratee)
-      await(Enumerator.enumInput(Input.Empty).run(transformedIteratee2)) must throwAn[Exception]
+        val transformedIteratee = enumeratee.transform(iteratee)
+        await(enumerator.run(transformedIteratee)) === 2
+
+        val transformedIteratee2 = enumeratee.transform(iteratee)
+        await(Enumerator.enumInput(Input.Empty).run(transformedIteratee2)) must throwAn[Exception]
+      }
     }
   }
 }
