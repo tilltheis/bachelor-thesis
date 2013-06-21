@@ -3,6 +3,7 @@ import org.specs2.time.NoTimeConversions
 
 import scala.concurrent._
 import scala.concurrent.duration._
+import ExecutionContext.Implicits.global
 
 import play.api.libs.iteratee._
 import play.api.libs.iteratee.Enumerator.enumInput
@@ -21,7 +22,8 @@ class CompositionSpec extends Specification with NoTimeConversions {
   "parallel composition for iteratees" should {
     "run the first iteratee together with the second iteratee" in {
       val result = Composition.Iteratees.Parallel.result
-      Await.result(result, 1 second) ===((Some("foo"), "foobarbaz"))
+      // Await.result(result, 1 second) ===((Some(1), 3))
+      result === Future((Some(1), 3))
     }
   }
 

@@ -988,12 +988,38 @@ val i12: Iteratee[Int, (Option[Int], Int)] = for {
 } yield (res1, res2)
 \end{lstlisting}
 
+% subparagraph anwendung_sequentielle_komposition_von_iteratees (end)entieller oder paralleler Komposition zu halten.
+
+\subparagraph{Parallele Komposition} % (fold)
+\label{subp:anwendung_parallele_komposition_von_iteratees}\mbox{} % force new line
+
 Bei der parallelen Komposition werden die Elemente immer an beide \lstinline|Iteratee|s übergeben.
 Dies lässt sich mit Hilfe von \lstinline|Enumeratee|s und den Methoden \lstinline|zip|, bzw. \lstinline|zipWith| bewerkstelligen.
+\lstinline|zip| erstellt aus zwei \lstinline|Iteratee|s einen neuen \lstinline|Iteratee|, der die empfangen Elemente an beide \lstinline|Iteratee|s weitergibt.
+Sobald beide \lstinline|Iteratee|s im \lstinline|Done|-Zustand sind, werden die Ergebnisse als Paar zurückgegeben.
+Die Verwendung von \lstinline|zipWith| ermöglicht es, das Ergebnis nicht nur als Paar zu erhalten, sondern es kann eine Funktion übergeben werden, die die Ergebnisse zu einem beliebigen Datentyp zusammenfasst.
+In Listing~\ref{lst:parallele_komposition_von_iteratees} ist ein Beispiel zu sehen, das die beiden \lstinline|Iteratee|s aus dem Beispiel für \nameref{lst:sequentielle_komposition_von_iteratees} verwendet, sie aber parallel kombiniert.
 
-\lstinline|Iteratees| können auch kombiniert werden, ohne sich an die regeln von sequ
+\begin{lstlisting}[caption=Parallele Komposition von \lstinline|Iteratee|s, label=lst:parallele_komposition_von_iteratees]
+val i1: Iteratee[Int, Option[Int]] = Iteratee.head
+val i2: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
 
-% subparagraph anwendung_sequentielle_komposition_von_iteratees (end)entieller oder paralleler Komposition zu halten.
+val i12: Iteratee[Int, (Option[Int], Int)] =
+  Enumeratee.zip(i1, i2)
+
+val e: Enumerator[Int] = Enumerator(1, 4, -2)
+val result: Future[(Option[Int], Int)] = e.run(i12)
+// result = Future((Some(1), 3))
+\end{lstlisting}
+
+% subparagraph anwendung_parallele_komposition_von_iteratees (end)
+
+\subparagraph{Freie Komposition} % (fold)
+\label{subp:anwendung_freie_komposition_von_iteratees}\mbox{} % force new line
+
+\lstinline|Iteratees| können auch kombiniert werden, ohne sich an die Regeln von sequentieller oder paralleler Komposition zu halten.
+
+% subparagraph anwendung_freie_komposition_von_iteratees (end)
 
 % paragraph anwendung_komposition_von_iteratees (end)
 

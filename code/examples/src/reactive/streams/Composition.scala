@@ -27,12 +27,14 @@ object Composition {
 
     object Parallel {
 
-      val i1 = Iteratee.head[String]
-      val i2 = Iteratee.consume[String]()
-      val i12 = Enumeratee.zip(i1, i2)
+      val i1: Iteratee[Int, Option[Int]] = Iteratee.head
+      val i2: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
 
-      val e = Enumerator("foo", "bar", "baz")
-      val result = e.run(i12)
+      val i12: Iteratee[Int, (Option[Int], Int)] =
+        Enumeratee.zip(i1, i2)
+
+      val e: Enumerator[Int] = Enumerator(1, 4, -2)
+      val result: Future[(Option[Int], Int)] = e.run(i12)
 
     }
 
