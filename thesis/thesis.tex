@@ -944,6 +944,59 @@ val enumerateeFromCompanion: Enumeratee[Int, Int] =
 \subsubsection{Komposition} % (fold)
 \label{ssub:anwendung_komposition}
 
+Die in Kap.~\ref{ssub:komposition} vorgestellten Arten von Komposition sollen an dieser Stelle durch Anwendungsbeispiele veranschaulicht werden.
+Es wird auf die Komposition von \lstinline|Iteratee|s und \lstinline|Enumerator|s eingegangen.
+
+\paragraph{Komposition von Iteratees} % (fold)
+\label{par:anwendung_komposition_von_iteratees}\mbox{} % force new line
+
+Im Folgenden werden die drei Arten der Komposition von \lstinline|Iteratee|s vorgestellt.
+Es werden die zugrundeliegenden Ansätze und die jeweilige Umsetzung erläutert.
+
+\subparagraph{Sequentielle Komposition} % (fold)
+\label{subp:anwendung_sequentielle_komposition_von_iteratees}\mbox{} % force new line
+
+Zwei \lstinline|Iteratee|s sequentiell zu kombinieren, bedeutet zuerst den ersten \lstinline|Iteratee| und dann den zweiten \lstinline|Iteratee| auszuführen.
+Dafür eignen sich die Methoden \lstinline|map| und \lstinline|flatMap| der \lstinline|Iteratee|-Klasse.
+Diese Methoden erlauben es, wie bei jeder Monade, den Wert innerhalb der Monade zu transformieren.
+Der Wert der \lstinline|Iteratee|-Monade steht dann fest, wenn der \lstinline|Iteratee| in den \lstinline|Done|-Zustand übergegangen ist.
+Um zwei \lstinline|Iteratee| nacheinander auszuführen, wird bei der \lstinline|flatMap|-Operation auf dem ersten \lstinline|Iteratee| der zweite \lstinline|Iteratee| zurückgegeben und die Ergebnisse der beiden \lstinline|Iteratee|s anschließend kombiniert.
+Ein Code-Beispiel, das dieses Prinzip ausnutzt ist in Listing~\ref{lst:sequentielle_komposition_von_iteratees} zu lesen.
+
+\begin{lstlisting}[caption=Sequentielle Komposition von \lstinline|Iteratee|s, label=lst:sequentielle_komposition_von_iteratees]
+val i1: Iteratee[Int, Option[Int]] = Iteratee.head
+val i2: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
+
+val i12: Iteratee[Int, (Option[Int], Int)] =
+  i1.flatMap(res1 => i2.map(res2 => (res1, res2)))
+
+val e: Enumerator[Int] = Enumerator(1, 4, -2)
+val result: Future[(Option[Int], Int)] = e.run(i12)
+\end{lstlisting}
+
+In diesem Fall gibt es zwei \lstinline|Iteratee|s.
+Der erste \lstinline|Iteratee| konsumiert genau ein Element und gibt dieses, in einem \lstinline|Option|-Wert verpackt, zurück.
+Der \lstinline|Option|-Typ ist notwendig, damit auch ein Ergebnis existiert, wenn nur ein \lstinline|Input.EOF|, aber kein \lstinline|Input.El| empfangen wird.
+Der zweite \lstinline|Iteratee| summiert alle empfangenen Elemente auf und gibt die Summe als Ergebnis zurück.
+Das Ergebnis der Komposition dieser beiden \lstinline|Iteratee|s ist ein Paar aus dem Ergebnis des ersten und des zweiten \lstinline|Iteratee|s.
+Das Kombinieren von \lstinline|i1| und \lstinline|i2| lässt sich durch das Verwenden einer \lstinline|for|-Comprehension allerdings noch lesbarer gestalten, wie in Listing~\ref{lst:sequentielle_komposition_von_iteratees_mit_for_comprehension} zu sehen.
+
+\begin{lstlisting}[caption=Sequentielle Komposition von \lstinline|Iteratee|s mit \lstinline|for|-Comprehension, label=lst:sequentielle_komposition_von_iteratees_mit_for_comprehension]
+val i12: Iteratee[Int, (Option[Int], Int)] = for {
+  res1 <- i1
+  res2 <- i2
+} yield (res1, res2)
+\end{lstlisting}
+
+Bei der parallelen Komposition werden die Elemente immer an beide \lstinline|Iteratee|s übergeben.
+Dies lässt sich mit Hilfe von \lstinline|Enumeratee|s und den Methoden \lstinline|zip|, bzw. \lstinline|zipWith| bewerkstelligen.
+
+\lstinline|Iteratees| können auch kombiniert werden, ohne sich an die regeln von sequ
+
+% subparagraph anwendung_sequentielle_komposition_von_iteratees (end)entieller oder paralleler Komposition zu halten.
+
+% paragraph anwendung_komposition_von_iteratees (end)
+
 \paragraph{Komposition von Enumerators} % (fold)
 \label{par:anwendung_komposition_von_enumerators}
 

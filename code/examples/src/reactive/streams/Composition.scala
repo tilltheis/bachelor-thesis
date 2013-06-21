@@ -9,16 +9,19 @@ object Composition {
   object Iteratees {
     object Sequential {
 
-      val i1 = Iteratee.head[String]
-      val i2 = Iteratee.consume[String]()
+      val i1: Iteratee[Int, Option[Int]] = Iteratee.head
+      val i2: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
 
-      val i12 = for {
-        res1 <- i1
-        res2 <- i2
-      } yield (res1, res2)
+      // val i12: Iteratee[Int, (Option[Int], Int)] = for {
+      //   res1 <- i1
+      //   res2 <- i2
+      // } yield (res1, res2)
 
-      val e = Enumerator("foo", "bar", "baz")
-      val result = e.run(i12)
+      val i12: Iteratee[Int, (Option[Int], Int)] =
+        i1.flatMap(res1 => i2.map(res2 => (res1, res2)))
+
+      val e: Enumerator[Int] = Enumerator(1, 4, -2)
+      val result: Future[(Option[Int], Int)] = e.run(i12)
 
     }
 

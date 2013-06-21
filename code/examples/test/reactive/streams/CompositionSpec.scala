@@ -14,7 +14,7 @@ class CompositionSpec extends Specification with NoTimeConversions {
   "sequential composition for iteratees" should {
     "run the first iteratee and then second iteratee" in {
       val result = Composition.Iteratees.Sequential.result
-      Await.result(result, 1 second) ===((Some("foo"), "barbaz"))
+      Await.result(result, 1 second) ===((Some(1), 2))
     }
   }
 
