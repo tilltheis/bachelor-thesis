@@ -22,8 +22,7 @@ class CompositionSpec extends Specification with NoTimeConversions {
   "parallel composition for iteratees" should {
     "run the first iteratee together with the second iteratee" in {
       val result = Composition.Iteratees.Parallel.result
-      // Await.result(result, 1 second) ===((Some(1), 3))
-      result === Future((Some(1), 3))
+      Await.result(result, 1 second) ===((Some(1), 3))
     }
   }
 
