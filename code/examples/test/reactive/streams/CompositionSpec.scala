@@ -30,18 +30,14 @@ class CompositionSpec extends Specification with NoTimeConversions {
   "sequential composition for enumerators" should {
     "run the first enumerator and then the second enumerator" in {
       val result = Composition.Enumerators.Sequential.result
-      Await.result(result, 1 second) === "foobarbaz"
+      Await.result(result, 1 second) === List(1, 2, 3)
     }
   }
 
   "parallel composition for enumerators" should {
     "run the first enumerator together with the second enumerator" in {
-      val result = Composition.Enumerators.Sequential.result
-      val string = Await.result(result, 1 second)
-
-      Seq("foo", "bar", "baz").foreach { word =>
-        string must contain(word)
-      }
+      val result = Composition.Enumerators.Parallel.result
+      Await.result(result, 1 second) === List(2, 3, 1)
     }
   }
 }

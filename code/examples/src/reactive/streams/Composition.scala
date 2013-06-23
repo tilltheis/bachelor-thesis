@@ -1,9 +1,13 @@
 package examples.reactive.streams
 
 import play.api.libs.iteratee._
-import scala.concurrent._
+import play.api.libs.concurrent.Promise
+
+import scala.concurrent.{Promise => _, _}
+import scala.concurrent.duration._
 import ExecutionContext.Implicits.global
 import scala.language.reflectiveCalls
+import scala.language.postfixOps
 
 object Composition {
   object Iteratees {
@@ -52,17 +56,30 @@ object Composition {
   object Enumerators {
     object Sequential {
 
-      val i = Iteratee.consume[String]()
-      val e = Enumerator("foo").andThen(Enumerator("bar", "baz"))
-      val result = e.run(i)
+      val i: Iteratee[Int, List[Int]] = Iteratee.getChunks
+      val e1 = Enumerator(1, 2)
+      val e2 = Enumerator(3)
+      val e12: Enumerator[Int] = e1.andThen(e2)
+
+      val result: Future[List[Int]] = e12.run(i)
+      // result = Future.successful(List(1, 2, 3))
 
     }
 
     object Parallel {
 
-      val i = Iteratee.consume[String]()
-      val e = Enumerator.interleave(Enumerator("foo"), Enumerator("bar", "baz"))
-      val result = e.run(i)
+
+      def timeoutEnumerator[A](x: A, d: Duration): Enumerator[A] =
+        Enumerator.flatten(Promise.timeout(Enumerator(x), d))
+
+      val i: Iteratee[Int, List[Int]] = Iteratee.getChunks
+      val e1 = timeoutEnumerator(1, 300 milliseconds)
+      val e2 = timeoutEnumerator(2, 100 milliseconds)
+      val e3 = timeoutEnumerator(3, 200 milliseconds)
+      val e123: Enumerator[Int] = Enumerator.interleave(e1, e2, e3)
+
+      val result: Future[List[Int]] = e123.run(i)
+      // result = Future.successful(List(2, 3, 1))
 
     }
   }

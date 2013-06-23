@@ -961,7 +961,7 @@ Dafür eignen sich die Methoden \lstinline|map| und \lstinline|flatMap| der \lst
 Diese Methoden erlauben es, wie bei jeder Monade, den Wert innerhalb der Monade zu transformieren.
 Der Wert der \lstinline|Iteratee|-Monade steht dann fest, wenn der \lstinline|Iteratee| in den \lstinline|Done|-Zustand übergegangen ist.
 Um zwei \lstinline|Iteratee| nacheinander auszuführen, wird bei der \lstinline|flatMap|-Operation auf dem ersten \lstinline|Iteratee| der zweite \lstinline|Iteratee| zurückgegeben und die Ergebnisse der beiden \lstinline|Iteratee|s anschließend kombiniert.
-Ein Code-Beispiel, das dieses Prinzip ausnutzt ist in Listing~\ref{lst:sequentielle_komposition_von_iteratees} zu lesen.
+Ein Code-Beispiel, das dieses Prinzip ausnutzt, ist in Listing~\ref{lst:sequentielle_komposition_von_iteratees} zu lesen.
 
 \begin{lstlisting}[caption=Sequentielle Komposition von \lstinline|Iteratee|s, label=lst:sequentielle_komposition_von_iteratees]
 val i1: Iteratee[Int, Option[Int]] = Iteratee.head
@@ -1025,31 +1025,73 @@ val result: Future[(Option[Int], Int)] = e.run(i12)
 % paragraph anwendung_komposition_von_iteratees (end)
 
 \paragraph{Komposition von Enumerators} % (fold)
-\label{par:anwendung_komposition_von_enumerators}
+\label{par:anwendung_komposition_von_enumerators}\mbox{} % force new line
 
-Eine einfachere Art und Weise, mehrere \lstinline|Enumerator|s zu kombinieren ist mit Hilfe der \lstinline|andThen|-Methode.
-Diese Methode hat die Signatur \lstinline|Enumerator[E] => Enumerator[E]|.
-Der resultierende \lstinline|Enumerator| wendet immer erst den \lstinline|Enumerator| an, auf dem die Methode aufgerufen wurde und dann den \lstinline|Enumerator|, mit dem die Methode aufgerufen wurde.
-\lstinline|andThen| kann alternativ auch mit dem Operator \lstinline|>>>| aufgerufen werden.
-Das Beispiel unter Einsatz von \lstinline|andThen| ist in Listing~\ref{lst:enumerators_kombinieren} zu sehen.
+Genau wie \lstinline|Iteratee|s kombiniert werden können, so können auch \lstinline|Enumerator|s miteinander kombiniert werden.
+Es existieren wieder drei verschiedene Kompositionsansätze, deren Umsetzung im Folgenden näher beschrieben wird.
 
-\begin{lstlisting}[caption=\lstinline|Enumerator|s kombinieren, label=lst:enumerators_kombinieren]
-val e1e2: Enumerator[Int] = e1.andThen(e2)
+\subparagraph{Sequentielle Komposition} % (fold)
+\label{subp:anwendung_sequentielle_komposition_von_enumerators}\mbox{} % force new line
 
-val sumIterateeAfterE1E2: Iteratee[Int, Int] =
-  Iteratee.flatten(e1e2(sumIteratee))
+Sequentielle Komposition zweier \lstinline|Enumerator|s heißt, dass erst die Elemente des ersten \lstinline|Enumerator|s generiert werden, bis dieser erschöpft ist und anschließend die Elemente des zweiter \lstinline|Enumerator|s generiert werden.
+Das \lstinline|Enumerator|-Trait stellt hierfür die Methode \lstinline|andThen| bereit.
+Diese Methode erstellt einen neuen \lstinline|Enumerator|, der die Elemente des ursprünglichen \lstinline|Enumerator|s und dann die Elemente des übergebenen \lstinline|Enumerator|s enumeriert.
+Listing~\ref{lst:sequentielle_komposition_von_enumerators} zeigt, wie \lstinline|andThen| verwendet werden kann, um zwei \lstinline|Enumerator|s sequentiell zu komponieren.
 
-val sumResult: Future[Int] = sumIterateeAfterE1E2.run
+\begin{lstlisting}[caption=Sequentielle Komposition von Enumerators, label=lst:sequentielle_komposition_von_enumerators]
+val i: Iteratee[Int, List[Int]] = Iteratee.getChunks
+val e1 = Enumerator(1, 2)
+val e2 = Enumerator(3)
+val e12: Enumerator[Int] = e1.andThen(e2)
+
+val result: Future[List[Int]] = e12.run(i)
+// result = Future.successful(List(1, 2, 3))
 \end{lstlisting}
 
-Des Weiteren kann ein \lstinline|Iteratee| auch direkt von einem \lstinline|Enumerator| ausgeführt und anschließend das Ergebnis extrahiert werden.
-Dafür gibt es die Methode \lstinline|run| mit dazugehörigem Operator \lstinline$|>>>$ im \lstinline|Enumerator|-Trait.
-Dadurch wird unser Beispiel noch kürzer, wie in Listing~\ref{lst:iterateeausfuehrung_mit_enumerator_run} zu erkennen ist.
+% subparagraph anwendung_sequentielle_komposition_von_enumerators (end)
 
-\begin{lstlisting}[caption=Ausführung eines \lstinline|Iteratees| mit gleichzeitiger Ergebnisextraktion, label=lst:iterateeausfuehrung_mit_enumerator_run]
-val e1e2: Enumerator[Int] = e1.andThen(e2)
-val sumResult: Future[Int] = e1e2.run(sumIteratee)
+\subparagraph{Parallele Komposition} % (fold)
+\label{subp:anwendung_parallele_komposition_von_enumerators}\mbox{} % force new line
+
+Wenn immer das zuerst verfügbare Element zweier \lstinline|Enumerator|s generiert werden soll, wird dies als parallele Komposition bezeichnet.
+Das \lstinline|Enumerator|-Companion-Objekt stellt hierfür die Konstruktormethode \lstinline|interleave| bereit.
+\lstinline|interleave| kommt in unterschiedlichen Varianten, darunter auch in einer Variante mit der in Listing~\ref{lst:signatur_von_interleave} gezeigten Signatur.
+
+\begin{lstlisting}[caption=Die Signatur von interleave, label=lst:signatur_von_interleave]
+def interleave[E](e1: Enumerator[E], es: Enumerator[E]*): Enumerator[E]
 \end{lstlisting}
+
+\lstinline|interleave| nimmt einen oder mehrere \lstinline|Enumerator|s als Argumente und kombiniert diese nach dem zuvor beschriebenen Prinzip.
+In Listing~\ref{lst:parallele_komposition_von_enumerators} wird nun mit Hilfe dieser Methode gezeigt, wie mehrere \lstinline|Enumerator|s parallel komponiert werden können.
+
+\begin{lstlisting}[caption=Parallele Komposition von Enumerators, label=lst:parallele_komposition_von_enumerators]
+def timeoutEnumerator[A](x: A, d: Duration): Enumerator[A] =
+  Enumerator.flatten(Promise.timeout(Enumerator(x), d))
+
+val i: Iteratee[Int, List[Int]] = Iteratee.getChunks
+val e1 = timeoutEnumerator(1, 300 milliseconds)
+val e2 = timeoutEnumerator(2, 100 milliseconds)
+val e3 = timeoutEnumerator(3, 200 milliseconds)
+val e123: Enumerator[Int] = Enumerator.interleave(e1, e2, e3)
+
+val result: Future[List[Int]] = e123.run(i)
+// result = Future.successful(List(2, 3, 1))
+\end{lstlisting}
+
+Zu Bemerken ist hierbei, dass \lstinline|Iteratee.getChunks| die empfangenen Elemente als Liste zurückgibt.
+Außerdem stellt Play das Objekt \lstinline|play.api.libs.concurrent.Promise| mit mehreren Hilfsmethoden zur Verfügung.
+Mit dessen \lstinline|timeout|-Methode ist es möglich, ein \lstinline|Future|-Objekt zu erstellen, dass nach Verlauf einer angegebenen Zeitspanne einen Wert liefert.
+\lstinline|Enumerator.flatten| transformiert einen Wert vom Typ \lstinline|Future[Enumerator[A]]| nach \lstinline|Enumerator[A]| analog zur Methode \lstinline|Iteratee.flatten|, die in Kap.~\ref{par:anwendung_auf_iteratees} behandelt wurde.
+Gut zu erkennen ist, dass die Reihenfolge der Elemente im Ergebnis mit der jeweiligen Zeitspanne korreliert und nicht etwa mit der Reihenfolge, in der die \lstinline|Enumerator|s an \lstinline|interleave| übergeben wurden.
+
+% subparagraph anwendung_parallele_komposition_von_enumerators (end)
+
+\subparagraph{Freie Komposition} % (fold)
+\label{subp:anwendung_freie_komposition_von_enumerators}\mbox{} % force new line
+
+Auch \lstinline|Enumerator|s können miteinander kombiniert werden, ohne die dass der resultierende \lstinline|Enumerator| die Eigenschaften von sequentieller oder paralleler Komposition hat.
+
+% subparagraph anwendung_freie_komposition_von_enumerators (end)
 
 % paragraph anwendung_komposition_von_enumerators (end)
 
