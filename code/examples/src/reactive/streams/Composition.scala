@@ -26,6 +26,7 @@ object Composition {
 
       val e: Enumerator[Int] = Enumerator(1, 4, -2)
       val result: Future[(Option[Int], Int)] = e.run(i12)
+      // result = Future.successful((Some(1), 2))
 
     }
 
@@ -39,6 +40,7 @@ object Composition {
 
       val e: Enumerator[Int] = Enumerator(1, 4, -2)
       val result: Future[(Option[Int], Int)] = e.run(i12)
+      // result = Future.successful((Some(1), 3))
 
     }
 

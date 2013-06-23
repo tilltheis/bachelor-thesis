@@ -972,7 +972,7 @@ val i12: Iteratee[Int, (Option[Int], Int)] =
 
 val e: Enumerator[Int] = Enumerator(1, 4, -2)
 val result: Future[(Option[Int], Int)] = e.run(i12)
-// result = Future((Some(1), 2))
+// result = Future.successful((Some(1), 2))
 \end{lstlisting}
 
 In diesem Fall gibt es zwei \lstinline|Iteratee|s.
@@ -1010,7 +1010,7 @@ val i12: Iteratee[Int, (Option[Int], Int)] =
 
 val e: Enumerator[Int] = Enumerator(1, 4, -2)
 val result: Future[(Option[Int], Int)] = e.run(i12)
-// result = Future((Some(1), 3))
+// result = Future.successful((Some(1), 3))
 \end{lstlisting}
 
 % subparagraph anwendung_parallele_komposition_von_iteratees (end)
