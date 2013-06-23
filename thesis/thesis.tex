@@ -846,7 +846,7 @@ val futureResult2: Future[Int] = enumerator.run(iteratee)
 \label{ssub:enumeratees}
 
 \lstinline|Enumeratee|s sind Stream-Transformatoren, die \lstinline|Iteratee|s eines Typs zu \lstinline|Iteratee|s eines anderen Typs transformieren.
-Sie sind, wie in Kap.~\ref{ssub:design_enumeratees} erkärt, Funktionen von \lstinline|Iteratee| nach \lstinline|Iteratee|.
+Sie sind, wie in Kap.~\ref{ssub:design_enumeratees} erklärt, Funktionen von \lstinline|Iteratee| nach \lstinline|Iteratee|.
 Das Ergebnis des resultierenden \lstinline|Iteratee|s ist wiederum ein \lstinline|Iteratee|.
 Und zwar ist es der ursprünglichen \lstinline|Iteratee| nach Empfang der Elemente.
 In diesem Kapitel wird beschrieben, wie...
@@ -923,7 +923,7 @@ def map[E, NE](f: E => NE): Enumeratee[E, NE]
 Der wichtige Unterschied zwischen diesen beiden Signaturen ist, dass die erste nur über einen Typ \lstinline|E| parametrisiert ist.
 Erst das zurückgegebene Objekt verlangt den zweiten Typ \lstinline|NE|.
 Dadurch wird, so vermutet der Autor, Code, der diese Methode nutzt, kürzer, weil der Parameter \lstinline|NE| in der Regel vom Compiler abgeleitet werden kann.
-So muss in aller Regel, sofern überhapt nötig, nur noch der erste Typ-Parameter angegeben werden.
+So muss in aller Regel, sofern überhaupt nötig, nur noch der erste Typ-Parameter angegeben werden.
 Zu einem früheren Entwicklungsstand des Frameworks wurde die zweite Variante verwendet und wurde erst später zur aktuellen Signatur abgeändert \cite[vgl.][]{play_enumeratee_map_signatur}.
 
 Unter Einsatz dieser \lstinline|map|-Methode ist die Transformation in einer einzigen Anweisung möglich.
