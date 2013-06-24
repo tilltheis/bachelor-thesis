@@ -525,8 +525,9 @@ Dann wird der andere \lstinline|Enumerator| ausgewählt, aus dem die folgenden E
 \subsection{Anwendung} % (fold)
 \label{sub:anwendung}
 
-Im vorigen Kapitel wurden die einzelnen Komponenten vorgestellt.
-In diesem Kapitel soll der ihr Einsatz mit Hilfe von konkreten Code-Beispielen gezeigt werden.
+Im vorigen Kapitel zum Design der \lstinline|Iteratee|-Streams wurden die Grundkomponenten des Moduls vorgestellt.
+In diesem Kapitel soll ihr Einsatz mit Hilfe von konkreten Code-Beispielen gezeigt werden.
+Es wird werden häufig mehrere Möglichkeiten für die Verwendung der einzelnen Komponenten erläutert, um die unterschiedlichen Abstraktionsschichten zu verdeutlichen.
 
 
 \subsubsection{Iteratees} % (fold)
@@ -542,9 +543,9 @@ def fold[B](folder: Step[E, A] => Future[B]): Future[B]
 
 Mit Hilfe von \lstinline|fold| lässt sich der Zustand des \lstinline|Iteratee|s transformieren.
 Deshalb sind sehr viele Methoden in der \lstinline|Iteratee|-Klasse auf Basis von \lstinline|fold| definiert.
-Durch Angabe der Schrittfunktion im \lstinline|Cont|-Konstruktor bestimmt die konkrete \lstinline|Iteratee|-Implementierung, wie mit übergebenen Elementen umzugehen ist.
-Nur durch diese Funktion können neue Elemente gelesen werden.
-Dadurch wird der zu berechnende Wert aufgebaut.
+Durch Übergabe eines \lstinline|Step|-Werts an die \lstinline|folder|-Funktion bestimmt die konkrete \lstinline|Iteratee|-Implementierung, wie mit übergebenen Elementen umzugehen ist und ob überhaupt weitere Elemente akzeptiert werden.
+Nur durch die im \lstinline|Step|-Wert befindliche Eingabeverarbeitung kann ein \lstinline|Iteratee| neue Elemente empfangen.
+Dadurch wird nach und nach der zu berechnende Wert aufgebaut.
 
 \paragraph{Iteratees erstellen} % (fold)
 \label{par:iteratees_erstellen}\mbox{} % force new line
@@ -553,10 +554,10 @@ Es gibt drei Möglichkeiten, einen neuen \lstinline|Iteratee| zu erstellen.
 \begin{enumerate}
   \item Durch Erstellung einer neuen Klasse, die von \lstinline|Iteratee| erbt und \lstinline|fold| implementiert.
   \item Durch Benutzung einer Konstruktormethode analog zu den \lstinline|Step|-Zuständen (\lstinline|Done|, \lstinline|Cont| und \lstinline|Error|).
-  \item Durch Benutzung einer Hilfsfunktion des Companion-Objekts (\lstinline|fold|, \lstinline|foreach|, u.~a.).
+  \item Durch Benutzung einer Konstruktormethode des Companion-Objekts (\lstinline|fold|, \lstinline|foreach|, u.~a.).
 \end{enumerate}
 
-Zu Demonstrationszwecken soll nun ein \lstinline|Iteratee| erstellt werden, der alle Elemente aufsummiert.
+Zu Demonstrationszwecken soll im Folgenden ein \lstinline|Iteratee| erstellt werden, der alle empfangenen Elemente aufsummiert.
 Es wird dabei nach jeder der drei möglichen Varianten implementiert.
 
 \subparagraph{Erstellung durch Vererbung} % (fold)
@@ -585,7 +586,7 @@ val sumIterateeFromInheritance: Iteratee[Int, Int] = SumIteratee()
 \end{lstlisting}
 
 Der \lstinline|folder|-Funktion muss der aktuelle \lstinline|Step|-Zustand übergeben werden.
-Diese Funktion soll den \lstinline|Iteratee| dann ausführen, d.~h. ihn mit Elementen versorgen.
+Diese Funktion soll den \lstinline|Iteratee| dann mit Elementen versorgen.
 Anschließend soll der \lstinline|folder| dann aus dem finalen Zustand ein Ergebnis berechnen.
 Solange noch weitere Elemente kommen können, also solange kein \lstinline|Input.EOF|-Element empfangen wurde, geht der \lstinline|Iteratee| in einen neuen \lstinline|Cont|-Zustand über.
 Bei diesem Zustandsübergang wird auch die interne Berechnung fortgesetzt.
@@ -600,6 +601,7 @@ Sobald keine weiteren Elemente mehr kommen können, wird die Berechnung beendet 
 
 Die zweite Möglichkeit, einen \lstinline|Iteratee| zu erstellen, ist mit Hilfe einer der Konstruktormethoden.
 Es gibt die Konstruktormethoden \lstinline|Done|, \lstinline|Cont| und \lstinline|Error|, die jeweils einen \lstinline|Iteratee| im gleichnamigen \lstinline|Step|-Zustand erstellen.
+Jede diese Methoden nimmt auch die gleichen Argumente, wie ihr Pendant.
 Der Code, der einen \lstinline|Iteratee| mit Hilfe dieser Methoden erstellt, ist in Listing~\ref{lst:iteratee_durch_konstruktormethode} zu sehen.
 
 \begin{lstlisting}[caption=Erstellung eines Iteratees durch eine Konstruktormethode, label=lst:iteratee_durch_konstruktormethode]
@@ -612,27 +614,26 @@ def sumIteratee(sum: Int = 0): Iteratee[Int, Int] = Cont(_ match {
 val sumIterateeFromConstructor: Iteratee[Int, Int] = sumIteratee()
 \end{lstlisting}
 
-Der Code ist dem in \nameref{subp:erstellung_durch_vererbung} vorgestellten Code sehr ähnlich.
+Der Code ist dem in \nameref{lst:iteratee_durch_vererbung} vorgestellten Code sehr ähnlich.
 Im Gegensatz dazu muss hier jedoch nicht mehr explizit von \lstinline|Iteratee| geerbt und die \lstinline|fold|-Methode implementiert werden.
 Dies macht den Code schon wesentlich kürzer und einfacher.
 Der Code ist auf die elementaren Aufgaben reduziert und es ist nun klar zu erkennen, was bei welcher Eingabe geschieht.
 
 % subparagraph erstellung_durch_konstruktormethode (end)
 
-\subparagraph{Erstellung durch Hilfsmethode} % (fold)
+\subparagraph{Erstellung durch Konstruktormethode im Companion-Objekt} % (fold)
 \label{subp:erstellung_durch_hilfsmethode}\mbox{} % force new line
 
-Die dritte und letzte Möglichkeit nutzt eine problemspezifische Hilfsmethode.
-Das Aufsummieren von Menge von Zahlen lässt sich sehr einfach mit Hilfe eines Folds implementieren\todo{Erklären, was ein Fold ist}.
-Das \lstinline|Iteratee|-Companion-Objekt beinhaltet u.~a. die \lstinline|fold|-Hilfsmethode, die für solche Operationen gedacht ist.
+Die dritte und letzte Möglichkeit nutzt eine problemspezifische Konstruktormethode im Companion-Objekt.
+Das Aufsummieren einer Menge von Zahlen lässt sich sehr einfach mit Hilfe eines Folds implementieren\todo{Erklären, was ein Fold ist}.
+Das \lstinline|Iteratee|-Companion-Objekt beinhaltet u.~a. die \lstinline|fold|-Konstruktormethode, die für solche Operationen gedacht ist.
 Durch Einsatz dieser Methode wird die Lösung, wie in Listing~\ref{lst:iteratee_durch_hilfsmethode} zu erkennen, zum Einzeiler.
+Vom Filtern der unterschiedlichen \lstinline|Input|-Typen ist hierbei abstrahiert und es muss sich nur noch um tatsächliche Eingabeelemente gekümmert werden.
 
-\begin{lstlisting}[caption=Erstellung eines Iteratees durch eine Hilfsmethode, label=lst:iteratee_durch_hilfsmethode]
+\begin{lstlisting}[caption=Erstellung eines Iteratees durch Konstruktormethode im Companion-Objekt, label=lst:iteratee_durch_hilfsmethode]
 val sumIterateeFromHelper: Iteratee[Int, Int] =
   Iteratee.fold(0)(_ + _)
 \end{lstlisting}
-
-Vom Filtern der unterschiedlichen \lstinline|Input|-Typen ist hierbei abstrahiert und es muss sich nur noch um tatsächliche Eingabeelemente gekümmert werden.
 
 % subparagraph erstellung_durch_hilfsmethode (end)
 
@@ -643,7 +644,7 @@ Vom Filtern der unterschiedlichen \lstinline|Input|-Typen ist hierbei abstrahier
 
 Um die \lstinline|Iteratee|s mit Daten zu versorgen, existiert, wie in \nameref{par:iteratees_erstellen} beschrieben, die Methode \lstinline|fold|.
 \lstinline|fold| nimmt als Argument eine Funktion \lstinline|folder| vom Typ \lstinline[breaklines=true]|Step[E, A] => Future[B]|.
-Diese Funktion übergibt ein Element an den \lstinline|Iteratee| und muss daraufhin den Zustand des neuen \lstinline|Iteratee|s überprüfen, ob weitere Elemente akzeptiert werden, oder nicht nicht.
+Diese Funktion übergibt ein Element an den \lstinline|Iteratee| und muss daraufhin den Zustand des neuen \lstinline|Iteratee|s überprüfen, ob weitere Elemente akzeptiert werden.
 Erst nach dieser Analyse kann entschieden werden, ob ein weiteres Element übergeben wird oder nicht.
 In Listing~\ref{lst:iterateeausfuehrung_durch_folder} wird gezeigt, wie dies implementiert werden kann.
 
@@ -672,6 +673,11 @@ val sumResult: Future[Int] =
 \end{lstlisting}
 
 Das Übergeben von Daten mittels der \lstinline|fold|-Methode ist, wie in Listing~\ref{lst:iterateeausfuehrung_durch_folder} zu erkennen, recht aufwändig.
+Dies kommt daher, dass zwei Zustände geprüft werden müssen.
+Zum Einen muss der Zustand der Eingabemenge geprüft werden, ob noch Elemente existieren, die an den \lstinline|Iteratee| übergeben werden sollen.
+Zum Anderen muss sichergestellt werden, dass der \lstinline|Iteratee| sich korrekt verhält.
+D.~h. solange kein \lstinline|Input.EOF| gesendet wurde, muss der \lstinline|Iteratee| weitere Elemente annehmen und sobald ein \lstinline|Input.EOF| gesendet wurde, darf der \lstinline|Iteratee| keine Elemente mehr annehmen.
+Nur wenn all diese Voraussetzungen erfüllt wurden, kann am Ende das Ergebnis dem \lstinline|Iteratee| im \lstinline|Step.Done|-Zustand entnommen werden.
 Durch Verwendung von \lstinline|Enumerator|s wird dies allerdings wesentlich einfacher.
 
 % paragraph iteratees_ausfuehren (end)
@@ -691,11 +697,11 @@ Es wird erklärt, auf welche Arten \lstinline|Enumerator|s erstellt werden könn
 Es gibt drei unterschiedliche Techniken, einen \lstinline|Enumerator| zu erstellen.
 \begin{enumerate}
   \item Durch Erstellung einer neuen Klasse, die von \lstinline|Enumerator| erbt und \lstinline|apply| implementiert.
-  \item Durch Benutzung einer Konstruktormethode im Companion-Objekt (\lstinline|apply|, \lstinline|generateM|, u.~a.).
+  \item Durch Benutzung einer Konstruktormethode im Companion-Objekt im Companion-Objekt (\lstinline|apply|, \lstinline|generateM|, u.~a.).
   \item Durch Benutzung einer Konstruktormethode im \lstinline|Concurrent|-Objekt (\lstinline|broadcast|, \lstinline|unicast|, u.~a.).
 \end{enumerate}
 
-Im Folgenden werden alle Herangehensweisen vorgestellt, um Zahlen für den im vorigen Kapitel vorgestellten Summierungsiteratee zu generieren.
+Im Folgenden werden alle Herangehensweisen vorgestellt, um Zahlen für den im vorigen Kapitel vorgestellten Summierungs-\lstinline|Iteratee| zu generieren.
 
 \subparagraph{Erstellung durch Vererbung} % (fold)
 \label{subp:enumeratorerstellung_durch_vererbung}\mbox{} % force new line
@@ -811,14 +817,14 @@ val futureIterateeAfterApplication: Future[Iteratee[Int, Int]] =
 
 
 Um mit dem neuen \lstinline|Iteratee| weiterzuarbeiten wäre es möglich, alle weiteren Operationen innerhalb der \lstinline|Future|-Monade durchzuführen.
-Weil es aber mühsam ist, \lstinline|Iteratee|s innerhalb von \lstinline|Future|s zu bearbeiten, ist es möglich einen Wert vom Typ \lstinline|Future[Iteratee[E, A]]| in einen Wert vom Typ \lstinline|Iteratee[E, A]| zu transformieren.
+Weil es aber eine Indirektion bedeuten würde, \lstinline|Iteratee|s innerhalb von \lstinline|Future|s zu bearbeiten, ist es möglich einen Wert vom Typ \lstinline|Future[Iteratee[E, A]]| in einen Wert vom Typ \lstinline|Iteratee[E, A]| zu transformieren.
 Beide Typen haben die gleiche Bedeutung, indem sie für ein Ergebnis stehen, das möglicherweise noch nicht vorhanden ist.
 Weil ein \lstinline|Iteratee| innerhalb der \lstinline|Future|-Monade aus diesem Betrachtungswinkel aber redundant ist, existiert die Methode \lstinline|Iteratee.flatten|.
 
 
 Nachdem ein \lstinline|Enumerator| alle Elemente an einen \lstinline|Iteratee| übergeben hat, sendet er allerdings kein \lstinline|Input.EOF|-Element.
 Dadurch ist es möglich, mehrere \lstinline|Enumerator|s auf einen \lstinline|Iteratee| anzuwenden, worauf in Kap.~\ref{par:anwendung_komposition_von_enumerators} näher eingegangen wird.
-Um ein \lstinline|Input.EOF|-Element an ein \lstinline|Iteratee| zu senden, wird die \lstinline|run|-Methode aus dem \lstinline|Iteratee|-Trait aufgerufen.
+Um ein \lstinline|Input.EOF|-Element an ein \lstinline|Iteratee| zu senden und anschließend das berechnete Ergebnis zu erhalten, wird die \lstinline|run|-Methode aus dem \lstinline|Iteratee|-Trait aufgerufen.
 Eine Weiterführung des zuvor begonnenen \lstinline|Enumerator|-Beispiels ist in Listing~\ref{lst:enumeratoranwendung2} zu finden.
 In diesem Beispiel werden die beiden oben beschriebenen Techniken angewendet, um die berechnete Summe aus dem \lstinline|Iteratee| zu extrahieren.
 
@@ -829,8 +835,8 @@ val iterateeAfterApplication: Iteratee[Int, Int] =
 val futureResult: Future[Int] = iterateeAfterApplication.run
 \end{lstlisting}
 
-Mit Hilfe der Methode \lstinline|Enumerator.run| ist es möglich, \lstinline|Enumerator|anwendung und Ergebnisextraktion zusammenzufassen.
-Diese Hilfsmethode hat die Signatur \lstinline[breaklines=true]|def run[A](i: Iteratee[E, A]): Future[A]|.
+Mit Hilfe der Methode \lstinline|Enumerator.run| ist es außerdem möglich, \lstinline|Enumerator|anwendung und Ergebnisextraktion zusammenzufassen.
+Diese Methode hat die Signatur \lstinline[breaklines=true]|def run[A](i: Iteratee[E, A]): Future[A]|.
 Unter Einsatz dieser Methode wird die Verarbeitung im Aufsummierungsbeispiel, wie in Listing~\ref{lst:enumeratoranwendung3} zu sehen, auf einen Befehl verkürzt.
 
 \begin{lstlisting}[caption=Anwendung eines Enumerators mit gleichzeitiger Ergebnisextrahierung, label=lst:enumeratoranwendung3]
@@ -1063,7 +1069,7 @@ def interleave[E](e1: Enumerator[E], es: Enumerator[E]*):
 \end{lstlisting}
 
 \lstinline|interleave| nimmt einen oder mehrere \lstinline|Enumerator|s als Argumente und kombiniert diese nach dem zuvor beschriebenen Prinzip.
-In Listing~\ref{lst:parallele_komposition_von_enumerators} wird nun mit Hilfe dieser Methode gezeigt, wie mehrere \lstinline|Enumerator|s parallel komponiert werden können.
+In Listing~\ref{lst:parallele_komposition_von_enumerators} wird mit Hilfe dieser Methode gezeigt, wie mehrere \lstinline|Enumerator|s parallel komponiert werden können.
 
 \begin{lstlisting}[caption=Parallele Komposition von Enumerators, label=lst:parallele_komposition_von_enumerators]
 def timeoutEnumerator[A](x: A, d: Duration): Enumerator[A] =
