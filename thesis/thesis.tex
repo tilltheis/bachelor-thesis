@@ -318,7 +318,7 @@ Diese Komponenten und ihr jeweiliger Verwendungszweck wird in diesem Kapitel vor
 Die von der Datenquelle generierten Elemente werden in \lstinline|Input|s verpackt.
 Der Datentyp \lstinline|Input| ist definiert, wie in Listing~\ref{lst:der_input_datentyp} gezeigt.
 
-\begin{lstlisting}[caption=Der \lstinline|Input|-Datentyp, label=lst:der_input_datentyp]
+\begin{lstlisting}[caption=Der Input-Datentyp, label=lst:der_input_datentyp]
 sealed trait Input[+E]
 object Input {
   case class El[+E](e: E) extends Input[E]
@@ -369,7 +369,7 @@ Ein Wert vom Typ \lstinline|Input| hat also drei mögliche Zustände:
 Die von der Datenquelle in \lstinline|Input|s verpackten Elemente werden von \lstinline|Iteratee|s konsumiert, um daraus ein Ergebnis aufzubauen.
 \lstinline|Iteratee|s kapseln ihren Zustand \lstinline|Step|, der den Verarbeitungszustand widerspiegelt.
 Der Typ des \lstinline|Step|-Zustands ist wie in Listing~\ref{lst:der_step_datentyp} gezeigt.
-\begin{lstlisting}[caption=Der \lstinline|Step|-Datentyp, label=lst:der_step_datentyp]
+\begin{lstlisting}[caption=Der Step-Datentyp, label=lst:der_step_datentyp]
 sealed trait Step[E, +A]
 object Step {
   case class Done[+A, E](a: A, remaining: Input[E])
@@ -421,7 +421,7 @@ Auch kann ein erfolgreich berechneter Wert innerhalb der Monade transformiert we
 
 Ein \lstinline|Enumerator| ist die Datenquelle, die ihre Daten, in \lstinline|Input|s verpackt, bereitstellt.
 Der Datentyp \lstinline|Enumerator| ist definiert, wie in Listing~\ref{lst:der_enumerator_datentyp} vereinfacht dargestellt.
-\begin{lstlisting}[caption=Der \lstinline|Enumerator|-Datentyp, label=lst:der_enumerator_datentyp]
+\begin{lstlisting}[caption=Der Enumerator-Datentyp, label=lst:der_enumerator_datentyp]
 trait Enumerator[E] {
   def apply[A](i: Iteratee[E, A]): Future[Iteratee[E, A]]
 }
@@ -445,7 +445,7 @@ Dadurch ist es beispielsweise möglich, die Daten aus Dateien oder dem Netzwerk 
 
 Ein \lstinline|Enumeratee| ist ein Stream-Transformator, der \lstinline|Iteratee|s eines bestimmten Element-Typs zu \lstinline|Iteratee|s eines anderen Element-Typs konvertiert.
 Der Datentyp \lstinline|Enumeratee| ist definiert, wie in Listing~\ref{lst:der_enumeratee_datentyp} vereinfacht dargestellt.
-\begin{lstlisting}[caption=Der \lstinline|Enumeratee|-Datentyp, label=lst:der_enumeratee_datentyp]
+\begin{lstlisting}[caption=Der Enumeratee-Datentyp, label=lst:der_enumeratee_datentyp]
 trait Enumeratee[From, To] {
   def apply[A](inner: Iteratee[To, A]):
     Iteratee[From, Iteratee[To, A]]
@@ -536,7 +536,7 @@ Plays \lstinline|Iteratee|s bilden einen Container um ihren \lstinline|Step|-Zus
 Dadurch werden, wie bei objektorientierten Sprachen üblich\todo{Zitat}, Daten und Operationen gebündelt.
 Die elementare Methode dieser Klasse ist \lstinline|fold|.
 Die Signatur dazu ist in Listing~\ref{lst:fold_signatur} zu lesen.
-\begin{lstlisting}[caption=Die Signatur von \lstinline|fold|, label=lst:fold_signatur]
+\begin{lstlisting}[caption=Die Signatur von fold, label=lst:fold_signatur]
 def fold[B](folder: Step[E, A] => Future[B]): Future[B]
 \end{lstlisting}
 
@@ -566,7 +566,7 @@ Die erste Variante ist, von \lstinline|Iteratee| zu erben und die \lstinline|fol
 Dies erfordert viel Schreibarbeit, weil nur die sehr generische \lstinline|fold|-Methode verwendet werden kann.
 Der Code dazu ist in Listing~\ref{lst:iteratee_durch_vererbung} zu sehen.
 
-\begin{lstlisting}[caption=Erstellung eines \lstinline|Iteratee|s durch Vererbung, label=lst:iteratee_durch_vererbung]
+\begin{lstlisting}[caption=Erstellung eines Iteratees durch Vererbung, label=lst:iteratee_durch_vererbung]
 case class SumIteratee(sum: Int = 0) extends Iteratee[Int, Int] {
   def fold[B](folder: Step[Int, Int] => Future[B]): Future[B] = {
     folder(Step.Cont(_ match {
@@ -602,7 +602,7 @@ Die zweite Möglichkeit, einen \lstinline|Iteratee| zu erstellen, ist mit Hilfe 
 Es gibt die Konstruktormethoden \lstinline|Done|, \lstinline|Cont| und \lstinline|Error|, die jeweils einen \lstinline|Iteratee| im gleichnamigen \lstinline|Step|-Zustand erstellen.
 Der Code, der einen \lstinline|Iteratee| mit Hilfe dieser Methoden erstellt, ist in Listing~\ref{lst:iteratee_durch_konstruktormethode} zu sehen.
 
-\begin{lstlisting}[caption=Erstellung eines \lstinline|Iteratee|s durch eine Konstruktormethode, label=lst:iteratee_durch_konstruktormethode]
+\begin{lstlisting}[caption=Erstellung eines Iteratees durch eine Konstruktormethode, label=lst:iteratee_durch_konstruktormethode]
 def sumIteratee(sum: Int = 0): Iteratee[Int, Int] = Cont(_ match {
   case Input.El(i) => sumIteratee(sum + i)
   case Input.Empty => sumIteratee(sum)
@@ -627,7 +627,7 @@ Das Aufsummieren von Menge von Zahlen lässt sich sehr einfach mit Hilfe eines F
 Das \lstinline|Iteratee|-Companion-Objekt beinhaltet u.~a. die \lstinline|fold|-Hilfsmethode, die für solche Operationen gedacht ist.
 Durch Einsatz dieser Methode wird die Lösung, wie in Listing~\ref{lst:iteratee_durch_hilfsmethode} zu erkennen, zum Einzeiler.
 
-\begin{lstlisting}[caption=Erstellung eines \lstinline|Iteratee|s durch eine Hilfsmethode, label=lst:iteratee_durch_hilfsmethode]
+\begin{lstlisting}[caption=Erstellung eines Iteratees durch eine Hilfsmethode, label=lst:iteratee_durch_hilfsmethode]
 val sumIterateeFromHelper: Iteratee[Int, Int] =
   Iteratee.fold(0)(_ + _)
 \end{lstlisting}
@@ -647,7 +647,7 @@ Diese Funktion übergibt ein Element an den \lstinline|Iteratee| und muss darauf
 Erst nach dieser Analyse kann entschieden werden, ob ein weiteres Element übergeben wird oder nicht.
 In Listing~\ref{lst:iterateeausfuehrung_durch_folder} wird gezeigt, wie dies implementiert werden kann.
 
-\begin{lstlisting}[caption=Ausführung eines \lstinline|Iteratee|s durch \lstinline|folder|-Funktion, label=lst:iterateeausfuehrung_durch_folder]
+\begin{lstlisting}[caption=Ausführung eines Iteratees durch folder-Funktion, label=lst:iterateeausfuehrung_durch_folder]
 def folder(xs: Int*)(step: Step[Int, Int]): Future[Int] = {
   def folder_(xs: List[Int])(step: Step[Int, Int]): Future[Int] =
     xs match {
@@ -704,7 +704,7 @@ Bei der Erstellung eines \lstinline|Enumerator|s durch Vererbung, muss das \lsti
 Alles, was dafür nötig ist, ist die \lstinline|apply|-Methode zu implementieren.
 Innerhalb dieser Methode wird der übergebene \lstinline|Iteratee| mit Hilfe seiner \lstinline|fold|-Methode befüllt, wie in Listing~\ref{lst:enumeratorerstellung_durch_vererbung} zu sehen.
 
-\begin{lstlisting}[caption=Erstellung eines \lstinline|Enumerator|s durch Vererbung, label=lst:enumeratorerstellung_durch_vererbung]
+\begin{lstlisting}[caption=Erstellung eines Enumerators durch Vererbung, label=lst:enumeratorerstellung_durch_vererbung]
 case class NumberEnumerator(xs: Int*) extends Enumerator[Int] {
   def apply[A](iteratee: Iteratee[Int, A]):
       Future[Iteratee[Int, A]] = {
@@ -742,7 +742,7 @@ Die hier vorgestellte Methode ist die \lstinline|apply|-Methode des Companion-Ob
 Diese Methode nimmt als Parameter beliebig viele Elemente eines Typs und wird diese bei Anwendung in \lstinline|Input|-Elemente verpacken und an den \lstinline|Iteratee| übergeben.
 Wie der \lstinline|Enumerator| mit dieser Methode erstellt wird, ist in Listing~\ref{lst:enumeratorerstellung_durch_apply} zu sehen.
 
-\begin{lstlisting}[caption=Erstellung eines \lstinline|Enumerator|s durch die \lstinline|apply|-Konstruktormethode, label=lst:enumeratorerstellung_durch_apply]
+\begin{lstlisting}[caption=Erstellung eines Enumerators durch die apply-Konstruktormethode, label=lst:enumeratorerstellung_durch_apply]
 val numberEnumeratorFromApply: Enumerator[Int] =
   Enumerator(1, 4, -2)
 \end{lstlisting}
@@ -756,7 +756,7 @@ Das Objekt \lstinline|Concurrent| stellt weitere Konstruktoren für \lstinline|E
 Unter anderem beinhaltet dieses Objekt die Methode \lstinline|unicast|, die imperatives schreiben auf einen \lstinline|Iteratee| erlaubt.
 Die Signatur von \lstinline|unicast| ist wie in Listing~\ref{lst:unicast_signatur} dargestellt.
 
-\begin{lstlisting}[caption=Die Signatur von \lstinline|Concurrent.unicast|, label=lst:unicast_signatur]
+\begin{lstlisting}[caption=Die Signatur von Concurrent.unicast, label=lst:unicast_signatur]
 def unicast[E](
   onStart: (Channel[E]) => Unit,
   onComplete: => Unit,
@@ -779,7 +779,7 @@ Wichtig ist dabei jedoch, dass nach Übergabe aller Zahlen der \lstinline|Channe
 Andernfalls wird niemals signalisiert, dass keine weiteren Elemente mehr kommen und der \lstinline|Iteratee| wird nicht in den \lstinline|Step.Done|-Zustand übergehen.
 Die Implementation dazu ist in Listing~\ref{lst:enumeratorerstellung_durch_unicast} zu sehen.
 
-\begin{lstlisting}[caption=Erstellung eines \lstinline|Enumerator|s durch die \lstinline|unicast|-Konstruktormethode, label=lst:enumeratorerstellung_durch_unicast]
+\begin{lstlisting}[caption=Erstellung eines Enumerators durch die unicast-Konstruktormethode, label=lst:enumeratorerstellung_durch_unicast]
 def numberEnumerator(xs: Int*): Enumerator[Int] = {
   Concurrent.unicast { channel =>
     xs.foreach(channel.push(_))
@@ -802,7 +802,7 @@ val numberEnumeratorFromUnicast: Enumerator[Int] =
 Das Ergebnis der Anwendung einer solchen \lstinline|Enumerator|-Funktion ist der übergebene \lstinline|Iteratee| nach Konsum der Elemente in der \lstinline|Future|-Monade.
 Ein Beispiel für diese ersten Schritte ist in Listing~\ref{lst:enumeratoranwendung1} zu sehen.
 
-\begin{lstlisting}[caption=Anwendung eines \lstinline|Enumerator|s auf einen \lstinline|Iteratee|, label=lst:enumeratoranwendung1]
+\begin{lstlisting}[caption=Anwendung eines Enumerators auf einen Iteratee, label=lst:enumeratoranwendung1]
 val iteratee: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
 val enumerator: Enumerator[Int] = Enumerator(1, 4, -2)
 val futureIterateeAfterApplication: Future[Iteratee[Int, Int]] =
@@ -822,7 +822,7 @@ Um ein \lstinline|Input.EOF|-Element an ein \lstinline|Iteratee| zu senden, wird
 Eine Weiterführung des zuvor begonnenen \lstinline|Enumerator|-Beispiels ist in Listing~\ref{lst:enumeratoranwendung2} zu finden.
 In diesem Beispiel werden die beiden oben beschriebenen Techniken angewendet, um die berechnete Summe aus dem \lstinline|Iteratee| zu extrahieren.
 
-\begin{lstlisting}[caption=Extrahierung des Ergebnisses aus einem \lstinline|Iteratee|, label=lst:enumeratoranwendung2]
+\begin{lstlisting}[caption=Extrahierung des Ergebnisses aus einem Iteratee, label=lst:enumeratoranwendung2]
 val iterateeAfterApplication: Iteratee[Int, Int] =
   Iteratee.flatten(futureIterateeAfterApplication)
 
@@ -833,7 +833,7 @@ Mit Hilfe der Methode \lstinline|Enumerator.run| ist es möglich, \lstinline|Enu
 Diese Hilfsmethode hat die Signatur \lstinline[breaklines=true]|def run[A](i: Iteratee[E, A]): Future[A]|.
 Unter Einsatz dieser Methode wird die Verarbeitung im Aufsummierungsbeispiel, wie in Listing~\ref{lst:enumeratoranwendung3} zu sehen, auf einen Befehl verkürzt.
 
-\begin{lstlisting}[caption=Anwendung eines \lstinline|Enumerator|s mit gleichzeitiger Ergebnisextrahierung, label=lst:enumeratoranwendung3]
+\begin{lstlisting}[caption=Anwendung eines Enumerators mit gleichzeitiger Ergebnisextrahierung, label=lst:enumeratoranwendung3]
 val futureResult2: Future[Int] = enumerator.run(iteratee)
 \end{lstlisting}
 
@@ -875,7 +875,7 @@ Die Methode \lstinline|apply| ist als Alias für \lstinline|applyOn| definiert.
 \lstinline|applyOn| hat die Signatur, die in Kap.~\ref{ssub:design_enumeratees} für \lstinline|apply| vorgestellt wurde.
 Eine Mögliche Implementierung für einen \lstinline|Enumeratee|, der die Zahlen eines \lstinline|Iteratee|s mit 2 multipliziert ist in Listing~\ref{lst:enumerateeerstellung_durch_vererbung} zu sehen.
 
-\begin{lstlisting}[caption=Erstellung eines \lstinline|Enumeratee|s durch Vererbung, label=lst:enumerateeerstellung_durch_vererbung]
+\begin{lstlisting}[caption=Erstellung eines Enumeratees durch Vererbung, label=lst:enumerateeerstellung_durch_vererbung]
 case object MultiplyingEnumeratee extends Enumeratee[Int, Int] {
   def applyOn[A](inner: Iteratee[Int, A]):
       Iteratee[Int, Iteratee[Int, A]] = {
@@ -929,7 +929,7 @@ Zu einem früheren Entwicklungsstand des Frameworks wurde die zweite Variante ve
 Unter Einsatz dieser \lstinline|map|-Methode ist die Transformation in einer einzigen Anweisung möglich.
 Der dazu nötige Code kann Listing~\ref{lst:enumerateeerstellung_durch_companion_konstruktormethode} entnommen werden.
 
-\begin{lstlisting}[caption=Erstellung eines \lstinline|Enumeratee|s durch die \lstinline|map|-Konstruktormethode, label=lst:enumerateeerstellung_durch_companion_konstruktormethode]
+\begin{lstlisting}[caption=Erstellung eines Enumeratees durch die map-Konstruktormethode, label=lst:enumerateeerstellung_durch_companion_konstruktormethode]
 val enumerateeFromCompanion: Enumeratee[Int, Int] =
   Enumeratee.map(_ * 2)
 \end{lstlisting}
@@ -963,7 +963,7 @@ Der Wert der \lstinline|Iteratee|-Monade steht dann fest, wenn der \lstinline|It
 Um zwei \lstinline|Iteratee| nacheinander auszuführen, wird bei der \lstinline|flatMap|-Operation auf dem ersten \lstinline|Iteratee| der zweite \lstinline|Iteratee| zurückgegeben und die Ergebnisse der beiden \lstinline|Iteratee|s anschließend kombiniert.
 Ein Code-Beispiel, das dieses Prinzip ausnutzt, ist in Listing~\ref{lst:sequentielle_komposition_von_iteratees} zu lesen.
 
-\begin{lstlisting}[caption=Sequentielle Komposition von \lstinline|Iteratee|s, label=lst:sequentielle_komposition_von_iteratees]
+\begin{lstlisting}[caption=Sequentielle Komposition von Iteratees, label=lst:sequentielle_komposition_von_iteratees]
 val i1: Iteratee[Int, Option[Int]] = Iteratee.head
 val i2: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
 
@@ -982,7 +982,7 @@ Der zweite \lstinline|Iteratee| summiert alle empfangenen Elemente auf und gibt 
 Das Ergebnis der Komposition dieser beiden \lstinline|Iteratee|s ist ein Paar aus dem Ergebnis des ersten und des zweiten \lstinline|Iteratee|s.
 Das Kombinieren von \lstinline|i1| und \lstinline|i2| lässt sich durch das Verwenden einer \lstinline|for|-Comprehension allerdings noch lesbarer gestalten, wie in Listing~\ref{lst:sequentielle_komposition_von_iteratees_mit_for_comprehension} zu sehen.
 
-\begin{lstlisting}[caption=Sequentielle Komposition von \lstinline|Iteratee|s mit \lstinline|for|-Comprehension, label=lst:sequentielle_komposition_von_iteratees_mit_for_comprehension]
+\begin{lstlisting}[caption=Sequentielle Komposition von Iteratees mit for-Comprehension, label=lst:sequentielle_komposition_von_iteratees_mit_for_comprehension]
 val i12: Iteratee[Int, (Option[Int], Int)] = for {
   res1 <- i1
   res2 <- i2
@@ -1001,7 +1001,7 @@ Sobald beide \lstinline|Iteratee|s im \lstinline|Done|-Zustand sind, werden die 
 Die Verwendung von \lstinline|zipWith| ermöglicht es, das Ergebnis nicht nur als Paar zu erhalten, sondern es kann eine Funktion übergeben werden, die die Ergebnisse zu einem beliebigen Datentyp zusammenfasst.
 In Listing~\ref{lst:parallele_komposition_von_iteratees} ist ein Beispiel zu sehen, das die beiden \lstinline|Iteratee|s aus dem Beispiel für \nameref{lst:sequentielle_komposition_von_iteratees} verwendet, sie aber parallel kombiniert.
 
-\begin{lstlisting}[caption=Parallele Komposition von \lstinline|Iteratee|s, label=lst:parallele_komposition_von_iteratees]
+\begin{lstlisting}[caption=Parallele Komposition von Iteratees, label=lst:parallele_komposition_von_iteratees]
 val i1: Iteratee[Int, Option[Int]] = Iteratee.head
 val i2: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
 
