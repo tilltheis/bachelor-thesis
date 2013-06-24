@@ -1058,7 +1058,8 @@ Das \lstinline|Enumerator|-Companion-Objekt stellt hierfür die Konstruktormetho
 \lstinline|interleave| kommt in unterschiedlichen Varianten, darunter auch in einer Variante mit der in Listing~\ref{lst:signatur_von_interleave} gezeigten Signatur.
 
 \begin{lstlisting}[caption=Die Signatur von interleave, label=lst:signatur_von_interleave]
-def interleave[E](e1: Enumerator[E], es: Enumerator[E]*): Enumerator[E]
+def interleave[E](e1: Enumerator[E], es: Enumerator[E]*):
+  Enumerator[E]
 \end{lstlisting}
 
 \lstinline|interleave| nimmt einen oder mehrere \lstinline|Enumerator|s als Argumente und kombiniert diese nach dem zuvor beschriebenen Prinzip.
