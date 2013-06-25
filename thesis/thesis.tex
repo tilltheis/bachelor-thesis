@@ -855,7 +855,7 @@ val futureResult2: Future[Int] = enumerator.run(iteratee)
 Sie sind, wie in Kap.~\ref{ssub:design_enumeratees} erklärt, Funktionen von \lstinline|Iteratee| nach \lstinline|Iteratee|.
 Das Ergebnis des resultierenden \lstinline|Iteratee|s ist wiederum ein \lstinline|Iteratee|.
 Und zwar ist es der ursprünglichen \lstinline|Iteratee| nach Empfang der Elemente.
-In diesem Kapitel wird beschrieben, wie...
+In diesem Kapitel wird beschrieben, wie eigene \lstinline|Enumeratee|s erstellt und wie sie auf \lstinline|Iteratee|s angewendet werden können.
 
 \paragraph{Erstellung von Enumeratees} % (fold)
 \label{par:erstellung_von_enumeratees}\mbox{} % force new line
@@ -913,7 +913,7 @@ Sobald ein \lstinline|Input.EOF| empfangen wird, wird in den Endzustand mit dem 
 \subparagraph{Erstellung durch Konstruktormethode des Companion-Objekts} % (fold)
 \label{subp:enumerateeerstellung_durch_konstruktormethode_des_companion_objekts}\mbox{} % force new line
 
-Die zweite Möglichkeit, einen \lstinline|Enumeratee| zu erstellen ist mit Hilfe seines Companion-Objekts.
+Die zweite hier vorgestellte Möglichkeit, einen \lstinline|Enumeratee| zu erstellen ist mit Hilfe seines Companion-Objekts.
 Im Companion-Objekt finden sich mehrere Konstruktormethoden, die Listenoperationen sehr ähneln, wie z.~B. \lstinline|drop|, \lstinline|filter|, \lstinline|map| oder \lstinline|zip|.
 Um alle Elemente des \lstinline|Iteratees| zu transformieren bietet sich \lstinline|map| an.
 Mit Hilfe dieser Methode werden alle Elemente durch eine angegebene Funktion transformiert, bevor sie an das innere \lstinline|Iteratee| gegeben werden.
@@ -944,6 +944,13 @@ val enumerateeFromCompanion: Enumeratee[Int, Int] =
 
 % paragraph erstellung_von_enumeratees (end)
 
+\paragraph{Anwendung auf Iteratees} % (fold)
+\label{par:enumerateeanwendung_auf_iteratees}
+
+TODO
+
+% paragraph enumerateeanwendung_auf_iteratees (end)
+
 % subsubsection enumeratees (end)
 
 
@@ -965,8 +972,9 @@ Es werden die zugrundeliegenden Ansätze und die jeweilige Umsetzung erläutert.
 Zwei \lstinline|Iteratee|s sequentiell zu kombinieren, bedeutet zuerst den ersten \lstinline|Iteratee| und dann den zweiten \lstinline|Iteratee| auszuführen.
 Dafür eignen sich die Methoden \lstinline|map| und \lstinline|flatMap| der \lstinline|Iteratee|-Klasse.
 Diese Methoden erlauben es, wie bei jeder Monade, den Wert innerhalb der Monade zu transformieren.
-Der Wert der \lstinline|Iteratee|-Monade steht dann fest, wenn der \lstinline|Iteratee| in den \lstinline|Done|-Zustand übergegangen ist.
-Um zwei \lstinline|Iteratee| nacheinander auszuführen, wird bei der \lstinline|flatMap|-Operation auf dem ersten \lstinline|Iteratee| der zweite \lstinline|Iteratee| zurückgegeben und die Ergebnisse der beiden \lstinline|Iteratee|s anschließend kombiniert.
+Der Wert der \lstinline|Iteratee|-Monade steht fest, sobald der \lstinline|Iteratee| in den \lstinline|Done|-Zustand übergegangen ist.
+Um zwei \lstinline|Iteratee|s nacheinander auszuführen, wird zuerst per \lstinline|flatMap| auf den Wert des ersten \lstinline|Iteratee|s zugegriffen.
+Anschließend wird ein \lstinline|map| über den zweiten \lstinline|Iteratee| durchgeführt, wobei die Ergebnisse der beiden \lstinline|Iteratee|s kombiniert werden.
 Ein Code-Beispiel, das dieses Prinzip ausnutzt, ist in Listing~\ref{lst:sequentielle_komposition_von_iteratees} zu lesen.
 
 \begin{lstlisting}[caption=Sequentielle Komposition von Iteratees, label=lst:sequentielle_komposition_von_iteratees]
@@ -1003,7 +1011,15 @@ val i12: Iteratee[Int, (Option[Int], Int)] = for {
 Bei der parallelen Komposition werden die Elemente immer an beide \lstinline|Iteratee|s übergeben.
 Dies lässt sich mit Hilfe von \lstinline|Enumeratee|s und den Methoden \lstinline|zip|, bzw. \lstinline|zipWith| bewerkstelligen.
 \lstinline|zip| erstellt aus zwei \lstinline|Iteratee|s einen neuen \lstinline|Iteratee|, der die empfangen Elemente an beide \lstinline|Iteratee|s weitergibt.
+Die genaue Signatur von \lstinline|Enumeratee.zip| ist Listing~\ref{lst:signatur_enumeratee_zip} zu entnehmen.
+
+\begin{lstlisting}[caption=Die Signatur von Enumeratee.zip, label=lst:signatur_enumeratee_zip]
+def zip[E, A, B](inner1: Iteratee[E, A], inner2: Iteratee[E, B]):
+  Iteratee[E, (A, B)]
+\end{lstlisting}
+
 Sobald beide \lstinline|Iteratee|s im \lstinline|Done|-Zustand sind, werden die Ergebnisse als Paar zurückgegeben.
+Falls ein \lstinline|Iteratee| in den \lstinline|Error|-Zustand übergeht, ist auch der resultierende \lstinline|Iteratee| im \lstinline|Error|-Zustand.
 Die Verwendung von \lstinline|zipWith| ermöglicht es, das Ergebnis nicht nur als Paar zu erhalten, sondern es kann eine Funktion übergeben werden, die die Ergebnisse zu einem beliebigen Datentyp zusammenfasst.
 In Listing~\ref{lst:parallele_komposition_von_iteratees} ist ein Beispiel zu sehen, das die beiden \lstinline|Iteratee|s aus dem Beispiel für \nameref{lst:sequentielle_komposition_von_iteratees} verwendet, sie aber parallel kombiniert.
 
@@ -1040,9 +1056,10 @@ Es existieren wieder drei verschiedene Kompositionsansätze, deren Umsetzung im 
 \label{subp:anwendung_sequentielle_komposition_von_enumerators}\mbox{} % force new line
 
 Sequentielle Komposition zweier \lstinline|Enumerator|s heißt, dass erst die Elemente des ersten \lstinline|Enumerator|s generiert werden, bis dieser erschöpft ist und anschließend die Elemente des zweiter \lstinline|Enumerator|s generiert werden.
-Das \lstinline|Enumerator|-Trait stellt hierfür die Methode \lstinline|andThen| bereit.
+Das \lstinline|Enumerator|-Trait stellt hierfür die Methode \lstinline|andThen| mit der Signatur \lstinline[breaklines=true]|Enumerator[E] => Enumerator[E]| bereit.
 Diese Methode erstellt einen neuen \lstinline|Enumerator|, der die Elemente des ursprünglichen \lstinline|Enumerator|s und dann die Elemente des übergebenen \lstinline|Enumerator|s enumeriert.
 Listing~\ref{lst:sequentielle_komposition_von_enumerators} zeigt, wie \lstinline|andThen| verwendet werden kann, um zwei \lstinline|Enumerator|s sequentiell zu komponieren.
+Die im Beispiel verwendete Methode \lstinline|Iteratee.getChunks| gibt lediglich die empfangenen Elemente als Liste zurück.
 
 \begin{lstlisting}[caption=Sequentielle Komposition von Enumerators, label=lst:sequentielle_komposition_von_enumerators]
 val i: Iteratee[Int, List[Int]] = Iteratee.getChunks
@@ -1085,8 +1102,7 @@ val result: Future[List[Int]] = e123.run(i)
 // result = Future.successful(List(2, 3, 1))
 \end{lstlisting}
 
-Zu Bemerken ist hierbei, dass \lstinline|Iteratee.getChunks| die empfangenen Elemente als Liste zurückgibt.
-Außerdem stellt Play das Objekt \lstinline|play.api.libs.concurrent.Promise| mit mehreren Hilfsmethoden zur Verfügung.
+Zu bemerken ist hierbei, dass Play das Objekt \lstinline|play.api.libs.concurrent.Promise| mit mehreren Hilfsmethoden zur Verfügung stellt.
 Mit dessen \lstinline|timeout|-Methode ist es möglich, ein \lstinline|Future|-Objekt zu erstellen, dass nach Verlauf einer angegebenen Zeitspanne einen Wert liefert.
 \lstinline|Enumerator.flatten| transformiert einen Wert vom Typ \lstinline|Future[Enumerator[A]]| nach \lstinline|Enumerator[A]| analog zur Methode \lstinline|Iteratee.flatten|, die in Kap.~\ref{par:anwendung_auf_iteratees} behandelt wurde.
 Gut zu erkennen ist, dass die Reihenfolge der Elemente im Ergebnis mit der jeweiligen Zeitspanne korreliert und nicht etwa mit der Reihenfolge, in der die \lstinline|Enumerator|s an \lstinline|interleave| übergeben wurden.
