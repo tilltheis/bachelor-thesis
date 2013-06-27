@@ -44,16 +44,6 @@ object Composition {
 
     }
 
-    object ParallelSelective {
-      val evenIteratee: Iteratee[Int, List[Int]] = Iteratee.getChunks
-      val oddIteratee: Iteratee[Int, List[Int]] = Iteratee.getChunks
-      val splittingIteratee: Iteratee[Int, (Iteratee[Int, List[Int]], Iteratee[Int, List[Int]])] =
-        Iteratee.fold((evenIteratee, oddIteratee)) { case ((evenI, oddI), n) =>
-          def feed(i: Iteratee[Int, List[Int]]) = Iteratee.flatten(i.feed(Input.El(n)))
-          if (n % 2 == 0) (feed(evenI), oddI) else (evenI, feed(oddI))
-        }
-    }
-
     object OneSourceToOneSink {
       // val dropFirstIter: Iteratee[Int, List[Int]] = for {
       //   firstOption: Option[Int] <- Iteratee.head
@@ -63,6 +53,16 @@ object Composition {
       val dropFirstIteratee: Iteratee[Int, List[Int]] =
         Iteratee.head.flatMap { firstOption =>
           Enumeratee.drop(firstOption.get).transform(Iteratee.getChunks)
+        }
+    }
+
+    object ParallelOneSourceToSeveralSinks {
+      val evenIteratee: Iteratee[Int, List[Int]] = Iteratee.getChunks
+      val oddIteratee: Iteratee[Int, List[Int]] = Iteratee.getChunks
+      val splittingIteratee: Iteratee[Int, (Iteratee[Int, List[Int]], Iteratee[Int, List[Int]])] =
+        Iteratee.fold((evenIteratee, oddIteratee)) { case ((evenI, oddI), n) =>
+          def feed(i: Iteratee[Int, List[Int]]) = Iteratee.flatten(i.feed(Input.El(n)))
+          if (n % 2 == 0) (feed(evenI), oddI) else (evenI, feed(oddI))
         }
     }
 
