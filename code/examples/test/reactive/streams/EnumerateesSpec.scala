@@ -9,9 +9,9 @@ import play.api.libs.iteratee.Enumerator.enumInput
 
 import examples.reactive.streams.Enumeratees
 
-class EnumerateesSpec extends Specification with NoTimeConversions {
-  def await[A](f: Future[A]): A = Await.result(f, 1 second)
+import test.Helpers.await
 
+class EnumerateesSpec extends Specification with NoTimeConversions {
   Seq(
       ("inheritance", Enumeratees.Creation.enumerateeFromInheritance),
       ("constructor", Enumeratees.Creation.enumerateeFromConstructor)

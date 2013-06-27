@@ -10,6 +10,8 @@ import play.api.libs.iteratee.Enumerator.enumInput
 
 import examples.reactive.streams.Iteratees
 
+import test.Helpers.await
+
 class IterateesSpec extends Specification with NoTimeConversions {
   Seq(
     ("inheritance", Iteratees.Creation.sumIterateeFromInheritance),
@@ -34,14 +36,14 @@ class IterateesSpec extends Specification with NoTimeConversions {
 
       "sum correctly with folder" in {
         val result = iteratee.fold(Iteratees.Creation.folder(1, 4, -2))
-        Await.result(result, 1 second) === 3
+        await(result) === 3
       }
     }
   }
 
   "sum result with folder" should {
     "be correct" in {
-      Await.result(Iteratees.Creation.sumResult, 1 second) === 3
+      await(Iteratees.Creation.sumResult) === 3
     }
 
     Seq(

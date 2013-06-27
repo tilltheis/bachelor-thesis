@@ -9,6 +9,8 @@ import play.api.libs.iteratee.Enumerator.enumInput
 
 import examples.reactive.streams.Enumerators
 
+import test.Helpers.await
+
 class EnumeratorsSpec extends Specification with NoTimeConversions {
   Seq(
     ("inheritance", Enumerators.Creation.numberEnumeratorFromInheritance),
@@ -31,12 +33,12 @@ class EnumeratorsSpec extends Specification with NoTimeConversions {
     import Enumerators.Application._
 
     "yield a correct result for separate application and result extraction" in {
-      val sum = Await.result(futureResult, 1 second)
+      val sum = await(futureResult)
       sum === 3
     }
 
     "yield a correct result for combined application and result extraction" in {
-      val sum = Await.result(futureResult2, 1 second)
+      val sum = await(futureResult2)
       sum === 3
     }
   }
