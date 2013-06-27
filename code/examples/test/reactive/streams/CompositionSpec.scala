@@ -39,15 +39,19 @@ class CompositionSpec extends Specification with NoTimeConversions {
 
   "parallel composition with several sources to one sink for iteratees" should {
     "yield a correct result" in {
-      val i1: Iteratee[Int, Iteratee[String, (Int, String)]] =
-        Composition.Iteratees.ParallelManySourcesToOneSink.iteratee
+      val wordLineI = Composition.Iteratees.ParallelManySourcesToOneSink.lineWithNthWord(2)
+      val wordE = Enumerator("foo", "bar", "baz")
+      val lineE = Enumerator(
+        "some boring line",
+        "foo line baz",
+        "baz matching line",
+        "some other line"
+        )
 
-      val i2: Iteratee[String, (Int, String)] =
-        Iteratee.flatten(Enumerator(1, 2, 3).run(i1))
+      val lineI = Iteratee.flatten(wordE.run(wordLineI))
+      val result = lineE.run(lineI)
 
-      val result = Enumerator("foo", "bar", "baz").run(i2)
-
-      await(result) === (1, "foo")
+      await(result) === Some(("baz matching line", "baz"))
     }
   }
 
@@ -71,7 +75,7 @@ class CompositionSpec extends Specification with NoTimeConversions {
   "parallel composition for enumerators" should {
     "run the first enumerator together with the second enumerator" in {
       val result = Composition.Enumerators.Parallel.result
-      await(result) === List(2, 3, 1)
+      await(result, 4.seconds) === List(2, 3, 1)
     }
   }
 }

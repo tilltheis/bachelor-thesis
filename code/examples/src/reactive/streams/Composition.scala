@@ -67,19 +67,20 @@ object Composition {
     }
 
     object ParallelManySourcesToOneSink {
-      // val iteratee: Iteratee[Int, Iteratee[String, (Int, String)]] = for {
-      //   e1 <- Iteratee.head
-      //   e2 <- Iteratee.head
-      // } yield (e1.get, e2.get)
+      type Word = String
+      type Line = String
 
-      val iteratee: Iteratee[Int, Iteratee[String, (Int, String)]] =
-        Iteratee.head.map(e1 => Iteratee.head.map(e2 => (e1.get, e2.get)))
-
-      // val iteratee: Iteratee[Int, Iteratee[String, (Int, String)]] = for {
-      //   _ <- Done(1)
-      //   e1 <- Iteratee.head
-      //   e2 <- Iteratee.head
-      // } yield (e1.get, e2.get)
+      def lineWithNthWord(n: Int): Iteratee[Word, Iteratee[Line, Option[(Line, Word)]]] = {
+        Enumeratee.drop(n).transform(Iteratee.head[Word]).map {
+          case Some(word) =>
+            val t = Enumeratee.dropWhile[Line](!_.startsWith(word))
+            t.transform(Iteratee.head[Line]).map {
+              case Some(line) => Some(line, word)
+              case _ => None
+            }
+          case _ => Done(None)
+        }
+      }
     }
   }
 
@@ -103,9 +104,9 @@ object Composition {
         Enumerator.flatten(Promise.timeout(Enumerator(x), d))
 
       val i: Iteratee[Int, List[Int]] = Iteratee.getChunks
-      val e1 = timeoutEnumerator(1, 300 milliseconds)
-      val e2 = timeoutEnumerator(2, 100 milliseconds)
-      val e3 = timeoutEnumerator(3, 200 milliseconds)
+      val e1 = timeoutEnumerator(1, 3 seconds)
+      val e2 = timeoutEnumerator(2, 1 second)
+      val e3 = timeoutEnumerator(3, 2 seconds)
       val e123: Enumerator[Int] = Enumerator.interleave(e1, e2, e3)
 
       val result: Future[List[Int]] = e123.run(i)
