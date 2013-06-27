@@ -28,7 +28,7 @@ class CompositionSpec extends Specification with NoTimeConversions {
     }
   }
 
-  "selective parallel composition for iteratees" should {
+  "parallel composition with one source to several sinks for iteratees" should {
     "pass filtered elements to each iteratee" in {
       val i = Composition.Iteratees.ParallelOneSourceToSeveralSinks.splittingIteratee
       val (evenI, oddI) = await(Enumerator(1,2,3,7,6,5,7,3).run(i))
