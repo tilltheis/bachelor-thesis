@@ -44,15 +44,43 @@ object Composition {
 
     }
 
-    // object Free {
-    //   val i1 = Iteratee.consume[String]()
-    //   val i2 = Iteratee.consume[String]()
+    object ParallelSelective {
+      val evenIteratee: Iteratee[Int, List[Int]] = Iteratee.getChunks
+      val oddIteratee: Iteratee[Int, List[Int]] = Iteratee.getChunks
+      val splittingIteratee: Iteratee[Int, (Iteratee[Int, List[Int]], Iteratee[Int, List[Int]])] =
+        Iteratee.fold((evenIteratee, oddIteratee)) { case ((evenI, oddI), n) =>
+          def feed(i: Iteratee[Int, List[Int]]) = Iteratee.flatten(i.feed(Input.El(n)))
+          if (n % 2 == 0) (feed(evenI), oddI) else (evenI, feed(oddI))
+        }
+    }
 
-    //   def composeAlternating[E, A1, A2](odd: Iteratee[E, A1], even: Iteratee[E, A2]): Iteratee[E, (A1, A2)] = {
+    object OneSourceToOneSink {
+      // val dropFirstIter: Iteratee[Int, List[Int]] = for {
+      //   firstOption: Option[Int] <- Iteratee.head
+      //   xs: List[Int] <- Enumeratee.drop(firstOption.get).transform(Iteratee.getChunks)
+      // } yield xs
 
-    //   }
+      val dropFirstIteratee: Iteratee[Int, List[Int]] =
+        Iteratee.head.flatMap { firstOption =>
+          Enumeratee.drop(firstOption.get).transform(Iteratee.getChunks)
+        }
+    }
 
-    // }
+    object ParallelManySourcesToOneSink {
+      // val iteratee: Iteratee[Int, Iteratee[String, (Int, String)]] = for {
+      //   e1 <- Iteratee.head
+      //   e2 <- Iteratee.head
+      // } yield (e1.get, e2.get)
+
+      val iteratee: Iteratee[Int, Iteratee[String, (Int, String)]] =
+        Iteratee.head.map(e1 => Iteratee.head.map(e2 => (e1.get, e2.get)))
+
+      // val iteratee: Iteratee[Int, Iteratee[String, (Int, String)]] = for {
+      //   _ <- Done(1)
+      //   e1 <- Iteratee.head
+      //   e2 <- Iteratee.head
+      // } yield (e1.get, e2.get)
+    }
   }
 
   object Enumerators {
