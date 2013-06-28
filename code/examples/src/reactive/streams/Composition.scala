@@ -81,6 +81,23 @@ object Composition {
           case _ => Done(None)
         }
       }
+
+      def rotatingSourceIteratee(timesPerSource: Int):
+          Iteratee[Int, Iteratee[Int, List[Int]]] = {
+        val t = Enumeratee.take[Int](timesPerSource)
+        val i = t.transform(Iteratee.getChunks)
+
+        val groupedT = Enumeratee.grouped[Int] {
+          i.map(l1 => i.map(l2 => l1 ::: l2))
+        }
+        groupedT.transform(Iteratee.fold(Done[Int, List[Int]](Nil)) {
+            (resultI, groupedI) =>
+          for {
+            result <- resultI
+            group <- groupedI
+          } yield result ::: group
+        })
+      }
     }
   }
 

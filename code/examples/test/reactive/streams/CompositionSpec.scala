@@ -38,8 +38,10 @@ class CompositionSpec extends Specification with NoTimeConversions {
   }
 
   "parallel composition with several sources to one sink for iteratees" should {
-    "yield a correct result" in {
-      val wordLineI = Composition.Iteratees.ParallelManySourcesToOneSink.lineWithNthWord(2)
+    import Composition.Iteratees.ParallelManySourcesToOneSink._
+
+    "work for lineWithNthWord()" in {
+      val wordLineI = lineWithNthWord(2)
       val wordE = Enumerator("foo", "bar", "baz")
       val lineE = Enumerator(
         "some boring line",
@@ -52,6 +54,17 @@ class CompositionSpec extends Specification with NoTimeConversions {
       val result = lineE.run(lineI)
 
       await(result) === Some(("baz matching line", "baz"))
+    }
+
+    "work for rotatingSourceIteratee()" in {
+      val e1 = Enumerator(1, 1, 1, 1, 1, 1)
+      val e2 = Enumerator(2, 2, 2, 2, 2, 2)
+
+      val i1 = rotatingSourceIteratee(2)
+      val i2 = Iteratee.flatten(e1.run(i1))
+      val r = e2.run(i2)
+
+      await(r) === List(1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2)
     }
   }
 
