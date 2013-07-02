@@ -962,19 +962,13 @@ TODO
 \label{ssub:anwendung_komposition}
 
 Die in Kap.~\ref{ssub:komposition} vorgestellten Arten von Komposition sollen an dieser Stelle durch Anwendungsbeispiele veranschaulicht werden.
-Es wird auf die Komposition von \lstinline|Iteratee|s und \lstinline|Enumerator|s eingegangen.
+Dabei wird auf die sequentielle und parallele Komposition von \lstinline|Iteratee|s und \lstinline|Enumerator|s eingegangen.
 
-\paragraph{Komposition von Iteratees} % (fold)
-\label{par:anwendung_komposition_von_iteratees}\mbox{} % force new line
-
-Im Folgenden werden die drei Arten der Komposition von \lstinline|Iteratee|s vorgestellt.
-Es werden die zugrundeliegenden Ansätze und die jeweilige Umsetzung erläutert.
-
-\subparagraph{Sequentielle Komposition} % (fold)
-\label{subp:anwendung_sequentielle_komposition_von_iteratees}\mbox{} % force new line
+\paragraph{Sequentielle Komposition von Iteratees} % (fold)
+\label{p:anwendung_sequentielle_komposition_von_iteratees}\mbox{} % force new line
 
 Zwei \lstinline|Iteratee|s sequentiell zu kombinieren, bedeutet zuerst den ersten \lstinline|Iteratee| und dann den zweiten \lstinline|Iteratee| auszuführen.
-Dafür eignen sich die Methoden \lstinline|map| und \lstinline|flatMap| der \lstinline|Iteratee|-Klasse.
+Dafür eignen sich die Methoden \lstinline|map| und \lstinline|flatMap| des \lstinline|Iteratee|-Traits.
 Diese Methoden erlauben es, wie bei jeder Monade, den Wert innerhalb der Monade zu transformieren.
 Der Wert der \lstinline|Iteratee|-Monade steht fest, sobald der \lstinline|Iteratee| in den \lstinline|Done|-Zustand übergegangen ist.
 Um zwei \lstinline|Iteratee|s nacheinander auszuführen, wird zuerst per \lstinline|flatMap| auf den Wert des ersten \lstinline|Iteratee|s zugegriffen.
@@ -1007,13 +1001,13 @@ val i12: Iteratee[Int, (Option[Int], Int)] = for {
 } yield (res1, res2)
 \end{lstlisting}
 
-% subparagraph anwendung_sequentielle_komposition_von_iteratees (end)entieller oder paralleler Komposition zu halten.
+% paragraph anwendung_sequentielle_komposition_von_iteratees (end)
 
-\subparagraph{Parallele Komposition} % (fold)
-\label{subp:anwendung_parallele_komposition_von_iteratees}\mbox{} % force new line
+\paragraph{Parallele Komposition} % (fold)
+\label{p:anwendung_parallele_komposition_von_iteratees}\mbox{} % force new line
 
-Bei der parallelen Komposition werden die Elemente immer an beide \lstinline|Iteratee|s übergeben.
-Dies lässt sich mit Hilfe von \lstinline|Enumeratee|s und den Methoden \lstinline|zip|, bzw. \lstinline|zipWith| bewerkstelligen.
+Bei der parallelen Komposition zweier \lstinline|Iteratee|s werden die Elemente der Datenquelle an beide \lstinline|Iteratee|s übergeben.
+Eine Datenquelle auf mehrere Datensenken abzubilden, lässt sich mit Hilfe von \lstinline|Enumeratee|s und den Methoden \lstinline|zip|, bzw. \lstinline|zipWith| bewerkstelligen.
 \lstinline|zip| erstellt aus zwei \lstinline|Iteratee|s einen neuen \lstinline|Iteratee|, der die empfangen Elemente an beide \lstinline|Iteratee|s weitergibt.
 Die genaue Signatur von \lstinline|Enumeratee.zip| ist Listing~\ref{lst:signatur_enumeratee_zip} zu entnehmen.
 
@@ -1039,24 +1033,9 @@ val result: Future[(Option[Int], Int)] = e.run(i12)
 // result = Future.successful((Some(1), 3))
 \end{lstlisting}
 
-% subparagraph anwendung_parallele_komposition_von_iteratees (end)
+% paragraph anwendung_parallele_komposition_von_iteratees (end)
 
-\subparagraph{Freie Komposition} % (fold)
-\label{subp:anwendung_freie_komposition_von_iteratees}\mbox{} % force new line
-
-\lstinline|Iteratees| können auch kombiniert werden, ohne sich an die Regeln von sequentieller oder paralleler Komposition zu halten.
-
-% subparagraph anwendung_freie_komposition_von_iteratees (end)
-
-% paragraph anwendung_komposition_von_iteratees (end)
-
-\paragraph{Komposition von Enumerators} % (fold)
-\label{par:anwendung_komposition_von_enumerators}\mbox{} % force new line
-
-Genau wie \lstinline|Iteratee|s kombiniert werden können, so können auch \lstinline|Enumerator|s miteinander kombiniert werden.
-Es existieren wieder drei verschiedene Kompositionsansätze, deren Umsetzung im Folgenden näher beschrieben wird.
-
-\subparagraph{Sequentielle Komposition} % (fold)
+\paragraph{Sequentielle Komposition von Enumerators} % (fold)
 \label{subp:anwendung_sequentielle_komposition_von_enumerators}\mbox{} % force new line
 
 Sequentielle Komposition zweier \lstinline|Enumerator|s heißt, dass erst die Elemente des ersten \lstinline|Enumerator|s generiert werden, bis dieser erschöpft ist und anschließend die Elemente des zweiter \lstinline|Enumerator|s generiert werden.
@@ -1075,9 +1054,9 @@ val result: Future[List[Int]] = e12.run(i)
 // result = Future.successful(List(1, 2, 3))
 \end{lstlisting}
 
-% subparagraph anwendung_sequentielle_komposition_von_enumerators (end)
+% paragraph anwendung_sequentielle_komposition_von_enumerators (end)
 
-\subparagraph{Parallele Komposition} % (fold)
+\paragraph{Parallele Komposition von Enumerators} % (fold)
 \label{subp:anwendung_parallele_komposition_von_enumerators}\mbox{} % force new line
 
 Wenn immer das zuerst verfügbare Element zweier \lstinline|Enumerator|s generiert werden soll, wird dies als parallele Komposition bezeichnet.
@@ -1097,9 +1076,9 @@ def timeoutEnumerator[A](x: A, d: Duration): Enumerator[A] =
   Enumerator.flatten(Promise.timeout(Enumerator(x), d))
 
 val i: Iteratee[Int, List[Int]] = Iteratee.getChunks
-val e1 = timeoutEnumerator(1, 300 milliseconds)
-val e2 = timeoutEnumerator(2, 100 milliseconds)
-val e3 = timeoutEnumerator(3, 200 milliseconds)
+val e1 = timeoutEnumerator(1, 3 seconds)
+val e2 = timeoutEnumerator(2, 1 second)
+val e3 = timeoutEnumerator(3, 2 seconds)
 val e123: Enumerator[Int] = Enumerator.interleave(e1, e2, e3)
 
 val result: Future[List[Int]] = e123.run(i)
@@ -1111,16 +1090,7 @@ Mit dessen \lstinline|timeout|-Methode ist es möglich, ein \lstinline|Future|-O
 \lstinline|Enumerator.flatten| transformiert einen Wert vom Typ \lstinline|Future[Enumerator[A]]| nach \lstinline|Enumerator[A]| analog zur Methode \lstinline|Iteratee.flatten|, die in Kap.~\ref{par:anwendung_auf_iteratees} behandelt wurde.
 Gut zu erkennen ist, dass die Reihenfolge der Elemente im Ergebnis mit der jeweiligen Zeitspanne korreliert und nicht etwa mit der Reihenfolge, in der die \lstinline|Enumerator|s an \lstinline|interleave| übergeben wurden.
 
-% subparagraph anwendung_parallele_komposition_von_enumerators (end)
-
-\subparagraph{Freie Komposition} % (fold)
-\label{subp:anwendung_freie_komposition_von_enumerators}\mbox{} % force new line
-
-Auch \lstinline|Enumerator|s können miteinander kombiniert werden, ohne die dass der resultierende \lstinline|Enumerator| die Eigenschaften von sequentieller oder paralleler Komposition hat.
-
-% subparagraph anwendung_freie_komposition_von_enumerators (end)
-
-% paragraph anwendung_komposition_von_enumerators (end)
+% paragraph anwendung_parallele_komposition_von_enumerators (end)
 
 % subsubsection anwendung_komposition (end)
 
