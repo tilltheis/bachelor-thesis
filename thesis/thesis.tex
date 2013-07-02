@@ -499,12 +499,6 @@ Beispielsweise können die Elemente der Datenquelle immer an beide \lstinline|It
 Es müssen allerdings nicht alle Elemente an alle \lstinline|Iteratee|s übergeben werden.
 Es können auch nur bestimmte Elemente an bestimme \lstinline|Iteratee|s weitergegeben werden. % Enumeratee.zip/zipWith
 
-Weiter ist es möglich mehrere Datenquellen auf eine Datensenke abzubilden.
-Es wird hierbei ein \lstinline|Iteratee| erstellt, der von mehreren Datenquellen liest und daraus ein Ergebnis berechnet.
-Dabei kann nach eigenen Regeln bestimmt werden, wann aus welcher Datenquelle gelesen wird.
-Die Komposition der \lstinline|Iteratee|s findet in diesem Fall allerdings nur innerhalb des resultierenden \lstinline|Iteratee|s statt.
-Die einzelnen \lstinline|Iteratee|s, die zum Lesen der Datenquellen genutzt werden, sind Teil des resultierenden \lstinline|Iteratee|s.
-
 % paragraph komposition_von_iteratees (end)
 
 \paragraph{Komposition von Enumerators} % (fold)
