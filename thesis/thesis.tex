@@ -395,9 +395,12 @@ Ein Beispiel für einen nicht leeren Eingaberest ist, wenn ein \lstinline|Iterat
 Wenn das gesuchte Wort gefunden wurde, wird als Restwert der bisher nicht angesehene Rest der Zeile verwendet.
 
 Ein \lstinline|Iteratee|, der noch kein Endergebnis berechnet hat, ist im Zustand \lstinline|Step.Cont|.
-Das Argument von \lstinline|Step.Cont| ist die Schritt-Funktion \lstinline[breaklines=true]|Input[E] => Iteratee[E, A]|\todo{Continuation? Weil nicht genau nach Definition}.
+Das Argument von \lstinline|Step.Cont| ist die Schritt-Funktion \lstinline[breaklines=true]|Input[E] => Iteratee[E, A]|.
 Die Eingabe der Schritt-Funktion ist ein \lstinline|Input| mit einem neuen zu verarbeitenden Element.
 Die Ausgabe der Schritt-Funktion ist ein neuer \lstinline|Iteratee|, der den neuen Berechnungsstand nach dem Verarbeiten des Eingabeelements hält.
+Diese Funktion wird als Continuation bezeichnet.
+Eine Delimited Continuation repräsentiert den Rest einer Berechnung bis zu einem bestimmten Punkt \cite[vgl.][S.~1]{continuations}.
+In diesem Fall berechnet die Continuation immer die Verarbeitung genau eines weiteren Elements.
 
 Falls bei der Verarbeitung eines Elements ein Fehler auftritt, wird dies durch den Zustand \lstinline|Step.Error| signalisiert.
 Ein solcher Fehler wird durch eine Fehlermeldung und durch das verursachende Eingabeelement dargestellt.
