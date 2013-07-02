@@ -91,4 +91,16 @@ class CompositionSpec extends Specification with NoTimeConversions {
       await(result, 4.seconds) === List(2, 3, 1)
     }
   }
+
+  "parallel composition with many to one for enumerators" should {
+    "work" in {
+      import Composition.Enumerators.ParallelManyToOne._
+
+      val i = Iteratee.getChunks[Int]
+      val e = enumeratorFromOutput(e1, e2, e3, e1)
+      val result = e.run(i)
+
+      await(result, 4.seconds) === List(1, 1, 2, 2, 3, 3, 2, 2)
+    }
+  }
 }

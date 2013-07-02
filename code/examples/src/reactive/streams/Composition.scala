@@ -130,5 +130,24 @@ object Composition {
       // result = Future.successful(List(2, 3, 1))
 
     }
+
+    object ParallelManyToOne {
+      val e1 = Enumerator(1, 1, 2)
+      val e2 = Enumerator(2, 3, 2)
+      val e3 = Enumerator(3, 2, 3)
+
+      def enumeratorFromOutput(e1: Enumerator[Int], e2: Enumerator[Int], e3: Enumerator[Int], initialE: Enumerator[Int]): Enumerator[Int] = {
+        initialE.flatMap {
+          case 1 => enumeratorFromOutput(e1, e2, e3, e1)
+          case 2 => enumeratorFromOutput(e1, e2, e3, e2)
+          case 3 => enumeratorFromOutput(e1, e2, e3, e3)
+        }
+      }
+
+      val i = Iteratee.getChunks[Int]
+      val e = enumeratorFromOutput(e1, e2, e3, e1)
+      val result = e.run(i)
+    }
+
   }
 }
