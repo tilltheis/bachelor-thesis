@@ -531,14 +531,14 @@ Es wird werden häufig mehrere Möglichkeiten für die Verwendung der einzelnen 
 
 Plays \lstinline|Iteratee|s bilden einen Container um ihren \lstinline|Step|-Zustand.
 Dadurch werden, wie bei objektorientierten Sprachen üblich\todo{Zitat}, Daten und Operationen gebündelt.
-Die elementare Methode dieser Klasse ist \lstinline|fold|.
+Die elementare Methode dieses Traits ist \lstinline|fold|.
 Die Signatur dazu ist in Listing~\ref{lst:fold_signatur} zu lesen.
 \begin{lstlisting}[caption=Die Signatur von fold, label=lst:fold_signatur]
 def fold[B](folder: Step[E, A] => Future[B]): Future[B]
 \end{lstlisting}
 
 Mit Hilfe von \lstinline|fold| lässt sich der Zustand des \lstinline|Iteratee|s transformieren.
-Deshalb sind sehr viele Methoden in der \lstinline|Iteratee|-Klasse auf Basis von \lstinline|fold| definiert.
+Deshalb sind sehr viele Methoden des \lstinline|Iteratee|-Traits auf Basis von \lstinline|fold| definiert.
 Durch Übergabe eines \lstinline|Step|-Werts an die \lstinline|folder|-Funktion bestimmt die konkrete \lstinline|Iteratee|-Implementierung, wie mit übergebenen Elementen umzugehen ist und ob überhaupt weitere Elemente akzeptiert werden.
 Nur durch die im \lstinline|Step|-Wert befindliche Eingabeverarbeitung kann ein \lstinline|Iteratee| neue Elemente empfangen.
 Dadurch wird nach und nach der zu berechnende Wert aufgebaut.
@@ -548,7 +548,7 @@ Dadurch wird nach und nach der zu berechnende Wert aufgebaut.
 
 Es gibt drei Möglichkeiten, einen neuen \lstinline|Iteratee| zu erstellen.
 \begin{enumerate}
-  \item Durch Erstellung einer neuen Klasse, die von \lstinline|Iteratee| erbt und \lstinline|fold| implementiert.
+  \item Durch Erstellung einer neuen Klasse, die das \lstinline|Iteratee|-Trait implementiert.
   \item Durch Benutzung einer Konstruktormethode analog zu den \lstinline|Step|-Zuständen (\lstinline|Done|, \lstinline|Cont| und \lstinline|Error|).
   \item Durch Benutzung einer Konstruktormethode des Companion-Objekts (\lstinline|fold|, \lstinline|foreach|, u.~a.).
 \end{enumerate}
@@ -692,7 +692,7 @@ Es wird erklärt, auf welche Arten \lstinline|Enumerator|s erstellt werden könn
 
 Es gibt drei unterschiedliche Techniken, einen \lstinline|Enumerator| zu erstellen.
 \begin{enumerate}
-  \item Durch Erstellung einer neuen Klasse, die von \lstinline|Enumerator| erbt und \lstinline|apply| implementiert.
+  \item Durch Erstellung einer neuen Klasse, die das \lstinline|Enumerator|-Trait implementiert.
   \item Durch Benutzung einer Konstruktormethode im Companion-Objekt im Companion-Objekt (\lstinline|apply|, \lstinline|generateM|, u.~a.).
   \item Durch Benutzung einer Konstruktormethode im \lstinline|Concurrent|-Objekt (\lstinline|broadcast|, \lstinline|unicast|, u.~a.).
 \end{enumerate}
