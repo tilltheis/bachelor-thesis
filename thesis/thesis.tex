@@ -824,7 +824,7 @@ Weil ein \lstinline|Iteratee| innerhalb der \lstinline|Future|-Monade aus diesem
 
 
 Nachdem ein \lstinline|Enumerator| alle Elemente an einen \lstinline|Iteratee| übergeben hat, sendet er allerdings kein \lstinline|Input.EOF|-Element.
-Dadurch ist es möglich, mehrere \lstinline|Enumerator|s auf einen \lstinline|Iteratee| anzuwenden, worauf in Kap.~\ref{par:anwendung_komposition_von_enumerators} näher eingegangen wird.
+Dadurch ist es möglich, mehrere \lstinline|Enumerator|s auf einen \lstinline|Iteratee| anzuwenden, worauf in Kap.~\ref{subp:anwendung_sequentielle_komposition_von_enumerators} näher eingegangen wird.
 Um ein \lstinline|Input.EOF|-Element an ein \lstinline|Iteratee| zu senden und anschließend das berechnete Ergebnis zu erhalten, wird die \lstinline|run|-Methode aus dem \lstinline|Iteratee|-Trait aufgerufen.
 Eine Weiterführung des zuvor begonnenen \lstinline|Enumerator|-Beispiels ist in Listing~\ref{lst:enumeratoranwendung2} zu finden.
 In diesem Beispiel werden die beiden oben beschriebenen Techniken angewendet, um die berechnete Summe aus dem \lstinline|Iteratee| zu extrahieren.
