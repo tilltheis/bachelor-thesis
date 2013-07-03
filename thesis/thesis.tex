@@ -345,7 +345,7 @@ Der Konstruktor \lstinline|El| besitzt ein Feld, \lstinline|Empty| und \lstinlin
 
 Für den Fall, dass die Datenquelle nicht erschöpft ist, existiert im Companion-Objekt die Unterklasse \lstinline|Input.El| mit dazugehöriger Konstruktormethode.
 Diese Implementierung hält genau ein Element aus der Datenquelle.
-\lstinline|Input.Empty| "`signifies a stream with no immediately available data but which is still continuing"' \cite[vgl.][]{iteratee_io}\todo{Ist Übernehmen von Kiselyovs Definition für Plays Implementierung erlaubt?}.
+Über die Entsprechung zu \lstinline|Input.Empty| in Kiselyovs Implementierung schreibt er "`[it] signifies a stream with no immediately available data but which is still continuing"' \cite[vgl.][]{iteratee_io}.
 Außerdem findet es im Kontext von \lstinline|Iteratee|s Verwendung, um zu signalisieren, dass kein Teil Eingabe übriggebliebenen ist.
 Um zu signalisieren, dass die Datenquelle erschöpft ist, existiert das Objekt \lstinline|Input.EOF|.
 
