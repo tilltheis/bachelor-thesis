@@ -316,7 +316,7 @@ Diese Komponenten und ihr jeweiliger Verwendungszweck wird in diesem Kapitel vor
 \label{ssub:design_inputs}
 
 Die von der Datenquelle generierten Elemente werden in \lstinline|Input|s verpackt.
-Der Datentyp \lstinline|Input| ist definiert, wie in Listing~\ref{lst:der_input_datentyp} gezeigt.
+Der Datentyp \lstinline|Input| ist definiert, wie in Listing~\ref{lst:der_input_datentyp} gezeigt \cite[vgl.][Zeile.~224]{play_iteratee_source_code}.
 
 \begin{lstlisting}[caption=Der Input-Datentyp, label=lst:der_input_datentyp]
 sealed trait Input[+E]
@@ -368,7 +368,7 @@ Ein Wert vom Typ \lstinline|Input| hat also drei mögliche Zustände:
 
 Die von der Datenquelle in \lstinline|Input|s verpackten Elemente werden von \lstinline|Iteratee|s konsumiert, um daraus ein Ergebnis aufzubauen.
 \lstinline|Iteratee|s kapseln ihren Zustand \lstinline|Step|, der den Verarbeitungszustand widerspiegelt.
-Der Typ des \lstinline|Step|-Zustands ist wie in Listing~\ref{lst:der_step_datentyp} gezeigt.
+Der Typ des \lstinline|Step|-Zustands ist wie in Listing~\ref{lst:der_step_datentyp} gezeigt \cite[vgl.][Zeile~256]{play_iteratee_source_code}.
 \begin{lstlisting}[caption=Der Step-Datentyp, label=lst:der_step_datentyp]
 sealed trait Step[E, +A]
 object Step {
@@ -425,7 +425,7 @@ Auch kann ein erfolgreich berechneter Wert innerhalb der Monade transformiert we
 \label{ssub:design_enumerators}
 
 Ein \lstinline|Enumerator| ist die Datenquelle, die ihre Daten, in \lstinline|Input|s verpackt, bereitstellt.
-Der Datentyp \lstinline|Enumerator| ist definiert, wie in Listing~\ref{lst:der_enumerator_datentyp} vereinfacht dargestellt.
+Der Datentyp \lstinline|Enumerator| ist definiert, wie in Listing~\ref{lst:der_enumerator_datentyp} vereinfacht dargestellt \cite[vgl.][]{play_enumerator_source_code}.
 \begin{lstlisting}[caption=Der Enumerator-Datentyp, label=lst:der_enumerator_datentyp]
 trait Enumerator[E] {
   def apply[A](i: Iteratee[E, A]): Future[Iteratee[E, A]]
@@ -449,7 +449,7 @@ Dadurch ist es beispielsweise möglich, die Daten aus Dateien oder dem Netzwerk 
 \label{ssub:design_enumeratees}
 
 Ein \lstinline|Enumeratee| ist ein Stream-Transformator, der \lstinline|Iteratee|s eines bestimmten Element-Typs zu \lstinline|Iteratee|s eines anderen Element-Typs konvertiert.
-Der Datentyp \lstinline|Enumeratee| ist definiert, wie in Listing~\ref{lst:der_enumeratee_datentyp} vereinfacht dargestellt.
+Der Datentyp \lstinline|Enumeratee| ist definiert, wie in Listing~\ref{lst:der_enumeratee_datentyp} vereinfacht dargestellt \cite[vgl.][]{play_enumeratee_source_code}.
 \begin{lstlisting}[caption=Der Enumeratee-Datentyp, label=lst:der_enumeratee_datentyp]
 trait Enumeratee[From, To] {
   def apply[A](inner: Iteratee[To, A]):
