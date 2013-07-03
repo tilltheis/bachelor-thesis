@@ -44,61 +44,61 @@ object Composition {
 
     }
 
-    object OneSourceToOneSink {
-      // val dropFirstIter: Iteratee[Int, List[Int]] = for {
-      //   firstOption: Option[Int] <- Iteratee.head
-      //   xs: List[Int] <- Enumeratee.drop(firstOption.get).transform(Iteratee.getChunks)
-      // } yield xs
+  //   object OneSourceToOneSink {
+  //     // val dropFirstIter: Iteratee[Int, List[Int]] = for {
+  //     //   firstOption: Option[Int] <- Iteratee.head
+  //     //   xs: List[Int] <- Enumeratee.drop(firstOption.get).transform(Iteratee.getChunks)
+  //     // } yield xs
 
-      val dropFirstIteratee: Iteratee[Int, List[Int]] =
-        Iteratee.head.flatMap { firstOption =>
-          Enumeratee.drop(firstOption.get).transform(Iteratee.getChunks)
-        }
-    }
+  //     val dropFirstIteratee: Iteratee[Int, List[Int]] =
+  //       Iteratee.head.flatMap { firstOption =>
+  //         Enumeratee.drop(firstOption.get).transform(Iteratee.getChunks)
+  //       }
+  //   }
 
-    object ParallelOneSourceToSeveralSinks {
-      val evenIteratee: Iteratee[Int, List[Int]] = Iteratee.getChunks
-      val oddIteratee: Iteratee[Int, List[Int]] = Iteratee.getChunks
-      val splittingIteratee: Iteratee[Int, (Iteratee[Int, List[Int]], Iteratee[Int, List[Int]])] =
-        Iteratee.fold((evenIteratee, oddIteratee)) { case ((evenI, oddI), n) =>
-          def feed(i: Iteratee[Int, List[Int]]) = Iteratee.flatten(i.feed(Input.El(n)))
-          if (n % 2 == 0) (feed(evenI), oddI) else (evenI, feed(oddI))
-        }
-    }
+  //   object ParallelOneSourceToSeveralSinks {
+  //     val evenIteratee: Iteratee[Int, List[Int]] = Iteratee.getChunks
+  //     val oddIteratee: Iteratee[Int, List[Int]] = Iteratee.getChunks
+  //     val splittingIteratee: Iteratee[Int, (Iteratee[Int, List[Int]], Iteratee[Int, List[Int]])] =
+  //       Iteratee.fold((evenIteratee, oddIteratee)) { case ((evenI, oddI), n) =>
+  //         def feed(i: Iteratee[Int, List[Int]]) = Iteratee.flatten(i.feed(Input.El(n)))
+  //         if (n % 2 == 0) (feed(evenI), oddI) else (evenI, feed(oddI))
+  //       }
+  //   }
 
-    object ParallelManySourcesToOneSink {
-      type Word = String
-      type Line = String
+  //   object ParallelManySourcesToOneSink {
+  //     type Word = String
+  //     type Line = String
 
-      def lineWithNthWord(n: Int): Iteratee[Word, Iteratee[Line, Option[(Line, Word)]]] = {
-        Enumeratee.drop(n).transform(Iteratee.head[Word]).map {
-          case Some(word) =>
-            val t = Enumeratee.dropWhile[Line](!_.startsWith(word))
-            t.transform(Iteratee.head[Line]).map {
-              case Some(line) => Some(line, word)
-              case _ => None
-            }
-          case _ => Done(None)
-        }
-      }
+  //     def lineWithNthWord(n: Int): Iteratee[Word, Iteratee[Line, Option[(Line, Word)]]] = {
+  //       Enumeratee.drop(n).transform(Iteratee.head[Word]).map {
+  //         case Some(word) =>
+  //           val t = Enumeratee.dropWhile[Line](!_.startsWith(word))
+  //           t.transform(Iteratee.head[Line]).map {
+  //             case Some(line) => Some(line, word)
+  //             case _ => None
+  //           }
+  //         case _ => Done(None)
+  //       }
+  //     }
 
-      def rotatingSourceIteratee(timesPerSource: Int):
-          Iteratee[Int, Iteratee[Int, List[Int]]] = {
-        val t = Enumeratee.take[Int](timesPerSource)
-        val i = t.transform(Iteratee.getChunks)
+  //     def rotatingSourceIteratee(timesPerSource: Int):
+  //         Iteratee[Int, Iteratee[Int, List[Int]]] = {
+  //       val t = Enumeratee.take[Int](timesPerSource)
+  //       val i = t.transform(Iteratee.getChunks)
 
-        val groupedT = Enumeratee.grouped[Int] {
-          i.map(l1 => i.map(l2 => l1 ::: l2))
-        }
-        groupedT.transform(Iteratee.fold(Done[Int, List[Int]](Nil)) {
-            (resultI, groupedI) =>
-          for {
-            result <- resultI
-            group <- groupedI
-          } yield result ::: group
-        })
-      }
-    }
+  //       val groupedT = Enumeratee.grouped[Int] {
+  //         i.map(l1 => i.map(l2 => l1 ::: l2))
+  //       }
+  //       groupedT.transform(Iteratee.fold(Done[Int, List[Int]](Nil)) {
+  //           (resultI, groupedI) =>
+  //         for {
+  //           result <- resultI
+  //           group <- groupedI
+  //         } yield result ::: group
+  //       })
+  //     }
+  //   }
   }
 
   object Enumerators {
@@ -131,23 +131,23 @@ object Composition {
 
     }
 
-    object ParallelManyToOne {
-      val e1 = Enumerator(1, 1, 2)
-      val e2 = Enumerator(2, 3, 2)
-      val e3 = Enumerator(3, 2, 3)
+    // object ParallelManyToOne {
+    //   val e1 = Enumerator(1, 1, 2)
+    //   val e2 = Enumerator(2, 3, 2)
+    //   val e3 = Enumerator(3, 2, 3)
 
-      def enumeratorFromOutput(e1: Enumerator[Int], e2: Enumerator[Int], e3: Enumerator[Int], initialE: Enumerator[Int]): Enumerator[Int] = {
-        initialE.flatMap {
-          case 1 => enumeratorFromOutput(e1, e2, e3, e1)
-          case 2 => enumeratorFromOutput(e1, e2, e3, e2)
-          case 3 => enumeratorFromOutput(e1, e2, e3, e3)
-        }
-      }
+    //   def enumeratorFromOutput(e1: Enumerator[Int], e2: Enumerator[Int], e3: Enumerator[Int], initialE: Enumerator[Int]): Enumerator[Int] = {
+    //     initialE.flatMap {
+    //       case 1 => enumeratorFromOutput(e1, e2, e3, e1)
+    //       case 2 => enumeratorFromOutput(e1, e2, e3, e2)
+    //       case 3 => enumeratorFromOutput(e1, e2, e3, e3)
+    //     }
+    //   }
 
-      val i = Iteratee.getChunks[Int]
-      val e = enumeratorFromOutput(e1, e2, e3, e1)
-      val result = e.run(i)
-    }
+    //   val i = Iteratee.getChunks[Int]
+    //   val e = enumeratorFromOutput(e1, e2, e3, e1)
+    //   val result = e.run(i)
+    // }
 
   }
 }

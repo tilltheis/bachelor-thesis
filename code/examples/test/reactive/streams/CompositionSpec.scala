@@ -28,54 +28,54 @@ class CompositionSpec extends Specification with NoTimeConversions {
     }
   }
 
-  "parallel composition with one source to several sinks for iteratees" should {
-    "pass filtered elements to each iteratee" in {
-      val i = Composition.Iteratees.ParallelOneSourceToSeveralSinks.splittingIteratee
-      val (evenI, oddI) = await(Enumerator(1,2,3,7,6,5,7,3).run(i))
-      val result = (await(evenI.run), await(oddI.run))
-      result === (List(2, 6), List(1, 3, 7, 5, 7, 3))
-    }
-  }
+  // "parallel composition with one source to several sinks for iteratees" should {
+  //   "pass filtered elements to each iteratee" in {
+  //     val i = Composition.Iteratees.ParallelOneSourceToSeveralSinks.splittingIteratee
+  //     val (evenI, oddI) = await(Enumerator(1,2,3,7,6,5,7,3).run(i))
+  //     val result = (await(evenI.run), await(oddI.run))
+  //     result === (List(2, 6), List(1, 3, 7, 5, 7, 3))
+  //   }
+  // }
 
-  "parallel composition with several sources to one sink for iteratees" should {
-    import Composition.Iteratees.ParallelManySourcesToOneSink._
+  // "parallel composition with several sources to one sink for iteratees" should {
+  //   import Composition.Iteratees.ParallelManySourcesToOneSink._
 
-    "work for lineWithNthWord()" in {
-      val wordLineI = lineWithNthWord(2)
-      val wordE = Enumerator("foo", "bar", "baz")
-      val lineE = Enumerator(
-        "some boring line",
-        "foo line baz",
-        "baz matching line",
-        "some other line"
-        )
+  //   "work for lineWithNthWord()" in {
+  //     val wordLineI = lineWithNthWord(2)
+  //     val wordE = Enumerator("foo", "bar", "baz")
+  //     val lineE = Enumerator(
+  //       "some boring line",
+  //       "foo line baz",
+  //       "baz matching line",
+  //       "some other line"
+  //       )
 
-      val lineI = Iteratee.flatten(wordE.run(wordLineI))
-      val result = lineE.run(lineI)
+  //     val lineI = Iteratee.flatten(wordE.run(wordLineI))
+  //     val result = lineE.run(lineI)
 
-      await(result) === Some(("baz matching line", "baz"))
-    }
+  //     await(result) === Some(("baz matching line", "baz"))
+  //   }
 
-    "work for rotatingSourceIteratee()" in {
-      val e1 = Enumerator(1, 1, 1, 1, 1, 1)
-      val e2 = Enumerator(2, 2, 2, 2, 2, 2)
+  //   "work for rotatingSourceIteratee()" in {
+  //     val e1 = Enumerator(1, 1, 1, 1, 1, 1)
+  //     val e2 = Enumerator(2, 2, 2, 2, 2, 2)
 
-      val i1 = rotatingSourceIteratee(2)
-      val i2 = Iteratee.flatten(e1.run(i1))
-      val r = e2.run(i2)
+  //     val i1 = rotatingSourceIteratee(2)
+  //     val i2 = Iteratee.flatten(e1.run(i1))
+  //     val r = e2.run(i2)
 
-      await(r) === List(1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2)
-    }
-  }
+  //     await(r) === List(1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2)
+  //   }
+  // }
 
-  "iteratee usage" should {
-    "work" in {
-      val i = Composition.Iteratees.OneSourceToOneSink.dropFirstIteratee
-      val result = Enumerator(3, 1, 2, 3, 4, 5).run(i)
+  // "iteratee usage" should {
+  //   "work" in {
+  //     val i = Composition.Iteratees.OneSourceToOneSink.dropFirstIteratee
+  //     val result = Enumerator(3, 1, 2, 3, 4, 5).run(i)
 
-      await(result) === List(4, 5)
-    }
-  }
+  //     await(result) === List(4, 5)
+  //   }
+  // }
 
 
   "sequential composition for enumerators" should {
@@ -92,15 +92,15 @@ class CompositionSpec extends Specification with NoTimeConversions {
     }
   }
 
-  "parallel composition with many to one for enumerators" should {
-    "work" in {
-      import Composition.Enumerators.ParallelManyToOne._
+  // "parallel composition with many to one for enumerators" should {
+  //   "work" in {
+  //     import Composition.Enumerators.ParallelManyToOne._
 
-      val i = Iteratee.getChunks[Int]
-      val e = enumeratorFromOutput(e1, e2, e3, e1)
-      val result = e.run(i)
+  //     val i = Iteratee.getChunks[Int]
+  //     val e = enumeratorFromOutput(e1, e2, e3, e1)
+  //     val result = e.run(i)
 
-      await(result, 4.seconds) === List(1, 1, 2, 2, 3, 3, 2, 2)
-    }
-  }
+  //     await(result, 4.seconds) === List(1, 1, 2, 2, 3, 3, 2, 2)
+  //   }
+  // }
 }
