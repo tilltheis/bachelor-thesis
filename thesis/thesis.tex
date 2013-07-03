@@ -983,6 +983,30 @@ Dafür stellt das \lstinline|Enumerator|-Trait die Methode \lstinline|through| b
 \paragraph{Anwendung auf Enumeratees} % (fold)
 \label{par:enumerateeanwendung_auf_enumeratees}\mbox{} % force new line
 
+\lstinline|Enumeratee|s können auch auf andere \lstinline|Enumeratee|s angewendet werden, wodurch sich eine Kette von Transformationen abbilden lässt.
+Mit Hilfe der Methode \lstinline|compose| oder dem Operator \lstinline|><>| lassen sich zwei \lstinline|Enumeratee|s verketten.
+Die Signatur von \lstinline|compose| ist Listing~\ref{lst:die_signatur_von_compose} zu entnehmen.
+\begin{lstlisting}[caption=Die Signatur von compose, label=lst:die_signatur_von_compose]
+def compose[To2](other: Enumeratee[To, To2]): Enumeratee[From,To2]
+\end{lstlisting}
+
+In Listing~\ref{lst:enumerateeanwendung_auf_enumeratees} ist ein Beispiel zu sehen, in dem zwei \lstinline|Enumeratees| verkettet werden.
+Der erste \lstinline|Enumeratee| filtert die gerade Zahlen heraus und der zweite \lstinline|Enumeratee| macht Strings daraus.
+Anschließend werden beide kombiniert und auf einen \lstinline|Enumerator| angewendet.
+Im Ergebnis ist gut zu erkennen, dass nur die einzige gerade Zahl des \lstinline|Enumerator|s transformiert an den \lstinline|Iteratee| weitergegeben wird.
+
+\begin{lstlisting}[caption=Enumerateeanwendung auf Enumeratees, label=lst:enumerateeanwendung_auf_enumeratees]
+val t1: Enumeratee[Int, Int] = Enumeratee.filter(_ % 2 == 0)
+val t2: Enumeratee[Int, String] = Enumeratee.map(_.toString)
+val t12: Enumeratee[Int, String] = t1.compose(t2)
+
+val e: Enumerator[Int] = Enumerator(1, 2, 3)
+val i: Iteratee[String, List[String]] = Iteratee.getChunks
+
+val result: Future[List[String]] = e.through(t12).run(i)
+// result = Future.successful(List("2"))
+\end{lstlisting}
+
 % paragraph enumerateeanwendung_auf_enumeratees (end)
 
 % subsubsection enumeratees (end)

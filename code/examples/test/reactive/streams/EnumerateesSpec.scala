@@ -60,4 +60,10 @@ class EnumerateesSpec extends Specification with NoTimeConversions {
       await(result) === List("1", "2", "3")
     }
   }
+
+  "applying an enumeratee to an enumeratee" should {
+    "chain the enumeratees together" in {
+      await(Enumeratees.ApplicationOnEnumeratees.result) === List("2")
+    }
+  }
 }

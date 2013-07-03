@@ -51,4 +51,16 @@ object Enumeratees {
     val transformedE: Enumerator[String] = e.through(t)
   }
 
+  object ApplicationOnEnumeratees {
+    val t1: Enumeratee[Int, Int] = Enumeratee.filter(_ % 2 == 0)
+    val t2: Enumeratee[Int, String] = Enumeratee.map(_.toString)
+    val t12: Enumeratee[Int, String] = t1.compose(t2)
+
+    val e: Enumerator[Int] = Enumerator(1, 2, 3)
+    val i: Iteratee[String, List[String]] = Iteratee.getChunks
+
+    val result: Future[List[String]] = e.through(t12).run(i)
+    // result = Future.successful(List("2"))
+  }
+
 }
