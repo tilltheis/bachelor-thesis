@@ -998,7 +998,8 @@ def compose[To2](other: Enumeratee[To, To2]): Enumeratee[From,To2]
 \end{lstlisting}
 
 In Listing~\ref{lst:enumerateeanwendung_auf_enumeratees} ist ein Beispiel zu sehen, in dem zwei \lstinline|Enumeratees| verkettet werden.
-Der erste \lstinline|Enumeratee| filtert die gerade Zahlen heraus und der zweite \lstinline|Enumeratee| macht Strings daraus.
+Der erste \lstinline|Enumeratee| reduziert den Stream mit Hilfe von \lstinline|Enumeratee.filter| auf gerade Zahlen.
+Der zweite \lstinline|Enumeratee| transformiert die übriggebliebenen Elemente zu Strings.
 Anschließend werden beide kombiniert und auf einen \lstinline|Enumerator| angewendet.
 Im Ergebnis ist gut zu erkennen, dass nur die einzige gerade Zahl des \lstinline|Enumerator|s transformiert an den \lstinline|Iteratee| weitergegeben wird.
 
