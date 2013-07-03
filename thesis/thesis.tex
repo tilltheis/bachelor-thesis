@@ -623,7 +623,7 @@ Der Code ist auf die elementaren Aufgaben reduziert und es ist nun klar zu erken
 % subparagraph erstellung_durch_konstruktormethode (end)
 
 \subparagraph{Erstellung durch Konstruktormethode im Companion-Objekt} % (fold)
-\label{subp:erstellung_durch_hilfsmethode}\mbox{} % force new line
+\label{subp:erstellung_durch_konstruktormethode_im_companion_objekt}\mbox{} % force new line
 
 Die dritte und letzte Möglichkeit nutzt eine problemspezifische Konstruktormethode im Companion-Objekt.
 Das Aufsummieren einer Menge von Zahlen lässt sich sehr einfach mit Hilfe eines Folds implementieren\todo{Erklären, was ein Fold ist}.
@@ -636,7 +636,12 @@ val sumIterateeFromHelper: Iteratee[Int, Int] =
   Iteratee.fold(0)(_ + _)
 \end{lstlisting}
 
-% subparagraph erstellung_durch_hilfsmethode (end)
+Eine weitere hilfreiche Konstruktormethode ist \lstinline|getChunks|.
+Diese Methode gibt einen \lstinline|Iteratee| zurück, der alle empfangenen Elemente in einer Liste sammelt.
+Der Typ dieses \lstinline|Iteratee|s ist entsprechend \lstinline|Iteratee[E, List[E]]|.
+Dieser \lstinline|Iteratee| wird im Folgenden zu Veranschaulichungszwecken an einigen Stellen dieser Arbeit verwendet.
+
+% subparagraph erstellung_durch_konstruktormethode_im_companion_objekt (end)
 
 % paragraph iteratees_erstellen (end)
 
@@ -1096,7 +1101,6 @@ Sequentielle Komposition zweier \lstinline|Enumerator|s heißt, dass erst die El
 Das \lstinline|Enumerator|-Trait stellt hierfür die Methode \lstinline|andThen| mit der Signatur \lstinline[breaklines=true]|Enumerator[E] => Enumerator[E]| bereit.
 Diese Methode erstellt einen neuen \lstinline|Enumerator|, der die Elemente des ursprünglichen \lstinline|Enumerator|s und dann die Elemente des übergebenen \lstinline|Enumerator|s enumeriert.
 Listing~\ref{lst:sequentielle_komposition_von_enumerators} zeigt, wie \lstinline|andThen| verwendet werden kann, um zwei \lstinline|Enumerator|s sequentiell zu komponieren.
-Die im Beispiel verwendete Methode \lstinline|Iteratee.getChunks| gibt lediglich die empfangenen Elemente als Liste zurück.
 
 \begin{lstlisting}[caption=Sequentielle Komposition von Enumerators, label=lst:sequentielle_komposition_von_enumerators]
 val i: Iteratee[Int, List[Int]] = Iteratee.getChunks
