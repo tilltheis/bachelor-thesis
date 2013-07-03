@@ -974,6 +974,10 @@ val result: Future[List[Int]] = e2.run(originalI)
 \paragraph{Anwendung auf Enumerators} % (fold)
 \label{par:enumerateeanwendung_auf_enumerators}\mbox{} % force new line
 
+Neben \lstinline|Iteratee|s können auch \lstinline|Enumerator|s transformiert werden.
+Dafür stellt das \lstinline|Enumerator|-Trait die Methode \lstinline|through| bereit.
+\lstinline|through| nimmt als Argument einen \lstinline|Enumeratee| und gibt als Rückgabewert einen neuen \lstinline|Enumerator| zurück.
+
 % paragraph enumerateeanwendung_auf_enumerators (end)
 
 \paragraph{Anwendung auf Enumeratees} % (fold)

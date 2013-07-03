@@ -51,4 +51,13 @@ class EnumerateesSpec extends Specification with NoTimeConversions {
       await(result) === List(2, 4, 3, 4)
     }
   }
+
+  "applying an enumeratee to an enumerator" should {
+    "transform the enumerator" in {
+      val e = Enumeratees.ApplicationOnEnumerators.transformedE
+      val i = Iteratee.getChunks[String]
+      val result = e.run(i)
+      await(result) === List("1", "2", "3")
+    }
+  }
 }

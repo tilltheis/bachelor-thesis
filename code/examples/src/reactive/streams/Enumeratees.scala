@@ -45,4 +45,10 @@ object Enumeratees {
     // result = Future.successful(List(2, 4, 3, 4))
   }
 
+  object ApplicationOnEnumerators {
+    val t: Enumeratee[Int, String] = Enumeratee.map(_.toString)
+    val e: Enumerator[Int] = Enumerator(1, 2, 3)
+    val transformedE: Enumerator[String] = e.through(t)
+  }
+
 }
