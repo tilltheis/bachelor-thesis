@@ -529,6 +529,7 @@ Eine Möglichkeit ist, dass die Reihenfolge der Elemente dadurch bestimmt wird, 
 Im vorigen Kapitel zum Design der \lstinline|Iteratee|-Streams wurden die Grundkomponenten des Moduls vorgestellt.
 In diesem Kapitel soll ihr Einsatz mit Hilfe von konkreten Code-Beispielen gezeigt werden.
 Es wird werden häufig mehrere Möglichkeiten für die Verwendung der einzelnen Komponenten erläutert, um die unterschiedlichen Abstraktionsschichten zu verdeutlichen.
+Die Codebeispiele stammen, sofern nicht anders vermerkt, vom Autoren.
 
 
 \subsubsection{Iteratees} % (fold)
@@ -676,6 +677,7 @@ def folder(xs: Int*)(step: Step[Int, Int]): Future[Int] = {
 
 val sumResult: Future[Int] =
   sumIterateeFromHelper.fold(folder(1, 4, -2))
+// sumResult = Future.successful(3)
 \end{lstlisting}
 
 Das Übergeben von Daten mittels der \lstinline|fold|-Methode ist, wie in Listing~\ref{lst:iterateeausfuehrung_durch_folder} zu erkennen, recht aufwändig.
