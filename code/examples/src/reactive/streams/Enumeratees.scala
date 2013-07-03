@@ -31,4 +31,18 @@ object Enumeratees {
       Enumeratee.map(_ * 2)
 
   }
+
+  object ApplicationOnIteratees {
+    val t: Enumeratee[Int, Int] = Enumeratee.map(_ * 2)
+    val i: Iteratee[Int, List[Int]] = Iteratee.getChunks
+    val e1: Enumerator[Int] = Enumerator(1, 2)
+    val e2: Enumerator[Int] = Enumerator(3, 4)
+
+    val transformedI: Iteratee[Int, Iteratee[Int, List[Int]]] = t(i)
+    val originalI: Iteratee[Int, List[Int]] =
+      Iteratee.flatten(e1.run(transformedI))
+    val result: Future[List[Int]] = e2.run(originalI)
+    // result = Future.successful(List(2, 4, 3, 4))
+  }
+
 }

@@ -856,7 +856,8 @@ val futureResult2: Future[Int] = enumerator.run(iteratee)
 Sie sind, wie in Kap.~\ref{ssub:design_enumeratees} erklärt, Funktionen von \lstinline|Iteratee| nach \lstinline|Iteratee|.
 Das Ergebnis des resultierenden \lstinline|Iteratee|s ist wiederum ein \lstinline|Iteratee|.
 Und zwar ist es der ursprünglichen \lstinline|Iteratee| nach Empfang der Elemente.
-In diesem Kapitel wird beschrieben, wie eigene \lstinline|Enumeratee|s erstellt und wie sie auf \lstinline|Iteratee|s angewendet werden können.
+Plays \lstinline|Enumeratee|s ermöglichen es allerdings auch \lstinline|Enumerator|s und andere \lstinline|Enumeratee|s zu transformieren.
+In diesem Kapitel wird beschrieben, wie eigene \lstinline|Enumeratee|s erstellt und wie sie auf \lstinline|Iteratee|s, \lstinline|Enumerator|s und \lstinline|Enumeratee|s angewendet werden können.
 
 \paragraph{Erstellung von Enumeratees} % (fold)
 \label{par:erstellung_von_enumeratees}\mbox{} % force new line
@@ -946,11 +947,39 @@ val enumerateeFromCompanion: Enumeratee[Int, Int] =
 % paragraph erstellung_von_enumeratees (end)
 
 \paragraph{Anwendung auf Iteratees} % (fold)
-\label{par:enumerateeanwendung_auf_iteratees}
+\label{par:enumerateeanwendung_auf_iteratees}\mbox{} % force new line
 
-TODO
+Für die Anwendung auf \lstinline|Iteratee|s eignet sich die \lstinline|apply|-, bzw. die \lstinline|applyOn|-Methode, die im Kap.~\nameref{subp:enumerateeerstellung_durch_vererbung} implementiert wurde.
+Der Rückgabewert dieser Methode ist ein verschachtelter \lstinline|Iteratee|, nämlich der äußere und der innere \lstinline|Iteratee|.
+Dies ermöglicht es, nach Beendigung des äußeren \lstinline|Iteratee|s wieder den ursprünglichen \lstinline|Iteratee| nach Empfang der transformierten Elemente zu erhalten.
+Für den Fall, dass der ursprüngliche \lstinline|Iteratee| nicht wiederverwendet werden soll, gibt es die Methode \lstinline|transform|.
+\lstinline|transform| gibt nach Anwendung nur den tranfsormierten \lstinline|Iteratee| zurück.
+Listing~\ref{lst:enumerateeanwendung_auf_iteratees} zeigt, wie ein \lstinline|Enumeratee| auf einen \lstinline|Iteratee| angewendet werden und anschließend wieder mit dem ursprünglichen \lstinline|Iteratee| weitergearbeitet werden kann.
+
+\begin{lstlisting}[caption=Enumerateeanwendung auf Iteratees, label=lst:enumerateeanwendung_auf_iteratees]
+val t: Enumeratee[Int, Int] = Enumeratee.map(_ * 2)
+val i: Iteratee[Int, List[Int]] = Iteratee.getChunks
+val e1: Enumerator[Int] = Enumerator(1, 2)
+val e2: Enumerator[Int] = Enumerator(3, 4)
+
+val transformedI: Iteratee[Int, Iteratee[Int, List[Int]]] = t(i)
+val originalI: Iteratee[Int, List[Int]] =
+  Iteratee.flatten(e1.run(transformedI))
+val result: Future[List[Int]] = e2.run(originalI)
+// result = Future.successful(List(2, 4, 3, 4))
+\end{lstlisting}
 
 % paragraph enumerateeanwendung_auf_iteratees (end)
+
+\paragraph{Anwendung auf Enumerators} % (fold)
+\label{par:enumerateeanwendung_auf_enumerators}\mbox{} % force new line
+
+% paragraph enumerateeanwendung_auf_enumerators (end)
+
+\paragraph{Anwendung auf Enumeratees} % (fold)
+\label{par:enumerateeanwendung_auf_enumeratees}\mbox{} % force new line
+
+% paragraph enumerateeanwendung_auf_enumeratees (end)
 
 % subsubsection enumeratees (end)
 

@@ -43,4 +43,12 @@ class EnumerateesSpec extends Specification with NoTimeConversions {
       }
     }
   }
+
+
+  "applying an enumeratee to an iteratee" should {
+    "get back the original iteratee afterwards" in {
+      val result = Enumeratees.ApplicationOnIteratees.result
+      await(result) === List(2, 4, 3, 4)
+    }
+  }
 }
