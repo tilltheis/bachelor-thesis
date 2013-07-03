@@ -571,7 +571,7 @@ Der Code dazu ist in Listing~\ref{lst:iteratee_durch_vererbung} zu sehen.
 \begin{lstlisting}[caption=Erstellung eines Iteratees durch Vererbung, label=lst:iteratee_durch_vererbung]
 case class SumIteratee(sum: Int = 0) extends Iteratee[Int, Int] {
   def fold[B](folder: Step[Int, Int] => Future[B]): Future[B] = {
-    folder(Step.Cont(_ match {
+    folder(Step.Cont {
       case Input.El(i) => SumIteratee(sum + i)
       case Input.Empty => this
       case Input.EOF   => new Iteratee[Int, Int] {
@@ -579,7 +579,7 @@ case class SumIteratee(sum: Int = 0) extends Iteratee[Int, Int] {
           folder(Step.Done(sum, Input.EOF))
         }
       }
-    }))
+    })
   }
 }
 
@@ -606,11 +606,11 @@ Jede diese Methoden nimmt auch die gleichen Argumente, wie ihr Pendant.
 Der Code, der einen \lstinline|Iteratee| mit Hilfe dieser Methoden erstellt, ist in Listing~\ref{lst:iteratee_durch_konstruktormethode} zu sehen.
 
 \begin{lstlisting}[caption=Erstellung eines Iteratees durch eine Konstruktormethode, label=lst:iteratee_durch_konstruktormethode]
-def sumIteratee(sum: Int = 0): Iteratee[Int, Int] = Cont(_ match {
+def sumIteratee(sum: Int = 0): Iteratee[Int, Int] = Cont {
   case Input.El(i) => sumIteratee(sum + i)
   case Input.Empty => sumIteratee(sum)
   case Input.EOF   => Done(sum, Input.EOF)
-})
+}
 
 val sumIterateeFromConstructor: Iteratee[Int, Int] = sumIteratee()
 \end{lstlisting}
@@ -659,10 +659,10 @@ def folder(xs: Int*)(step: Step[Int, Int]): Future[Int] = {
   def folder_(xs: List[Int])(step: Step[Int, Int]): Future[Int] =
     xs match {
       case Nil => step match {
-        case Step.Cont(k) => k(Input.EOF).fold(_ match {
+        case Step.Cont(k) => k(Input.EOF).fold {
           case Step.Done(sum, Input.EOF) => Future(sum)
           case _ => Future.failed(new Exception("invalid state"))
-        })
+        }
         case _ => Future.failed(new Exception("invalid state"))
       }
       case x :: xs => step match {
