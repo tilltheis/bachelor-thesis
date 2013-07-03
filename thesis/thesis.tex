@@ -316,7 +316,7 @@ Diese Komponenten und ihr jeweiliger Verwendungszweck wird in diesem Kapitel vor
 \label{ssub:design_inputs}
 
 Die von der Datenquelle generierten Elemente werden in \lstinline|Input|s verpackt.
-Der Datentyp \lstinline|Input| ist definiert, wie in Listing~\ref{lst:der_input_datentyp} gezeigt \cite[vgl.][Zeile.~224]{play_iteratee_source_code}.
+Der Datentyp \lstinline|Input| ist definiert, wie in Listing~\ref{lst:der_input_datentyp} gezeigt \cite[vgl.][Z.~224]{play_iteratee_source_code}.
 
 \begin{lstlisting}[caption=Der Input-Datentyp, label=lst:der_input_datentyp]
 sealed trait Input[+E]
@@ -368,7 +368,7 @@ Ein Wert vom Typ \lstinline|Input| hat also drei mögliche Zustände:
 
 Die von der Datenquelle in \lstinline|Input|s verpackten Elemente werden von \lstinline|Iteratee|s konsumiert, um daraus ein Ergebnis aufzubauen.
 \lstinline|Iteratee|s kapseln ihren Zustand \lstinline|Step|, der den Verarbeitungszustand widerspiegelt.
-Der Typ des \lstinline|Step|-Zustands ist wie in Listing~\ref{lst:der_step_datentyp} gezeigt \cite[vgl.][Zeile~256]{play_iteratee_source_code}.
+Der Typ des \lstinline|Step|-Zustands ist wie in Listing~\ref{lst:der_step_datentyp} gezeigt \cite[vgl.][Z.~256]{play_iteratee_source_code}.
 \begin{lstlisting}[caption=Der Step-Datentyp, label=lst:der_step_datentyp]
 sealed trait Step[E, +A]
 object Step {
@@ -741,7 +741,7 @@ Alles was ein \lstinline|Enumerator| zu tun hat, ist seine Daten an den übergeb
 Dieses Vorgehen ist in diesem Beispiel als Fold über den \lstinline|Iteratee| implementiert.
 Es wird immer ein Element an den \lstinline|Iteratee| übergeben und der resultierende \lstinline|Iteratee| als neues Zwischenergebnis verwendet.
 Falls der \lstinline|Iteratee| keine weiteren Elemente akzeptiert, obwohl noch Elemente übrig sind, wird dieser als Endergebnis verwendet.
-Das hier vorgestellte Verfahren ist in leicht abgewandelter Form der Implementierung von \lstinline|Enumerator.apply| entnommen \cite[vgl.][Zeile~663 und Zeile~690]{play_enumerator_source_code}.
+Das hier vorgestellte Verfahren ist in leicht abgewandelter Form der Implementierung von \lstinline|Enumerator.apply| entnommen \cite[vgl.][Z.~663 und Z.~690]{play_enumerator_source_code}.
 
 % subparagraph enumeratorerstellung_durch_vererbung (end)
 
@@ -911,7 +911,7 @@ val enumerateeFromInheritance: Enumeratee[Int, Int] =
 \end{lstlisting}
 
 Die Implementierung dieses \lstinline|Enumeratee|s ist der von \lstinline|Enumeratee.map| nachempfunden.
-Sie ist allerdings weniger abstrakt, als in der Referenzimplementierung \cite[vgl.][Zeile~268, 174, 81]{play_enumeratee_source_code}.
+Sie ist allerdings weniger abstrakt, als in der Referenzimplementierung \cite[vgl.][Z.~268, Z.~174 und Z.~81]{play_enumeratee_source_code}.
 Der \lstinline|Enumeratee| prüft, ob der innere \lstinline|Iteratee| weitere Elemente annehmen kann.
 Kann er keine weiteren Elemente annehmen, wird er als Ergebnis zurückgegeben.
 Kann er Elemente annehmen, werden diese transformiert und anschließend weitergegeben.
