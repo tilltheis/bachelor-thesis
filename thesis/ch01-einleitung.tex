@@ -1,0 +1,69 @@
+\chapter{Einleitung} % (fold)
+\label{cha:einleitung}
+
+In Diesem Kapitel wird erläutert, was das Real-Time-Web ausmacht und weshalb sich das Play-Framework besonders eignet, Anwendungen dafür zu schreiben.
+Es wird ein Überblick über die bisherige Entwicklung des Webs gegeben und klargestellt, womit sich diese Arbeit genau beschäftigt und womit nicht.
+Anschließend wird aufgelistet, wie die weitere Struktur dieser Arbeit aussieht.
+
+
+\section{Entwicklung des Webs} % (fold)
+\label{sec:entwicklung_des_webs}
+
+Nach \citealt{tavalsaari2011}~(S.~1--3) war das World Wide Web der 1990er Jahre ein Medium, bei dem einzelne Dokumente im Vordergrund standen.
+Das klassische Web der ersten Hälfte des Jahrzehnts bestand aus Dokumenten mit Text, Bildern und Links.
+Die zweite Hälfte machte das hybrid Web aus.
+Browsertechnologien, wie Javascript und CSS, sowie Plugins wie Flash und QuickTime wurden entwickelt und erweiterten die statischen Dokumente um interaktive Elemente.
+
+In den 2000ern verbreitete sich das dynamische Senden und Anfordern von Daten unter dem Namen Ajax (Asynchronous JavaScript and XML).
+Gegen Ende des Jahrzehnts wurden die vorhandenen Technologien genutzt, um ganze Anwendungen damit zu schreiben, wie z.~B. Facebook oder Twitter.
+
+% section entwicklung_des_webs (end)
+
+
+\section{Real-Time-Web} % (fold)
+\label{sec:real-time-web}
+
+Eine Real-Time-Web-Anwendung ist eine Web-Anwendung, die automatisch neue Daten an den Client sendet, sobald diese dem Server bekannt werden.
+Dies unterscheidet sich vom klassischen Pull-Prinzip, in dem nur der Client per Anfrage eine neue Seite beim Server anfordern kann.
+Bei Real-Time-Events ist es stattdessen notwendig, dass der Server mittels Push-Prinzip neue Informationen an den Client sendet \cite[vgl.][S.~1]{bozdag2007}.
+Facebook beispielsweise zeigt neue Statusmeldungen von Freunden an, ohne dass manuell die Seite neu geladen werden muss.
+
+% section real-time-web (end)
+
+
+\section{Motivation} % (fold)
+\label{sec:motivation}
+
+Wenn man die in Kap.~\ref{sec:entwicklung_des_webs} beschriebene Entwicklung des Webs betrachtet, knüpft das Real-Time-Web genau daran an.
+Der Nachrichtenverkehr verläuft nicht mehr nur vom Client zum Server, sondern auch in umgekehrter Richtung vom Server zum Client.
+Das Play-Framework besitzt Werkzeuge, mit dieser Art der Kommunikation umzugehen~\cite[vgl.][S.~5]{drobi2012}.
+
+% section motivation (end)
+
+
+\section{Themenabgrenzung} % (fold)
+\label{sec:themenabgrenzung}
+
+Diese Arbeit beschäftigt sich in erster Linie mit der Architektur und den Grundlagen des Play-Frameworks und den Teilen, die zur Entwicklung von Real-Time-Web-Anwendungen benötigt werden.
+Einige Themenbereiche, die dafür nicht elementar sind, wie z.~B. Datenbanken, werden nicht behandelt.
+Des Weiteren wird vorausgesetzt, dass der Leser bereits mit den Grundtechnologien der Web-Entwicklung, wie HTML, CSS und Javascript vertraut ist.
+
+% section themenabgrenzung (end)
+
+
+\section{Ziel} % (fold)
+\label{sec:ziel}
+
+Das Ziel dieser Arbeit ist es, das Play-Framework in Scala zu analysieren und dessen Grundlagen zu erklären, um schließlich seine Werkzeuge zur Entwicklung von Real-Time-Web-Anwendungen zu erforschen.
+Auf Basis dieser Erkenntnisse wird anschließend eine Beispielanwendung analysiert und eine eigene Anwendung geschrieben, die das Real-Time-Prinzip ausnutzt.
+
+% section ziel (end)
+
+
+\section{Struktur} % (fold)
+\label{sec:struktur}
+
+% section struktur (end)
+
+
+% chapter einleitung (end)
