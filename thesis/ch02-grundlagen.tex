@@ -19,28 +19,23 @@ Bevor auf die eigentliche Arbeit mit dem Play-Framework eingegangen wird, müsse
 \subsection{Entwicklungsumgebung} % (fold)
 \label{sub:entwicklungsumgebung}
 
-Es kann entweder mit einem einfachen Text-Editor entwickelt werden, oder auch mit einer IDE (integrated development environment).
+Zum Anlegen von Play-Projekten und Steuern des Web-Servers wird eine Kommandozeile, wie die Eingabeaufforderung unter Windows oder dem Terminal und Mac OS~X benötigt.
+Zum Programmieren kann entweder ein einfacher Text-Editor, oder auch eine IDE (integrated development environment) verwendet werden.
 Für die einzelnen Programme können teilweise Plugins heruntergeladen werden, die beispielsweise code completion oder syntax highlighting für Play-spezifische Funktionalitäten bereitstellen.
 
-Für \textbf{Eclipse} Indigo und Juno kann die Scala IDE heruntergeladen werden.
+Für \textbf{Eclipse} kann die Scala IDE von \citealt{scala_ide} heruntergeladen werden.
 Diese IDE ist für die Entwicklung von Scala-Anwendungen mit Eclipse notwendig.
-Des weiteren existiert für die Scala IDE ein Plugin für das Play-Framework, das nach Installation der Scala IDE über die gleiche Quelle, wie auch die Scala IDE installiert werden kann (siehe Abb.~\ref{fig:scala-ide-plugin-installation}).
+Für die Scala IDE existiert außerdem ein Plugin für das Play-Framework.
+Eine genaue Installationsanleitung dafür ist unter \citealt{scala_ide_play_plugin} zu finden.
+Um ein Play-Projekt in Eclipse zu bearbeiten, muss dafür nach dem Anlegen des Projekts auf der Kommandozeile ein Eclipse-Projekt exportiert werden.
+Dazu muss in der Play-Konsole des Projekts der Befehl \lstinline|eclipse| ausgeführt werden.
+Dieser Befehl muss jedes Mal ausgeführt werden, wenn die Konfigurationsdateien geändert werden.
+Anschließend kann der Ordner des Play-Projekts als Eclipse-Projekt importiert und geöffnet werden.
 
-% \includegraphics[width=\linewidth]{scala-ide-plugin-installation.png}
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{scala-ide-plugin-installation.png}
-\caption{Installation des Play-Plugins für die Scala IDE}
-\label{fig:scala-ide-plugin-installation}
-\end{figure}
-
-
-Beispiel Sublime Text 2.
-
-Als IDE wird hier IntelliJ IDEA 12 Community Edition verwendet.
-Nach dem Anlegen des Play-Projekts auf der Kommandozeile muss ein mal der Befehl \lstinline|play idea| ausgeführt werden.
-Wenn man sich bereits in der Play-Eingabemaske befindet, muss man nur \lstinline|idea| ausführen.
-Eine umfangreiche Liste für weitere IDEs ist bei \citealt{ide}~\footnote{\url{http://www.playframework.com/documentation/2.1.1/IDE}} zu finden.
+Beim Exportieren eines \textbf{IntelliJ IDEA}-Projekts verhält es sich ähnlich, wie im Falle von Eclipse.
+Der einzige Unterschied ist, dass der Befehel \lstinline|idea| verwendet werden muss, um ein IntelliJ IDEA-Projekt zu erstellen.
+Für Text-Editoren, wie z.B. \textbf{VIM}, \textbf{Emacs} oder \textbf{Sublime Text} ist prinzipiell kein Plugin nötig, es kann aber eines installiert werden, sofern eines vorhanden ist.
+Weitere Informationen zu diesen und \textbf{anderen Entwicklungsumgebungen} sind in der offiziellen Dokumentation zu finden \cite[vgl.][]{ide}.
 
 % subsection entwicklungsumgebung (end)
 
