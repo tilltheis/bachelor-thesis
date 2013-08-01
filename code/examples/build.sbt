@@ -1,4 +1,4 @@
-scalaVersion := "2.10.1"
+scalaVersion := "2.10.2"
 
 scalacOptions ++= Seq("-deprecation", "-feature")
 
@@ -9,7 +9,7 @@ scalaSource in Test := file("test")
 fork in Test := true
 
 libraryDependencies ++= Seq(
-  "play" % "play_2.10" % "2.1.1",
+  "play" % "play_2.10" % "2.1.2",
   "org.specs2" %% "specs2" % "1.14" % "test"
 )
 
