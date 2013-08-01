@@ -3,7 +3,7 @@
 \chapter{Grundlagen} % (fold)
 \label{cha:grundlagen}
 
-Grundlagen mit den bisherigen Quellen \citealt{hilton2013}.
+Grundlagen mit den bisherigen Quellen \citealt{play_for_scala_v8}.
 
 In diesem Kapitel werden die grundlegenden Techniken zur Webseiten-Entwicklung mit dem Play-Framework vorgestellt werden.
 Dabei wird dafür benötigtes Hintergrundwissen bereitgestellt und erklärt, welche Werkzeuge benötigt werden.
@@ -45,11 +45,27 @@ Weitere Informationen zu diesen und \textbf{anderen Entwicklungsumgebungen} sind
 \subsection{Software-Version} % (fold)
 \label{sub:software_version}
 
+Zum Zeitpunkt dieser Arbeit ist die aktuellste stabile Version des Play-Frameworks die Version 2.1.2.
+Diese Version wird in allen Beispielen und der eigenen entwickelten Anwendung verwendet.
+Für den Einsatz des Frameworks wird das JDK (Java development kit) in Version 6 oder 7 benötigt.
+Der Autor arbeitet mit dem JDK~7 unter Mac OS~X.
+
 % subsection software_version (end)
 
 
 \subsection{Installation} % (fold)
 \label{sub:installation}
+
+Zum Installieren von Play kann eine vorkompilierte Version der Software von der offiziellen Website unter \cite{play_download} heruntergeladen werden.
+Nach dem Entpacken der heruntergeladenen Datei kann das Programm namens \lstinline|play|, das sich im entpackten Ordner befindet, auf der Kommandozeile verwendet werden.
+Um für die Verwendung des Programms nicht immer den absoluten Pfad angeben zu müssen, kann der Pfad zum entpackten Ordner in die Systemumgebungsvariable PATH eingetragen werden.
+
+Unter \textbf{Mac OS~X} muss dazu auf der Kommandozeile folgender Befehl ausgeführt werden: \lstinline|export PATH=$PATH:<Pfad zum entpackten Ordner>|.
+Ein konkretes Beispiel könnte so aussehen: \lstinline|export PATH=$PATH:~/Downloads/play-2.1.2|.
+Damit sich der Ordner auch nach dem Schließen des Terminals noch in der PATH-Variable befindet, sollte der obige Befehl zusätzlich in die \lstinline|~/.profile|-Datei eingetragen werden.
+Falls diese Datei nicht existiert, muss sie vorher angelegt werden.
+
+Unter \textbf{Windows} muss dazu in der Eingabeaufforderung folgender Befehl ausgeführt werden: \lstinline|setx PATH "%PATH%;c:\path\to\play" /m|, wobei \lstinline|c:\path\to\play| durch den tatsächlichen Pfad zu ersetzen ist \cite[vgl.][S.~9]{play_for_scala_v8}.
 
 % subsection installation (end)
 
