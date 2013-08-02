@@ -62,8 +62,8 @@ Kovarianz bedeutet, dass wenn \lstinline|F| ein spezialisierter Typ von \lstinli
 Dadurch wären beispielsweise sowohl \lstinline|Input[Cat]|, also auch \lstinline|Input[Dog]| Spezialisierungen von \lstinline|Input[Animal]|.
 Wäre \lstinline|Input| nicht kovariant über den Typ der der gehaltenen Elemente, wären \lstinline|Input[Cat]|, \lstinline|Input[Dog]| und \lstinline|Input[Animal]| völlig unterschiedliche Typen.
 
-Des Weiteren ist anzumerken, dass \lstinline|Input| ein algebraischer Datentyp ist.
-Ein algebraischer Datentyp ist ein Datentyp mit mehreren, alternativen Konstruktoren, die jeweils eigene Felder besitzen.
+Des Weiteren ist anzumerken, dass \lstinline|Input| ein \gls{adt} ist.
+Ein \gls{adt} ist ein Datentyp mit mehreren, alternativen Konstruktoren, die jeweils eigene Felder besitzen.
 Mittels Pattern Matching kann von einem Wert eines solchen Datentyps auf den verwendeten Konstruktor geschlossen werden \cite[vgl.][S.~14--15]{algebraic_data_type}.
 
 In Scala werden algebraische Datentypen mit Hilfe von einem Marker-Trait und \lstinline|case|-Klassen und -Objekten implementiert.
