@@ -74,15 +74,14 @@ Unter \textbf{Windows} muss dazu in der Eingabeaufforderung folgender Befehl aus
 \section{Architektur} % (fold)
 \label{sec:architektur}
 
-Eine Play-Anwendung hat auf oberster Ebene eine \gls{mvc}-Architektur.
-"`[\gls{mvc}] programming is the application of this three-way factoring, whereby objects of different classes take over the operations related to the application domain (the model), the display of the application's state (the view), and the user interaction with the model and the view (the controller)."' \cite[vgl.][]{mvc}.
-Bei einer Anwendung, die Statistiken für ihre Nutzer zugänglich macht, könnten Model, View und Controller wie folgt aussehen: Ein Model hält die Statistikdaten in einer internen Darstellung.
-Eine View ist dafür zuständig, die Daten des Statistiken-Models als HTML-Seite anzuzeigen.
-Ein Controller sorgt dafür, dass bei einem Aufruf der Webseite die korrekte View für das Model angezeigt und die HTML-Seite an den Nutzer ausgeliefert wird.
+Auf der untersten Ebene existiert ein Web-Server, der mit dem Framework ausgeliefert wird.
+Die Anfragen, die der Web-Server empfängt werden an Play weitergeleitet und schließlich von der Anwendung verarbeitet.
+Nach der Verarbeitung wird eine Antwort generiert und schließlich als HTTP-Antwort versendet.
+Der Anwendungscode einer Play-Applikation ist nach der \gls{mvc}-Architektur aufgebaut \cite[vgl.][S.~51-53]{play_for_scala_v8}.
 
-Im sog. Router ist definiert, was beim Aufruf einer bestimmten URL geschehen soll.
-Er wählt einen Controller aus und sorgt dafür, dass die korrekte Methode aufgerufen wird, die dann für das oben beschriebene Verhalten zuständig ist.
-Auf Router, Models, Views und Controller wird im Folgenden noch näher eingegangen.
+"`[\gls{mvc} programming is a] three-way factoring, whereby objects of different classes take over the operations related to the application domain (the model), the display of the application's state (the view), and the user interaction with the model and the view (the controller)."' \cite[vgl.][S.~1]{mvc}.
+Views bilden Models i.~d.~R. auf HTML-Seiten ab.
+Controller sind dazu da, HTTP-Anfragen zu verarbeiten, die jeweilige Antwort durch eine View übersetzen zu lassen und als HTTP-Antwort zurückzusenden.
 
 % section architektur (end)
 
