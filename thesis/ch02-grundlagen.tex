@@ -68,9 +68,6 @@ Unter \textbf{Windows} muss dazu in der Eingabeaufforderung folgender Befehl aus
 % subsection installation (end)
 
 
-% section vorbereitung (end)
-
-
 \section{Architektur} % (fold)
 \label{sec:architektur}
 
@@ -84,6 +81,21 @@ Views bilden Models i.~d.~R. auf HTML-Seiten ab.
 Controller sind dazu da, HTTP-Anfragen zu verarbeiten, die jeweilige Antwort durch eine View übersetzen zu lassen und als HTTP-Antwort zurückzusenden.
 
 % section architektur (end)
+
+
+% section vorbereitung (end)
+
+
+\section{Erstellen einer Anwendung} % (fold)
+\label{sec:erstellen_einer_anwendung}
+
+Um eine neue Anwendung mit Play zu erstellen, muss auf der Kommandozeile in den Ordner navigiert werden, in dem das Projekt erstellt werden soll.
+Anschließend kann mit \lstinline[language=sh]|play new <project name>| ein neues Projekt angelegt werden.
+Im startenden Assistenten wählt man die Hauptprogrammiersprache aus (Java oder Scala), in diesem Fall Scala.
+Daraufhin wird im aktuellen Verzeichnis ein neuer Ordner mit dem vorher angegebenen Namen \lstinline|<project name>| angelegt \cite[vgl.][S.~10]{play_for_scala_v8}.
+Die darin vorzufindende Verzeichnisstruktur wird im nächsten Abschnitt beschrieben.
+
+% section erstellen_einer_anwendung (end)
 
 
 \section{Verzeichnisstruktur} % (fold)
@@ -103,6 +115,30 @@ Diese Ordner sind folgende \cite[vgl.][]{play_verzeichnisstruktur}:
 \end{description}
 
 % section verzeichnisstruktur (end)
+
+
+\section{Starten einer Anwendung} % (fold)
+\label{sec:starten_einer_anwendung}
+
+Um die neu erstellte Anwendung zu starten, muss sie erst kompiliert werden.
+Das geschieht ebenfalls mit Hilfe des \lstinline|play|-Befehls.
+Mit dem Aufruf von \lstinline|play| gelangt man in die Play-Konsole.
+Von dort aus kann mit \lstinline|compile| der Source-Code kompiliert und anschließend mit \lstinline|run| ausgeführt werden.
+Der Aufruf von \lstinline|compile| ist allerdings optional.
+Falls noch nicht kompilierte Änderungen existieren, werden diese beim Aufruf von \lstinline|run| automatisch kompiliert, sobald die Website aufgerufen wird.
+
+Jede neue Play-Anwendung ist eine lauffähige Website.
+Diese kann nach dem Starten unter der URL \url{http://localhost:9000/} abgerufen werden (siehe Abb.~\ref{fig:anwendung_nach_erstellung}).
+Um die Anwendung bei Dateiänderungen automatisch neu kompilieren zu lassen, ohne sie erst im Browser aufrufen zu müssen, kann in der Play-Konsole statt \lstinline|run| \lstinline|~run| ausgeführt werden.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{hello_world.png}
+\caption{Eine neu erstellte Play-Anwendung}
+\label{fig:anwendung_nach_erstellung}
+\end{figure}
+
+% section starten_einer_anwendung (end)
 
 
 % chapter grundlagen (end)
