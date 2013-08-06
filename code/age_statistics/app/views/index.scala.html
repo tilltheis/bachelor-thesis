@@ -1,0 +1,82 @@
+@(ageStatistics: AgeStatistics)
+
+@main("Age Statistics") {
+
+  <div class="container">
+
+    <h1>Age Statistics</h1>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <div>
+          <svg id="ageChart"></svg>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <form method="post">
+          <fieldset>
+            <legend>Your Age</legend>
+            <div class="form-group">
+              <label for="ageInput">How Old Are You?</label>
+              <input type="text" class="form-control" id="ageInput" name="age" placeholder="Enter Age">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </fieldset>
+        </form>
+
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      var chart;
+      var data;
+
+      function setup() {
+        fitToContainer(document.getElementById("ageChart"));
+
+        data = [ @Html(ageStatistics.map { case (k, v) => s"{ label: $k, value: $v }" }.mkString(",")) ];
+
+        function dataFunction() {
+          return [{
+            key: "Age Statistics",
+            values: data
+          }];
+        }
+
+        nv.addGraph(function() {
+          chart = nv.models.discreteBarChart()
+              .x(function(d) { return d.label })
+              .y(function(d) { return d.value })
+              .staggerLabels(true)
+              .tooltips(false)
+              .showValues(true);
+
+          d3.select('#ageChart')
+              .datum(dataFunction)
+            .transition().duration(500)
+              .call(chart);
+
+          nv.utils.windowResize(chart.update);
+
+          return chart;
+        });
+      }
+
+      setup();
+
+
+      // from http://stackoverflow.com/questions/10214873/make-canvas-as-wide-and-as-high-as-parent
+      function fitToContainer(canvas){
+        // Make it visually fill the positioned parent
+        canvas.style.width ='100%';
+        canvas.style.height='100%';
+        // ...then set the internal size to match
+        canvas.width  = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+      }
+
+    </script>
+
+  </div>
+
+}
