@@ -125,11 +125,11 @@ Das geschieht ebenfalls mit Hilfe des \lstinline|play|-Befehls.
 Mit dem Aufruf von \lstinline|play| gelangt man in die Play-Konsole.
 Von dort aus kann mit \lstinline|compile| der Source-Code kompiliert und anschließend mit \lstinline|run| ausgeführt werden.
 Der Aufruf von \lstinline|compile| ist allerdings optional.
-Falls noch nicht kompilierte Änderungen existieren, werden diese beim Aufruf von \lstinline|run| automatisch kompiliert, sobald die Website aufgerufen wird.
+Falls noch nicht kompilierte Änderungen existieren, werden diese beim Aufruf von \lstinline|run| automatisch kompiliert, sobald die Website aufgerufen wird \cite[vgl.][]{play_compile}.
 
 Jede neue Play-Anwendung ist eine lauffähige Website.
 Diese kann nach dem Starten unter der URL \url{http://localhost:9000/} abgerufen werden (siehe Abb.~\ref{fig:anwendung_nach_erstellung}).
-Um die Anwendung bei Dateiänderungen automatisch neu kompilieren zu lassen, ohne sie erst im Browser aufrufen zu müssen, kann in der Play-Konsole statt \lstinline|run| \lstinline|~run| ausgeführt werden.
+Um die Anwendung bei Dateiänderungen automatisch neu kompilieren zu lassen, ohne sie erst im Browser aufrufen zu müssen, kann in der Play-Konsole statt \lstinline|run| \lstinline|~run| ausgeführt werden \cite[vgl.][S.~12--13]{play_for_scala_v8}.
 
 \begin{figure}[h]
 \centering
@@ -139,6 +139,58 @@ Um die Anwendung bei Dateiänderungen automatisch neu kompilieren zu lassen, ohn
 \end{figure}
 
 % section starten_einer_anwendung (end)
+
+
+\section{Beispielanwendung: Sammeln von Altersstatistiken} % (fold)
+\label{sec:beispielanwendung}
+
+Um die Techniken zur Entwicklung von statischen Web-Anwendungen zu demonstrieren, soll im Folgenden eine kleine Anwendung entwickelt werden.
+Diese Anwendung fragt ihre Benutzer, wie alt sie sind und bildet die gesammelten Information als Diagramm ab.
+Anhand dieser Anwendung soll die Entwicklung mit Models, Views und Controllern erklärt werden.
+
+
+\subsection{Routing} % (fold)
+\label{sub:routing}
+
+Wenn die Website von jemandem aufgerufen wird, soll eine bestimmte Controller-Aktion ausgeführt werden.
+Damit Play weiß, welche Controller-Aktion für die aufgerufene URL ausgeführt werden soll, muss dies im \gls{router} definiert werden.
+Der Router befindet sich unter \lstinline|conf/routes| und besitzt nach der Erstellung einer Anwendung bereits zwei Einträge (vgl. Listing~\ref{lst:der_router}).
+An dieser Stelle ist allerdings nur der erste Eintrag interessant.
+
+\begin{lstlisting}[caption=Der Router, label=lst:der_router]
+  GET    /    controllers.Application.index
+\end{lstlisting}
+
+Dieser Eintrag bedeutet, dass HTTP-Anfragen der Methode \lstinline|GET| der URL \lstinline|/| auf die Controller-Aktion \lstinline|index| abgebildet werden.
+Neben \lstinline|GET| gibt es noch \lstinline|POST|, \lstinline|PUT|, \lstinline|DELETE| und \lstinline|HEAD|.
+Die am Häufigsten verwendeten HTTP-Methoden sind \lstinline|GET|, \lstinline|POST|, \lstinline|PUT| und \lstinline|DELETE|, um Daten abzufragen, zu bearbeiten, zu erstellen und zu löschen \cite[vgl.][S.~6]{play_for_scala_v8}.
+Der Pfad \lstinline|/| steht für die URL \url{http://localhost:9000/}.
+Es sind auch längere Pfade, wie z.~B. \lstinline|/animals/cat| möglich, davon wird in diesem Beispiel allerdings nicht Gebrauch gemacht.
+Der Controller-Aktion \lstinline|controllers.Application.index|, auf die der Routing-Eintrag zeigt, ist bereits implementiert, weshalb diese im nächsten Abschnitt näher erläutert wird.
+
+% subsection routing (end)
+
+
+\subsubsection{Controller} % (fold)
+\label{ssub:controller}
+
+Nachdem im Router definiert wurde, welche URLs auf welche Controller-Aktionen abgebildet werden, sollen nun die dazugehörigen Controller-Aktionen erklärt werden.
+Die zuvor genannte Aktion \lstinline[breaklines=true]|controllers.Application.index| befindet sich in der Datei \lstinline[breaklines=true]|app/controllers/Application.scala| und ist, wie in Listing~\ref{lst:application_controller_mit_index_aktion} zu sehen, definiert.
+
+\begin{lstlisting}[caption=Der Application-Controller mit index-Aktion, label=lst:application_controller_mit_index_aktion]
+object Application extends Controller {
+  def index = Action {
+    Ok(views.html.index("Your new application is ready."))
+  }
+}
+\end{lstlisting}
+
+Controller erben von \lstinline|Controller| und Aktionen, die beim Aufruf einer URL ausgeführt werden sollen, müssen den Rückgabetyp \lstinline|Action| haben. \todo{controller+actions aus play-doku/buch erklaeren}
+
+% subsubsection controller (end)
+
+
+% section beispielanwendung (end)
 
 
 % chapter grundlagen (end)
