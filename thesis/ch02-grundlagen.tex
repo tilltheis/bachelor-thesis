@@ -161,12 +161,12 @@ An dieser Stelle ist allerdings nur der erste Eintrag interessant.
   GET    /    controllers.Application.index
 \end{lstlisting}
 
-Dieser Eintrag bedeutet, dass HTTP-Anfragen der Methode \lstinline|GET| der URL \lstinline|/| auf die Controller-Aktion \lstinline|index| abgebildet werden.
+Dieser Eintrag bedeutet, dass HTTP-Anfragen der Methode \lstinline|GET| der URL \lstinline|/| auf die Controller-Aktion \lstinline|index| des Controllers \lstinline[breaklines=true]|controllers.Application| abgebildet werden.
 Neben \lstinline|GET| gibt es noch \lstinline|POST|, \lstinline|PUT|, \lstinline|DELETE| und \lstinline|HEAD|.
 Die am Häufigsten verwendeten HTTP-Methoden sind \lstinline|GET|, \lstinline|POST|, \lstinline|PUT| und \lstinline|DELETE|, um Daten abzufragen, zu bearbeiten, zu erstellen und zu löschen \cite[vgl.][S.~6]{play_for_scala_v8}.
 Der Pfad \lstinline|/| steht für die URL \url{http://localhost:9000/}.
 Es sind auch längere Pfade, wie z.~B. \lstinline|/animals/cat| möglich, davon wird in diesem Beispiel allerdings nicht Gebrauch gemacht.
-Der Controller-Aktion \lstinline|controllers.Application.index|, auf die der Routing-Eintrag zeigt, ist bereits implementiert, weshalb diese im nächsten Abschnitt näher erläutert wird.
+Die Controller-Aktion \lstinline|controllers.Application.index|, auf die der Routing-Eintrag zeigt, ist bereits implementiert. Diese wird im nächsten Abschnitt näher erläutert.
 
 % subsection routing (end)
 
@@ -174,7 +174,7 @@ Der Controller-Aktion \lstinline|controllers.Application.index|, auf die der Rou
 \subsubsection{Controller} % (fold)
 \label{ssub:controller}
 
-Nachdem im Router definiert wurde, welche URLs auf welche Controller-Aktionen abgebildet werden, sollen nun die dazugehörigen Controller-Aktionen erklärt werden.
+Nachdem im Router definiert wurde, welche URLs auf welche Controller-Aktionen abgebildet werden sollen, werden nun die dazugehörigen Controller-Aktionen erklärt.
 Die zuvor genannte Aktion \lstinline[breaklines=true]|controllers.Application.index| befindet sich in der Datei \lstinline[breaklines=true]|app/controllers/Application.scala| und ist, wie in Listing~\ref{lst:application_controller_mit_index_aktion} zu sehen, definiert.
 
 \begin{lstlisting}[caption=Der Application-Controller mit index-Aktion, label=lst:application_controller_mit_index_aktion]
@@ -185,7 +185,22 @@ object Application extends Controller {
 }
 \end{lstlisting}
 
-Controller erben von \lstinline|Controller| und Aktionen, die beim Aufruf einer URL ausgeführt werden sollen, müssen den Rückgabetyp \lstinline|Action| haben. \todo{controller+actions aus play-doku/buch erklaeren}
+Controller sind Objekte, die von \lstinline|Controller| erben und Aktionen definieren.
+Aktionen, die beim Aufruf einer URL ausgeführt werden sollen, sind Controller-Objekt-Methoden mit dem Rückgabetyp \lstinline|Action|.
+Eine Aktion, bzw. \lstinline|Action| ist eine Funktion von einer HTTP-Anfrage nach einer HTTP-Antwort.
+In der obigen Form wird die HTTP-Anfrage ignoriert, es können aber auch \lstinline|Action|s mit explizitem oder implizitem Request erstellt werden \cite[vgl.][]{play_controllers}.
+Das könnte aussehen, wie in Listing~\ref{lst:action_mit_implizitem_request} gezeigt.
+
+\begin{lstlisting}[caption=Action mit implizitem Request, label=lst:action_mit_implizitem_request]
+def index = Action { implicit request =>
+  Ok(views.html.index("Your new application is ready."))
+}
+\end{lstlisting}
+
+Um eine HTTP-Antwort zu generieren, stellt das Objekt \lstinline|play.api.mvc.Results|, von dem \lstinline|play.api.mvc.Controller| erbt, mehrere Konstruktoren zur Verfügung.
+Der in Listing~\ref{lst:application_controller_mit_index_aktion} und \ref{lst:action_mit_implizitem_request} verwendete Konstruktor \lstinline|Ok| erstellt eine HTTP-Antwort mit dem Status-Code \lstinline|200 OK|.
+Der Inhalt dieser Antwort ist das Ergebnis der View \lstinline|views.html.index|, worauf in einem der folgenden Abschnitte näher eingegangen wird.
+Neben \lstinline|Ok| gibt es u.~a. noch \lstinline|BadRequest| für fehlerhafte Anfragen (z.~B. unvollständiges Formular) und \lstinline|Redirect|, um eine Seitenweiterleitung auf eine angegebene lokale URL durchzuführen \cite[vgl.][]{play_controllers}.
 
 % subsubsection controller (end)
 
