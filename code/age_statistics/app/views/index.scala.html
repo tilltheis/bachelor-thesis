@@ -8,8 +8,8 @@
 
     <div class="row">
       <div class="col-lg-6">
-        <div>
-          <svg id="ageChart"></svg>
+        <div id="ageChart">
+          <svg></svg>
         </div>
       </div>
       <div class="col-lg-6">
@@ -23,7 +23,6 @@
             <button type="submit" class="btn btn-default">Submit</button>
           </fieldset>
         </form>
-
       </div>
     </div>
 
@@ -32,9 +31,16 @@
       var data;
 
       function setup() {
-        fitToContainer(document.getElementById("ageChart"));
+        var container = $("#ageChart");
+        container.height(container.width());
 
-        data = [ @Html(ageStatistics.map { case (k, v) => s"{ label: $k, value: $v }" }.mkString(",")) ];
+        data = [
+          @Html((0 to 90 by 10).map { i =>
+            val label = s"$i-${i+9}"
+            val value = ageStatistics.filter { case (age, count) => age >= i && age <= i + 9 }.values.sum
+            "{ label: \"" + label + "\", value: " + value + " }"
+          }.mkString(", "))
+        ];
 
         function dataFunction() {
           return [{
@@ -45,13 +51,23 @@
 
         nv.addGraph(function() {
           chart = nv.models.discreteBarChart()
-              .x(function(d) { return d.label })
-              .y(function(d) { return d.value })
-              .staggerLabels(true)
-              .tooltips(false)
-              .showValues(true);
+            .x(function(d) { return d.label })
+            .y(function(d) { return d.value })
+            .staggerLabels(true)
+            .tooltips(false)
+            .showValues(true)
+            .margin({left: 100})
+            .margin({bottom: 100})
+            .valueFormat(d3.format(",.0f"));
 
-          d3.select('#ageChart')
+
+          chart.yAxis.axisLabel("#Votes").tickFormat(d3.format(",.0f"))
+          chart.xAxis.axisLabel("Age (in Years)")
+
+          // long bars will be cut off if domain is not set explicitly
+          chart.yDomain([0, d3.max(data, function (d) { return d.value; })])
+
+          d3.select('#ageChart svg')
               .datum(dataFunction)
             .transition().duration(500)
               .call(chart);
@@ -63,17 +79,6 @@
       }
 
       setup();
-
-
-      // from http://stackoverflow.com/questions/10214873/make-canvas-as-wide-and-as-high-as-parent
-      function fitToContainer(canvas){
-        // Make it visually fill the positioned parent
-        canvas.style.width ='100%';
-        canvas.style.height='100%';
-        // ...then set the internal size to match
-        canvas.width  = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-      }
 
     </script>
 
