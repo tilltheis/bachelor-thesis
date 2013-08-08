@@ -199,8 +199,8 @@ def index = Action { implicit request =>
 
 Um eine HTTP-Antwort zu generieren, stellt das Objekt \lstinline|play.api.mvc.Results|, von dem \lstinline|play.api.mvc.Controller| erbt, mehrere Konstruktoren zur Verfügung.
 Der in Listing~\ref{lst:application_controller_mit_index_aktion} und \ref{lst:action_mit_implizitem_request} verwendete Konstruktor \lstinline|Ok| erstellt eine HTTP-Antwort mit dem Status-Code \lstinline|200 OK|.
-Der Inhalt dieser Antwort ist das Ergebnis der View \lstinline|views.html.index|, worauf in einem der folgenden Abschnitte näher eingegangen wird.
-Neben \lstinline|Ok| gibt es u.~a. noch \lstinline|BadRequest| für fehlerhafte Anfragen (z.~B. unvollständiges Formular) und \lstinline|Redirect|, um eine Seitenweiterleitung auf eine angegebene lokale URL durchzuführen \cite[vgl.][]{play_controllers}.
+Der Inhalt dieser Antwort ist das Ergebnis der View \lstinline|views.html.index|, worauf im folgenden Abschnitt näher eingegangen wird.
+Neben \lstinline|Ok| gibt es u.~a. noch \lstinline|BadRequest| für fehlerhafte Anfragen (z.~B. unvollständiges Formular) und \lstinline|Redirect|, um eine Seitenweiterleitung auf eine angegebene URL durchzuführen \cite[vgl.][]{play_controllers}.
 
 % subsubsection controller (end)
 

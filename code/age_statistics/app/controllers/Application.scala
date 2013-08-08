@@ -5,8 +5,6 @@ import play.api.mvc._
 import play.api.data.Forms._
 import play.api.data._
 
-import scala.collection.immutable.SortedMap
-
 import models.AgeStatistics
 
 object Application extends Controller {
@@ -15,8 +13,7 @@ object Application extends Controller {
   val ageForm = Form("age" -> number)
 
   def index = Action {
-    // Ok(views.html.index(AgeStatistics.exampleStatistics))
-    Ok(views.html.index(SortedMap(ageStatistics.toSeq: _*)))
+    Ok(views.html.index(ageStatistics))
   }
 
   def input = Action { implicit request =>
