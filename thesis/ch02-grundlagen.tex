@@ -219,15 +219,16 @@ Das View-Template befindet sich unter \lstinline|app/views/index.scala.html| und
 }
 \end{lstlisting}
 
-View-Templates bestehen aus Scala- und HTML-Code.
+View-Templates bestehen aus Scala- und HTML-Code und verhalten sich wie Funktionen, die HTML-Code generieren.
 Am Anfang eines Templates steht die Parameterliste, worüber die anzuzeigenden Daten übergeben werden.
 Das \lstinline|@|-Symbol führt einen Scala-Ausdruck an.
-Andere View-Templates und sog. Helper können wie normale Funktionen aufgerufen werden.
-Helper sind in Funktionen ausgelagerter View-Code.
-\lstinline|@play20.welcome(message)| ist ein Aufruf eines solchen Helpers, der die in Abb.~\ref{fig:anwendung_nach_erstellung} abgebildete Seite generiert.
+Andere View-Templates und sog. Helper können wie normale Funktionen aufgerufen werden \cite[vgl.][]{play_templates}.
+Helper sind in Funktionen ausgelagerter View-Code \cite[vgl.][S.~227]{play_for_scala_v8}.
+
+\lstinline|@play20.welcome(message)| ist ein Aufruf eines von Play mitgelieferten Helpers, der die in Abb.~\ref{fig:anwendung_nach_erstellung} abgebildete Seite generiert.
 \lstinline|@main("Welcome to Play 2.1") { /* ... */ }| ist ein Aufruf eines anderen Templates.
 Dieses Template ist unter \lstinline|app/views/main.scala.html| zu finden und generiert das Grundgerüst der Website aus dem Webseiten-Titel (der ersten Parameterliste) und dem eigentlichen Inhalt (der zweiten Parameterliste).
-In diesem Template werden durch  Aufrufe wie \lstinline[breaklines=true]|@routes.Assets.at("javascripts/jquery-1.9.0.min.js")| Dateien aus dem \lstinline|public/|-Ordner adressiert.
+In diesem Template werden durch Aufrufe wie \lstinline[breaklines=true]|@routes.Assets.at("javascripts/jquery-1.9.0.min.js")| Dateien aus dem \lstinline|public/|-Ordner adressiert \cite[vgl.][S.~136]{play_for_scala_v8}.
 
 % subsection view (end)
 
