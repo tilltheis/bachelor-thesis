@@ -1,6 +1,16 @@
-@(ageStatistics: AgeStatistics)
+@(statistics: AgeStatistics)
 
-@main("Age Statistics") {
+<!doctype html>
+<html>
+<head>
+  <title>Age Statistics</title>
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.css")">
+  <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")"></script>
+  <script src="@routes.Assets.at("javascripts/bootstrap.js")"></script>
+  <script src="@routes.Assets.at("javascripts/d3.js")"></script>
+  <script src="@routes.Assets.at("javascripts/nv.d3.js")"></script>
+</head>
+<body>
 
   <div class="container">
 
@@ -37,8 +47,10 @@
         data = [
           @Html((0 to 90 by 10).map { i =>
             val label = s"$i-${i+9}"
-            val value = ageStatistics.filter { case (age, count) => age >= i && age <= i + 9 }.values.sum
-            "{ label: \"" + label + "\", value: " + value + " }"
+            val value = statistics.filter { case (age, _count) =>
+              age >= i && age <= i + 9
+            }.values.sum
+            s"{ label: '$label', value: $value }"
           }.mkString(", "))
         ];
 
@@ -49,6 +61,7 @@
           }];
         }
 
+        // see http://nvd3.org/ghpages/discreteBar.html
         nv.addGraph(function() {
           chart = nv.models.discreteBarChart()
             .x(function(d) { return d.label })
@@ -84,4 +97,5 @@
 
   </div>
 
-}
+</body>
+</html>

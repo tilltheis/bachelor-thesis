@@ -86,13 +86,25 @@ Controller sind dazu da, HTTP-Anfragen zu verarbeiten, die jeweilige Antwort dur
 % section vorbereitung (end)
 
 
+\section{Beispielanwendung: Sammeln von Altersstatistiken} % (fold)
+\todo{eigener Abschn. oder als Teil von "Erstellen..."?}
+\label{sec:beispielanwendung}
+
+Um die Techniken zur Entwicklung von statischen Web-Anwendungen zu demonstrieren, soll im Folgenden eine kleine Anwendung entwickelt werden.
+Diese Anwendung fragt ihre Benutzer, wie alt sie sind und bildet die gesammelten Information als Diagramm ab.
+Anhand dieser Anwendung soll die Entwicklung mit Models, Views und Controllern erklärt werden.
+
+% section beispielanwendung (end)
+
+
 \section{Erstellen einer Anwendung} % (fold)
 \label{sec:erstellen_einer_anwendung}
 
 Um eine neue Anwendung mit Play zu erstellen, muss auf der Kommandozeile in den Ordner navigiert werden, in dem das Projekt erstellt werden soll.
 Anschließend kann mit \lstinline[language=sh]|play new <project name>| ein neues Projekt angelegt werden.
+In diesem Fall ist der Projektname \lstinline|age_statistics|.
 Im startenden Assistenten wählt man die Hauptprogrammiersprache aus (Java oder Scala), in diesem Fall Scala.
-Daraufhin wird im aktuellen Verzeichnis ein neuer Ordner mit dem vorher angegebenen Namen \lstinline|<project name>| angelegt \cite[vgl.][S.~10]{play_for_scala_v8}.
+Daraufhin wird im aktuellen Verzeichnis ein neuer Ordner mit dem vorher angegebenen Namen \lstinline|age_statistics| angelegt \cite[vgl.][S.~10]{play_for_scala_v8}.
 Die darin vorzufindende Verzeichnisstruktur wird im nächsten Abschnitt beschrieben.
 
 % section erstellen_einer_anwendung (end)
@@ -127,7 +139,7 @@ Von dort aus kann mit \lstinline|compile| der Source-Code kompiliert und anschli
 Der Aufruf von \lstinline|compile| ist allerdings optional.
 Falls noch nicht kompilierte Änderungen existieren, werden diese beim Aufruf von \lstinline|run| automatisch kompiliert, sobald die Website aufgerufen wird \cite[vgl.][]{play_compile}.
 
-Jede neue Play-Anwendung ist eine lauffähige Website.
+Jede neue Play-Anwendung ist bereits eine lauffähige Website.
 Diese kann nach dem Starten unter der URL \url{http://localhost:9000/} abgerufen werden (siehe Abb.~\ref{fig:anwendung_nach_erstellung}).
 Um die Anwendung bei Dateiänderungen automatisch neu kompilieren zu lassen, ohne sie erst im Browser aufrufen zu müssen, kann in der Play-Konsole statt \lstinline|run| \lstinline|~run| ausgeführt werden \cite[vgl.][S.~12--13]{play_for_scala_v8}.
 
@@ -141,23 +153,15 @@ Um die Anwendung bei Dateiänderungen automatisch neu kompilieren zu lassen, ohn
 % section starten_einer_anwendung (end)
 
 
-\section{Beispielanwendung: Sammeln von Altersstatistiken} % (fold)
-\label{sec:beispielanwendung}
-
-Um die Techniken zur Entwicklung von statischen Web-Anwendungen zu demonstrieren, soll im Folgenden eine kleine Anwendung entwickelt werden.
-Diese Anwendung fragt ihre Benutzer, wie alt sie sind und bildet die gesammelten Information als Diagramm ab.
-Anhand dieser Anwendung soll die Entwicklung mit Models, Views und Controllern erklärt werden.
-
-
-\subsection{Routing} % (fold)
-\label{sub:routing}
+\section{Routing} % (fold)
+\label{sec:routing}
 
 Wenn die Website von jemandem aufgerufen wird, soll eine bestimmte Controller-Aktion ausgeführt werden.
-Damit Play weiß, welche Controller-Aktion für die aufgerufene URL ausgeführt werden soll, muss dies im \gls{router} definiert werden.
-Der Router befindet sich unter \lstinline|conf/routes| und besitzt nach der Erstellung einer Anwendung bereits zwei Einträge (vgl. Listing~\ref{lst:der_router}).
+Damit Play weiß, welche Controller-Aktion für die aufgerufene URL ausgeführt werden soll, muss dies in der \lstinline|routes|-Datei definiert werden.
+Diese Datei befindet sich unter \lstinline|conf/routes| und besitzt nach der Erstellung einer Anwendung bereits zwei Einträge (vgl. Listing~\ref{lst:die_routes_datei}).
 An dieser Stelle ist allerdings nur der erste Eintrag interessant.
 
-\begin{lstlisting}[caption=Der Router, label=lst:der_router]
+\begin{lstlisting}[caption=Der routes-Datei, label=lst:die_routes_datei]
   GET    /    controllers.Application.index
 \end{lstlisting}
 
@@ -166,21 +170,32 @@ Neben \lstinline|GET| gibt es noch \lstinline|POST|, \lstinline|PUT|, \lstinline
 Die am Häufigsten verwendeten HTTP-Methoden sind \lstinline|GET|, \lstinline|POST|, \lstinline|PUT| und \lstinline|DELETE|, um Daten abzufragen, zu bearbeiten, zu erstellen und zu löschen \cite[vgl.][S.~6]{play_for_scala_v8}.
 Der Pfad \lstinline|/| steht für die URL \url{http://localhost:9000/}.
 Es sind auch längere Pfade, wie z.~B. \lstinline|/animals/cat| möglich, davon wird in diesem Beispiel allerdings nicht Gebrauch gemacht.
-Die Controller-Aktion \lstinline|controllers.Application.index|, auf die der Routing-Eintrag zeigt, ist bereits implementiert. Diese wird im nächsten Abschnitt näher erläutert.
+Die Controller-Aktion \lstinline|controllers.Application.index|, auf die der Routing-Eintrag zeigt, ist bereits implementiert.
+Diese wird im nächsten Abschnitt allerdings durch eine eigene Implementierung ersetzt.
 
-% subsection routing (end)
+% section routing (end)
 
 
-\subsubsection{Controller} % (fold)
-\label{ssub:controller}
+\section{Model} % (fold)
+\label{sec:model}
 
-Nachdem im Router definiert wurde, welche URLs auf welche Controller-Aktionen abgebildet werden sollen, werden nun die dazugehörigen Controller-Aktionen erklärt.
-Die zuvor genannte Aktion \lstinline[breaklines=true]|controllers.Application.index| befindet sich in der Datei \lstinline[breaklines=true]|app/controllers/Application.scala| und ist, wie in Listing~\ref{lst:application_controller_mit_index_aktion} zu sehen, definiert.
+AgeStatistics-Model
+
+% section model (end)
+
+
+\section{Controller} % (fold)
+\label{sec:controller}
+
+Nachdem im Router definiert wurde, welche URLs auf welche Controller-Aktionen abgebildet werden sollen, werden die betroffenen Controller-Aktionen nun mit Logik befüllt.
+Die zuvor genannte Aktion \lstinline[breaklines=true]|controllers.Application.index| befindet sich in der Datei \lstinline[breaklines=true]|app/controllers/Application.scala|.
+Die Standardimplementierung wird wie in Listing~\ref{lst:application_controller_mit_index_aktion} zu sehen, umdefiniert.
 
 \begin{lstlisting}[caption=Der Application-Controller mit index-Aktion, label=lst:application_controller_mit_index_aktion]
 object Application extends Controller {
+  var ageStatistics = AgeStatistics.exampleStatistics
   def index = Action {
-    Ok(views.html.index("Your new application is ready."))
+    Ok(views.html.index(ageStatistics))
   }
 }
 \end{lstlisting}
@@ -190,10 +205,11 @@ Aktionen, die beim Aufruf einer URL ausgeführt werden sollen, sind Controller-O
 Eine Aktion, bzw. \lstinline|Action| ist eine Funktion von einer HTTP-Anfrage nach einer HTTP-Antwort.
 In der obigen Form wird die HTTP-Anfrage ignoriert, es können aber auch \lstinline|Action|s mit explizitem oder implizitem Request erstellt werden \cite[vgl.][]{play_controllers}.
 Das könnte aussehen, wie in Listing~\ref{lst:action_mit_implizitem_request} gezeigt.
+\todo{Verweis auf /input-Impl, wo impliziter Request verwendet wird}
 
 \begin{lstlisting}[caption=Action mit implizitem Request, label=lst:action_mit_implizitem_request]
 def index = Action { implicit request =>
-  Ok(views.html.index("Your new application is ready."))
+  Ok(views.html.index(ageStatistics))
 }
 \end{lstlisting}
 
@@ -202,21 +218,24 @@ Der in Listing~\ref{lst:application_controller_mit_index_aktion} und \ref{lst:ac
 Der Inhalt dieser Antwort ist das Ergebnis der View \lstinline|views.html.index|, worauf im folgenden Abschnitt näher eingegangen wird.
 Neben \lstinline|Ok| gibt es u.~a. noch \lstinline|BadRequest| für fehlerhafte Anfragen (z.~B. unvollständiges Formular) und \lstinline|Redirect|, um eine Seitenweiterleitung auf eine angegebene URL durchzuführen \cite[vgl.][]{play_controllers}.
 
-% subsubsection controller (end)
+% section controller (end)
 
 
-\subsection{View} % (fold)
-\label{sub:view}
+\section{View} % (fold)
+\label{sec:view}
 
-Im vorigen Abschnitt wurde gezeigt, wie mittels \lstinline[breaklines=true]|Ok(views.html.index("Your new application is ready."))| eine View gerendert und als HTTP-Antwort verschickt wurde.
-Das View-Template befindet sich unter \lstinline|app/views/index.scala.html| und hat den in Listing~\ref{lst:das_index_view_template} gezeigten Inhalt.
+Im vorigen Abschnitt wurde gezeigt, wie mittels \lstinline[breaklines=true]|Ok(views.html.index(ageStatistics))| eine View gerendert und als HTTP-Antwort verschickt wurde.
+Das View-Template befindet sich unter \lstinline|app/views/index.scala.html|.
+Bevor die Implementierung dieses Templates gezeigt wird, soll an einem einfacheren Beispiel verdeutlicht werden, wie View-Templates geschrieben werden.
+Listing~\ref{lst:ein_einfaches_view_template} zeigt ein entsprechendes Template.
 
-\begin{lstlisting}[caption=Das index-View-Template, label=lst:das_index_view_template]
-@(message: String)
+\begin{lstlisting}[caption=Ein einfaches View-Template, label=lst:ein_einfaches_view_template]
+@(title: String)
 
-@main("Welcome to Play 2.1") {
-    @play20.welcome(message)
-}
+<!doctype html>
+<meta charset=utf-8>
+<title>@title</title>
+@Html("<p>This is a simple view template.</p>")
 \end{lstlisting}
 
 View-Templates bestehen aus Scala- und HTML-Code und verhalten sich wie Funktionen, die HTML-Code generieren.
@@ -224,16 +243,46 @@ Am Anfang eines Templates steht die Parameterliste, worüber die anzuzeigenden D
 Das \lstinline|@|-Symbol führt einen Scala-Ausdruck an.
 Andere View-Templates und sog. Helper können wie normale Funktionen aufgerufen werden \cite[vgl.][]{play_templates}.
 Helper sind in Funktionen ausgelagerter View-Code \cite[vgl.][S.~227]{play_for_scala_v8}.
+Play kodiert Scala-Strings automatisch so, dass dadurch kein HTML-Code generiert werden kann.
+Um dies zu verhindern, kann der \lstinline|Html|-Helper verwendet werden, wie in der letzten Zeile von Listing~\ref{lst:ein_einfaches_view_template} zu erkennen.
 
-\lstinline|@play20.welcome(message)| ist ein Aufruf eines von Play mitgelieferten Helpers, der die in Abb.~\ref{fig:anwendung_nach_erstellung} abgebildete Seite generiert.
-\lstinline|@main("Welcome to Play 2.1") { /* ... */ }| ist ein Aufruf eines anderen Templates.
-Dieses Template ist unter \lstinline|app/views/main.scala.html| zu finden und generiert das Grundgerüst der Website aus dem Webseiten-Titel (der ersten Parameterliste) und dem eigentlichen Inhalt (der zweiten Parameterliste).
-In diesem Template werden durch Aufrufe wie \lstinline[breaklines=true]|@routes.Assets.at("javascripts/jquery-1.9.0.min.js")| Dateien aus dem \lstinline|public/|-Ordner adressiert \cite[vgl.][S.~136]{play_for_scala_v8}.
+Das eigentliche View-Template unter \lstinline|app/views/index.scala.html| ist etwas umfangreicher.
+Es verwendet eine JavaScript-Bibliothek, um das Diagramm zu zeichnen, das in Abb.~\ref{fig:die_altersstatistiken_view} zu sehen ist.
+Diese Bibliothek befindet sich, wie in Abschnitt~\ref{sec:verzeichnisstruktur} zur \nameref{sec:verzeichnisstruktur} erklärt, im \lstinline|public/|-Ordner.
+Dateien aus diesem Ordner werden durch Aufrufe wie \lstinline$<script src="@routes.Assets.at("javascripts/nv.d3.js")"></script>$ eingebunden \cite[vgl.][S.~136]{play_for_scala_v8}.
 
-% subsection view (end)
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{age_statistics.png}
+\caption{Die Altersstatistiken-View}
+\label{fig:die_altersstatistiken_view}
+\end{figure}
 
+Die verwendete Bibliothek erwartet die Diagrammdaten in einem bestimmten Format.
+Dieses Format ist eine Liste von Diagrammbalken, die durch Objekte mit Attributen für Höhe und Beschriftung definiert werden.
+Ein Altersdiagramm mit nur zwei Säulen, dass die 0-9-jährigen und die 10-19-jährigen Menschen anzeigt, würde durch das in Listing~\ref{lst:das_format_der_altersdiagrammdaten} abgebildete \gls{js}-Array definiert.
 
-% section beispielanwendung (end)
+\begin{lstlisting}[caption=Das Format der Altersdiagrammdaten, label=lst:das_format_der_altersdiagrammdaten]
+[ { label: '0-9', value: 1 }, { label: '10-19', value: 7 } ]
+\end{lstlisting}
+
+Um die Daten des \lstinline|AgeStatistics|-Models in diesem Format auszugeben, müssen diese erst in Zehn-Jahres-Gruppen eingeteilt werden und anschließend in das obige Format gebracht werden.
+Wie in Listing~\ref{lst:ausgabe_der_altersstatistiken_als_diagramm} zu sehen, werden für jede Altersgruppe die entsprechende Beschriftung und die Höhe des Diagrammbalkens berechnet.
+Daraus wird der String für das jeweilige \gls{js}-Objekt erstellt und anschließend werden diese zusammengefügt und mit Hilfe des \lstinline|Html|-Helpers direkt ausgegeben.
+
+\begin{lstlisting}[caption=Ausgabe der Alterstatistiken im Diagramm-Datenformat, label=lst:ausgabe_der_altersstatistiken_als_diagramm]
+[
+  @Html((0 to 90 by 10).map { i =>
+    val label = s"$i-${i+9}"
+    val value = statistics.filter { case (age, _count) =>
+      age >= i && age <= i + 9
+    }.values.sum
+    s"{ label: '$label', value: $value }"
+  }.mkString(", "))
+];
+\end{lstlisting}
+
+% section view (end)
 
 
 % chapter grundlagen (end)
