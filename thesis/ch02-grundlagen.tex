@@ -205,6 +205,33 @@ Neben \lstinline|Ok| gibt es u.~a. noch \lstinline|BadRequest| für fehlerhafte 
 % subsubsection controller (end)
 
 
+\subsection{View} % (fold)
+\label{sub:view}
+
+Im vorigen Abschnitt wurde gezeigt, wie mittels \lstinline[breaklines=true]|Ok(views.html.index("Your new application is ready."))| eine View gerendert und als HTTP-Antwort verschickt wurde.
+Das View-Template befindet sich unter \lstinline|app/views/index.scala.html| und hat den in Listing~\ref{lst:das_index_view_template} gezeigten Inhalt.
+
+\begin{lstlisting}[caption=Das index-View-Template, label=lst:das_index_view_template]
+@(message: String)
+
+@main("Welcome to Play 2.1") {
+    @play20.welcome(message)
+}
+\end{lstlisting}
+
+View-Templates bestehen aus Scala- und HTML-Code.
+Am Anfang eines Templates steht die Parameterliste, worüber die anzuzeigenden Daten übergeben werden.
+Das \lstinline|@|-Symbol führt einen Scala-Ausdruck an.
+Andere View-Templates und sog. Helper können wie normale Funktionen aufgerufen werden.
+Helper sind in Funktionen ausgelagerter View-Code.
+\lstinline|@play20.welcome(message)| ist ein Aufruf eines solchen Helpers, der die in Abb.~\ref{fig:anwendung_nach_erstellung} abgebildete Seite generiert.
+\lstinline|@main("Welcome to Play 2.1") { /* ... */ }| ist ein Aufruf eines anderen Templates.
+Dieses Template ist unter \lstinline|app/views/main.scala.html| zu finden und generiert das Grundgerüst der Website aus dem Webseiten-Titel (der ersten Parameterliste) und dem eigentlichen Inhalt (der zweiten Parameterliste).
+In diesem Template werden durch  Aufrufe wie \lstinline[breaklines=true]|@routes.Assets.at("javascripts/jquery-1.9.0.min.js")| Dateien aus dem \lstinline|public/|-Ordner adressiert.
+
+% subsection view (end)
+
+
 % section beispielanwendung (end)
 
 
