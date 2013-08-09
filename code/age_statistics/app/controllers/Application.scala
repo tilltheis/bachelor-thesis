@@ -8,7 +8,7 @@ import play.api.data._
 import models.AgeStatistics
 
 object Application extends Controller {
-  var ageStatistics = AgeStatistics.exampleStatistics
+  var ageStatistics = AgeStatistics.sample
 
   val ageForm = Form("age" -> number)
 

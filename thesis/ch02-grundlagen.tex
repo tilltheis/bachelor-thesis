@@ -179,7 +179,28 @@ Diese wird im nächsten Abschnitt allerdings durch eine eigene Implementierung e
 \section{Model} % (fold)
 \label{sec:model}
 
-AgeStatistics-Model
+Bevor die Anwendung Daten anzeigen kann, muss eine Datenstruktur für die Altersstatistiken entworfen werden.
+Für diese Statistik sollen nur der Alterszahlen und Personenzahl des jeweiligen Alters gesammelt werden.
+Dafür eignet sich eine \lstinline|Map[Int, Int]|, wobei die Schlüssel das Alter sind und die Werte dazu die Anzahl an Personen, die dieses Alter haben.
+Um den Code verständlicher zu machen, wird ein Typ-Alias mit dem Namen \lstinline|AgeStatistics| eingeführt.
+Dies wird in der Datei \lstinline[language=sh]|app/models/package.scala| durchgeführt und hat den in Listing~\ref{lst:der_agestatistics_typ_alias} gezeigten Inhalt.
+Die Verwendung eines \lstinline|package object|s ist nötig, um den Typ-Alias paket-weit einzurichten \cite[vgl.][]{package_objects}.
+
+\begin{lstlisting}[caption=Der AgeStatistics-Typ-Alias, label=lst:der_agestatistics_typ_alias]
+package object models {
+  type AgeStatistics = Map[Int, Int]
+}
+\end{lstlisting}
+
+Um die Verwendung noch komfortabler zu machen, wird in \lstinline|app/models/AgeStatistics.scala| ein Objekt mit weiteren Konstruktormethoden erstellt, wie in Listing~\ref{lst:das_agestatistics_hilfsobjekt} zu sehen.
+Dadurch, dass \lstinline|AgeStatistics.empty| für undefinierte Schlüssel einen Standardwert von null zurückgibt, können auch unbekannte Alterseinträge abgefragt werden, ohne dass ein Fehler auftritt.
+
+\begin{lstlisting}[caption=Das AgeStatistics-Hilfsobjekt, label=lst:das_agestatistics_hilfsobjekt]
+object AgeStatistics {
+  val empty: AgeStatistics = Map.empty.withDefaultValue(0)
+  val sample: AgeStatistics = empty ++ Map( 6 -> 1 /* , ... */ )
+}
+\end{lstlisting}
 
 % section model (end)
 
@@ -193,7 +214,7 @@ Die Standardimplementierung wird wie in Listing~\ref{lst:application_controller_
 
 \begin{lstlisting}[caption=Der Application-Controller mit index-Aktion, label=lst:application_controller_mit_index_aktion]
 object Application extends Controller {
-  var ageStatistics = AgeStatistics.exampleStatistics
+  val ageStatistics = AgeStatistics.sample
   def index = Action {
     Ok(views.html.index(ageStatistics))
   }
