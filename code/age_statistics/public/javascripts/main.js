@@ -1,4 +1,4 @@
-// requires nv.d3.js
+// requires nv.d3.js and underscore.js
 
 // statistics is a dictionary object { age: count } like { 6: 1, 10: 2 }
 function makeAgeStatisticsChart(chartElementSelector, statistics) {

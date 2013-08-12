@@ -1,6 +1,7 @@
 @(title: String)
-
+@import scala.math.pow
 <!doctype html>
 <meta charset=utf-8>
 <title>@title</title>
+<p>4^3 = @{pow(4, 3)}</p>
 @Html("<p>This is a simple view template.</p>")
