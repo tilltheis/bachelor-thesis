@@ -5,8 +5,8 @@
 
 Grundlagen mit den bisherigen Quellen \citealt{play_for_scala_v8}.
 
-In diesem Kapitel werden die grundlegenden Techniken zur Webseiten-Entwicklung mit dem Play-Framework vorgestellt werden.
-Dabei wird dafür benötigtes Hintergrundwissen bereitgestellt und erklärt, welche Werkzeuge benötigt werden.
+In diesem Kapitel werden die grundlegenden Techniken zur Webseiten-Entwicklung mit dem Play-Framework vorgestellt.
+Dabei wird notwendiges Hintergrundwissen bereitgestellt und erklärt, welche Werkzeuge benötigt werden.
 Schließlich werden durch die Entwicklung einer kleinen Anwendung die einzelnen Komponenten erklärt.
 Es werden hierbei in erster Linie die Komponenten vorgestellt, die für die Entwicklung von Real-Time-Web-Anwendungen unbedingt notwendig sind.
 
@@ -171,7 +171,7 @@ Die am Häufigsten verwendeten HTTP-Methoden sind \lstinline|GET|, \lstinline|PO
 Der Pfad \lstinline|/| steht für die URL \url{http://localhost:9000/}.
 Es sind auch längere Pfade, wie z.~B. \lstinline|/animals/cat| möglich, davon wird in diesem Beispiel allerdings nicht Gebrauch gemacht.
 Die Controller-Aktion \lstinline|controllers.Application.index|, auf die der Routing-Eintrag zeigt, ist bereits implementiert.
-Diese wird im nächsten Abschnitt allerdings durch eine eigene Implementierung ersetzt.
+Diese wird in Abschnitt~\ref{sec:controller} allerdings durch eine eigene Implementierung ersetzt.
 
 % section routing (end)
 
@@ -180,7 +180,7 @@ Diese wird im nächsten Abschnitt allerdings durch eine eigene Implementierung e
 \label{sec:model}
 
 Bevor die Anwendung Daten anzeigen kann, muss eine Datenstruktur für die Altersstatistiken entworfen werden.
-Für diese Statistik sollen nur der Alterszahlen und Personenzahl des jeweiligen Alters gesammelt werden.
+Für diese Statistik sollen nur die Alterszahlen und die Personenzahl des jeweiligen Alters gesammelt werden.
 Dafür eignet sich eine \lstinline|Map[Int, Int]|, wobei die Schlüssel das Alter sind und die Werte dazu die Anzahl an Personen, die dieses Alter haben.
 Um den Code verständlicher zu machen, wird ein Typ-Alias mit dem Namen \lstinline|AgeStatistics| eingeführt.
 Dies wird in der Datei \lstinline[language=sh]|app/models/package.scala| durchgeführt und hat den in Listing~\ref{lst:der_agestatistics_typ_alias} gezeigten Inhalt.
@@ -192,8 +192,8 @@ package object models {
 }
 \end{lstlisting}
 
-Um die Verwendung noch komfortabler zu machen, wird in \lstinline|app/models/AgeStatistics.scala| ein Objekt mit weiteren Konstruktormethoden erstellt, wie in Listing~\ref{lst:das_agestatistics_hilfsobjekt} zu sehen.
-Dadurch, dass \lstinline|AgeStatistics.empty| für undefinierte Schlüssel einen Standardwert von null zurückgibt, können auch unbekannte Alterseinträge abgefragt werden, ohne dass ein Fehler auftritt.
+Um die Verwendung noch komfortabler zu machen, wird in \lstinline|app/models/AgeStatistics.scala| ein Objekt mit Konstruktormethoden erstellt, wie in Listing~\ref{lst:das_agestatistics_hilfsobjekt} zu sehen.
+Dadurch, dass \lstinline|AgeStatistics.empty| für undefinierte Schlüssel einen Standardwert von null~(0) zurückgibt, können auch unbekannte Alterseinträge abgefragt werden, ohne dass ein Fehler auftritt.
 
 \begin{lstlisting}[caption=Das AgeStatistics-Hilfsobjekt, label=lst:das_agestatistics_hilfsobjekt]
 object AgeStatistics {
@@ -214,9 +214,8 @@ Die Standardimplementierung wird wie in Listing~\ref{lst:application_controller_
 
 \begin{lstlisting}[caption=Der Application-Controller mit index-Aktion, label=lst:application_controller_mit_index_aktion]
 object Application extends Controller {
-  val ageStatistics = AgeStatistics.sample
   def index = Action {
-    Ok(views.html.index(ageStatistics))
+    Ok(views.html.index(AgeStatistics.sample))
   }
 }
 \end{lstlisting}
@@ -252,7 +251,9 @@ Listing~\ref{lst:ein_einfaches_view_template} zeigt ein entsprechendes Template.
 
 \begin{lstlisting}[caption=Ein einfaches View-Template, label=lst:ein_einfaches_view_template]
 @(title: String)
+
 @import scala.math.pow
+
 <!doctype html>
 <meta charset=utf-8>
 <title>@title</title>

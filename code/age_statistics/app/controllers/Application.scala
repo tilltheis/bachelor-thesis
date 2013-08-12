@@ -13,7 +13,7 @@ object Application extends Controller {
   val ageForm = Form("age" -> number)
 
   def index = Action {
-    Ok(views.html.index(ageStatistics))
+    Ok(views.html.index(AgeStatistics.sample))
   }
 
   def input = Action { implicit request =>
