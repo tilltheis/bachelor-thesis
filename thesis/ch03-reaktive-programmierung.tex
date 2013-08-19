@@ -891,38 +891,90 @@ Gut zu erkennen ist, dass die Reihenfolge der Elemente im Ergebnis mit der jewei
 \label{sub:regeln}
 
 Kiselyov identifiziert in \citealt{kiselyov2012}~(S.~12--13 u. S.~18--21) mehrere Regeln für Iteratee-Streams, die Beweise über Code ermöglichen, der diese Streams verwendet.
-Diese Regeln sind folgende:
+Im folgenden werden mehrmals folgende Typ-Aliase und eine Funktion verwendet:
 
-\lstinline!k |> l!  ist der Alternativ-Kombinator. Der Iteratee, der als erstes ein Ergebnis liefert, wird zurückgegeben.
+\begin{lstlisting}[caption=Verwendete Typ-Aliase, label=lst:verwendete_typ_aliase]
+type E     = Char           // Der Eingabetyp der Iteratees (Char)
+type I[A]  = Iteratee[E, A] // Ein Iteratee von Char nach A
+type M[A]  = Future[A]      // Die Monade ist immer Future
+type IM[A] = M[I[A]]        // Ein Iteratee in der Future-Monade
+\end{lstlisting}
+
+Außerdem wird die Funktion \lstinline|en_str| mehrfach verwendet.
+Diese Funktion hat die Signatur \lstinline|String => Enumerator[E]| und macht aus einem übergebenen String einen \lstinline|Enumerator| der die einzelnen Zeichen des Strings enumeriert.
+Die in den Code-Ausschnitten gezeigen Variablen \lstinline|left| und \lstinline|right| haben immer die gleiche Bedeutung.
 
 \begin{enumerate}
   \item Komposition
-    \begin{lstlisting}
-enstr (s1 ++ s2) = enstr s2 . enstr s1
-    \end{lstlisting}
 
-    Eingaben konkatenieren ist das gleiche, wie Enumeratoren zu konkatenieren.
+    Die Komposition von \lstinline|Enumerator|s entspricht der Verkettung ihrer Eingaben.
+    \lstinline|s1| und \lstinline|s2| in Listing~\ref{lst:kompositionsregel} sind zwei beliebige \lstinline|String|s.
+
+    \begin{lstlisting}[caption=Kompositionsregel, label=lst:kompositionsregel]
+val left: Enumerator[E] = en_str(s1 + s2)
+val right: Enumerator[E] = en_str(s1).andThen(en_str(s2))
+    \end{lstlisting}
 
   \item Verkettung
-    \begin{lstlisting}
-enstr (s1 ++ s2)(i >>= f) = enstr s1 i >>= enstr s2 . f
+
+    Ein \lstinline|Iteratee| \lstinline|i|, der einen \lstinline|String| \lstinline|s1| erkennt, erkennt auch \lstinline|s1 + s2|, für jeden String \lstinline|s2|.
+    Erkennen bedeutet, dass ein \lstinline|Iteratee| erfolgreich in den Endzustand \lstinline|Done| übergeht.
+
+    \begin{lstlisting}[caption={Verkettungsregel, wenn ein Iteratee die Eingabe erkennt}, label=lst:verkettungsregel1]
+def flatMap[A, B](m: IM[A], f: A => IM[B]): IM[B] =
+  m.map(_.flatMapM(f))
+
+val left: IM[String] = en_str(s1 + s2)(i.flatMap(f))
+val right: IM[String] =
+  flatMap(en_str(s1)(i), (x: String) => en_str(s2)(f(x)))
     \end{lstlisting}
 
-    Wenn Iteratee i s1 erkennt, dann ist das Verarbeiten und Verwerten der der konkatenierten Eingaben das gleiche, wie das Verarbeiten und Verwerten der ersten Eingabe und anschließend das Verarbeiten der zweiten Eingabe.
+    Die in Listing~\ref{lst:verkettungsregel1} verwendete Funktion \lstinline|flatMap|  verhält sich wie auch andere \lstinline|flatMap|-Methoden.
+    Diese Implementierung arbeitet allerdigns auf der Monade \lstinline|IM|, die aus \lstinline|Future| und \lstinline|Iteratee| zusammengesetzt ist.
+    Erkennt der \lstinline|Iteratee| \lstinline|s1| nicht, so gilt die in Listing~\ref{lst:verkettungsregel2} abgebildete Gleichheit.
 
-  \item Neutrales Element
-    \begin{lstlisting}
-failure >>= f = failure
+    \begin{lstlisting}[caption={Verkettungsregel, wenn ein Iteratee die Eingabe nicht erkennt}, label=lst:verkettungsregel2]
+val left: IM[String] = en_str(s)(i.flatMap(f))
+val right: IM[String] = en_str(s)(i).map(_.flatMap(f))
     \end{lstlisting}
 
-    Wenn ein Iteratee einen Fehler erzeugt, haben auch folgende Iteratees keine Chance mehr auf Erfolg.
+  \item Nullelement
+
+    Ein abweichender \lstinline|Iteratee| ist ein absorbierendes Element bzgl. \lstinline|flatMap|.
+    Ein abweichender \lstinline|Iteratee| ist ein \lstinline|Iteratee|, der nach Empfang von \lstinline|Input.EOF| nicht in einen Endzustand übergeht.
+    \lstinline|failure| in Listing~\ref{lst:nullelementregel} ist ein solcher \lstinline|Iteratee|.
+    Ein absorbierendes Element ist ein Element, das, mit jedem anderen Element verknüpft, wieder das absorbierende Element ergibt.
+    Die Null beispielsweise ist das absorbierende Element der Multiplikation\todo{Zitat}.
+
+    \begin{lstlisting}[caption=Nullelementregel, label=lst:nullelementregel]
+def failure[A]: I[A] = Cont(_ => failure)
+
+val left: I[String] = failure.flatMap(f)
+val right: I[String] = failure
+    \end{lstlisting}
 
   \item Rechtsdistributivität
-    \begin{lstlisting}
-i >>= \x -> (k1 x |> k2 x) = (i >>= k1) |> (i >>= k2)
+
+    \lstinline|flatMap| ist rechtsdistributiv\todo{soll erklärt werden, was Rechtsdistr. ist?}, sofern der \lstinline|Iteratee| idempotent ist.
+
+    \begin{lstlisting}[caption=Rechtsdistributivitätsregel, label=lst:rechtsdistributivitaetsregel]
+val left: I[String] =
+  i.flatMap(x => alternative(k1(x), k2(x)))
+val right: I[String] =
+  alternative(i.flatMap(k1), i.flatMap(k2))
     \end{lstlisting}
 
-    Iteratees sind rechtsdistributiv, d.h. erst Iteratee i auszuführen und auf das Ergebnis k1 oder k2 auszuführen ist das gleiche, als i und darauf k1 auszuführen oder i und darauf k2 auszuführen.
+    \lstinline|alternative| komponiert die Ergebnis-\lstinline|Iteratee|s der beiden Funktionen \lstinline|k1| und \lstinline|k1|.
+    Der resultierende \lstinline|Iteratee| erkennt, was der am schnellsten erkennende Eingabe-\lstinline|Iteratee| erkennt.
+    Idempotenz wird von \citeauthor{kiselyov2012}, wie in Listing~\ref{lst:idempotenz_eines_iteratees} zu sehen, definiert.
+
+    \begin{lstlisting}[caption=Idempotenz eines Iteratees, label=lst:idempotenz_eines_iteratees]
+val left: M[(I[A], I[A])] =
+  en_str(s)(i).flatMap(x => Future((x, x)))
+val right: M[(I[A], I[A])] =
+  en_str(s)(i).flatMap(x =>
+    en_str(s)(i).flatMap(y => Future((x, y))))
+    \end{lstlisting}
 \end{enumerate}
 
 % subsection regeln (end)
