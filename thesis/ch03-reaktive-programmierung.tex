@@ -891,18 +891,18 @@ Gut zu erkennen ist, dass die Reihenfolge der Elemente im Ergebnis mit der jewei
 \label{sub:regeln}
 
 Kiselyov identifiziert in \citealt{kiselyov2012}~(S.~12--13 u. S.~18--21) mehrere Regeln für Iteratee-Streams, die Beweise über Code ermöglichen, der diese Streams verwendet.
-Im folgenden werden mehrmals folgende Typ-Aliase und eine Funktion verwendet:
+Zur besseren Lesbarkeit werden in Listing~\ref{lst:verwendete_typ_aliase} einige Typ-Aliase eingeführt, die in den Regeldefinitionen verwendet werden.
 
-\begin{lstlisting}[caption=Verwendete Typ-Aliase, label=lst:verwendete_typ_aliase]
-type E     = Char           // Der Eingabetyp der Iteratees (Char)
+\begin{lstlisting}[caption=Typ-Aliase der Regeln, label=lst:verwendete_typ_aliase]
+type E     = Char           // Der Eingabeelementtyp (Char)
 type I[A]  = Iteratee[E, A] // Ein Iteratee von Char nach A
-type M[A]  = Future[A]      // Die Monade ist immer Future
+type M[A]  = Future[A]      // Die Monade (Future)
 type IM[A] = M[I[A]]        // Ein Iteratee in der Future-Monade
 \end{lstlisting}
 
 Außerdem wird die Funktion \lstinline|en_str| mehrfach verwendet.
 Diese Funktion hat die Signatur \lstinline|String => Enumerator[E]| und macht aus einem übergebenen String einen \lstinline|Enumerator| der die einzelnen Zeichen des Strings enumeriert.
-Die in den Code-Ausschnitten gezeigen Variablen \lstinline|left| und \lstinline|right| haben immer die gleiche Bedeutung.
+Die in den Code-Ausschnitten gezeigten Variablen \lstinline|left| und \lstinline|right| haben immer die gleiche Bedeutung.
 
 \begin{enumerate}
   \item Komposition

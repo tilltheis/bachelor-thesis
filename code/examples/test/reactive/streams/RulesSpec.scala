@@ -142,9 +142,9 @@ class RulesSpec extends Specification with NoTimeConversions {
 
   // EFFECTFUL ITERATEES
   {
-    type E     = Char           // Der Eingabetyp der Iteratees (Char)
+    type E     = Char           // Der Eingabeelementtyp (Char)
     type I[A]  = Iteratee[E, A] // Ein Iteratee von Char nach A
-    type M[A]  = Future[A]      // Die Monade ist immer Future
+    type M[A]  = Future[A]      // Die Monade (Future)
     type IM[A] = M[I[A]]        // Ein Iteratee in der Future-Monade
 
     def en_str(s: String): Enumerator[E] = Enumerator.enumerate(s)
