@@ -436,10 +436,11 @@ Es wird erklärt, auf welche Arten \lstinline|Enumerator|s erstellt werden könn
 Es gibt drei unterschiedliche Techniken, einen \lstinline|Enumerator| zu erstellen.
 \begin{enumerate}
   \item Durch Erstellung einer neuen Klasse, die das \lstinline|Enumerator|-Trait implementiert.
-  \item Durch Benutzung einer Konstruktormethode im Companion-Objekt im Companion-Objekt (\lstinline|apply|, \lstinline|generateM|, u.~a.).
-  \item Durch Benutzung einer Konstruktormethode im \lstinline|Concurrent|-Objekt (\lstinline|broadcast|, \lstinline|unicast|, u.~a.).
+  \item Durch Benutzung einer Konstruktormethode im Companion-Objekt (\lstinline|apply|, \lstinline|generateM|, u.~a.).
+  \item Durch Benutzung einer Konstruktormethode im \lstinline|play.api.libs.iteratee.Concurrent|-Objekt (\lstinline|broadcast|, \lstinline|unicast|, u.~a.).
 \end{enumerate}
 
+Das o.~g. \lstinline|Concurrent|-Objekt stellt u.~a. Konstruktoren für imperativ steuerbare \lstinline|Enumerator|s bereit.
 Im Folgenden werden alle Herangehensweisen vorgestellt, um Zahlen für den im vorigen Kapitel vorgestellten Summierungs-\lstinline|Iteratee| zu generieren.
 
 \paragraph{Erstellung durch Vererbung} % (fold)
