@@ -68,7 +68,7 @@ Des Weiteren ist anzumerken, dass \lstinline|Input| ein \gls{adt} ist.
 Ein \gls{adt} ist ein Datentyp mit mehreren, alternativen Konstruktoren, die jeweils eigene Felder besitzen.
 Mittels Pattern Matching kann von einem Wert eines solchen Datentyps auf den verwendeten Konstruktor geschlossen werden \cite[vgl.][S.~14--15]{algebraic_data_type}.
 
-In Scala werden algebraische Datentypen mit Hilfe von einem Marker-Trait und \lstinline|case|-Klassen und -Objekten implementiert.
+In Scala werden algebraische Datentypen i.~d.~R. mit Hilfe von einem Marker-Trait und \lstinline|case|-Klassen und -Objekten implementiert.
 Das Marker-Trait ist der algebraische Datentyp und die \lstinline|case|-Klassen und -Objekte sind die Konstruktoren.
 Die Nutzung von \lstinline|case|-Klassen und -Objekten hat den Vorteil, dass diese mittels Pattern Matching zerlegt werden können.
 Dadurch, dass das Marker-Trait \lstinline|sealed| ist, wird verhindert, dass von außerhalb der Quellcode-Datei weitere Konstruktoren hinzugefügt werden können \cite[vgl.][]{algebraic_data_type_scala}.
