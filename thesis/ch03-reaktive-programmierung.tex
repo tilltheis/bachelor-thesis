@@ -964,9 +964,9 @@ val right: I[String] =
   alternative(i.flatMap(k1), i.flatMap(k2))
     \end{lstlisting}
 
-    \lstinline|alternative| komponiert die Ergebnis-\lstinline|Iteratee|s der beiden Funktionen \lstinline|k1| und \lstinline|k1|.
+    \lstinline|alternative| komponiert die Ergebnis-\lstinline|Iteratee|s der beiden Funktionen \lstinline|k1| und \lstinline|k2|.
     Der resultierende \lstinline|Iteratee| erkennt, was der am schnellsten erkennende Eingabe-\lstinline|Iteratee| erkennt.
-    Idempotenz wird von \citeauthor{kiselyov2012}, wie in Listing~\ref{lst:idempotenz_eines_iteratees} zu sehen, definiert.
+    Idempotenz wird von Kiselyov, wie in Listing~\ref{lst:idempotenz_eines_iteratees} zu sehen, definiert.
 
     \begin{lstlisting}[caption=Idempotenz eines Iteratees, label=lst:idempotenz_eines_iteratees]
 val left: M[(I[A], I[A])] =
