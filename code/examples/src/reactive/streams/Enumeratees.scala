@@ -42,7 +42,7 @@ object Enumeratees {
     val originalI: Iteratee[Int, List[Int]] =
       Iteratee.flatten(e1.run(transformedI))
     val result: Future[List[Int]] = e2.run(originalI)
-    // result = Future.successful(List(2, 4, 3, 4))
+    // result hat den Wert Future(List(2, 4, 3, 4))
   }
 
   object ApplicationOnEnumerators {
@@ -60,7 +60,7 @@ object Enumeratees {
     val i: Iteratee[String, List[String]] = Iteratee.getChunks
 
     val result: Future[List[String]] = e.through(t12).run(i)
-    // result = Future.successful(List("2"))
+    // result hat den Wert Future(List("2"))
   }
 
 }

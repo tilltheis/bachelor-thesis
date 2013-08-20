@@ -26,7 +26,7 @@ object Composition {
 
       val e: Enumerator[Int] = Enumerator(1, 4, -2)
       val result: Future[(Option[Int], Int)] = e.run(i12)
-      // result = Future.successful((Some(1), 2))
+      // result hat den Wert Future((Some(1), 2))
 
     }
 
@@ -40,7 +40,7 @@ object Composition {
 
       val e: Enumerator[Int] = Enumerator(1, 4, -2)
       val result: Future[(Option[Int], Int)] = e.run(i12)
-      // result = Future.successful((Some(1), 3))
+      // result hat den Wert Future((Some(1), 3))
 
     }
 
@@ -110,7 +110,7 @@ object Composition {
       val e12: Enumerator[Int] = e1.andThen(e2)
 
       val result: Future[List[Int]] = e12.run(i)
-      // result = Future.successful(List(1, 2, 3))
+      // result hat den Wert Future(List(1, 2, 3))
 
     }
 
@@ -127,7 +127,7 @@ object Composition {
       val e123: Enumerator[Int] = Enumerator.interleave(e1, e2, e3)
 
       val result: Future[List[Int]] = e123.run(i)
-      // result = Future.successful(List(2, 3, 1))
+      // result hat den Wert Future(List(2, 3, 1))
 
     }
 

@@ -408,7 +408,7 @@ def folder(xs: Int*)(step: Step[Int, Int]): Future[Int] = {
 
 val sumResult: Future[Int] =
   sumIterateeFromHelper.fold(folder(1, 4, -2))
-// sumResult = Future.successful(3)
+// sumResult hat den Wert Future(3)
 \end{lstlisting}
 
 Das Übergeben von Daten mittels der \lstinline|fold|-Methode ist, wie in Listing~\ref{lst:iterateeausfuehrung_durch_folder} zu erkennen, recht aufwändig.
@@ -704,7 +704,7 @@ val transformedI: Iteratee[Int, Iteratee[Int, List[Int]]] = t(i)
 val originalI: Iteratee[Int, List[Int]] =
   Iteratee.flatten(e1.run(transformedI))
 val result: Future[List[Int]] = e2.run(originalI)
-// result = Future.successful(List(2, 4, 3, 4))
+// result hat den Wert Future(List(2, 4, 3, 4))
 \end{lstlisting}
 
 % subsubsection enumerateeanwendung_auf_iteratees (end)
@@ -743,7 +743,7 @@ val e: Enumerator[Int] = Enumerator(1, 2, 3)
 val i: Iteratee[String, List[String]] = Iteratee.getChunks
 
 val result: Future[List[String]] = e.through(t12).run(i)
-// result = Future.successful(List("2"))
+// result hat den Wert Future(List("2"))
 \end{lstlisting}
 
 % subsubsection enumerateeanwendung_auf_enumeratees (end)
@@ -777,7 +777,7 @@ val i12: Iteratee[Int, (Option[Int], Int)] =
 
 val e: Enumerator[Int] = Enumerator(1, 4, -2)
 val result: Future[(Option[Int], Int)] = e.run(i12)
-// result = Future.successful((Some(1), 2))
+// result hat den Wert Future((Some(1), 2))
 \end{lstlisting}
 
 In diesem Fall gibt es zwei \lstinline|Iteratee|s.
@@ -823,7 +823,7 @@ val i12: Iteratee[Int, (Option[Int], Int)] =
 
 val e: Enumerator[Int] = Enumerator(1, 4, -2)
 val result: Future[(Option[Int], Int)] = e.run(i12)
-// result = Future.successful((Some(1), 3))
+// result hat den Wert Future((Some(1), 3))
 \end{lstlisting}
 
 % subsubsection anwendung_parallele_komposition_von_iteratees (end)
@@ -843,7 +843,7 @@ val e2 = Enumerator(3)
 val e12: Enumerator[Int] = e1.andThen(e2)
 
 val result: Future[List[Int]] = e12.run(i)
-// result = Future.successful(List(1, 2, 3))
+// result hat den Wert Future(List(1, 2, 3))
 \end{lstlisting}
 
 % subsubsection anwendung_sequentielle_komposition_von_enumerators (end)
@@ -874,7 +874,7 @@ val e3 = timeoutEnumerator(3, 2 seconds)
 val e123: Enumerator[Int] = Enumerator.interleave(e1, e2, e3)
 
 val result: Future[List[Int]] = e123.run(i)
-// result = Future.successful(List(2, 3, 1))
+// result hat den Wert Future(List(2, 3, 1))
 \end{lstlisting}
 
 Zu bemerken ist hierbei, dass Play das Objekt \lstinline|play.api.libs.concurrent.Promise| mit mehreren Hilfsmethoden zur Verfügung stellt.
