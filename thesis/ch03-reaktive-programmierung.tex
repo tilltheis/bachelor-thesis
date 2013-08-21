@@ -58,10 +58,10 @@ object Input {
 }
 \end{lstlisting}
 
-Der Datentyp ist über den kovarianten Typ \lstinline|E| der gehaltenen Elemente parametrisiert.
-Kovarianz bedeutet, dass wenn \lstinline|F| ein spezialisierter Typ von \lstinline|E| ist, \lstinline|Input[F]| auch ein spezialisierter Typ von \lstinline|Input[E]| ist \cite[vgl.][S.~11]{variance}.
+Der Datentyp ist über den \glslink{kovarianz}{kovarianten} Typ \lstinline|E| der gehaltenen Elemente parametrisiert.
+\gls{kovarianz} bedeutet, dass wenn \lstinline|F| ein spezialisierter Typ von \lstinline|E| ist, \lstinline|Input[F]| auch ein spezialisierter Typ von \lstinline|Input[E]| ist \cite[vgl.][S.~11]{variance}.
 Dadurch wären beispielsweise sowohl \lstinline|Input[Cat]|, als auch \lstinline|Input[Dog]| Spezialisierungen von \lstinline|Input[Animal]|.
-Wäre \lstinline|Input| nicht kovariant über den Typ der der gehaltenen Elemente, wären \lstinline|Input[Cat]|, \lstinline|Input[Dog]| und \lstinline|Input[Animal]| völlig unterschiedliche Typen.
+Wäre \lstinline|Input| nicht \glslink{kovarianz}{kovariant} über den Typ der der gehaltenen Elemente, wären \lstinline|Input[Cat]|, \lstinline|Input[Dog]| und \lstinline|Input[Animal]| völlig unterschiedliche Typen.
 
 Des Weiteren ist anzumerken, dass \lstinline|Input| ein \gls{adt} ist.
 Ein \gls{adt} ist ein Datentyp mit mehreren, alternativen Konstruktoren, die jeweils eigene Felder besitzen.
@@ -82,7 +82,7 @@ Wenn die Datenquelle erschöpft ist, wird dies mit dem Objekt \lstinline|Input.E
 
 Sowohl \lstinline|Input.Empty|, als auch \lstinline|Input.EOF| sind vom Typ \lstinline|Input[Nothing]|.
 \lstinline|Nothing| ist ein besonderer Typ in Scala, der eine Spezialisierung jedes anderen Typs ist \cite[vgl.][S.~32]{scala_specification}.
-Weil der Typparameter des \lstinline|Input|-Datentyps kovariant ist, lassen sich \lstinline|Input.Empty| und \lstinline|Input.EOF| mit jedem anderen \lstinline|Input| kombinieren.
+Weil der Typparameter des \lstinline|Input|-Datentyps \glslink{kovarianz}{kovariant} ist, lassen sich \lstinline|Input.Empty| und \lstinline|Input.EOF| mit jedem anderen \lstinline|Input| kombinieren.
 
 Ein Wert vom Typ \lstinline|Input| hat also drei mögliche Zustände:
 \begin{enumerate}
@@ -115,8 +115,8 @@ object Step {
 Der algebraische Typ ist über die zwei Typen \lstinline|E| und \lstinline|A| parametrisiert.
 \lstinline|E| ist der Typ der zu konsumierenden Elemente.
 \lstinline|A| ist der Typ des zu berechnenden Ergebnisses.
-\lstinline|A| ist kovariant, sodass auch Spezialisierungen von \lstinline|A| als Werte verwendet werden können.
-Die Kovarianz über den Typ \lstinline|A| ermöglicht es auch hier wieder \lstinline|Nothing| in den Konstruktoren zu verwenden, wie im vorigen Kapitel beschrieben.
+\lstinline|A| ist \glslink{kovarianz}{kovariant}, sodass auch Spezialisierungen von \lstinline|A| als Werte verwendet werden können.
+Die \gls{kovarianz} über den Typ \lstinline|A| ermöglicht es auch hier wieder \lstinline|Nothing| in den Konstruktoren zu verwenden, wie im vorigen Kapitel beschrieben.
 
 Ein \lstinline|Iteratee|, der mit seiner Berechnung fertig ist, ist im Zustand \lstinline|Step.Done|.
 Ein solcher \lstinline|Iteratee| hält sein berechnetes Ergebnis und den Teil der letzten Eingabe, der nicht mehr verarbeitet wurde.
