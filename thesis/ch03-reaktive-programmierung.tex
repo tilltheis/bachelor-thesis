@@ -3,7 +3,7 @@
 \chapter{Reaktive Programmierung} % (fold)
 \label{cha:reaktive_programmierung}
 
-Reaktive Programmierung ist die Programmierung von reaktiven System.
+Reaktive Programmierung ist die Programmierung von reaktiven Systemen.
 Ein reaktives System ist ein System, das von seiner Umgebung kontinuierlich Daten empfängt und darauf reagiert.
 In nebenläufigen Systemen können gleich mehrere solcher Datenströme unabhängig voneinander existieren \cite[vgl.][S.~1]{reactive_programming}.
 
@@ -33,13 +33,12 @@ Als Quellen hierfür dienen \citealt{kiselyov2012}, \citealt{iteratee_io}, \cite
 \subsection{Design von Streams} % (fold)
 \label{sub:design}
 
-Iteratee IO-Streams bestehen aus vier Komponenten.
-\lstinline|Input|, \lstinline|Iteratee|, \lstinline|Enumerator| und \lstinline|Enumeratee|.
-\lstinline|Input| beinhaltet die gestreamten Elemente.
-\lstinline|Iteratee| konsumiert \lstinline|Input|-Elemente und dient somit als Datensenke.
-\lstinline|Enumerator| generiert \lstinline|Input|-Elemente und dient somit als Datenquelle.
-Und \lstinline|Enumeratee| transformiert einen \lstinline|Iteratee|.
-Diese Komponenten und ihr jeweiliger Verwendungszweck wird in den folgenden Abschnitten vorgestellt.
+Iteratee IO-Streams bestehen aus den vier Komponenten \lstinline|Input|, \lstinline|Iteratee|, \lstinline|Enumerator| und \lstinline|Enumeratee|.
+\lstinline|Input|s beinhalten die gestreamten Elemente.
+\lstinline|Iteratee|s konsumieren \lstinline|Input|-Elemente und dienen somit als Datensenken.
+\lstinline|Enumerator|s generieren \lstinline|Input|-Elemente und dienen somit als Datenquellen.
+\lstinline|Enumeratee|s transformieren \lstinline|Iteratee|s und \lstinline|Enumerator|s.
+Diese Komponenten und ihr jeweiliger Verwendungszweck werden in den folgenden Abschnitten näher vorgestellt.
 
 % subsection design (end)
 
@@ -61,7 +60,7 @@ object Input {
 
 Der Datentyp ist über den kovarianten Typ \lstinline|E| der gehaltenen Elemente parametrisiert.
 Kovarianz bedeutet, dass wenn \lstinline|F| ein spezialisierter Typ von \lstinline|E| ist, \lstinline|Input[F]| auch ein spezialisierter Typ von \lstinline|Input[E]| ist \cite[vgl.][S.~11]{variance}.
-Dadurch wären beispielsweise sowohl \lstinline|Input[Cat]|, also auch \lstinline|Input[Dog]| Spezialisierungen von \lstinline|Input[Animal]|.
+Dadurch wären beispielsweise sowohl \lstinline|Input[Cat]|, als auch \lstinline|Input[Dog]| Spezialisierungen von \lstinline|Input[Animal]|.
 Wäre \lstinline|Input| nicht kovariant über den Typ der der gehaltenen Elemente, wären \lstinline|Input[Cat]|, \lstinline|Input[Dog]| und \lstinline|Input[Animal]| völlig unterschiedliche Typen.
 
 Des Weiteren ist anzumerken, dass \lstinline|Input| ein \gls{adt} ist.
@@ -79,7 +78,7 @@ Für den Fall, dass die Datenquelle nicht erschöpft ist, existiert im Companion
 Diese Implementierung hält genau ein Element aus der Datenquelle.
 Über die Entsprechung zu \lstinline|Input.Empty| in Kiselyovs Implementierung schreibt er "`[it] signifies a stream with no immediately available data but which is still continuing"' \cite[vgl.][]{iteratee_io}.
 Außerdem findet es im Kontext von \lstinline|Iteratee|s Verwendung, um zu signalisieren, dass kein Teil der Eingabe übriggebliebenen ist.
-Um zu signalisieren, dass die Datenquelle erschöpft ist, existiert das Objekt \lstinline|Input.EOF|.
+Wenn die Datenquelle erschöpft ist, wird dies mit dem Objekt \lstinline|Input.EOF| mitgeteilt.
 
 Sowohl \lstinline|Input.Empty|, als auch \lstinline|Input.EOF| sind vom Typ \lstinline|Input[Nothing]|.
 \lstinline|Nothing| ist ein besonderer Typ in Scala, der eine Spezialisierung jedes anderen Typs ist \cite[vgl.][S.~32]{scala_specification}.
@@ -129,7 +128,7 @@ Wenn das gesuchte Wort gefunden wurde, wird als Restwert der bisher nicht angese
 Ein \lstinline|Iteratee|, der noch kein Endergebnis berechnet hat, ist im Zustand \lstinline|Step.Cont|.
 Das Argument von \lstinline|Step.Cont| ist die Schritt-Funktion \lstinline[breaklines=true]|Input[E] => Iteratee[E, A]|.
 Die Eingabe der Schritt-Funktion ist ein \lstinline|Input| mit einem neuen zu verarbeitenden Element.
-Die Ausgabe der Schritt-Funktion ist ein neuer \lstinline|Iteratee|, der den neuen Berechnungsstand nach dem Verarbeiten des Eingabeelements hält.
+Die Ausgabe ist ein neuer \lstinline|Iteratee|, der den neuen Berechnungsstand nach dem Verarbeiten des Eingabeelements hält.
 Diese Funktion wird als Continuation bezeichnet.
 Eine Delimited Continuation repräsentiert den Rest einer Berechnung bis zu einem bestimmten Punkt \cite[vgl.][S.~1]{continuations}.
 In diesem Fall berechnet die Continuation immer die Verarbeitung genau eines weiteren Elements.
@@ -169,7 +168,7 @@ Der Eingabewert ist der \lstinline|Iteratee|, an den die generierten Elemente ge
 Der Rückgabewert ist der übergebene \lstinline|Iteratee| nach Fertigstellung oder Abbruch seiner Berechnung.
 Der zurückgegebene \lstinline|Iteratee| befindet sich in der \lstinline|Future|-Monade.
 
-Bei der Anwendung dieser Funktion werden dem \lstinline|Iteratee| so lange Daten übergeben, bis die Datenquelle erschöpft ist, oder bis der \lstinline|Iteratee| keine Daten mehr annimmt.
+Bei der Anwendung dieser Funktion werden dem \lstinline|Iteratee| so lange Daten übergeben, bis die Datenquelle erschöpft ist oder bis der \lstinline|Iteratee| keine Daten mehr annimmt.
 Die Herkunft der Daten, die der \lstinline|Enumerator| an den \lstinline|Iteratee| sendet, ist beliebig.
 Weil der Rückgabetyp sich in der \lstinline|Future|-Monade befindet können auch zeitintensive Berechnungen durchgeführt werden, ohne den Programmfluss zu unterbrechen.
 Dadurch ist es beispielsweise möglich, die Daten aus Dateien oder dem Netzwerk zu empfangen.
@@ -223,7 +222,7 @@ Diese Arten sind die sequentielle und die parallele Komposition.
 \subsubsection{Komposition von Iteratees} % (fold)
 \label{ssub:komposition_von_iteratees}
 
-Sequenzielle Komposition zweier \lstinline|Iteratee|s funktioniert noch folgendem Prinzip:
+Sequenzielle Komposition zweier \lstinline|Iteratee|s funktioniert nach folgendem Prinzip:
 Zuerst wird der erste \lstinline|Iteratee| angewendet, bis er keine Elemente mehr annimmt oder die Datenquelle erschöpft ist.
 Dann wird der zweite \lstinline|Iteratee| auf die noch übrigen Elemente der Datenquelle angewendet, bis auch dieser \lstinline|Iteratee| keine Elemente mehr annimmt, oder die Datenquelle erschöpft ist.
 Anschließend werden die Ergebnisse beider \lstinline|Iteratee|s kombiniert, z.~B. als Paar. % Iteratee#map/flatMap
@@ -243,8 +242,8 @@ Die sequentielle Komposition zweier \lstinline|Enumerator|s erfolgt ähnlich, wi
 Der resultierende \lstinline|Enumerator| generiert erst alle Elemente des ersten \lstinline|Enumerator|s und dann alle Elemente des zweiten \lstinline|Enumerator|s.
 Die sequentielle Komposition von \lstinline|Enumerator|s entspricht also der Verkettung ihrer Ausgaben. %Enumerator.andThen
 
-Parallele Komposition von \lstinline|Enumerator|s bedeutet, dass nicht erst ein \lstinline|Enumerator| erschöpft sein muss, bevor Daten generiert werden, die dem anderen \lstinline|Enumerator| entstammen.
-Dabei muss nicht erst ein \lstinline|Enumerator| erschöpft sein, bevor Daten generiert werden, die aus einem anderen \lstinline|Enumerator| entstammen.
+Bei der parallelen Komposition von \lstinline|Enumerator|s werden die Elemente der \lstinline|Enumerator|s nicht nacheinander, sondern durcheinander generiert.
+Es muss also nicht erst ein \lstinline|Enumerator| erschöpft sein, bevor Daten generiert werden, die aus einem anderen \lstinline|Enumerator| entstammen.
 Eine Möglichkeit ist, dass die Reihenfolge der Elemente dadurch bestimmt wird, welcher \lstinline|Enumerator| zuerst ein neues Element zur Verfügung stellt. % Enumerator.interleave
 
 % subsubsection komposition_von_enumerators (end)
@@ -266,7 +265,7 @@ Die Codebeispiele stammen, sofern nicht anders vermerkt, vom Autor.
 \subsection{Anwendung von Iteratees} % (fold)
 \label{sub:iteratees}
 
-Plays \lstinline|Iteratee|s bilden einen Container um ihren \lstinline|Step|-Zustand.
+Plays \lstinline|Iteratee|s kapseln ihren \lstinline|Step|-Zustand.
 Dadurch werden, wie bei objektorientierten Sprachen üblich\todo{Zitat}, Daten und Operationen gebündelt.
 Die elementare Methode dieses Traits ist \lstinline|fold|.
 Die Signatur dazu ist in Listing~\ref{lst:fold_signatur} zu lesen.
@@ -350,7 +349,7 @@ val sumIterateeFromConstructor: Iteratee[Int, Int] = sumIteratee()
 Der Code ist dem in \nameref{lst:iteratee_durch_vererbung} vorgestellten Code sehr ähnlich.
 Im Gegensatz dazu muss hier jedoch nicht mehr explizit von \lstinline|Iteratee| geerbt und die \lstinline|fold|-Methode implementiert werden.
 Dies macht den Code schon wesentlich kürzer und einfacher.
-Der Code ist auf die elementaren Aufgaben reduziert und es ist nun klar zu erkennen, was bei welcher Eingabe geschieht.
+Der Code ist auf die elementaren Aufgaben reduziert und es ist nun klar zu erkennen, was bei welcher Art von \lstinline|Input| geschieht.
 
 % paragraph erstellung_durch_konstruktormethode (end)
 
@@ -361,7 +360,7 @@ Die dritte und letzte Möglichkeit nutzt eine problemspezifische Konstruktormeth
 Das Aufsummieren einer Menge von Zahlen lässt sich sehr einfach mit Hilfe eines Folds implementieren\todo{Erklären, was ein Fold ist}.
 Das \lstinline|Iteratee|-Companion-Objekt beinhaltet u.~a. die \lstinline|fold|-Konstruktormethode, die für solche Operationen gedacht ist.
 Durch Einsatz dieser Methode wird die Lösung, wie in Listing~\ref{lst:iteratee_durch_hilfsmethode} zu erkennen, zum Einzeiler.
-Vom Filtern der unterschiedlichen \lstinline|Input|-Typen ist hierbei abstrahiert und es muss sich nur noch um tatsächliche Eingabeelemente gekümmert werden.
+Es muss nicht mehr zwischen unterschliedlichen \lstinline|Input|-Arten unterschieden werden, sondern es muss sich nur noch um tatsächliche Eingabeelemente gekümmert werden.
 
 \begin{lstlisting}[caption=Erstellung eines Iteratees durch Konstruktormethode im Companion-Objekt, label=lst:iteratee_durch_hilfsmethode]
 val sumIterateeFromHelper: Iteratee[Int, Int] =
@@ -415,7 +414,7 @@ Das Übergeben von Daten mittels der \lstinline|fold|-Methode ist, wie in Listin
 Dies kommt daher, dass zwei Zustände geprüft werden müssen.
 Zum Einen muss der Zustand der Eingabemenge geprüft werden, ob noch Elemente existieren, die an den \lstinline|Iteratee| übergeben werden sollen.
 Zum Anderen muss sichergestellt werden, dass der \lstinline|Iteratee| sich korrekt verhält.
-D.~h. solange kein \lstinline|Input.EOF| gesendet wurde, muss der \lstinline|Iteratee| weitere Elemente annehmen und sobald ein \lstinline|Input.EOF| gesendet wurde, darf der \lstinline|Iteratee| keine Elemente mehr annehmen.
+Ein \lstinline|Iteratee| verhält sich korrekt, wenn er nach dem Empfang von \lstinline|Input.EOF| keine weiteren Element annimmt, also in einen Endzustand übergeht.\todo{muss er auch bis EOF Elemente annehmen?}
 Nur wenn all diese Voraussetzungen erfüllt wurden, kann am Ende das Ergebnis dem \lstinline|Iteratee| im \lstinline|Step.Done|-Zustand entnommen werden.
 Durch Verwendung von \lstinline|Enumerator|s wird dies allerdings wesentlich einfacher.
 
@@ -832,7 +831,7 @@ val result: Future[(Option[Int], Int)] = e.run(i12)
 \subsubsection{Sequentielle Komposition von Enumerators} % (fold)
 \label{ssub:anwendung_sequentielle_komposition_von_enumerators}
 
-Sequentielle Komposition zweier \lstinline|Enumerator|s heißt, dass erst die Elemente des ersten \lstinline|Enumerator|s generiert werden, bis dieser erschöpft ist und anschließend die Elemente des zweiter \lstinline|Enumerator|s generiert werden.
+Sequentielle Komposition zweier \lstinline|Enumerator|s heißt, dass erst die Elemente des ersten \lstinline|Enumerator|s generiert werden, bis dieser erschöpft ist und anschließend die Elemente des zweiten \lstinline|Enumerator|s generiert werden.
 Das \lstinline|Enumerator|-Trait stellt hierfür die Methode \lstinline|andThen| mit der Signatur \lstinline[breaklines=true]|Enumerator[E] => Enumerator[E]| bereit.
 Diese Methode erstellt einen neuen \lstinline|Enumerator|, der die Elemente des ursprünglichen \lstinline|Enumerator|s und dann die Elemente des übergebenen \lstinline|Enumerator|s enumeriert.
 Listing~\ref{lst:sequentielle_komposition_von_enumerators} zeigt, wie \lstinline|andThen| verwendet werden kann, um zwei \lstinline|Enumerator|s sequentiell zu komponieren.
@@ -902,7 +901,7 @@ type IM[A] = M[I[A]]        // Ein Iteratee in der Future-Monade
 \end{lstlisting}
 
 Außerdem wird die Funktion \lstinline|en_str| mehrfach verwendet.
-Diese Funktion hat die Signatur \lstinline|String => Enumerator[E]| und macht aus einem übergebenen String einen \lstinline|Enumerator| der die einzelnen Zeichen des Strings enumeriert.
+Diese Funktion hat die Signatur \lstinline|String => Enumerator[E]| und macht aus einem übergebenen String einen \lstinline|Enumerator|, der die einzelnen Zeichen des Strings enumeriert.
 Die in den Code-Ausschnitten gezeigten Variablen \lstinline|left| und \lstinline|right| haben immer die gleiche Bedeutung.
 
 \begin{enumerate}
@@ -930,7 +929,7 @@ val right: IM[String] =
   flatMap(en_str(s1)(i), (x: String) => en_str(s2)(f(x)))
     \end{lstlisting}
 
-    Die in Listing~\ref{lst:verkettungsregel1} verwendete Funktion \lstinline|flatMap|  verhält sich wie auch andere \lstinline|flatMap|-Methoden.
+    Die in Listing~\ref{lst:verkettungsregel1} verwendete Funktion \lstinline|flatMap| verhält sich wie auch andere \lstinline|flatMap|-Methoden.
     Diese Implementierung arbeitet allerdigns auf der Monade \lstinline|IM|, die aus \lstinline|Future| und \lstinline|Iteratee| zusammengesetzt ist.
     Erkennt der \lstinline|Iteratee| \lstinline|s1| nicht, so gilt die in Listing~\ref{lst:verkettungsregel2} abgebildete Gleichheit.
 

@@ -14,14 +14,15 @@ Es werden hierbei in erster Linie die Komponenten vorgestellt, die für die Entw
 \section{Vorbereitung} % (fold)
 \label{sec:vorbereitung}
 
-Bevor auf die eigentliche Arbeit mit dem Play-Framework eingegangen wird, müssen einige vorbereitende Dinge geklärt werden. In diesem Abschnitt geht es darum, wie die Entwicklungsumgebung aufgesetzt wird, mit welcher Version der eingesetzten Software gearbeitet wird und wie sich das Play-Framework installieren lässt.
+Bevor auf die eigentliche Arbeit mit dem Play-Framework eingegangen wird, müssen einige vorbereitende Dinge erklärt werden.
+In diesem Abschnitt geht es darum, wie die Entwicklungsumgebung aufgesetzt wird, mit welcher Version der eingesetzten Software gearbeitet wird und wie sich das Play-Framework installieren lässt.
 
 \subsection{Entwicklungsumgebung} % (fold)
 \label{sub:entwicklungsumgebung}
 
 Zum Anlegen von Play-Projekten und Steuern des Web-Servers wird eine Kommandozeile, wie die Eingabeaufforderung unter Windows oder dem Terminal und Mac OS~X benötigt.
 Zum Programmieren kann entweder ein einfacher Text-Editor, oder auch eine \gls{ide} verwendet werden.
-Für die einzelnen Programme können teilweise Plugins heruntergeladen werden, die beispielsweise code completion oder syntax highlighting für Play-spezifische Funktionalitäten bereitstellen.
+Für die einzelnen Programme können teilweise Plugins heruntergeladen werden, die beispielsweise Code Completion oder Syntax Highlighting für Play-spezifische Funktionalitäten bereitstellen.
 
 Für \textbf{Eclipse} kann die Scala IDE von \citealt{scala_ide} heruntergeladen werden.
 Diese IDE ist für die Entwicklung von Scala-Anwendungen mit Eclipse notwendig.
@@ -34,7 +35,8 @@ Anschließend kann der Ordner des Play-Projekts als Eclipse-Projekt importiert u
 
 Beim Exportieren eines \textbf{IntelliJ IDEA}-Projekts verhält es sich ähnlich, wie im Falle von Eclipse.
 Der einzige Unterschied ist, dass der Befehel \lstinline|idea| verwendet werden muss, um ein IntelliJ IDEA-Projekt zu erstellen.
-Für Text-Editoren, wie z.B. \textbf{VIM}, \textbf{Emacs} oder \textbf{Sublime Text} ist prinzipiell kein Plugin nötig, es kann aber eines installiert werden, sofern eines vorhanden ist.
+Für Text-Editoren, wie z.B. \textbf{VIM}, \textbf{Emacs} oder \textbf{Sublime Text} ist prinzipiell kein Plugin nötig.
+Falls aber ein Plugin für den verwendeten Editor existiert, kann es natürlich installiert werden.
 Weitere Informationen zu diesen und \textbf{anderen Entwicklungsumgebungen} sind in der offiziellen Dokumentation zu finden \cite[vgl.][]{ide}.
 
 % subsection entwicklungsumgebung (end)
@@ -45,8 +47,8 @@ Weitere Informationen zu diesen und \textbf{anderen Entwicklungsumgebungen} sind
 
 Zum Zeitpunkt dieser Arbeit ist die aktuellste stabile Version des Play-Frameworks die Version 2.1.2.
 Diese Version wird in allen Beispielen und der eigenen entwickelten Anwendung verwendet.
-Für den Einsatz des Frameworks wird das JDK (Java development kit) in Version 6 oder 7 benötigt.
-Der Autor arbeitet mit dem JDK~7 unter Mac OS~X.
+Für den Einsatz des Frameworks wird das \gls{jdk} in Version 6 oder 7 benötigt.
+Der Autor arbeitet mit dem \gls{jdk}~7 unter Mac OS~X.
 
 % subsection software_version (end)
 
@@ -161,7 +163,7 @@ Damit Play weiß, welche Controller-Aktion für die aufgerufene URL ausgeführt 
 Diese Datei befindet sich unter \lstinline|conf/routes| und besitzt nach der Erstellung einer Anwendung bereits zwei Einträge (vgl. Listing~\ref{lst:die_routes_datei}).
 An dieser Stelle ist allerdings nur der erste Eintrag interessant.
 
-\begin{lstlisting}[caption=Der routes-Datei, label=lst:die_routes_datei]
+\begin{lstlisting}[caption=Die routes-Datei, label=lst:die_routes_datei]
   GET    /    controllers.Application.index
 \end{lstlisting}
 
@@ -264,7 +266,7 @@ Listing~\ref{lst:ein_einfaches_view_template} zeigt ein entsprechendes Template.
 View-Templates bestehen aus Scala- und HTML-Code und verhalten sich wie Funktionen, die HTML-Code generieren.
 Am Anfang eines Templates steht die Parameterliste, worüber die anzuzeigenden Daten übergeben werden.
 Nach der Parameterliste können Pakete importiert werden.
-Das \lstinline|@|-Symbol führt einen Scala-Ausdruck an, der in geschweifte Klammern eingeschlossen werden kann \cite[vgl.][]{play_templates}.
+Das \lstinline|@|-Symbol führt einen Scala-Ausdruck an, der in geschweifte Klammern (\lstinline|{}|) eingeschlossen werden kann \cite[vgl.][]{play_templates}.
 
 Neben den Template-Parametern und den importierten Paketen können sog. Helper verwendet werden.
 Helper sind in Funktionen ausgelagerter Template-Code \cite[vgl.][S.~227]{play_for_scala_v8}.
