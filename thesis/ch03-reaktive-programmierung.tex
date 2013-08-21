@@ -233,6 +233,14 @@ Es ist möglich \lstinline|Iteratee|s so zu kombinieren, dass der resultierende 
 Die Datensenken sind hierbei die kombinierten \lstinline|Iteratee|s.
 Beispielsweise können die Elemente der Datenquelle immer an beide \lstinline|Iteratee|s weitergegeben werden, um die Ergebnisse beider \lstinline|Iteratee|s anschließend als Paar zu zusammenzufassen. % Enumeratee.zip/zipWith
 
+Eine weitere Art der parallelen Komposition ist es, mehrere Datenquellen auf eine Datensenke abzubilden.
+Es wird hierbei ein \lstinline|Iteratee| erstellt, der von mehreren Datenquellen liest und daraus ein Ergebnis berechnet.
+Dieser \lstinline|Iteratee| ist ein verschachtelter \lstinline|Iteratee|, d.~h. das Ergebnis des äußeren \lstinline|Iteratee|s ist der innere \lstinline|Iteratee|, der schließlich das zusammengesetzte Ergebnis zurückgibt (mehr dazu in Abschnitt~\ref{ssub:anwendung_parallele_komposition_von_iteratees_mehrere_quellen}).
+In Kiselyovs Implementierung ist es möglich, in beliebiger Reihenfolge aus den unterschiedlichen Datenquellen zu lesen.
+Nach dem Kenntnisstand des Autors ist dies in Plays Implementierung nicht möglich, weil diese nicht auf einer so hohen Abstraktionsebene arbeitet, wie Kiselyovs.
+Der Grund hierfür könnte zum einen sein, dass durch die Einführung einer weiteren Abstraktionsschicht das Verständnis der Iteratee-Implementierung erschwert würde.
+Zum anderen könnte es sein, dass dieses Feature im Kontext von Web-Anwendungen zu wenig Verwendung findet und der Implementierungsaufwand deshalb nicht gerechtfertigt ist.
+
 % subsubsection komposition_von_iteratees (end)
 
 \subsubsection{Komposition von Enumerators} % (fold)
@@ -796,8 +804,8 @@ val i12: Iteratee[Int, (Option[Int], Int)] = for {
 
 % subsubsection anwendung_sequentielle_komposition_von_iteratees (end)
 
-\subsubsection{Parallele Komposition von Iteratees} % (fold)
-\label{ssub:anwendung_parallele_komposition_von_iteratees}
+\subsubsection{Parallele Komposition von Iteratees: eine Quelle auf mehrere Senken} % (fold)
+\label{ssub:anwendung_parallele_komposition_von_iteratees_eine_quelle}
 
 Bei der parallelen Komposition zweier \lstinline|Iteratee|s werden die Elemente der Datenquelle an beide \lstinline|Iteratee|s übergeben.
 Eine Datenquelle auf mehrere Datensenken abzubilden, lässt sich mit Hilfe von \lstinline|Enumeratee|s und den Methoden \lstinline|zip|, bzw. \lstinline|zipWith| bewerkstelligen.
@@ -812,9 +820,9 @@ def zip[E, A, B](inner1: Iteratee[E, A], inner2: Iteratee[E, B]):
 Sobald beide \lstinline|Iteratee|s im \lstinline|Done|-Zustand sind, werden die Ergebnisse als Paar zurückgegeben.
 Falls ein \lstinline|Iteratee| in den \lstinline|Error|-Zustand übergeht, ist auch der resultierende \lstinline|Iteratee| im \lstinline|Error|-Zustand.
 Die Verwendung von \lstinline|zipWith| ermöglicht es, das Ergebnis nicht nur als Paar zu erhalten, sondern es kann eine Funktion übergeben werden, die die Ergebnisse zu einem beliebigen Datentyp zusammenfasst.
-In Listing~\ref{lst:parallele_komposition_von_iteratees} ist ein Beispiel zu sehen, das die beiden \lstinline|Iteratee|s aus dem Beispiel für \nameref{lst:sequentielle_komposition_von_iteratees} verwendet, sie aber parallel kombiniert.
+In Listing~\ref{lst:parallele_komposition_von_iteratees_mit_einer_Quelle_auf_mehrere_senken} ist ein Beispiel zu sehen, das die beiden \lstinline|Iteratee|s aus dem Beispiel für \nameref{lst:sequentielle_komposition_von_iteratees} verwendet, sie aber parallel kombiniert.
 
-\begin{lstlisting}[caption=Parallele Komposition von Iteratees, label=lst:parallele_komposition_von_iteratees]
+\begin{lstlisting}[caption=Parallele Komposition von Iteratees mit einer Quelle und mehreren Senken, label=lst:parallele_komposition_von_iteratees_mit_einer_Quelle_auf_mehrere_senken]
 val i1: Iteratee[Int, Option[Int]] = Iteratee.head
 val i2: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
 
@@ -826,7 +834,38 @@ val result: Future[(Option[Int], Int)] = e.run(i12)
 // result hat den Wert Future((Some(1), 3))
 \end{lstlisting}
 
-% subsubsection anwendung_parallele_komposition_von_iteratees (end)
+% subsubsection anwendung_parallele_komposition_von_iteratees_eine_quelle (end)
+
+\subsubsection{Parallele Komposition von Iteratees: mehrere Quellen auf eine Senke} % (fold)
+\label{ssub:anwendung_parallele_komposition_von_iteratees_mehrere_quellen}
+
+Es können auch mehrere \lstinline|Enumerator|s auf einen \lstinline|Iteratee| angewendet werden.
+Ein auf diese Weise zusammengesetzter \lstinline|Iteratee| ist ein verschachtelter \lstinline|Iteratee|, wobei der äußere \lstinline|Iteratee| als Ergebnis einen inneren \lstinline|Iteratee| zurückliefert, der von einem weiteren \lstinline|Enumerator| Elemente benötigt.
+Wie ein solcher \lstinline|Iteratee| aussieht, ist in Listing~\ref{lst:parallele_komposition_von_iteratees_mit_mehreren_quellen_auf_eine_senke} zu sehen.
+\lstinline|headHeadIteratee| ist ein \lstinline|Iteratee|, der von zwei \lstinline|Enumerator|s liest und das jeweils erste Element zurückgibt.
+Um einen verschachtelten \lstinline|Iteratee| auszuführen, müssen die \lstinline|Iteratee|s der einzelnen Ebenen nacheinander ausgeführt werden, was an den Variablen \lstinline|intermediateResult| und \lstinline|result| zu erkennen ist.
+
+\begin{lstlisting}[caption=Parallele Komposition von Iteratees mit mehreren Quellen auf eine Senke, label=lst:parallele_komposition_von_iteratees_mit_mehreren_quellen_auf_eine_senke]
+def headHeadIteratee[A, B]:
+  Iteratee[A, Iteratee[B, (Option[A], Option[B])]] =
+    Iteratee.head.map(a => Iteratee.head.map(b => (a, b)))
+
+val i:
+  Iteratee[Char, Iteratee[Int, (Option[Char], Option[Int])]] =
+    headHeadIteratee[Char, Int]
+val e1: Enumerator[Char] = Enumerator('1', '2', '3')
+val e2: Enumerator[Int] = Enumerator()
+
+val intermediateResult:
+  Iteratee[Int, (Option[Char], Option[Int])] =
+    Iteratee.flatten(e1.run(i))
+
+val result: Future[(Option[Char], Option[Int])] =
+  e2.run(intermediateResult)
+// result hat den Wert Future((Some('1'), None))
+\end{lstlisting}
+
+% subsubsection anwendung_parallele_komposition_von_iteratees_mehrere_quellen (end)
 
 \subsubsection{Sequentielle Komposition von Enumerators} % (fold)
 \label{ssub:anwendung_sequentielle_komposition_von_enumerators}

@@ -37,24 +37,61 @@ class CompositionSpec extends Specification with NoTimeConversions {
   //   }
   // }
 
-  // "parallel composition with several sources to one sink for iteratees" should {
-  //   import Composition.Iteratees.ParallelManySourcesToOneSink._
+  "parallel composition with several sources to one sink for iteratees" should {
+     import Composition.Iteratees.ParallelManySourcesToOneSink._
 
-  //   "work for lineWithNthWord()" in {
-  //     val wordLineI = lineWithNthWord(2)
-  //     val wordE = Enumerator("foo", "bar", "baz")
-  //     val lineE = Enumerator(
-  //       "some boring line",
-  //       "foo line baz",
-  //       "baz matching line",
-  //       "some other line"
-  //       )
+      "work for headheadIteratee" in {
+        val i: Iteratee[Char, Iteratee[Int, (Option[Char], Option[Int])]] =
+          headHeadIteratee[Char, Int]
+        val e1: Enumerator[Char] = Enumerator('1', '2', '3')
+        val e2: Enumerator[Int] = Enumerator()
 
-  //     val lineI = Iteratee.flatten(wordE.run(wordLineI))
-  //     val result = lineE.run(lineI)
+        val intermediateResult: Iteratee[Int, (Option[Char], Option[Int])] =
+          Iteratee.flatten(e1.run(i))
 
-  //     await(result) === Some(("baz matching line", "baz"))
-  //   }
+        val result: Future[(Option[Char], Option[Int])] =
+          e2.run(intermediateResult)
+
+        await(result) === (Some('1'), None)
+      }
+
+//    "work for firstFirstNthIteratee with enough elements" in {
+//      val i = firstFirstNthIteratee[String]
+//      val e1: Enumerator[String] = Enumerator("first", "second", "third")
+//      val e2: Enumerator[Int] = Enumerator(1)
+//
+//      val result: Future[(Option[String], Option[Int], Option[String])] =
+//        e2.run(Iteratee.flatten(e1.run(i)))
+//
+//      await(result) === (Some("first"), Some(1), Some("second"))
+//    }
+//
+//    "work for firstFirstNthIteratee with too few elements" in {
+//      val i = firstFirstNthIteratee[String]
+//      val e1: Enumerator[String] = Enumerator("first", "second", "third")
+//      val e2: Enumerator[Int] = Enumerator()
+//
+//      val result: Future[(Option[String], Option[Int], Option[String])] =
+//        e2.run(Iteratee.flatten(e1.run(i)))
+//
+//      await(result) === (Some("first"), None, Some("second"))
+//    }
+
+     "work for lineWithNthWord()" in {
+       val wordLineI = lineWithNthWord(2)
+       val wordE = Enumerator("foo", "bar", "baz")
+       val lineE = Enumerator(
+         "some boring line",
+         "foo line baz",
+         "baz matching line",
+         "some other line"
+         )
+
+       val lineI: Iteratee[Line, Option[(Word, Line)]] = Iteratee.flatten(wordE.run(wordLineI))
+       val result = lineE.run(lineI)
+
+       await(result) === Some(("baz matching line", "baz"))
+     }
 
   //   "work for rotatingSourceIteratee()" in {
   //     val e1 = Enumerator(1, 1, 1, 1, 1, 1)
@@ -66,7 +103,7 @@ class CompositionSpec extends Specification with NoTimeConversions {
 
   //     await(r) === List(1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2)
   //   }
-  // }
+  }
 
   // "iteratee usage" should {
   //   "work" in {

@@ -8,6 +8,7 @@ import scala.concurrent.duration._
 import ExecutionContext.Implicits.global
 import scala.language.reflectiveCalls
 import scala.language.postfixOps
+import scala.Some
 
 object Composition {
   object Iteratees {
@@ -66,21 +67,62 @@ object Composition {
   //       }
   //   }
 
-  //   object ParallelManySourcesToOneSink {
-  //     type Word = String
-  //     type Line = String
+     object ParallelManySourcesToOneSink {
+       def headHeadIteratee[A, B]:
+         Iteratee[A, Iteratee[B, (Option[A], Option[B])]] =
+           Iteratee.head.map(a => Iteratee.head.map(b => (a, b)))
 
-  //     def lineWithNthWord(n: Int): Iteratee[Word, Iteratee[Line, Option[(Line, Word)]]] = {
-  //       Enumeratee.drop(n).transform(Iteratee.head[Word]).map {
-  //         case Some(word) =>
-  //           val t = Enumeratee.dropWhile[Line](!_.startsWith(word))
-  //           t.transform(Iteratee.head[Line]).map {
-  //             case Some(line) => Some(line, word)
-  //             case _ => None
-  //           }
-  //         case _ => Done(None)
-  //       }
-  //     }
+       // read first element from outer iteratee
+       // read first element from inner iteratee
+       // read second element from outer iteratee
+       def firstFirstNthIteratee[A]: Iteratee[A, Iteratee[Int, (Option[A], Option[Int], Option[A])]] = {
+         val firstAI: Iteratee[A, Option[A]] = Iteratee.head[A]
+         val firstBI: Iteratee[Int, Option[Int]] = Iteratee.head[Int]
+
+         val firstFirst: Iteratee[A, Iteratee[Int, (Option[A], Option[Int])]] =
+           firstAI.map(a => firstBI.map(b => (a, b)))
+
+         firstFirst.flatMap { innerI =>
+           Done(innerI.map {
+             case (ma, mb) => (ma, mb, None)
+           })
+         }
+
+//         firstFirst.flatMap { i =>
+//           i.flatMap {
+//             case (ma, mb) => Done(Done((ma, mb, None: Option[A])))
+//           }
+//
+////           i.flatMap {
+//////             case (ma, None)    => Done(Done((ma, None: Option[Int], None: Option[A])))
+////             case (ma, mb)    => Done(Done((ma: Option[A], mb: Option[Int], None: Option[A])))
+//////             case (ma, mb@Some(b)) => {
+//////               val t = Enumeratee.drop(b)
+//////               val inner = Iteratee.head[A].map(mc => (ma, mb, mc))
+//////               t.transform(inner)
+//////             }
+////           }
+////           Iteratee.head[A].map { c =>
+////             i.map { case (a, b) => (a, b, c) }
+////           }
+//         }
+       }
+
+
+       type Word = String
+       type Line = String
+
+       def lineWithNthWord(n: Int): Iteratee[Word, Iteratee[Line, Option[(Line, Word)]]] = {
+         Enumeratee.drop(n).transform(Iteratee.head[Word]).map {
+           case Some(word) =>
+             val t = Enumeratee.dropWhile[Line](!_.startsWith(word))
+             t.transform(Iteratee.head[Line]).map {
+               case Some(line) => Some(line, word)
+               case _ => None
+             }
+           case _ => Done(None)
+         }
+       }
 
   //     def rotatingSourceIteratee(timesPerSource: Int):
   //         Iteratee[Int, Iteratee[Int, List[Int]]] = {
@@ -98,7 +140,7 @@ object Composition {
   //         } yield result ::: group
   //       })
   //     }
-  //   }
+     }
   }
 
   object Enumerators {
