@@ -666,11 +666,11 @@ Im Companion-Objekt finden sich mehrere Konstruktormethoden, die Listenoperation
 Um alle Elemente des \lstinline|Iteratees| zu transformieren bietet sich \lstinline|map| an.
 Mit Hilfe dieser Methode werden alle Elemente durch eine angegebene Funktion transformiert, bevor sie an das innere \lstinline|Iteratee| gegeben werden.
 \lstinline|map| hat folgende Signatur:
-\begin{lstlisting}
-def map[E]: AnyRef { def apply[NE](f: E => NE): Enumeratee[E,NE] }
+\begin{lstlisting}[caption=Die Signatur von Enumeratee.map, label=lst:die_signatur_von_enumeratee_map]
+def map[E]: AnyRef { def apply[NE](f: E => NE): Enumeratee[E,NE]}
 \end{lstlisting}
 Diese Signatur wirkt sperrig, lässt sich aber sinngemäß auf folgende Vereinfachung reduzieren:
-\begin{lstlisting}
+\begin{lstlisting}[caption=Die vereinfachte Signatur von Enumeratee.map, label=lst:die_vereinfachte_signatur_von_enumeratee_map]
 def map[E, NE](f: E => NE): Enumeratee[E, NE]
 \end{lstlisting}
 
