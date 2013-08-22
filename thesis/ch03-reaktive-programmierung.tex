@@ -80,8 +80,8 @@ Diese Implementierung hält genau ein Element aus der Datenquelle.
 Außerdem findet es im Kontext von \lstinline|Iteratee|s Verwendung, um zu signalisieren, dass kein Teil der Eingabe übriggebliebenen ist.
 Wenn die Datenquelle erschöpft ist, wird dies mit dem Objekt \lstinline|Input.EOF| mitgeteilt.
 
-Sowohl \lstinline|Input.Empty|, als auch \lstinline|Input.EOF| sind vom Typ \lstinline|Input[Nothing]|.
-\lstinline|Nothing| ist ein besonderer Typ in Scala, der eine Spezialisierung jedes anderen Typs ist \cite[vgl.][S.~32]{scala_specification}.
+Sowohl \lstinline|Input.Empty|, als auch \lstinline|Input.EOF| sind vom Typ \lstinline[mathescape]|$\text{\gls{nothing}}$|.
+\lstinline[mathescape]|$\text{\gls{nothing}}$| ist ein besonderer Typ in Scala, der eine Spezialisierung jedes anderen Typs ist \cite[vgl.][S.~32]{scala_specification}.
 Weil der Typparameter des \lstinline|Input|-Datentyps \glslink{kovarianz}{kovariant} ist, lassen sich \lstinline|Input.Empty| und \lstinline|Input.EOF| mit jedem anderen \lstinline|Input| kombinieren.
 
 Ein Wert vom Typ \lstinline|Input| hat also drei mögliche Zustände:
@@ -116,7 +116,7 @@ Der \gls{adt} ist über die zwei Typen \lstinline|E| und \lstinline|A| parametri
 \lstinline|E| ist der Typ der zu konsumierenden Elemente.
 \lstinline|A| ist der Typ des zu berechnenden Ergebnisses.
 \lstinline|A| ist \glslink{kovarianz}{kovariant}, sodass auch Spezialisierungen von \lstinline|A| als Werte verwendet werden können.
-Die \gls{kovarianz} über den Typ \lstinline|A| ermöglicht es auch hier wieder \lstinline|Nothing| in den Konstruktoren zu verwenden, wie im vorigen Kapitel beschrieben.
+Die \gls{kovarianz} über den Typ \lstinline|A| ermöglicht es auch hier wieder \lstinline[mathescape]|$\text{\gls{nothing}}$| in den Konstruktoren zu verwenden, wie im vorigen Kapitel beschrieben.
 
 Ein \lstinline|Iteratee|, der mit seiner Berechnung fertig ist, ist im Zustand \lstinline|Step.Done|.
 Ein solcher \lstinline|Iteratee| hält sein berechnetes Ergebnis und den Teil der letzten Eingabe, der nicht mehr verarbeitet wurde.
