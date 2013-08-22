@@ -23,7 +23,7 @@ class EnumeratorsSpec extends Specification with NoTimeConversions {
       "enumerate correctly" in {
         val iteratee = Enumerators.sumIteratee
         val sum = Await.result(enumerator.run(iteratee), 1 second)
-        sum === 3
+        sum === 101
       }
     }
   }
@@ -34,12 +34,12 @@ class EnumeratorsSpec extends Specification with NoTimeConversions {
 
     "yield a correct result for separate application and result extraction" in {
       val sum = await(futureResult)
-      sum === 3
+      sum === 101
     }
 
     "yield a correct result for combined application and result extraction" in {
       val sum = await(futureResult2)
-      sum === 3
+      sum === 101
     }
   }
 

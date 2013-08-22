@@ -43,7 +43,7 @@ class IterateesSpec extends Specification with NoTimeConversions {
 
   "sum result with folder" should {
     "be correct" in {
-      await(Iteratees.Creation.sumResult) === 3
+      await(Iteratees.Creation.sumResult) === 101
     }
 
     Seq(

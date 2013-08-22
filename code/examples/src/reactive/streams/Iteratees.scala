@@ -57,7 +57,7 @@ object Iteratees extends App {
     }
 
     val sumResult: Future[Int] =
-      sumIterateeFromHelper.fold(folder(1, 4, -2))
-    // sumResult hat den Wert Future(3)
+      sumIterateeFromHelper.fold(folder(22, 25, 54))
+    // sumResult hat den Wert Future(101)
   }
 }

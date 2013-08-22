@@ -8,41 +8,73 @@ import scala.language.reflectiveCalls
 object Enumeratees {
   object Creation {
 
-    case object MultiplyingEnumeratee extends Enumeratee[Int, Int] {
-      def applyOn[A](inner: Iteratee[Int, A]):
-          Iteratee[Int, Iteratee[Int, A]] = {
-        Iteratee.flatten(inner.fold {
-          case Step.Cont(k) => Future(Cont {
-            case Input.El(number) =>
-              MultiplyingEnumeratee(k(Input.El(number * 2)))
-            case Input.Empty => MultiplyingEnumeratee(k(Input.Empty))
-            case Input.EOF => Done(Cont(k))
+    object Multiplying {
+
+      case object MultiplyingEnumeratee extends Enumeratee[Int, Int] {
+        def applyOn[A](inner: Iteratee[Int, A]):
+            Iteratee[Int, Iteratee[Int, A]] = {
+          Iteratee.flatten(inner.fold {
+            case Step.Cont(k) => Future(Cont {
+              case Input.El(number) =>
+                MultiplyingEnumeratee(k(Input.El(number * 2)))
+              case Input.Empty => MultiplyingEnumeratee(k(Input.Empty))
+              case Input.EOF => Done(Cont(k))
+            })
+            case _ => Future(Done(inner, Input.Empty))
           })
-          case _ => Future(Done(inner, Input.Empty))
-        })
+        }
       }
+
+     val enumerateeFromInheritance: Enumeratee[Int, Int] =
+       MultiplyingEnumeratee
+
+
+      val enumerateeFromConstructor: Enumeratee[Int, Int] =
+        Enumeratee.map(_ * 2)
+
     }
 
-   val enumerateeFromInheritance: Enumeratee[Int, Int] =
-     MultiplyingEnumeratee
+
+    object Rejuvinating {
+
+      case object RejuvinatingEnumeratee extends Enumeratee[Int, Int] {
+        def applyOn[A](inner: Iteratee[Int, A]):
+            Iteratee[Int, Iteratee[Int, A]] =
+          Iteratee.flatten(inner.fold {
+            case Step.Cont(k) => Future(Cont {
+              case Input.El(number) if number >= 50 =>
+                RejuvinatingEnumeratee(k(Input.El(number - 10)))
+              case Input.El(number) =>
+                RejuvinatingEnumeratee(k(Input.El(number)))
+              case Input.Empty => RejuvinatingEnumeratee(k(Input.Empty))
+              case Input.EOF => Done(Cont(k))
+            })
+            case _ => Future(Done(inner, Input.Empty))
+          })
+      }
+
+      val enumerateeFromInheritance: Enumeratee[Int, Int] =
+        RejuvinatingEnumeratee
 
 
-    val enumerateeFromConstructor: Enumeratee[Int, Int] =
-      Enumeratee.map(_ * 2)
+      val enumerateeFromConstructor: Enumeratee[Int, Int] =
+        Enumeratee.map(x => if (x >= 50) x - 10 else x)
+
+    }
 
   }
 
   object ApplicationOnIteratees {
-    val t: Enumeratee[Int, Int] = Enumeratee.map(_ * 2)
+    val t: Enumeratee[Int, Int] =
+      Enumeratee.map(x => if (x >= 50) x - 10 else x)
     val i: Iteratee[Int, List[Int]] = Iteratee.getChunks
-    val e1: Enumerator[Int] = Enumerator(1, 2)
-    val e2: Enumerator[Int] = Enumerator(3, 4)
+    val e: Enumerator[Int] = Enumerator(22, 54)
 
     val transformedI: Iteratee[Int, Iteratee[Int, List[Int]]] = t(i)
     val originalI: Iteratee[Int, List[Int]] =
-      Iteratee.flatten(e1.run(transformedI))
-    val result: Future[List[Int]] = e2.run(originalI)
-    // result hat den Wert Future(List(2, 4, 3, 4))
+      Iteratee.flatten(e.run(transformedI))
+    val result: Future[List[Int]] = e.run(originalI)
+    // result hat den Wert Future(List(22, 44, 22, 54))
   }
 
   object ApplicationOnEnumerators {
@@ -52,15 +84,16 @@ object Enumeratees {
   }
 
   object ApplicationOnEnumeratees {
-    val t1: Enumeratee[Int, Int] = Enumeratee.filter(_ % 2 == 0)
-    val t2: Enumeratee[Int, String] = Enumeratee.map(_.toString)
-    val t12: Enumeratee[Int, String] = t1.compose(t2)
+    val t1: Enumeratee[Int, Int] = Enumeratee.filter(_ < 70)
+    val t2: Enumeratee[Int, Int] =
+      Enumeratee.map(x => if (x >= 50) x - 10 else x)
+    val t12: Enumeratee[Int, Int] = t1.compose(t2)
 
-    val e: Enumerator[Int] = Enumerator(1, 2, 3)
-    val i: Iteratee[String, List[String]] = Iteratee.getChunks
+    val e: Enumerator[Int] = Enumerator(22, 25, 54, 76)
+    val i: Iteratee[Int, List[Int]] = Iteratee.getChunks
 
-    val result: Future[List[String]] = e.through(t12).run(i)
-    // result hat den Wert Future(List("2"))
+    val result: Future[List[Int]] = e.through(t12).run(i)
+    // result hat den Wert Future(List(22, 25, 44))
   }
 
 }

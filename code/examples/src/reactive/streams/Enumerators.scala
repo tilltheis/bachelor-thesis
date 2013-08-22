@@ -26,10 +26,10 @@ object Enumerators {
     }
 
     val numberEnumeratorFromInheritance: Enumerator[Int] =
-      NumberEnumerator(1, 4, -2)
+      NumberEnumerator(22, 25, 54)
 
     val numberEnumeratorFromApply: Enumerator[Int] =
-      Enumerator(1, 4, -2)
+      Enumerator(22, 25, 54)
 
     def numberEnumerator(xs: Int*): Enumerator[Int] = {
       Concurrent.unicast { channel =>
@@ -39,12 +39,12 @@ object Enumerators {
     }
 
     val numberEnumeratorFromUnicast: Enumerator[Int] =
-      numberEnumerator(1, 4, -2)
+      numberEnumerator(22, 25, 54)
   }
 
   object Application {
     val iteratee: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
-    val enumerator: Enumerator[Int] = Enumerator(1, 4, -2)
+    val enumerator: Enumerator[Int] = Enumerator(22, 25, 54)
     val futureIterateeAfterApplication: Future[Iteratee[Int, Int]] =
       enumerator(iteratee)
 
@@ -52,8 +52,10 @@ object Enumerators {
       Iteratee.flatten(futureIterateeAfterApplication)
 
     val futureResult: Future[Int] = iterateeAfterApplication.run
+    // futureResult hat den Wert Future(101)
 
     val futureResult2: Future[Int] = enumerator.run(iteratee)
+    // futureResult2 hat den Wert Future(101)
   }
 
   // object NestedApplication {
