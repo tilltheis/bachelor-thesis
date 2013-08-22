@@ -145,9 +145,10 @@ Ein \lstinline|Iteratee| hat also einen Verarbeitungszustand vom Typ \lstinline|
   \item Es ist ein Fehler aufgetreten (\lstinline|Step.Error|).
 \end{enumerate}
 
-Außerdem ist anzumerken, dass der \lstinline|Iteratee|-Typ ist eine Monade.
+Außerdem ist anzumerken, dass der \lstinline|Iteratee|-Typ eine Monade ist.
 Dadurch ist es möglich, einen beliebigen Wert in die Monade zu heben, die dann im \lstinline|Step.Done|-Zustand ist.
 Auch kann ein erfolgreich berechneter Wert innerhalb der Monade transformiert werden.
+\todo{an das Monad-Kap. anpassen}
 
 % subsection design_iteratees (end)
 
