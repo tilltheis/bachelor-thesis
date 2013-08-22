@@ -171,8 +171,8 @@ Der zurückgegebene \lstinline|Iteratee| befindet sich in der \lstinline|Future|
 
 Bei der Anwendung dieser Funktion werden dem \lstinline|Iteratee| so lange Daten übergeben, bis die Datenquelle erschöpft ist oder bis der \lstinline|Iteratee| keine Daten mehr annimmt.
 Die Herkunft der Daten, die der \lstinline|Enumerator| an den \lstinline|Iteratee| sendet, ist beliebig.
-Weil der Rückgabetyp sich in der \lstinline|Future|-Monade befindet können auch zeitintensive Berechnungen durchgeführt werden, ohne den Programmfluss zu unterbrechen.
-Dadurch ist es beispielsweise möglich, die Daten aus Dateien oder dem Netzwerk zu empfangen.
+Weil der Rückgabetyp sich in der \lstinline|Future|-Monade befindet, können auch zeitintensive Berechnungen durchgeführt werden, ohne den Programmfluss zu unterbrechen.
+Dadurch ist es beispielsweise möglich, die Daten aus Dateien oder dem Netzwerk zu empfangen ohne zu blockieren.
 
 % subsection design_enumerators (end)
 
