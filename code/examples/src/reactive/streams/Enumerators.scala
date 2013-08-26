@@ -58,38 +58,4 @@ object Enumerators {
     // futureResult2 hat den Wert Future(101)
   }
 
-  // object NestedApplication {
-  //   val sumIterateeAfterE1: Future[Iteratee[Int, Int]] =
-  //     e1(sumIteratee)
-
-  //   val sumIterateeAfterE2: Future[Future[Iteratee[Int, Int]]] =
-  //     sumIterateeAfterE1.map(e2(_))
-
-  //   val sumResult: Future[Future[Future[Int]]] =
-  //     sumIterateeAfterE2.map(_.map(_.run))
-  // }
-
-  // object FlattenedApplication {
-  //   val sumIterateeAfterE1: Iteratee[Int, Int] =
-  //     Iteratee.flatten(e1(sumIteratee))
-
-  //   val sumIterateeAfterE2: Iteratee[Int, Int] =
-  //     Iteratee.flatten(e2(sumIterateeAfterE1))
-
-  //   val sumResult: Future[Int] = sumIterateeAfterE2.run
-  // }
-
-  // object CombinedApplication {
-  //   val e1e2: Enumerator[Int] = e1.andThen(e2)
-
-  //   val sumIterateeAfterE1E2: Iteratee[Int, Int] =
-  //     Iteratee.flatten(e1e2(sumIteratee))
-
-  //   val sumResult: Future[Int] = sumIterateeAfterE1E2.run
-  // }
-
-  // object ApplicationWithRun {
-  //   val e1e2: Enumerator[Int] = e1.andThen(e2)
-  //   val sumResult: Future[Int] = e1e2.run(sumIteratee)
-  // }
 }

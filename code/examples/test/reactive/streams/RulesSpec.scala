@@ -11,298 +11,160 @@ import scala.concurrent.Future
 import java.io.{PrintWriter, FileOutputStream}
 
 class RulesSpec extends Specification with NoTimeConversions {
-  // EFFECTLESS ITERATEES
-  {
-    type E = Char
-    type A = List[Char]
-    type I = Iteratee[E, A]
 
-    val s1 = "foo"
-    val s2 = "bar"
+  type E     = Char           // Der Eingabeelementtyp (Char)
+  type I[A]  = Iteratee[E, A] // Ein Iteratee von Char nach A
+  type M[A]  = Future[A]      // Die Monade (Future)
+  type IM[A] = M[I[A]]        // Ein Iteratee in der Future-Monade
 
-    //  def prefixIteratee(prefix: String): I = Iteratee.foldM[E, String]("") {
-    //    case (`prefix`, _) => Future(prefix)
-    //    case (s, c) if prefix.charAt(s.length) == c => Future(s + c)
-    //    case _ => Future.failed(new Exception("prefix not found"))
-    //  }.map(_.toList)
+  def en_str(s: String): Enumerator[E] = Enumerator.enumerate(s)
 
-    def prefixIteratee(prefix: String): I = {
-      def go(s: String): I = s match {
-        case "" => Done(prefix.toList)
-        case _  => Cont {
-          case Input.El(c) if s.head == c => go(s.tail)
-          case Input.Empty => go(s)
-          case input => Error("prefix not found", input)
-        }
-      }
+  def runM[A](mi: IM[A]): M[A] = Iteratee.flatten(mi).run
 
-      go(prefix)
-    }
-
-
-    val i: I = prefixIteratee("foo")
-    //  val f: A => I = Done(_)
-    val f: A => I = x => Done(s"f(${x.mkString})".toList)
-
-
-    def en_str(s: String): I => I = (i: I) =>
-      Iteratee.flatten(Enumerator.enumerate(s).apply(i))
-
-
-    "the composition of enumerators" should {
-      "correspond to the concatenation of their sources." in {
-        val left: I => I = en_str(s1 + s2)
-        val right: I => I = en_str(s2).compose(en_str(s1))
-
-  //      println(await(left(i).run))
-  //      println(await(right(i).run))
-
-        await(left(i).run) === await(right(i).run)
+  def prefixIteratee(prefix: String): I[String] = {
+    def go(s: String): I[String] = s match {
+      case "" => Done(prefix)
+      case _  => Cont {
+        case Input.El(c) if s.head == c => go(s.tail)
+        case Input.Empty => go(s)
+        case input => Error("prefix not found", input)
       }
     }
 
+    go(prefix)
+  }
 
-    "an iteratee that recognizes the string s" should {
-      "recognize (s+s2) for any s2" in {
-        val left: I = en_str(s1 + s2)(i.flatMap(f))
-        val right: I = en_str(s1)(i).flatMap(en_str(s2).compose(f))
+  "the composition of effectful enumerators" should {
+    "correspond to the concatenation of their sources." in {
+      val s1: String = "foo"
+      val s2: String = "bar"
 
-  //      println(await(left.run))
-  //      println(await(right.run))
+      val left: Enumerator[E] = en_str(s1 + s2)
+      val right: Enumerator[E] = en_str(s1).andThen(en_str(s2))
 
-        await(left.run) === await(right.run)
-      }
-    }
+      val i: I[String] = prefixIteratee("foo")
 
+      // runM(left(i)).foreach(println) // with this enabled there will be a wrong result
+      // runM(right(i)).foreach(println) // with this enabled there will be a wrong result
 
-    "flatMap'ing over a diverging iteratee" should {
-      "result in another diverging iteratee" in {
-
-        // http://wwwmath.uni-muenster.de/u/lammers/EDU/ss11/DiskreteStrukturen/Folien/V-2011-05-03.pdf
-        // http://de.wikipedia.org/wiki/Absorbierendes_Element
-        // http://en.wikipedia.org/wiki/Absorbing_element
-        // http://en.wikipedia.org/wiki/Semigroup#Identity_and_zero
-        // http://de.wikipedia.org/wiki/Halbgruppe#Absorption
-
-        // the absorbing or zero element of flatMap
-        lazy val failure: I = Cont(_ => failure)
-
-        val left: I = failure.flatMap(f)
-        val right: I = failure
-
-        def matchDivergingIteratee(i: I) =
-          await(i.run) must throwA[RuntimeException].like {
-            case e => e.getMessage === "diverging iteratee after Input.EOF"
-          }
-
-        matchDivergingIteratee(left) and matchDivergingIteratee(right)
-      }
-    }
-
-
-    "flatMap over iteratees" should {
-      "be right distributive" in {
-        // left biased alternative
-        def alternative(i1: I, i2: I): I = {
-          def toFuturePair[A](p: (Future[A], Future[A])): Future[(A, A)] =
-            Future.sequence(Seq(p._1, p._2)) map { case Seq(x, y) => (x, y) }
-
-          def flatFeed(i: I, in: Input[E]): I = Iteratee.flatten(i.feed(in))
-
-          val doneM = toFuturePair(Iteratee.isDoneOrError(i1), Iteratee.isDoneOrError(i2))
-          Iteratee.flatten(doneM.map {
-            case (true, _) => i1
-            case (_, true) => i2
-            case _         => new Iteratee[E, A] {
-              def fold[B](folder: (Step[E, A]) => Future[B]): Future[B] = folder(Step.Cont {
-                in => alternative(flatFeed(i1, in), flatFeed(i2, in))
-              })
-            }
-          })
-        }
-
-        val i: I = Iteratee.head.map(_ => "i".toList)
-  //      val k1: A => I = x => Done(x)
-        val k1: A => I = x => Iteratee.head.map(x => s"k1(${x.mkString})".toList)
-        val k2: A => I = x => Done(s"k2(${x.mkString})".toList)
-
-        val left: I = i.flatMap(x => alternative(k1(x), k2(x)))
-        val right: I = alternative(i.flatMap(k1), i.flatMap(k2))
-
-        def run(i: I) = en_str("foobar")(i).run
-
-//        println(await(run(left)))
-//        println(await(run(right)))
-
-        await(run(left)) === await(run(right))
-      }
+      await(runM(left(i))) === await(runM(right(i)))
     }
   }
 
 
-  // EFFECTFUL ITERATEES
-  {
-    type E     = Char           // Der Eingabeelementtyp (Char)
-    type I[A]  = Iteratee[E, A] // Ein Iteratee von Char nach A
-    type M[A]  = Future[A]      // Die Monade (Future)
-    type IM[A] = M[I[A]]        // Ein Iteratee in der Future-Monade
+  "an effectful iteratee that recognizes the string s" should {
+    "recognize (s+s2) for any s2" in {
+      def flatMap[A, B](m: IM[A], f: A => IM[B]): IM[B] =
+        m.map(_.flatMapM(f))
 
-    def en_str(s: String): Enumerator[E] = Enumerator.enumerate(s)
+      val s1: String = "foo"
+      val s2: String = "bar"
 
-    def runM[A](mi: IM[A]): M[A] = Iteratee.flatten(mi).run
+      val i: I[String] = prefixIteratee("foo")
+      val f: String => I[String] = x => Done(s"f($x)")
 
-    def prefixIteratee(prefix: String): I[String] = {
-      def go(s: String): I[String] = s match {
-        case "" => Done(prefix)
-        case _  => Cont {
-          case Input.El(c) if s.head == c => go(s.tail)
-          case Input.Empty => go(s)
-          case input => Error("prefix not found", input)
+      val left: IM[String] = en_str(s1 + s2)(i.flatMap(f))
+      val right: IM[String] = flatMap(en_str(s1)(i), (x: String) => en_str(s2)(f(x)))
+
+      // runM(left).foreach(println)
+      // runM(right).foreach(println)
+
+      await(runM(left)) === await(runM(right))
+    }
+  }
+
+
+  "an effectful iteratee that does not recognize the string s" should {
+    "not recognize anything" in {
+      val s: String = "baz"
+
+      val i: I[String] = prefixIteratee("foo")
+      val f: String => I[String] = x => Done(s"f($x)")
+
+      val left: IM[String] = en_str(s)(i.flatMap(f))
+      val right: IM[String] = en_str(s)(i).map(_.flatMap(f))
+
+      // runM(left).foreach(println)
+      // runM(right).foreach(println)
+
+      def matchNotRecognizingIteratee(i: IM[String]) =
+        await(runM(i)) must throwA[RuntimeException].like {
+          case e => e.getMessage === "prefix not found"
         }
+
+      matchNotRecognizingIteratee(left) and matchNotRecognizingIteratee(right)
+    }
+  }
+
+
+  "flatMap'ing over a diverging effectful iteratee" should {
+    "result in another diverging effectful iteratee" in {
+      // the absorbing or zero element of flatMap
+      def failure[A]: I[A] = Cont(_ => failure)
+
+      val f: String => I[String] = x => Done(s"f(${x.mkString})")
+
+      val left: I[String] = failure.flatMap(f)
+      val right: I[String] = failure
+
+      def matchDivergingIteratee[A](i: I[A]) =
+        await(i.run) must throwA[RuntimeException].like {
+          case e => e.getMessage === "diverging iteratee after Input.EOF"
+        }
+
+      matchDivergingIteratee(left) and matchDivergingIteratee(right)
+    }
+  }
+
+
+  "flatMap over effectful iteratees" should {
+    "be right distributive if it is idempotent" in {
+      def toFuturePair[A](p: (Future[A], Future[A])): Future[(A, A)] =
+        Future.sequence(Seq(p._1, p._2)).map { case Seq(x, y) => (x, y) }
+
+      def isIdempotent[A](i: I[A]) = {
+        val s: String = "foobar"
+        val left: M[(I[A], I[A])] = en_str(s)(i).flatMap(x => Future((x, x)))
+        val right: M[(I[A], I[A])] = en_str(s)(i).flatMap(x => en_str(s)(i).flatMap(y => Future((x, y))))
+        val leftResult: M[(A, A)] = left.flatMap(p => toFuturePair(p._1.run, p._2.run))
+        val rightResult: M[(A, A)] = right.flatMap(p => toFuturePair(p._1.run, p._2.run))
+        // println("left: " + await(leftResult) + " right: " + await(rightResult))
+        await(leftResult) == await(rightResult)
       }
 
-      go(prefix)
-    }
+      // left biased alternative
+      def alternative[A](i1: I[A], i2: I[A]): I[A] = {
+        def flatFeed(i: I[A], in: Input[E]): I[A] = Iteratee.flatten(i.feed(in))
 
-    "the composition of effectful enumerators" should {
-      "correspond to the concatenation of their sources." in {
-        val s1: String = "foo"
-        val s2: String = "bar"
-
-        val left: Enumerator[E] = en_str(s1 + s2)
-        val right: Enumerator[E] = en_str(s1).andThen(en_str(s2))
-
-        val i: I[String] = prefixIteratee("foo")
-
-        // runM(left(i)).foreach(println) // with this enabled there will be a wrong result
-        // runM(right(i)).foreach(println) // with this enabled there will be a wrong result
-
-        await(runM(left(i))) === await(runM(right(i)))
-      }
-    }
-
-
-    "an effectful iteratee that recognizes the string s" should {
-      "recognize (s+s2) for any s2" in {
-        def flatMap[A, B](m: IM[A], f: A => IM[B]): IM[B] =
-          m.map(_.flatMapM(f))
-
-        val s1: String = "foo"
-        val s2: String = "bar"
-
-        val i: I[String] = prefixIteratee("foo")
-        val f: String => I[String] = x => Done(s"f($x)")
-
-        val left: IM[String] = en_str(s1 + s2)(i.flatMap(f))
-        val right: IM[String] = flatMap(en_str(s1)(i), (x: String) => en_str(s2)(f(x)))
-
-        // runM(left).foreach(println)
-        // runM(right).foreach(println)
-
-        await(runM(left)) === await(runM(right))
-      }
-    }
-
-
-    "an effectful iteratee that does not recognize the string s" should {
-      "not recognize anything" in {
-        val s: String = "baz"
-
-        val i: I[String] = prefixIteratee("foo")
-        val f: String => I[String] = x => Done(s"f($x)")
-
-        val left: IM[String] = en_str(s)(i.flatMap(f))
-        val right: IM[String] = en_str(s)(i).map(_.flatMap(f))
-
-        // runM(left).foreach(println)
-        // runM(right).foreach(println)
-
-        def matchNotRecognizingIteratee(i: IM[String]) =
-          await(runM(i)) must throwA[RuntimeException].like {
-            case e => e.getMessage === "prefix not found"
+        val doneM = toFuturePair(Iteratee.isDoneOrError(i1), Iteratee.isDoneOrError(i2))
+        Iteratee.flatten(doneM.map {
+          case (true, _) => i1
+          case (_, true) => i2
+          case _         => new Iteratee[E, A] {
+            def fold[B](folder: (Step[E, A]) => Future[B]): Future[B] = folder(Step.Cont {
+              in => alternative(flatFeed(i1, in), flatFeed(i2, in))
+            })
           }
-
-        matchNotRecognizingIteratee(left) and matchNotRecognizingIteratee(right)
+        })
       }
-    }
 
+      val i: I[String] = Iteratee.head.map(_ => "i")
 
-    "flatMap'ing over a diverging effectful iteratee" should {
-      "result in another diverging effectful iteratee" in {
+      val k1: String => I[String] = x => Iteratee.head.map(x => s"k1($x)")
+      val k2: String => I[String] = x => Done(s"k2($x)")
 
-        // http://wwwmath.uni-muenster.de/u/lammers/EDU/ss11/DiskreteStrukturen/Folien/V-2011-05-03.pdf
-        // http://de.wikipedia.org/wiki/Absorbierendes_Element
-        // http://en.wikipedia.org/wiki/Absorbing_element
-        // http://en.wikipedia.org/wiki/Semigroup#Identity_and_zero
-        // http://de.wikipedia.org/wiki/Halbgruppe#Absorption
+      val left: I[String] = i.flatMap(x => alternative(k1(x), k2(x)))
+      val right: I[String] = alternative(i.flatMap(k1), i.flatMap(k2))
 
-        // the absorbing or zero element of flatMap
-        def failure[A]: I[A] = Cont(_ => failure)
+      def run[A](i: I[A]) = runM(en_str("foobar")(i))
 
-        val f: String => I[String] = x => Done(s"f(${x.mkString})")
+      // run(left).foreach(println)
+      // run(right).foreach(println)
 
-        val left: I[String] = failure.flatMap(f)
-        val right: I[String] = failure
+       val matchIdempotence = isIdempotent(i) === true
+      val matchEquality = await(run(left)) === await(run(right))
 
-        def matchDivergingIteratee[A](i: I[A]) =
-          await(i.run) must throwA[RuntimeException].like {
-            case e => e.getMessage === "diverging iteratee after Input.EOF"
-          }
-
-        matchDivergingIteratee(left) and matchDivergingIteratee(right)
-      }
-    }
-
-
-    "flatMap over effectful iteratees" should {
-      "be right distributive if it is idempotent" in {
-        def toFuturePair[A](p: (Future[A], Future[A])): Future[(A, A)] =
-          Future.sequence(Seq(p._1, p._2)).map { case Seq(x, y) => (x, y) }
-
-        def isIdempotent[A](i: I[A]) = {
-          val s: String = "foobar"
-          val left: M[(I[A], I[A])] = en_str(s)(i).flatMap(x => Future((x, x)))
-          val right: M[(I[A], I[A])] = en_str(s)(i).flatMap(x => en_str(s)(i).flatMap(y => Future((x, y))))
-          val leftResult: M[(A, A)] = left.flatMap(p => toFuturePair(p._1.run, p._2.run))
-          val rightResult: M[(A, A)] = right.flatMap(p => toFuturePair(p._1.run, p._2.run))
-//          println("left: " + await(leftResult) + " right: " + await(rightResult))
-          await(leftResult) == await(rightResult)
-        }
-
-        // left biased alternative
-        def alternative[A](i1: I[A], i2: I[A]): I[A] = {
-          def flatFeed(i: I[A], in: Input[E]): I[A] = Iteratee.flatten(i.feed(in))
-
-          val doneM = toFuturePair(Iteratee.isDoneOrError(i1), Iteratee.isDoneOrError(i2))
-          Iteratee.flatten(doneM.map {
-            case (true, _) => i1
-            case (_, true) => i2
-            case _         => new Iteratee[E, A] {
-              def fold[B](folder: (Step[E, A]) => Future[B]): Future[B] = folder(Step.Cont {
-                in => alternative(flatFeed(i1, in), flatFeed(i2, in))
-              })
-            }
-          })
-        }
-
-        val i: I[String] = Iteratee.head.map(_ => "i")
-
-        val k1: String => I[String] = x => Iteratee.head.map(x => s"k1($x)")
-        val k2: String => I[String] = x => Done(s"k2($x)")
-
-        val left: I[String] = i.flatMap(x => alternative(k1(x), k2(x)))
-        val right: I[String] = alternative(i.flatMap(k1), i.flatMap(k2))
-
-        def run[A](i: I[A]) = runM(en_str("foobar")(i))
-
-//        run(left).foreach(println)
-//        run(right).foreach(println)
-
-        val matchIdempotence = isIdempotent(i) === true
-        val matchEquality = await(run(left)) === await(run(right))
-
-        matchIdempotence and matchEquality
-      }
+      matchIdempotence and matchEquality
     }
   }
 }

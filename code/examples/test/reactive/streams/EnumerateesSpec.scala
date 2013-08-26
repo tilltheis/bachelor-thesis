@@ -13,39 +13,6 @@ import test.Helpers.await
 
 class EnumerateesSpec extends Specification with NoTimeConversions {
   Seq(
-      ("inheritance", Enumeratees.Creation.Multiplying.enumerateeFromInheritance),
-      ("constructor", Enumeratees.Creation.Multiplying.enumerateeFromConstructor)
-    ).foreach { pair =>
-      val (kind, enumeratee) = pair
-
-    "creating a multiplying enumeratee from " + kind should {
-      val enumerator = Enumerator(1, 4, -2)
-      // val enumeratee = enumerateeFromInheritance
-
-      "yield a correct result" in {
-        val iteratee: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
-
-        val transformedIteratee = enumeratee.transform(iteratee)
-        await(enumerator.run(transformedIteratee)) === 6
-      }
-
-      "work with prematurely done iteratees" in {
-        val iteratee = Cont[Int, Int] {
-          case Input.El(n) => Done(n, Input.Empty)
-          case in => Error("not an element", in)
-        }
-
-        val transformedIteratee = enumeratee.transform(iteratee)
-        await(enumerator.run(transformedIteratee)) === 2
-
-        val transformedIteratee2 = enumeratee.transform(iteratee)
-        await(Enumerator.enumInput(Input.Empty).run(transformedIteratee2)) must throwAn[Exception]
-      }
-    }
-  }
-
-
-  Seq(
       ("inheritance", Enumeratees.Creation.Rejuvinating.enumerateeFromInheritance),
       ("constructor", Enumeratees.Creation.Rejuvinating.enumerateeFromConstructor)
     ).foreach { pair =>

@@ -716,6 +716,7 @@ val e: Enumerator[Int] = Enumerator(22, 54)
 val transformedI: Iteratee[Int, Iteratee[Int, List[Int]]] = t(i)
 val originalI: Iteratee[Int, List[Int]] =
   Iteratee.flatten(e.run(transformedI))
+
 val result: Future[List[Int]] = e.run(originalI)
 // result hat den Wert Future(List(22, 44, 22, 54))
 \end{lstlisting}

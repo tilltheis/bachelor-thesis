@@ -8,33 +8,6 @@ import scala.language.reflectiveCalls
 object Enumeratees {
   object Creation {
 
-    object Multiplying {
-
-      case object MultiplyingEnumeratee extends Enumeratee[Int, Int] {
-        def applyOn[A](inner: Iteratee[Int, A]):
-            Iteratee[Int, Iteratee[Int, A]] = {
-          Iteratee.flatten(inner.fold {
-            case Step.Cont(k) => Future(Cont {
-              case Input.El(number) =>
-                MultiplyingEnumeratee(k(Input.El(number * 2)))
-              case Input.Empty => MultiplyingEnumeratee(k(Input.Empty))
-              case Input.EOF => Done(Cont(k))
-            })
-            case _ => Future(Done(inner, Input.Empty))
-          })
-        }
-      }
-
-     val enumerateeFromInheritance: Enumeratee[Int, Int] =
-       MultiplyingEnumeratee
-
-
-      val enumerateeFromConstructor: Enumeratee[Int, Int] =
-        Enumeratee.map(_ * 2)
-
-    }
-
-
     object Rejuvinating {
 
       case object RejuvinatingEnumeratee extends Enumeratee[Int, Int] {
@@ -73,6 +46,7 @@ object Enumeratees {
     val transformedI: Iteratee[Int, Iteratee[Int, List[Int]]] = t(i)
     val originalI: Iteratee[Int, List[Int]] =
       Iteratee.flatten(e.run(transformedI))
+
     val result: Future[List[Int]] = e.run(originalI)
     // result hat den Wert Future(List(22, 44, 22, 54))
   }
