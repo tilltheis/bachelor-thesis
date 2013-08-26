@@ -9,7 +9,7 @@ scalaSource in Test := file("test")
 fork in Test := true
 
 libraryDependencies ++= Seq(
-  "play" % "play_2.10" % "2.1.2",
+  "play" % "play_2.10" % "2.1.3",
   "org.specs2" %% "specs2" % "1.14" % "test"
 )
 
