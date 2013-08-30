@@ -1,16 +1,16 @@
 package reactive.streams
 
-import scala.language.reflectiveCalls
-
 import org.specs2.mutable._
-import org.specs2.time.NoTimeConversions
-import play.api.libs.iteratee._
-import test.Helpers.await
+import org.specs2.ScalaCheck
+import org.scalacheck._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import java.io.{PrintWriter, FileOutputStream}
 
-class RulesSpec extends Specification with NoTimeConversions {
+import play.api.libs.iteratee._
+
+import test.Helpers.await
+
+class RulesSpec extends Specification with ScalaCheck {
 
   type E     = Char           // Der Eingabeelementtyp (Char)
   type I[A]  = Iteratee[E, A] // Ein Iteratee von Char nach A
@@ -20,6 +20,12 @@ class RulesSpec extends Specification with NoTimeConversions {
   def en_str(s: String): Enumerator[E] = Enumerator.enumerate(s)
 
   def runM[A](mi: IM[A]): M[A] = Iteratee.flatten(mi).run
+
+  def unsafeHeadIteratee[E]: Iteratee[E, E] = Cont {
+    case Input.El(el) => Done(el, Input.Empty)
+    case Input.Empty  => unsafeHeadIteratee
+    case Input.EOF    => Error("premature EOF", Input.EOF)
+  }
 
   def prefixIteratee(prefix: String): I[String] = {
     def go(s: String): I[String] = s match {
@@ -34,18 +40,47 @@ class RulesSpec extends Specification with NoTimeConversions {
     go(prefix)
   }
 
+
+  "unsafeHeadIteratee" should {
+    "recognize inputs with at least one element" in check {
+      (s: String) => !s.isEmpty ==> {
+        await(runM(en_str(s)(unsafeHeadIteratee))) === s.head
+      }
+    }
+
+    "not recognize empty inputs" in {
+      await(unsafeHeadIteratee[Any].run) must throwA[RuntimeException].like {
+        case e => e.getMessage === "premature EOF"
+      }
+    }
+  }
+
+  "prefixIteratee" should {
+    "recognize inputs that begin with a given prefix" in check {
+      (s: String) => {
+        val prefix = s.take(scala.util.Random.nextInt(s.length + 1))
+        await(runM(en_str(s)(prefixIteratee(prefix)))) === prefix
+      }
+    }
+
+    "not recognize inputs that do not begin with a given prefix" in check {
+      (s: String, prefix: String) => !s.startsWith(prefix) ==> {
+        await(prefixIteratee(prefix).run) must throwA[RuntimeException].like {
+          case e => e.getMessage === "prefix not found"
+        }
+      }
+    }
+  }
+
+
+
   "the composition of effectful enumerators" should {
-    "correspond to the concatenation of their sources." in {
-      val s1: String = "foo"
-      val s2: String = "bar"
+    "correspond to the concatenation of their sources." in check {
+        (s1: String, s2: String) =>
+      val left = en_str(s1 + s2)
+      val right = en_str(s1).andThen(en_str(s2))
 
-      val left: Enumerator[E] = en_str(s1 + s2)
-      val right: Enumerator[E] = en_str(s1).andThen(en_str(s2))
-
-      val i: I[String] = prefixIteratee("foo")
-
-      // runM(left(i)).foreach(println) // with this enabled there will be a wrong result
-      // runM(right(i)).foreach(println) // with this enabled there will be a wrong result
+      val i = Iteratee.head[Char]
 
       await(runM(left(i))) === await(runM(right(i)))
     }
@@ -53,47 +88,43 @@ class RulesSpec extends Specification with NoTimeConversions {
 
 
   "an effectful iteratee that recognizes the string s" should {
-    "recognize (s+s2) for any s2" in {
-      def flatMap[A, B](m: IM[A], f: A => IM[B]): IM[B] =
-        m.map(_.flatMapM(f))
+    "recognize (s+s2) for any s2" in check {
+      (s1: String, s2: String) => s1.length > 0 ==> {
+        def flatMap[A, B](m: IM[A], f: A => IM[B]): IM[B] =
+          m.map(_.flatMapM(f))
 
-      val s1: String = "foo"
-      val s2: String = "bar"
+        val i: I[E] = unsafeHeadIteratee
+        val f: E => I[String] = c => Done(s"f($c)")
 
-      val i: I[String] = prefixIteratee("foo")
-      val f: String => I[String] = x => Done(s"f($x)")
+        val left: IM[String] = en_str(s1 + s2)(i.flatMap(f))
+        val right: IM[String] = flatMap(en_str(s1)(i), (x: E) => en_str(s2)(f(x)))
 
-      val left: IM[String] = en_str(s1 + s2)(i.flatMap(f))
-      val right: IM[String] = flatMap(en_str(s1)(i), (x: String) => en_str(s2)(f(x)))
-
-      // runM(left).foreach(println)
-      // runM(right).foreach(println)
-
-      await(runM(left)) === await(runM(right))
+        await(runM(left)) === await(runM(right))
+      }
     }
   }
 
 
   "an effectful iteratee that does not recognize the string s" should {
-    "not recognize anything" in {
-      val s: String = "baz"
+    "not recognize anything" in check {
+      (s: String) => (s.isEmpty || s.charAt(0) != 'a') ==> {
+        val i: I[String] = prefixIteratee("a")
+        val f: String => I[String] = x => Done(s"f($x)")
 
-      val i: I[String] = prefixIteratee("foo")
-      val f: String => I[String] = x => Done(s"f($x)")
+        val left: IM[String] = en_str(s)(i.flatMap(f))
+        val right: IM[String] = en_str(s)(i).map(_.flatMap(f))
 
-      val left: IM[String] = en_str(s)(i.flatMap(f))
-      val right: IM[String] = en_str(s)(i).map(_.flatMap(f))
+        runM(left).foreach(x => println(s"left: $x"))
+        runM(right).foreach(x => println(s"right: $x"))
 
-      // runM(left).foreach(println)
-      // runM(right).foreach(println)
+        def matchNotRecognizingIteratee(i: IM[String]) =
+          await(runM(i)) must throwA[RuntimeException].like {
+            case e => e.getMessage === "prefix not found"
+          }
 
-      def matchNotRecognizingIteratee(i: IM[String]) =
-        await(runM(i)) must throwA[RuntimeException].like {
-          case e => e.getMessage === "prefix not found"
-        }
-
-      matchNotRecognizingIteratee(left) and matchNotRecognizingIteratee(right)
-    }
+        matchNotRecognizingIteratee(left) and matchNotRecognizingIteratee(right)
+      }
+    }.set(minTestsOk = 1000)
   }
 
 
@@ -118,53 +149,53 @@ class RulesSpec extends Specification with NoTimeConversions {
 
 
   "flatMap over effectful iteratees" should {
-    "be right distributive if it is idempotent" in {
-      def toFuturePair[A](p: (Future[A], Future[A])): Future[(A, A)] =
-        Future.sequence(Seq(p._1, p._2)).map { case Seq(x, y) => (x, y) }
+    "be right distributive if it is idempotent" in check {
+      (s: String) => !s.isEmpty ==> {
+        def toFuturePair[A](p: (Future[A], Future[A])): Future[(A, A)] =
+          Future.sequence(Seq(p._1, p._2)).map { case Seq(x, y) => (x, y) }
 
-      def isIdempotent[A](i: I[A]) = {
-        val s: String = "foobar"
-        val left: M[(I[A], I[A])] = en_str(s)(i).flatMap(x => Future((x, x)))
-        val right: M[(I[A], I[A])] = en_str(s)(i).flatMap(x => en_str(s)(i).flatMap(y => Future((x, y))))
-        val leftResult: M[(A, A)] = left.flatMap(p => toFuturePair(p._1.run, p._2.run))
-        val rightResult: M[(A, A)] = right.flatMap(p => toFuturePair(p._1.run, p._2.run))
-        // println("left: " + await(leftResult) + " right: " + await(rightResult))
-        await(leftResult) == await(rightResult)
+        def isIdempotent[A](i: I[A]) = {
+          val left: M[(I[A], I[A])] = en_str(s)(i).flatMap(x => Future((x, x)))
+          val right: M[(I[A], I[A])] = en_str(s)(i).flatMap(x => en_str(s)(i).flatMap(y => Future((x, y))))
+
+          val leftResult: M[(A, A)] = left.flatMap(p => toFuturePair(p._1.run, p._2.run))
+          val rightResult: M[(A, A)] = right.flatMap(p => toFuturePair(p._1.run, p._2.run))
+
+          // println("left: " + await(leftResult) + " right: " + await(rightResult))
+
+          await(leftResult) == await(rightResult)
+        }
+
+        // left biased alternative
+        def alternative[A](i1: I[A], i2: I[A]): I[A] =
+          Iteratee.flatten(toFuturePair((i1.unflatten, i2.unflatten)).map {
+            case (Step.Done(value, rest), _)    => Done(value, rest)
+            case (_, Step.Done(value, rest))    => Done(value, rest)
+            case (Step.Error(message, rest), _) => Error(message, rest)
+            case (_, Step.Error(message, rest)) => Error(message, rest)
+            case (Step.Cont(k1), Step.Cont(k2)) =>
+              Cont(in => alternative(k1(in), k2(in)))
+          })
+
+        val i: I[String] = Iteratee.head.map(_ => "i")
+
+        val k1: String => I[String] = x => Iteratee.head.map(_ => s"k1($x)")
+        val k2: String => I[String] = x => Done(s"k2($x)")
+
+        val left: I[String] = i.flatMap(x => alternative(k1(x), k2(x)))
+        val right: I[String] = alternative(i.flatMap(k1), i.flatMap(k2))
+
+        def run[A](i: I[A]) = runM(en_str(s)(i))
+
+        // run(left).foreach(x => println(s"left: $x"))
+        // run(right).foreach(x => println(s"right: $x"))
+
+        val matchIdempotence = isIdempotent(i) === true
+        val matchEquality = await(run(left)) === await(run(right))
+
+        matchIdempotence and matchEquality
       }
-
-      // left biased alternative
-      def alternative[A](i1: I[A], i2: I[A]): I[A] = {
-        def flatFeed(i: I[A], in: Input[E]): I[A] = Iteratee.flatten(i.feed(in))
-
-        val doneM = toFuturePair(Iteratee.isDoneOrError(i1), Iteratee.isDoneOrError(i2))
-        Iteratee.flatten(doneM.map {
-          case (true, _) => i1
-          case (_, true) => i2
-          case _         => new Iteratee[E, A] {
-            def fold[B](folder: (Step[E, A]) => Future[B]): Future[B] = folder(Step.Cont {
-              in => alternative(flatFeed(i1, in), flatFeed(i2, in))
-            })
-          }
-        })
-      }
-
-      val i: I[String] = Iteratee.head.map(_ => "i")
-
-      val k1: String => I[String] = x => Iteratee.head.map(x => s"k1($x)")
-      val k2: String => I[String] = x => Done(s"k2($x)")
-
-      val left: I[String] = i.flatMap(x => alternative(k1(x), k2(x)))
-      val right: I[String] = alternative(i.flatMap(k1), i.flatMap(k2))
-
-      def run[A](i: I[A]) = runM(en_str("foobar")(i))
-
-      // run(left).foreach(println)
-      // run(right).foreach(println)
-
-       val matchIdempotence = isIdempotent(i) === true
-      val matchEquality = await(run(left)) === await(run(right))
-
-      matchIdempotence and matchEquality
     }
   }
+
 }
