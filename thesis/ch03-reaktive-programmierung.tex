@@ -11,6 +11,195 @@ Reaktive Prozesse haben die Eigenschaft, schrittweise, immer wenn sie neue Daten
 Deshalb sind sie bei Berechnungen essentiell, bei denen nicht nur das Endergebnis wichtig ist, sondern auch die Schritte, die dazu geführt haben \cite[vgl.][S.~2]{reactive_programming1}.
 
 
+\section{Monaden} % (fold)
+\label{sec:monaden}
+
+Monaden sind ein Konzept zur Strukturierung von Programmen, das ursprünglich aus der Mathematik, genauer der Kategorientheorie stammt.
+\citealt{monads_program_structure} nutzte Monaden für Beweise im Kontext des Lambda-Kalküls, worauf \citealt{monads_programming} aufbaute, um Monaden im Umfeld einer Programmiersprache zu verwenden.
+In diesem Abschnitt sollen die mathematischen Hintergründe von Monaden kurz angerissen werden, um diese anschließend im Zusammenhang mit Scala näher zu erläutern.
+
+\subsection{Monaden in der Kategorientheorie} % (fold)
+\label{sub:monaden_in_der_kategorientheorie}
+
+Eine Monade in einer Kategorie $C$ \todo{Kategorie erklären} ist ein Tripel $T = (T, \eta, \mu)$, wobei $T$ ein Funktor $T: C \to C$ ist und $\eta$ und $\mu$ natürliche Transformationen mit $\eta: Id_C \to T$ und $\mu: T^2 \to T$ sind \citetext{vgl.~\citealp[S.~137]{monads_category_theory}, \citealp[S.~2]{monads_program_structure}}.
+Ein Funktor $T: C \to B$ ist ein Morphismus \todo{Morphismus erklären} von einer Kategorie $C$ nach einer Kategorie $B$ \cite[vgl.][S.~13]{monads_category_theory}.
+\todo{Kleisli-Tripel}
+
+Um diese Definition verständlicher zu machen, soll sie in Scala-Code übersetzt werden.
+Wird $T$ nach \lstinline|map|, $\eta$ nach \lstinline|unit| und $\mu$ nach \lstinline|join| umbenannt, so ergeben sich die in Listing~\ref{lst:die_monaden_operationen_der_kategorientheorie} gezeigten Typen für eine eine Monade \lstinline|M|.
+
+\begin{lstlisting}[caption=Die Monaden-Operationen der Kategorientheorie, label=lst:die_monaden_operationen_der_kategorientheorie]
+def unit[A](a: A): M[A]
+def map[A, B](f: A => B, m: M[A]): M[B]
+def join[A](mm: M[M[A]]): M[A]
+\end{lstlisting}
+
+Eine Monade ist eine Art Container mit den drei assoziierten Operationen.
+\lstinline|unit| hebt einen einen Wert in die Monade.
+\lstinline|map| transformiert einen Wert innerhalb der Monade.
+\lstinline|join| verringert die Tiefe von verschachtelten Monaden um eins.
+
+% subsection monaden_in_der_kategorientheorie (end)
+
+\subsection{Kleisli-Tripel in der Kategorientheorie} % (fold)
+\label{sub:kleisli_tripel_in_der_kategorientheorie}
+\todo{bind(f,m) nach bind(m,f) ändern (map analog)}
+Ein Kleisli-Tripel über einer Kategorie $C$ ist $(T, \eta, \_^*)$, wobei $T: Obj(C) \to Obj(C)$, $\eta_A: A \to T A$ und $^*$ ein Operator ist, der Morphismen der Art $f: A \to T B$ nach $f^*: T A \to T B$ umformt \cite[vgl.][S.~2]{monads_program_structure}.
+
+In Scala-Code könnten die Operationen aussehen, wie in Listing~\ref{lst:die_kleisli_tripel_operationen_der_kategorientheorie} gezeigt.
+Dabei sind wieder $T$ nach \lstinline|map|, $\eta$ nach \lstinline|unit| und $*$ nach \lstinline|bind| umbenannt worden.
+
+\begin{lstlisting}[caption=Die Kleisli-Tripel-Operationen der Kategorientheorie, label=lst:die_kleisli_tripel_operationen_der_kategorientheorie]
+def unit[A](a: A): M[A]
+def map[A, B](f: A => B, m: M[A]): M[B]
+def bind[A, B](f: A => M[B]): M[A] => M[B]
+\end{lstlisting}
+
+Aus jedem Kleisli-Tripel $(T, \eta, \_*)$ lässt sich eine Monade $(T, \eta, \mu)$ ableiten und umgekehrt, wobei $T(f: A \to B) = (\eta_B \circ f)^*$ und $\mu_A = id^*_{T A}$ \cite[vgl.][S.~2]{monads_program_structure}.
+
+% subsection kleisli_tripel_in_der_kategorientheorie (end)
+
+\subsection{Monaden in Scala} % (fold)
+\label{sub:monaden_in_der_programmierung}
+
+Wie oben beschrieben, lassen sich die monadischen Semantiken sowohl mit Hilfe von Monaden, als auch mit Hilfe von Kleisli-Tripeln erreichen.
+In Haskell \cite[vgl.][S.~2]{monads_haskell}, als auch in Scala \cite[vgl.][]{monads_scala} werden sie durch Kleisli-Tripel umgesetzt.
+
+Scala hat Monaden via \lstinline|for|-Comprehensions fest in die Sprache integriert und nutzt dafür Operationen des Kleisli-Tripels.
+In der Scala-Standardbibliothek existiert allerdings kein allgemeines Trait für Monaden.
+Um einen Datentyp innerhalb von \lstinline|for|-Comprehensions nutzen zu können, muss dieser die zwei Methoden \lstinline|map| und \lstinline|flatMap| mit den Typen aus Listing~\ref{lst:die_monaden_operationen_in_scala} implementieren.
+
+\begin{lstlisting}[caption=Die Monaden-Operationen in Scala, label=lst:die_monaden_operationen_in_scala]
+class M[A] {
+  def map[B](f: A => B): M[B] = ???
+  def flatMap[B](f: A => M[B]): M[B] = ???
+}
+\end{lstlisting}
+
+Die \lstinline|map|-Methode entspricht hierbei der \lstinline|map|-Funktion und die \lstinline|flatMap|-Methode entspricht der \lstinline|bind|-Funktion aus dem vorigen Unterabschnitt.
+Für die \lstinline|unit|-Funktion gibt es in Scala kein standardisiertes Pendant.
+Stattdessen wird der jeweilige Konstruktor der Monade oder die Konstruktormethode des Companion-Objekts verwendet, sofern diese existieren.
+Auch wenn Scalas for-Comprehensions Monaden nach dem Kleisli-Tripel erwarten, so haben die Implementationen der Monaden in der Standardbibliothek i.~d.~R. auch die Methode \lstinline|flatten|, die der als \lstinline|join| vorgestellten Funktion entspricht.
+Bevor weiter auf for-Comprehensions eingegangen wird, sollen einige Beispiele gezeigt werden, um das Konzept zu verdeutlichen.
+
+% subsection monaden_in_der_programmierung (end)
+
+\subsection{Beispiele für Monaden} % (fold)
+\label{sub:beispiele_fuer_monaden}
+
+Nachdem bisher nur theoretische Konzepte vorgestellt wurden, sollen an dieser Stelle einige Beispiele für Monaden aufgezeigt werden.
+Monaden finden sich in vielen bekannten Datentypen wieder, wie z.~B. \lstinline|Option| oder \lstinline|List|.
+
+\subsubsection{Die Option-Monade} % (fold)
+\label{ssub:die_option_monade}
+
+\lstinline|Option| ist ein Datentyp, um optionale Daten darzustellen.
+Optionale Daten sind Daten, die vielleicht nicht vorhanden sind und würden in Sprachen, wie z.~B. Java als \lstinline|null| dargestellt werden \cite[vgl.][S.~329]{programming_in_scala}\todo{Seite verifizieren}.\todo{Auf algebraischen Datentyp eingehen?}
+\lstinline|Some| entspricht dabei \lstinline|unit| und hebt einen Wert in die Monade, wohingegen \lstinline|None| ein Objekt ohne Wert erstellt.
+Mit \lstinline|map| und \lstinline|flatMap| kann ein Wert, der mit \lstinline|Some| in die Monade gehoben wurde, verändert werden.
+
+Wenn im Kontext der Altersstatistiken-Anwendung zwei Altersgruppen zusammengezählt werden sollen, könnte dies aussehen, wie in Listing~\ref{lst:die_option_monade}.\todo{models.AgeStatistics aktualisieren}
+Dazu werden beide Altersgruppen mit \lstinline|get| ausgelesen, wobei \lstinline|get| das \lstinline|get| von \lstinline|scala.collection.Map| ist und das Ergebnis als \lstinline|Option| zurückliefert.
+Anschließend werden beide Ergebnisse mit Hilfe der Monaden-Operationen kombiniert.\todo{AgeStatistics ohne Default-Value, um Beispiel sinnvoller zu machen}
+
+\begin{lstlisting}[caption=Die Option-Monade, label=lst:die_option_monade]
+val statistics: AgeStatistics = AgeStatistics(20 -> 4, 30 -> 17)
+
+val twentyYearOldCount: Option[Int] = statistics.get(20)
+val thirtyYearOldCount: Option[Int] = statistics.get(30)
+
+val twentyAndThirtyYearOldCount: Option[Int] =
+  twentyYearOldCount.flatMap(twenties =>
+    thirtyYearOldCount.map(thirties => twenties + thirties))
+// twentyAndThirtyYearOldCount hat den Wert Some(21)
+\end{lstlisting}
+
+% subsubsection die_option_monade (end)
+
+\subsection{Die List-Monade} % (fold)
+\label{sub:die_list_monade}
+
+Eine weitere verbreitete Monade ist \lstinline|List|.
+Im Gegensatz zur oben vorgestellten \lstinline|Option|-Monade ist \lstinline|List| ein Container, der mehrere Elemente beinhalten kann.
+Mit \lstinline|List.apply| lässt sich eine Liste mit einem Element erstellen und entspricht damit der \lstinline|unit|-Funktion.
+\lstinline|apply| nimmt zwar beliebig viele Elemente, doch diese Eigenschaft ist hierbei zu vernachlässigen.
+
+Die Methoden \lstinline|map| und \lstinline|flatMap| operieren im Falle von \lstinline|List| i.~.d.~R. auf mehreren Elementen.
+Nur im Falle, dass die Liste leer ist, haben \lstinline|map| und \lstinline|flatMap| keinen Effekt.
+Ist die Liste nicht leer, so wendet \lstinline|map| die übergebene Funktion auf alle Elemente der Liste an.
+Bei \lstinline|flatMap| wird die Funktion ebenfalls auf alle Elemente angewendet.
+Weil die übergebene Funktion allerdings immer eine neue Liste zurückgibt, werden diese anschließend wieder in eine Liste zusammengefügt.
+
+\todo{Beispiel?}
+
+% subsection die_list_monade (end)
+
+% subsection beispiele_fuer_monaden (end)
+
+\subsection{for-Comprehensions} % (fold)
+\label{sub:for_comprehensions}
+
+for-Comprehensions bieten eine alternative Schreibweise für die zuvor vorgestellten Monaden-Operationen.
+Durch die Notation mit for-Comprehensions lassen sich einige längere Ausdrücke, die diese Operationen verwenden, verständlicher ausdrücken.
+for-Comprehensions haben die in Listing~\ref{lst:monaden_operationen_mit_for_comprehension} gezeigte Form.
+In diesem Listing, werden, wie schon im Beispiel der \lstinline|Option|-Monade, Werte aus den Monaden \lstinline|twentyYearOldCount| und \lstinline|thirtyYearOldCount| entnommen und anschließend neu zusammengesetzt.
+
+\begin{lstlisting}[caption=Monaden-Operationen mit for-Comprehension, label=lst:monaden_operationen_mit_for_comprehension]
+for {
+  twenties <- twentyYearOldCount
+  thirties <- thirtyYearOldCount
+} yield twenties + thirties
+\end{lstlisting}
+
+Ausdrücke der Form \lstinline|x <- m| werden Generatoren genannt.
+Generatoren werden in \lstinline|map|- und \lstinline|flatMap|-Operationen übersetzt.
+Die ersten Generatoren innerhalb einer for-Comprehension werden zu \lstinline|flatMap|s und der letzte Generator wird zu \lstinline|map| \cite[vgl.][S.~525]{programming_in_scala}\todo{Seiten in der Print-Version nachschlagen}.
+Wird der Code aus Listing~\ref{lst:monaden_operationen_mit_for_comprehension} nach diesen Regeln umgeformt, so ergibt sich wieder der ursprüngliche Code aus Listing~\ref{lst:die_option_monade}.
+
+% subsection for_comprehensions (end)
+
+\subsection{Gesetze} % (fold)
+\label{sub:regeln}
+
+Die hier vorgestellten Monaden-Operationen müssen einige Gesetze befolgen, um der mathematischen Definition gerecht zu werden.
+Diese Gesetze sind \citealt{monads_program_structure}~(S.~2) und \citealt{real_world_haskell}~(S.~356--257) entnommen.
+Sie sollen für die Operationen des Kleisli-Tripels gegeben und anhand von Scala-Code verdeutlicht werden.
+Im Scala-Code ist $\eta$ durch die Funktion \lstinline|unit|, die ein Objekt der gewünschten Monade zurückliefert, und $^*$ durch die Methode \lstinline|flatMap| ersetzt worden.
+In den folgenden Definition werden die Funktionen $f$ und $g$ verwendet, wobei $f: A \to T B$, $g: B \to T C$ und $T$ das Kleisli-Tripel ist.
+Die jeweiligen beiden Seiten von $=$, bzw. \lstinline|=| sind gleich.
+
+\begin{enumerate}
+  \item linkes neutrales Element
+
+    $f^* \circ \eta_A = f$\\
+    \lstinline|unit(x).flatMap(f) = f(x)|
+
+    \lstinline|unit| ist das linke neutrale Element von \lstinline|flatMap|.
+    Anstatt einen Wert mit \lstinline|unit| in eine Monade zu heben, um anschließend darauf \lstinline|flatMap| mit einer Funktion \lstinline|f| aufzurufen, kann direkt \lstinline|f| auf \lstinline|x| angewendet werden.
+
+  \item rechtes neutrales Element
+
+    $\eta^* = id_{T A}$\\
+    \lstinline|m.flatMap(unit) = m|
+
+    \lstinline|unit| ist das rechte neutrale Element von \lstinline|flatMap|.
+    \lstinline|unit| darf den übergebenen Wert nicht verändern, weshalb es keine Wirkung hat, wenn es auf der rechten Seite von \lstinline|flatMap| steht.
+
+  \item Assoziativität
+
+    $g^* \circ f^* = (g^* \circ f)^*$\\
+    \lstinline|m.flatMap(f).flatMap(g) = m.flatMap(x => f(x).flatMap(g))|
+
+    \lstinline|flatMap| ist assoziativ.
+    Es macht keinen Unterschied, ob das zweite \lstinline|flatMap| auf dem Ergebnis des ersten aufgerufen wird, oder ob es innerhalb des ersten aufgerufen wird.
+    Nur die Reihenfolge der Funktionsaufrufe von \lstinline|f| und \lstinline|g| muss übereinstimmen.
+\end{enumerate}
+
+% subsection regeln (end)
+
+% section monaden (end)
+
+
 \section{Futures und Promises} % (fold)
 \label{sec:futures_und_promises}
 
