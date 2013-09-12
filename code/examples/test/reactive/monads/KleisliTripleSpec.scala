@@ -11,22 +11,9 @@ class KleisliTripleSpec extends Specification {
     }
   }
 
-  "map on Some" should {
-    "apply a function to the inner value" in {
-      ev.map((x: Int) => x + 1, Some(1)) === Some(2)
-    }
-  }
-
   "bind on Some" should {
     "apply a function to the inner value and return its result" in {
       ev.bind((x: Int) => Some(x + 1))(Some(1)) === Some(2)
-    }
-  }
-
-
-  "map on None" should {
-    "do nothing" in {
-      ev.map((x: Int) => x + 1, None) == None
     }
   }
 

@@ -9,7 +9,7 @@ import org.specs2.mutable._
 class LawSpec extends Specification {
 
   implicit class Monad[M[_], A](m: M[A])(implicit kleisli: KleisliTriple[M]) {
-    def map[B](f: A => B): M[B] = kleisli.map(f, m)
+    def map[B](f: A => B): M[B] = kleisli.bind(f.andThen(kleisli.unit))(m)
     def flatMap[B](f: A => M[B]): M[B] = kleisli.bind(f)(m)
   }
 

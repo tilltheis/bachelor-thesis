@@ -10,31 +10,35 @@ In nebenläufigen Systemen können gleich mehrere solcher Datenströme unabhäng
 Reaktive Prozesse haben die Eigenschaft, schrittweise, immer wenn sie neue Daten empfangen, ein Ergebnis aufzubauen.
 Deshalb sind sie bei Berechnungen essentiell, bei denen nicht nur das Endergebnis wichtig ist, sondern auch die Schritte, die dazu geführt haben \cite[vgl.][S.~2]{reactive_programming1}.
 
-
 \section{Monaden} % (fold)
 \label{sec:monaden}
 
-Monaden sind ein Konzept zur Strukturierung von Programmen, das ursprünglich aus der Mathematik, genauer der Kategorientheorie stammt.
-\citealt{monads_program_structure} nutzte Monaden für Beweise im Kontext des Lambda-Kalküls, worauf \citealt{monads_programming} aufbaute, um Monaden im Umfeld einer Programmiersprache zu verwenden.
+Monaden sind Container-artige Strukturen, die einige Operationen definieren, um auf den gekapselten Daten zu arbeiten.
+Das Konzept der Monaden stammt ursprünglich aus der Mathematik, genauer der Kategorientheorie.
+\citealt{monads_program_structure} nutzte Monaden für Beweise über Programmen, worauf \citealt{monads_programming} aufbaute, um Monaden zur Programmierung zu verwenden.
 In diesem Abschnitt sollen die mathematischen Hintergründe von Monaden kurz angerissen werden, um diese anschließend im Zusammenhang mit Scala näher zu erläutern.
 
 \subsection{Monaden in der Kategorientheorie} % (fold)
 \label{sub:monaden_in_der_kategorientheorie}
 
-Eine Monade in einer Kategorie $C$ \todo{Kategorie erklären} ist ein Tripel $T = (T, \eta, \mu)$, wobei $T$ ein Funktor $T: C \to C$ ist und $\eta$ und $\mu$ natürliche Transformationen mit $\eta: Id_C \to T$ und $\mu: T^2 \to T$ sind \citetext{vgl.~\citealp[S.~137]{monads_category_theory}, \citealp[S.~2]{monads_program_structure}}.
-Ein Funktor $T: C \to B$ ist ein Morphismus \todo{Morphismus erklären} von einer Kategorie $C$ nach einer Kategorie $B$ \cite[vgl.][S.~13]{monads_category_theory}.
-\todo{Kleisli-Tripel}
+Eine Monade in einer Kategorie $C$ ist ein Tripel $T = (T, \eta, \mu)$, wobei $T$ ein Funktor $T: C \to C$ ist und $\eta$ und $\mu$ natürliche Transformationen mit $\eta: Id_C \to T$ und $\mu: T^2 \to T$ sind \citetext{vgl.~\citealp[S.~137]{monads_category_theory}, \citealp[S.~2]{monads_program_structure}}.
+
+Um diese Definition in den Kontext der Programmierung zu übersetzen, soll folgende vereinfachte Erklärung dienen \cite[vgl.][S.~2--3]{monads_programming}:
+Die Kategorie $C$ ist die Programmiersprache selber, mitsamt ihrer Typen und den Operationen auf den Werten dieser Typen \cite[vgl.][S.~6--8]{category_theory_and_programming}.
+Ein Funktor $T$ ist eine Struktur mit einem einem Operator, der Funktionen $A \to B$ zu Funktionen $T A \to T B$ transformiert.
+Natürliche Transformationen können als Funktionen aufgefasst werden.
+$\eta$ hebt einen Wert in die Monade und $\mu$ macht aus einer verschachtelten Monade ein nicht-verschachtelte Monade.
 
 Um diese Definition verständlicher zu machen, soll sie in Scala-Code übersetzt werden.
 Wird $T$ nach \lstinline|map|, $\eta$ nach \lstinline|unit| und $\mu$ nach \lstinline|join| umbenannt, so ergeben sich die in Listing~\ref{lst:die_monaden_operationen_der_kategorientheorie} gezeigten Typen für eine eine Monade \lstinline|M|.
 
 \begin{lstlisting}[caption=Die Monaden-Operationen der Kategorientheorie, label=lst:die_monaden_operationen_der_kategorientheorie]
 def unit[A](a: A): M[A]
-def map[A, B](f: A => B, m: M[A]): M[B]
+def map[A, B](f: A => B): M[A] => M[B]
 def join[A](mm: M[M[A]]): M[A]
 \end{lstlisting}
 
-Eine Monade ist eine Art Container mit den drei assoziierten Operationen.
+Eine Monade ist eine Art Container mit drei assoziierten Operationen.
 \lstinline|unit| hebt einen einen Wert in die Monade.
 \lstinline|map| transformiert einen Wert innerhalb der Monade.
 \lstinline|join| verringert die Tiefe von verschachtelten Monaden um eins.
@@ -43,19 +47,24 @@ Eine Monade ist eine Art Container mit den drei assoziierten Operationen.
 
 \subsection{Kleisli-Tripel in der Kategorientheorie} % (fold)
 \label{sub:kleisli_tripel_in_der_kategorientheorie}
-\todo{bind(f,m) nach bind(m,f) ändern (map analog)}
-Ein Kleisli-Tripel über einer Kategorie $C$ ist $(T, \eta, \_^*)$, wobei $T: Obj(C) \to Obj(C)$, $\eta_A: A \to T A$ und $^*$ ein Operator ist, der Morphismen der Art $f: A \to T B$ nach $f^*: T A \to T B$ umformt \cite[vgl.][S.~2]{monads_program_structure}.
+
+Ein Kleisli-Tripel über einer Kategorie $C$ ist $T = (T, \eta, \_^*)$, wobei $T: Obj(C) \to Obj(C)$, $\eta_A: A \to T A$ und $^*$ ein Operator ist, der Morphismen der Art $f: A \to T B$ nach $f^*: T A \to T B$ umformt \cite[vgl.][S.~2]{monads_program_structure}.
+
+Eine vereinfachte Erklärung für den Kontext der Programmierung ist folgende:
+$T$ ist eine Abbildung von einem Objekt der Kategorie $C$ auf ein anderes und dient als Typ des Tripels.\todo{Korrekt? Eigene Interpretation. Quellen nicht auffindbar.}
+$\eta$ und $^*$ können wieder als Funktionen aufgefasst werden.
+$\eta$ hebt einen Wert in den Tripel und $^*$ lässt eine Funktion, die auf Werten arbeitet, die keine Tripel sind, auf Tripeln arbeiten.
+
+Kleisli-Tripel entsprechen Monaden.
+Aus jedem Kleisli-Tripel $(T, \eta, \_^*)$ lässt sich eine Monade $(T, \eta, \mu)$ ableiten und umgekehrt, wobei $T(f: A \to B) = (\eta_B \circ f)^*$ und $\mu_A = id^*_{T A}$ \cite[vgl.][S.~2]{monads_program_structure}.
 
 In Scala-Code könnten die Operationen aussehen, wie in Listing~\ref{lst:die_kleisli_tripel_operationen_der_kategorientheorie} gezeigt.
-Dabei sind wieder $T$ nach \lstinline|map|, $\eta$ nach \lstinline|unit| und $*$ nach \lstinline|bind| umbenannt worden.
+Dabei sind wieder $T$ nach \lstinline|map|, $\eta$ nach \lstinline|unit| und $^*$ nach \lstinline|bind| umbenannt worden.
 
 \begin{lstlisting}[caption=Die Kleisli-Tripel-Operationen der Kategorientheorie, label=lst:die_kleisli_tripel_operationen_der_kategorientheorie]
 def unit[A](a: A): M[A]
-def map[A, B](f: A => B, m: M[A]): M[B]
 def bind[A, B](f: A => M[B]): M[A] => M[B]
 \end{lstlisting}
-
-Aus jedem Kleisli-Tripel $(T, \eta, \_*)$ lässt sich eine Monade $(T, \eta, \mu)$ ableiten und umgekehrt, wobei $T(f: A \to B) = (\eta_B \circ f)^*$ und $\mu_A = id^*_{T A}$ \cite[vgl.][S.~2]{monads_program_structure}.
 
 % subsection kleisli_tripel_in_der_kategorientheorie (end)
 
@@ -63,9 +72,7 @@ Aus jedem Kleisli-Tripel $(T, \eta, \_*)$ lässt sich eine Monade $(T, \eta, \mu
 \label{sub:monaden_in_der_programmierung}
 
 Wie oben beschrieben, lassen sich die monadischen Semantiken sowohl mit Hilfe von Monaden, als auch mit Hilfe von Kleisli-Tripeln erreichen.
-In Haskell \cite[vgl.][S.~2]{monads_haskell}, als auch in Scala \cite[vgl.][]{monads_scala} werden sie durch Kleisli-Tripel umgesetzt.
-
-Scala hat Monaden via \lstinline|for|-Comprehensions fest in die Sprache integriert und nutzt dafür Operationen des Kleisli-Tripels.
+Scala hat Monaden via \lstinline|for|-Comprehensions fest in die Sprache integriert und nutzt dafür sowohl Operationen des Kleisli-Tripels, als auch der klassischen Monade.
 In der Scala-Standardbibliothek existiert allerdings kein allgemeines Trait für Monaden.
 Um einen Datentyp innerhalb von \lstinline|for|-Comprehensions nutzen zu können, muss dieser die zwei Methoden \lstinline|map| und \lstinline|flatMap| mit den Typen aus Listing~\ref{lst:die_monaden_operationen_in_scala} implementieren.
 
@@ -76,11 +83,11 @@ class M[A] {
 }
 \end{lstlisting}
 
-Die \lstinline|map|-Methode entspricht hierbei der \lstinline|map|-Funktion und die \lstinline|flatMap|-Methode entspricht der \lstinline|bind|-Funktion aus dem vorigen Unterabschnitt.
+Die \lstinline|map|-Methode entspricht hierbei der \lstinline|map|-Funktion des vorletzten Unterabschnitts und die \lstinline|flatMap|-Methode entspricht der \lstinline|bind|-Funktion des letzten Unterabschnitt.
 Für die \lstinline|unit|-Funktion gibt es in Scala kein standardisiertes Pendant.
 Stattdessen wird der jeweilige Konstruktor der Monade oder die Konstruktormethode des Companion-Objekts verwendet, sofern diese existieren.
-Auch wenn Scalas for-Comprehensions Monaden nach dem Kleisli-Tripel erwarten, so haben die Implementationen der Monaden in der Standardbibliothek i.~d.~R. auch die Methode \lstinline|flatten|, die der als \lstinline|join| vorgestellten Funktion entspricht.
-Bevor weiter auf for-Comprehensions eingegangen wird, sollen einige Beispiele gezeigt werden, um das Konzept zu verdeutlichen.
+Auch wenn Scalas \lstinline|for|-Comprehensions sie nicht verlangen, so haben die Implementationen der Monaden in der Standardbibliothek i.~d.~R. auch die Methode \lstinline|flatten|, die der als \lstinline|join| vorgestellten Funktion entspricht.
+Bevor weiter auf \lstinline|for|-Comprehensions eingegangen wird, sollen einige Beispiele gezeigt werden, um das Konzept zu verdeutlichen.
 
 % subsection monaden_in_der_programmierung (end)
 
@@ -124,13 +131,11 @@ Im Gegensatz zur oben vorgestellten \lstinline|Option|-Monade ist \lstinline|Lis
 Mit \lstinline|List.apply| lässt sich eine Liste mit einem Element erstellen und entspricht damit der \lstinline|unit|-Funktion.
 \lstinline|apply| nimmt zwar beliebig viele Elemente, doch diese Eigenschaft ist hierbei zu vernachlässigen.
 
-Die Methoden \lstinline|map| und \lstinline|flatMap| operieren im Falle von \lstinline|List| i.~.d.~R. auf mehreren Elementen.
+Die Methoden \lstinline|map| und \lstinline|flatMap| operieren im Falle von \lstinline|List| i.~d.~R. auf mehreren Elementen.
 Nur im Falle, dass die Liste leer ist, haben \lstinline|map| und \lstinline|flatMap| keinen Effekt.
 Ist die Liste nicht leer, so wendet \lstinline|map| die übergebene Funktion auf alle Elemente der Liste an.
 Bei \lstinline|flatMap| wird die Funktion ebenfalls auf alle Elemente angewendet.
 Weil die übergebene Funktion allerdings immer eine neue Liste zurückgibt, werden diese anschließend wieder in eine Liste zusammengefügt.
-
-\todo{Beispiel?}
 
 % subsection die_list_monade (end)
 
@@ -139,9 +144,9 @@ Weil die übergebene Funktion allerdings immer eine neue Liste zurückgibt, werd
 \subsection{for-Comprehensions} % (fold)
 \label{sub:for_comprehensions}
 
-for-Comprehensions bieten eine alternative Schreibweise für die zuvor vorgestellten Monaden-Operationen.
-Durch die Notation mit for-Comprehensions lassen sich einige längere Ausdrücke, die diese Operationen verwenden, verständlicher ausdrücken.
-for-Comprehensions haben die in Listing~\ref{lst:monaden_operationen_mit_for_comprehension} gezeigte Form.
+\lstinline|for|-Comprehensions bieten eine alternative Schreibweise für die zuvor vorgestellten Monaden-Operationen.
+Durch die Notation mit \lstinline|for|-Comprehensions lassen sich einige längere Ausdrücke, die diese Operationen verwenden, verständlicher ausdrücken.
+\lstinline|for|-Comprehensions haben die in Listing~\ref{lst:monaden_operationen_mit_for_comprehension} gezeigte Form.
 In diesem Listing, werden, wie schon im Beispiel der \lstinline|Option|-Monade, Werte aus den Monaden \lstinline|twentyYearOldCount| und \lstinline|thirtyYearOldCount| entnommen und anschließend neu zusammengesetzt.
 
 \begin{lstlisting}[caption=Monaden-Operationen mit for-Comprehension, label=lst:monaden_operationen_mit_for_comprehension]
@@ -153,7 +158,7 @@ for {
 
 Ausdrücke der Form \lstinline|x <- m| werden Generatoren genannt.
 Generatoren werden in \lstinline|map|- und \lstinline|flatMap|-Operationen übersetzt.
-Die ersten Generatoren innerhalb einer for-Comprehension werden zu \lstinline|flatMap|s und der letzte Generator wird zu \lstinline|map| \cite[vgl.][S.~525]{programming_in_scala}\todo{Seiten in der Print-Version nachschlagen}.
+Die ersten Generatoren innerhalb einer \lstinline|for|-Comprehension werden zu \lstinline|flatMap|s und der letzte Generator wird zu \lstinline|map| \cite[vgl.][S.~525]{programming_in_scala}\todo{Seiten in der Print-Version nachschlagen}.
 Wird der Code aus Listing~\ref{lst:monaden_operationen_mit_for_comprehension} nach diesen Regeln umgeformt, so ergibt sich wieder der ursprüngliche Code aus Listing~\ref{lst:die_option_monade}.
 
 % subsection for_comprehensions (end)
