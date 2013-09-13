@@ -164,7 +164,7 @@ Wird der Code aus Listing~\ref{lst:monaden_operationen_mit_for_comprehension} na
 % subsection for_comprehensions (end)
 
 \subsection{Gesetze} % (fold)
-\label{sub:regeln}
+\label{sub:monadische_gesetze}
 
 Die hier vorgestellten Monaden-Operationen müssen einige Gesetze befolgen, um der mathematischen Definition gerecht zu werden.
 Diese Gesetze sind \citealt{monads_program_structure}~(S.~2) und \citealt{real_world_haskell}~(S.~356--257) entnommen.
@@ -200,7 +200,7 @@ Die jeweiligen beiden Seiten von $=$, bzw. \lstinline|=| sind gleich.
     Nur die Reihenfolge der Funktionsaufrufe von \lstinline|f| und \lstinline|g| muss übereinstimmen.
 \end{enumerate}
 
-% subsection regeln (end)
+% subsection monadische_gesetze (end)
 
 % section monaden (end)
 
@@ -253,7 +253,7 @@ object Input {
 \end{lstlisting}
 
 Der Datentyp ist über den \glslink{kovarianz}{kovarianten} Typ \lstinline|E| der gehaltenen Elemente parametrisiert.
-\gls{kovarianz} bedeutet, dass wenn \lstinline|F| ein spezialisierter Typ von \lstinline|E| ist, \lstinline|Input[F]| auch ein spezialisierter Typ von \lstinline|Input[E]| ist \cite[vgl.][S.~11]{variance}.
+\gls{kovarianz} bedeutet, dass wenn \lstinline|F| ein spezialisierter Typ von \lstinline|E| ist, \lstinline|Input[F]| auch ein spezialisierter Typ von \lstinline|Input[E]| ist \cite[vgl.][S.~430]{programming_in_scala}.
 Dadurch wären beispielsweise sowohl \lstinline|Input[Cat]|, als auch \lstinline|Input[Dog]| Spezialisierungen von \lstinline|Input[Animal]|.
 Wäre \lstinline|Input| nicht \glslink{kovarianz}{kovariant} über den Typ der der gehaltenen Elemente, wären \lstinline|Input[Cat]|, \lstinline|Input[Dog]| und \lstinline|Input[Animal]| völlig unterschiedliche Typen.
 
@@ -275,7 +275,9 @@ Außerdem findet es im Kontext von \lstinline|Iteratee|s Verwendung, um zu signa
 Wenn die Datenquelle erschöpft ist, wird dies mit dem Objekt \lstinline|Input.EOF| mitgeteilt.
 
 Sowohl \lstinline|Input.Empty|, als auch \lstinline|Input.EOF| sind vom Typ \lstinline[mathescape]|$\text{\gls{nothing}}$|.
-\lstinline[mathescape]|$\text{\gls{nothing}}$| ist ein besonderer Typ in Scala, der eine Spezialisierung jedes anderen Typs ist \cite[vgl.][S.~32]{scala_specification}.
+\lstinline[mathescape]|$\text{\gls{nothing}}$| ist ein besonderer Typ in Scala, ein so genannter Bottom-Typ.
+Das bedeutet, dass er ganz unten in der Klassenhierarchie steht und eine Spezialisierung jedes anderen Typs ist.
+Es gibt Instanz vom Typ \lstinline[mathescape]|$\text{\gls{nothing}}$|, aufgrund seiner Position in der Klassenhierarchie kann er jedoch jeden anderen Typ annehmen \cite[vgl.][S.~256--257]{programming_in_scala}.
 Weil der Typparameter des \lstinline|Input|-Datentyps \glslink{kovarianz}{kovariant} ist, lassen sich \lstinline|Input.Empty| und \lstinline|Input.EOF| mit jedem anderen \lstinline|Input| kombinieren.
 
 Ein Wert vom Typ \lstinline|Input| hat also drei mögliche Zustände:
@@ -915,6 +917,11 @@ val result: Future[List[Int]] = e.run(originalI)
 // result hat den Wert Future(List(22, 44, 22, 54))
 \end{lstlisting}
 
+Der transformierende \lstinline|Enumeratee| wird auf den konsumierenden \lstinline|Iteratee| angewendet (Z.~6).
+Daraufhin werden alle generierten Elemente des \lstinline|Enumerator|s angepasst, bevor sie an den \lstinline|Iteratee| gelangen.
+Der \lstinline|Enumerator| sendet einmal die Elemente an den transformierten \lstinline|Iteratee| (Z.~8) und einmal an den ursprünglichen \lstinline|Iteratee| (Z.~10).
+Am Ergebnis ist zu erkennen, dass die Elemente im ersten Fall korrekt transformiert und im zweiten Fall unverändert übergeben wurden.
+
 % subsubsection enumerateeanwendung_auf_iteratees (end)
 
 \subsubsection{Anwendung auf Enumerators} % (fold)
@@ -939,8 +946,8 @@ def compose[To2](other: Enumeratee[To, To2]): Enumeratee[From,To2]
 In Listing~\ref{lst:enumerateeanwendung_auf_enumeratees} ist ein Beispiel zu sehen, in dem zwei \lstinline|Enumeratees| verkettet werden.
 Der erste \lstinline|Enumeratee| sorgt dafür, dass Personen ab 70 gar nicht mehr in der Altersstatistik auftauchen, indem der Stream mit Hilfe von \lstinline|Enumeratee.filter| auf die kleineren Zahlen reduziert wird.
 Der zweite \lstinline|Enumeratee| transformiert die übriggebliebenen Elemente wie zuvor so, dass alle Personen ab 50 um 10 Jahre jünger gemacht werden.
-Anschließend werden beide \lstinline|Enumeratee|s kombiniert und auf einen \lstinline|Enumerator| angewendet.
-Im Ergebnis ist gut zu erkennen, dass nur die einzige gerade Zahl des \lstinline|Enumerator|s transformiert an den \lstinline|Iteratee| weitergegeben wird.
+Anschließend werden beide \lstinline|Enumeratee|s kombiniert und auf einen \lstinline|Enumerator| angewendet, sodass schon transformierte Elemente generiert werden.
+Im Ergebnis ist gut zu erkennen, dass der \lstinline|Iteratee| nur die Altersangaben unter 50 unverändert empfängt.
 
 \begin{lstlisting}[caption=Enumerateeanwendung auf Enumeratees, label=lst:enumerateeanwendung_auf_enumeratees]
 val t1: Enumeratee[Int, Int] = Enumeratee.filter(_ < 70)
@@ -973,6 +980,7 @@ Zwei \lstinline|Iteratee|s sequentiell zu kombinieren, bedeutet zuerst den erste
 Dafür eignen sich die Methoden \lstinline|map| und \lstinline|flatMap| des \lstinline|Iteratee|-Traits.
 Diese Methoden erlauben es, wie bei jeder Monade, den Wert innerhalb der Monade zu transformieren.
 Der Wert der \lstinline|Iteratee|-Monade steht fest, sobald der \lstinline|Iteratee| in den \lstinline|Done|-Zustand übergegangen ist.
+Dies geschieht, nachdem der \lstinline|Iteratee| die erforderlichen Elemente empfangen und daraus ein Ergebnis berechnet hat.
 Um zwei \lstinline|Iteratee|s nacheinander auszuführen, wird zuerst per \lstinline|flatMap| auf den Wert des ersten \lstinline|Iteratee|s zugegriffen.
 Anschließend wird ein \lstinline|map| über den zweiten \lstinline|Iteratee| durchgeführt, wobei die Ergebnisse der beiden \lstinline|Iteratee|s kombiniert werden.
 Ein Code-Beispiel, das dieses Prinzip ausnutzt, ist in Listing~\ref{lst:sequentielle_komposition_von_iteratees} zu lesen.
@@ -1127,13 +1135,13 @@ Gut zu erkennen ist, dass die Reihenfolge der Elemente im Ergebnis mit der jewei
 % subsection anwendung_komposition (end)
 
 
-\subsection{Regeln} % (fold)
-\label{sub:regeln}
+\subsection{Gesetze} % (fold)
+\label{sub:iteratee_gesetze}
 
-Kiselyov identifiziert in \citealt{kiselyov2012}~(S.~12--13 u. S.~18--21) mehrere Regeln für Iteratee-Streams, die Beweise über Code ermöglichen, der diese Streams verwendet.
-Zur besseren Lesbarkeit werden in Listing~\ref{lst:verwendete_typ_aliase} einige Typ-Aliase eingeführt, die in den Regeldefinitionen verwendet werden.
+Kiselyov identifiziert in \citealt{kiselyov2012}~(S.~12--13 u. S.~18--21) mehrere Gesetze für Iteratee-Streams, die Beweise über Code ermöglichen, der diese Streams verwendet.
+Zur besseren Lesbarkeit werden in Listing~\ref{lst:verwendete_typ_aliase} einige Typ-Aliase eingeführt, die in den Gesetzesdefinitionen verwendet werden.
 
-\begin{lstlisting}[caption=Typ-Aliase der Regeln, label=lst:verwendete_typ_aliase]
+\begin{lstlisting}[caption=Typ-Aliase der Gesetze, label=lst:verwendete_typ_aliase]
 type E     = Char           // Der Eingabeelementtyp (Char)
 type I[A]  = Iteratee[E, A] // Ein Iteratee von Char nach A
 type M[A]  = Future[A]      // Die Monade (Future)
@@ -1141,7 +1149,7 @@ type IM[A] = M[I[A]]        // Ein Iteratee in der Future-Monade
 \end{lstlisting}
 
 Außerdem wird die Funktion \lstinline|en_str| mehrfach verwendet.
-Diese Funktion hat die Signatur \lstinline|String => Enumerator[E]| und macht aus einem übergebenen String einen \lstinline|Enumerator|, der die einzelnen Zeichen des Strings enumeriert.
+Diese Funktion hat die Signatur \lstinline|String => Enumerator[E]| und macht aus einem übergebenen String einen \lstinline|Enumerator|, der als Elemente die einzelnen Zeichen des Strings generiert.
 Die in den Code-Ausschnitten gezeigten Variablen \lstinline|left| und \lstinline|right| haben immer die gleiche Bedeutung.
 
 \begin{enumerate}
@@ -1195,7 +1203,8 @@ val right: I[String] = failure
 
   \item Rechtsdistributivität
 
-    \lstinline|flatMap| ist rechtsdistributiv\todo{soll erklärt werden, was Rechtsdistr. ist?}, sofern der \lstinline|Iteratee| idempotent ist.
+    \lstinline|flatMap| ist rechtsdistributiv, sofern der \lstinline|Iteratee| idempotent ist.
+    Eine Funktion $f$ ist idempotent, wenn $f(x) = f(f(x))$\todo{Quelle}, mehr dazu im nächsten Absatz.
 
     \begin{lstlisting}[caption=Rechtsdistributivitätsregel, label=lst:rechtsdistributivitaetsregel]
 val left: I[String] =
@@ -1217,7 +1226,7 @@ val right: M[(I[A], I[A])] =
     \end{lstlisting}
 \end{enumerate}
 
-% subsection regeln (end)
+% subsection iteratee_gesetze (end)
 
 
 % section streams (end)

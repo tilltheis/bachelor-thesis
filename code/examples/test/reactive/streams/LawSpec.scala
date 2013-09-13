@@ -10,7 +10,7 @@ import play.api.libs.iteratee._
 
 import test.Helpers.await
 
-class RulesSpec extends Specification with ScalaCheck {
+class LawSpec extends Specification with ScalaCheck {
 
   type E     = Char           // Der Eingabeelementtyp (Char)
   type I[A]  = Iteratee[E, A] // Ein Iteratee von Char nach A
