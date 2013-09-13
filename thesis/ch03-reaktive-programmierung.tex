@@ -105,7 +105,8 @@ Optionale Daten sind Daten, die vielleicht nicht vorhanden sind und würden in S
 \lstinline|Some| entspricht dabei \lstinline|unit| und hebt einen Wert in die Monade, wohingegen \lstinline|None| ein Objekt ohne Wert erstellt.
 Mit \lstinline|map| und \lstinline|flatMap| kann ein Wert, der mit \lstinline|Some| in die Monade gehoben wurde, verändert werden.
 
-Wenn im Kontext der Altersstatistiken-Anwendung zwei Altersgruppen zusammengezählt werden sollen, könnte dies aussehen, wie in Listing~\ref{lst:die_option_monade}.\todo{models.AgeStatistics aktualisieren}
+Wenn im Kontext der Altersstatistiken-Anwendung zwei Altersgruppen zusammengezählt werden sollen, könnte dies aussehen, wie in Listing~\ref{lst:die_option_monade}.
+Dabei soll für dieses Beispiel ignoriert werden, dass alle Statistiken einen Standardwert von null~(0) für unbekannte Altersangaben zurückgeben.
 Dazu werden beide Altersgruppen mit \lstinline|get| ausgelesen, wobei \lstinline|get| das \lstinline|get| von \lstinline|scala.collection.Map| ist und das Ergebnis als \lstinline|Option| zurückliefert.
 Anschließend werden beide Ergebnisse mit Hilfe der Monaden-Operationen kombiniert.\todo{AgeStatistics ohne Default-Value, um Beispiel sinnvoller zu machen}
 

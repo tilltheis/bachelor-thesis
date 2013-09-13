@@ -70,8 +70,20 @@ Unter \textbf{Windows} muss dazu in der Eingabeaufforderung folgender Befehl aus
 % subsection installation (end)
 
 
-\section{Architektur} % (fold)
-\label{sec:architektur}
+% section vorbereitung (end)
+
+
+\section{Beispielanwendung: Sammeln von Altersstatistiken} % (fold)
+\label{sec:beispielanwendung}
+
+Um die Techniken zur Entwicklung von statischen Web-Anwendungen zu demonstrieren, soll im Folgenden eine kleine Anwendung entwickelt werden.
+Diese Anwendung fragt ihre Benutzer, wie alt sie sind und bildet die gesammelten Information als Diagramm ab.
+Anhand dieser Anwendung soll die Entwicklung mit Models, Views und Controllern erklärt werden.
+Bevor mit der Implementierung gestartet werden kann, muss allerdings die die Grundarchitektur des Frameworks erklärt werden.
+
+
+\subsection{Architektur} % (fold)
+\label{sub:architektur}
 
 Auf der untersten Ebene existiert ein Web-Server, der mit dem Framework ausgeliefert wird.
 Die Anfragen, die der Web-Server empfängt werden an Play weitergeleitet und schließlich von der Anwendung verarbeitet.
@@ -79,28 +91,14 @@ Nach der Verarbeitung wird eine Antwort generiert und schließlich als HTTP-Antw
 Der Anwendungscode einer Play-Applikation ist nach der \gls{mvc}-Architektur aufgebaut \cite[vgl.][S.~51-53]{play_for_scala_v8}.
 
 "`[\gls{mvc} programming is a] three-way factoring, whereby objects of different classes take over the operations related to the application domain (the model), the display of the application's state (the view), and the user interaction with the model and the view (the controller)."' \cite[vgl.][S.~1]{mvc}.
-Views bilden Models i.~d.~R. auf HTML-Seiten ab.
+Views bilden Models i.~d.~R. auf HTML-Seiten ab.\todo{passendere Model-Definition}
 Controller sind dazu da, HTTP-Anfragen zu verarbeiten, die jeweilige Antwort durch eine View übersetzen zu lassen und als HTTP-Antwort zurückzusenden.
 
-% section architektur (end)
+% subsection architektur (end)
 
 
-% section vorbereitung (end)
-
-
-\section{Beispielanwendung: Sammeln von Altersstatistiken} % (fold)
-\todo{eigener Abschn. oder als Teil von "Erstellen..."?}
-\label{sec:beispielanwendung}
-
-Um die Techniken zur Entwicklung von statischen Web-Anwendungen zu demonstrieren, soll im Folgenden eine kleine Anwendung entwickelt werden.
-Diese Anwendung fragt ihre Benutzer, wie alt sie sind und bildet die gesammelten Information als Diagramm ab.
-Anhand dieser Anwendung soll die Entwicklung mit Models, Views und Controllern erklärt werden.
-
-% section beispielanwendung (end)
-
-
-\section{Erstellen einer Anwendung} % (fold)
-\label{sec:erstellen_einer_anwendung}
+\subsection{Erstellen einer Anwendung} % (fold)
+\label{sub:erstellen_einer_anwendung}
 
 Um eine neue Anwendung mit Play zu erstellen, muss auf der Kommandozeile in den Ordner navigiert werden, in dem das Projekt erstellt werden soll.
 Anschließend kann mit \lstinline[language=sh]|play new <project name>| ein neues Projekt angelegt werden.
@@ -109,11 +107,11 @@ Im startenden Assistenten wählt man die Hauptprogrammiersprache aus (Java oder 
 Daraufhin wird im aktuellen Verzeichnis ein neuer Ordner mit dem vorher angegebenen Namen \lstinline|age_statistics| angelegt \cite[vgl.][S.~10]{play_for_scala_v8}.
 Die darin vorzufindende Verzeichnisstruktur wird im nächsten Abschnitt beschrieben.
 
-% section erstellen_einer_anwendung (end)
+% subsection erstellen_einer_anwendung (end)
 
 
-\section{Verzeichnisstruktur} % (fold)
-\label{sec:verzeichnisstruktur}
+\subsection{Verzeichnisstruktur} % (fold)
+\label{sub:verzeichnisstruktur}
 
 Die Verzeichnisstruktur einer Play-Anwendung ist immer gleich.
 An dieser Stelle werden nur die Ordner vorgestellt, die für das Verständnis dieser Arbeit wichtig sind.
@@ -128,11 +126,11 @@ Diese Ordner sind folgende \cite[vgl.][]{play_verzeichnisstruktur}:
   \item[public/] öffentliche statische Dateien (JS, CSS, Bilder)
 \end{description}
 
-% section verzeichnisstruktur (end)
+% subsection verzeichnisstruktur (end)
 
 
-\section{Starten einer Anwendung} % (fold)
-\label{sec:starten_einer_anwendung}
+\subsection{Starten einer Anwendung} % (fold)
+\label{sub:starten_einer_anwendung}
 
 Um die neu erstellte Anwendung zu starten, muss sie erst kompiliert werden.
 Das geschieht ebenfalls mit Hilfe des \lstinline|play|-Befehls.
@@ -152,11 +150,11 @@ Um die Anwendung bei Dateiänderungen automatisch neu kompilieren zu lassen, ohn
 \label{fig:anwendung_nach_erstellung}
 \end{figure}
 
-% section starten_einer_anwendung (end)
+% subsection starten_einer_anwendung (end)
 
 
-\section{Routing} % (fold)
-\label{sec:routing}
+\subsection{Routing} % (fold)
+\label{sub:routing}
 
 Wenn die Website von jemandem aufgerufen wird, soll eine bestimmte Controller-Aktion ausgeführt werden.
 Damit Play weiß, welche Controller-Aktion für die aufgerufene URL ausgeführt werden soll, muss dies in der \lstinline|routes|-Datei definiert werden.
@@ -173,13 +171,13 @@ Die am Häufigsten verwendeten HTTP-Methoden sind \lstinline|GET|, \lstinline|PO
 Der Pfad \lstinline|/| steht für die URL \url{http://localhost:9000/}.
 Es sind auch längere Pfade, wie z.~B. \lstinline|/animals/cat| möglich, davon wird in diesem Beispiel allerdings nicht Gebrauch gemacht.
 Die Controller-Aktion \lstinline|controllers.Application.index|, auf die der Routing-Eintrag zeigt, ist bereits implementiert.
-Diese wird in Abschnitt~\ref{sec:controller} allerdings durch eine eigene Implementierung ersetzt.
+Diese wird in Abschnitt~\ref{sub:controller} allerdings durch eine eigene Implementierung ersetzt.
 
-% section routing (end)
+% subsection routing (end)
 
 
-\section{Model} % (fold)
-\label{sec:model}
+\subsection{Model} % (fold)
+\label{sub:model}
 
 Bevor die Anwendung Daten anzeigen kann, muss eine Datenstruktur für die Altersstatistiken entworfen werden.
 Für diese Statistik sollen nur die Alterszahlen und die Personenzahl des jeweiligen Alters gesammelt werden.
@@ -195,20 +193,23 @@ package object models {
 \end{lstlisting}
 
 Um die Verwendung noch komfortabler zu machen, wird in \lstinline|app/models/AgeStatistics.scala| ein Objekt mit Konstruktormethoden erstellt, wie in Listing~\ref{lst:das_agestatistics_hilfsobjekt} zu sehen.
+Es wird eine \lstinline|apply|-Methode zur Verfügung gestellt, sodass die Werte der Statistik direkt übergeben werden können, wie z.~B. \lstinline|AgeStatistics(6 -> 1, 10 -> 2)|.
 Dadurch, dass \lstinline|AgeStatistics.empty| für undefinierte Schlüssel einen Standardwert von null~(0) zurückgibt, können auch unbekannte Alterseinträge abgefragt werden, ohne dass ein Fehler auftritt.
 
 \begin{lstlisting}[caption=Das AgeStatistics-Hilfsobjekt, label=lst:das_agestatistics_hilfsobjekt]
 object AgeStatistics {
+  def apply(statistics: (Int, Int)*): AgeStatistics =
+    empty ++ Map(statistics: _*)
   val empty: AgeStatistics = Map.empty.withDefaultValue(0)
-  val sample: AgeStatistics = empty ++ Map( 6 -> 1 /* , ... */ )
+  val sample: AgeStatistics = apply( 6 -> 1 /* , ... */ )
 }
 \end{lstlisting}
 
-% section model (end)
+% subsection model (end)
 
 
-\section{Controller} % (fold)
-\label{sec:controller}
+\subsection{Controller} % (fold)
+\label{sub:controller}
 
 Nachdem im Router definiert wurde, welche URLs auf welche Controller-Aktionen abgebildet werden sollen, werden die betroffenen Controller-Aktionen nun mit Logik befüllt.
 Die zuvor genannte Aktion \lstinline[breaklines=true]|controllers.Application.index| befindet sich in der Datei \lstinline[breaklines=true]|app/controllers/Application.scala|.
@@ -225,31 +226,26 @@ object Application extends Controller {
 Controller sind Objekte, die von \lstinline|Controller| erben und Aktionen definieren.
 Aktionen, die beim Aufruf einer URL ausgeführt werden sollen, sind Controller-Objekt-Methoden mit dem Rückgabetyp \lstinline|Action|.
 Eine Aktion, bzw. \lstinline|Action| ist eine Funktion von einer HTTP-Anfrage nach einer HTTP-Antwort.
-In der obigen Form wird die HTTP-Anfrage ignoriert, es können aber auch \lstinline|Action|s mit explizitem oder implizitem Request erstellt werden \cite[vgl.][]{play_controllers}.
-Das könnte aussehen, wie in Listing~\ref{lst:action_mit_implizitem_request} gezeigt.
-\todo{Verweis auf /input-Impl, wo impliziter Request verwendet wird}
-
-\begin{lstlisting}[caption=Action mit implizitem Request, label=lst:action_mit_implizitem_request]
-def index = Action { implicit request =>
-  Ok(views.html.index(ageStatistics))
-}
-\end{lstlisting}
+In der obigen Form wird die HTTP-Anfrage ignoriert, es können aber auch \lstinline|Action|s mit explizitem oder implizitem Request-Parameter erstellt werden \cite[vgl.][]{play_controllers}.
+Dies ist z.~B. dann notwendig, wenn Formulare verarbeitet werden sollen, was in Unterabschnitt~\ref{ssub:formularverarbeitung_im_controller}~(\nameref{ssub:formularverarbeitung_im_controller}) zu sehen ist.
 
 Um eine HTTP-Antwort zu generieren, stellt das Objekt \lstinline|play.api.mvc.Results|, von dem \lstinline|play.api.mvc.Controller| erbt, mehrere Konstruktoren zur Verfügung.
-Der in Listing~\ref{lst:application_controller_mit_index_aktion} und \ref{lst:action_mit_implizitem_request} verwendete Konstruktor \lstinline|Ok| erstellt eine HTTP-Antwort mit dem Status-Code \lstinline|200 OK|.
+Der in Listing~\ref{lst:application_controller_mit_index_aktion} verwendete Konstruktor \lstinline|Ok| erstellt eine HTTP-Antwort mit dem Status-Code \lstinline|200 OK|.
 Der Inhalt dieser Antwort ist das Ergebnis der View \lstinline|views.html.index|, worauf im folgenden Abschnitt näher eingegangen wird.
 Neben \lstinline|Ok| gibt es u.~a. noch \lstinline|BadRequest| für fehlerhafte Anfragen (z.~B. unvollständiges Formular) und \lstinline|Redirect|, um eine Seitenweiterleitung auf eine angegebene URL durchzuführen \cite[vgl.][]{play_controllers}.
 
-% section controller (end)
+% subsection controller (end)
 
 
-\section{View} % (fold)
-\label{sec:view}
+\subsection{View} % (fold)
+\label{sub:view}
 
-Im vorigen Abschnitt wurde gezeigt, wie mittels \lstinline[breaklines=true]|Ok(views.html.index(ageStatistics))| eine View gerendert und als HTTP-Antwort verschickt wurde.
+Im vorigen Abschnitt wurde gezeigt, wie mittels \lstinline|Ok(views.html.index(ageStatistics))| eine View gerendert und als HTTP-Antwort verschickt wurde.
 Das View-Template befindet sich unter \lstinline|app/views/index.scala.html|.
 Bevor die Implementierung dieses Templates gezeigt wird, soll an einem einfacheren Beispiel verdeutlicht werden, wie View-Templates geschrieben werden.
-Listing~\ref{lst:ein_einfaches_view_template} zeigt ein entsprechendes Template.
+
+\subsubsection{Views in Play} % (fold)
+\label{ssub:views_in_play}
 
 \begin{lstlisting}[caption=Ein einfaches View-Template, label=lst:ein_einfaches_view_template]
 @(title: String)
@@ -263,6 +259,7 @@ Listing~\ref{lst:ein_einfaches_view_template} zeigt ein entsprechendes Template.
 @Html("<p>This is a simple view template.</p>")
 \end{lstlisting}
 
+Anhand des in Listing~\ref{lst:ein_einfaches_view_template} gezeigten Codes sollen Struktur und Verwendung von View-Templates in Play veranschaulicht werden.
 View-Templates bestehen aus Scala- und HTML-Code und verhalten sich wie Funktionen, die HTML-Code generieren.
 Am Anfang eines Templates steht die Parameterliste, worüber die anzuzeigenden Daten übergeben werden.
 Nach der Parameterliste können Pakete importiert werden.
@@ -274,12 +271,17 @@ Play kodiert aus Sicherheitsgründen Scala-Strings automatisch so, dass dadurch 
 Um dies zu verhindern, kann der \lstinline|Html|-Helper verwendet werden, wie in der letzten Zeile von Listing~\ref{lst:ein_einfaches_view_template} zu erkennen.
 Dieser Helper nimmt als Argument einen String und fügt diesen unverändert an der Stelle des Aufrufs im Template ein \cite[vgl.][]{play_templates}.
 
+% subsubsection views_in_play (end)
+
+\subsubsection{Altersstatistiken-View} % (fold)
+\label{ssub:altersstatistiken_view}
+
 Das eigentliche View-Template unter \lstinline|app/views/index.scala.html| ist etwas umfangreicher.
-Das Zeichnen des Diagramms erfolgt client-seitig via JS und ist in \lstinline|public/javascripts/main.js| ausgelagert.
+Das Zeichnen des Diagramms erfolgt Client-seitig via JS und ist in \lstinline|public/javascripts/main.js| ausgelagert.
 Dieses Script wird wie auch die anderen Dateien im \lstinline|public/|-Ordner via \lstinline|@routes.Assets.at("javascripts/main.js")| adressiert \cite[vgl.][S.~136]{play_for_scala_v8}.
 Das gesamte Template hat den in Listing~\ref{lst:das_view_template} vereinfacht dargestellten Inhalt.
 
-\begin{lstlisting}[caption=Das View-Template, label=lst:das_view_template]
+\begin{lstlisting}[language=html,caption=Das View-Template, label=lst:das_view_template]
 @(statistics: AgeStatistics)
 <script src="@routes.Assets.at("javascripts/main.js")"></script>
 <div id="ageChart"><svg></svg></div>
@@ -291,12 +293,12 @@ Das gesamte Template hat den in Listing~\ref{lst:das_view_template} vereinfacht 
 </script>
 \end{lstlisting}
 
-\lstinline|makeAgeStatisticsChart| erwartet neben dem CSS-Selector des Diagramm-Elements die Altersstatistiken, die auf Server-Seite als \lstinline|Map| vorliegen.
+\lstinline|makeAgeStatisticsChart| erwartet neben dem CSS-Selector, der das Diagramm-Element identifiziert, die Altersstatistiken, die auf Server-Seite als \lstinline|Map| vorliegen.
 Diese werden auf der JS-Seite als Objekt erwartet, weil JS keine \lstinline|Map|s kennt, aber Objekte eine ähnliche Funktionalität bieten.
 Weil JS-Objekte die Schlüsselwerte als \lstinline|String| erwarten, müssen die Schlüssel serverseitig erst in \lstinline|String|s konvertiert werden.
 Anschließend kann mittels \lstinline|Json.toJson| \todo{dazu später mehr} die \lstinline|Map| in ein JS-Objekt konvertiert und mit \lstinline|toString| und \lstinline|Html| in das Template eingefügt werden.
 Wenn die \lstinline|statistics|-Variable serverseitig \lstinline|Map(51 -> 3, 16 -> 5, 10 -> 2)| enthält, so wird dies für die Client-Seite in \lstinline|{"51":3,"16":5,"10":2}| konvertiert.
-Aus diesen konvertierten Daten wird dann das Diagramm erstellt, was in Abb.~\ref{fig:die_altersstatistiken_view} zu sehen ist.
+Aus diesen konvertierten Daten wird dann das Diagramm erstellt, das in Abb.~\ref{fig:die_altersstatistiken_view} zu sehen ist.
 
 \begin{figure}
 \centering
@@ -305,7 +307,112 @@ Aus diesen konvertierten Daten wird dann das Diagramm erstellt, was in Abb.~\ref
 \label{fig:die_altersstatistiken_view}
 \end{figure}
 
-% section view (end)
+% subsubsection altersstatistiken_view (end)
+
+% subsection view (end)
+
+
+\subsection{Sammeln der Statistiken} % (fold)
+\label{sub:sammeln_der_statistiken}
+\todo{Quellen}
+Die Nutzer sollen die Möglichkeit erhalten, der Website mitzuteilen, wie alt sie sind, um in die Statistik einzugehen.
+Um das Beispiel einfach zu halten, soll nicht geprüft werden, ob jemand bereits sein Alter angegeben hat.
+Um die Anwendung um Nutzer-Interaktion zu erweitern, müssen unterschiedliche Komponenten erweitert werden.
+
+\subsubsection{Formular in der View} % (fold)
+\label{ssub:formular_in_der_view}
+
+Um die Nutzer nach ihrem Alter zu fragen, benötig es erst einmal ein Formular, über das sie ihre Daten angeben können.
+Dieses Formular ist der View schnell mit einigen Zeilen HTML hinzugefügt, wie in Listing~\ref{lst:das_view_template_mit_formular} zu sehen.
+Der Einfachheit halber werden nur Altersangaben zwischen einem und 99 Jahren akzeptiert.
+
+\begin{lstlisting}[language=html, caption=Das View-Template mit Formular, label=lst:das_view_template_mit_formular]
+<form method="post">
+  <fieldset>
+    <legend>Your Age</legend>
+    <div>
+      <label for="ageInput">How Old Are You?</label>
+      <input type="number" min="1" max="99" id="ageInput" name="age" placeholder="Enter Age">
+    </div>
+    <button type="submit">Submit</button>
+  </fieldset>
+</form>
+\end{lstlisting}
+
+% subsubsection formular_in_der_view (end)
+
+\subsubsection{Eintrag in der Routen-Datei} % (fold)
+\label{ssub:eintrag_in_der_routen_datei}
+
+Wenn dieses Formular abgesendet wird, wird nicht wie zuvor ein \lstinline|GET|-Request an den Server gesendet, sondern ein \lstinline|POST|-Request, wie im \lstinline|method|-Attribut des \lstinline|form|-Tags angegeben.
+In der \lstinline|conf/routes|-Datei muss deshalb ein neuer Eintrag hinzugefügt werden, der \lstinline|POST|-Requests abdeckt, wie in Listing~\ref{lst:die_routen_eintrag_fuer_formulareingaben} zu sehen.
+
+\begin{lstlisting}[caption=Die Routen-Eintrag für Formulareingaben, label=lst:die_routen_eintrag_fuer_formulareingaben]
+POST    /    controllers.Application.input
+\end{lstlisting}
+
+% subsubsection eintrag_in_der_routen_datei (end)
+
+\subsubsection{Dynamische Statistiken und Formularverarbeitung im Controller} % (fold)
+\label{ssub:formularverarbeitung_im_controller}
+
+Damit die Statistiken aktualisiert werden können, wird im \lstinline|Application|-Controller mit \lstinline|var ageStatistics = AgeStatistics.empty| eine Variable eingeführt, die den aktuellen Wert der Statistiken enthält.
+Die Controller-Actions arbeiten nun nur noch mit diesem Wert, anstatt mit \lstinline|AgeStatistics.sample|, wie es vorher der Fall war.
+
+Der Routen-Eintrag für das Formular definiert, dass \lstinline|POST|-Requests auf den Pfad \lstinline|/| an die \lstinline|input|-Action des \lstinline|constrollers.Application|-Controllers weitergeleitet werden sollen.
+Diese Action wird definiert, wie in Listing~\ref{lst:formularverarbeitung_im_controller} zu sehen.
+
+\begin{lstlisting}[caption=Formularverarbeitung im Controller, label=lst:formularverarbeitung_im_controller]
+val ageForm = Form("age" -> number(1, 99))
+
+def input = Action { implicit request =>
+  ageForm.bindFromRequest.fold(
+    invalidForm => BadRequest(invalidForm.errorsAsJson.toString),
+    { case (age) =>
+      println(s"age: $age")
+      ageStatistics =
+        ageStatistics.updated(age, ageStatistics(age) + 1)
+      Redirect(routes.Application.index)
+    }
+  )
+}
+\end{lstlisting}
+
+Das obige Listing beginnt mit der Definition der Server-seitigen Formulardarstellung.
+\lstinline|ageForm| enthält die Formulardefinition für die Altersangabe.
+\lstinline|play.api.data.Form.apply| erstellt aus einem \lstinline|play.api.data.Mapping| ein \lstinline|play.api.data.Form|-Objekt.
+Ein \lstinline|Mapping| bildet ein oder mehrere Formularfelder auf einen Wert mit assoziiertem Datentyp ab.
+Das \lstinline|play.api.data.Forms|-Hilfsobjekt enthält u.~a. die Methode \lstinline|tuple|, die aus Paaren von Formularfeldname und \lstinline|Mapping| ein einziges \lstinline|Mapping|-Objekt erstellt.
+\lstinline|tuple("name" -> text, "age" -> number)| würde ein \lstinline|Mapping| für zwei Formularfelder erstellen, das beide Werte auf ein Tupel abbildet.
+\lstinline|text| und \lstinline|number| sind vordefinierte \lstinline|Mapping|s des \lstinline|Forms|-Hilfsobjekts, die Zeichenketten, bzw. Zahlen erwarten.
+Für den Fall dass nur ein Formularfeld erwartet wird, gibt es eine weitere Variante von \lstinline|Form.apply|, die einen Formularfeldnamen und ein \lstinline|Mapping| erwartet, welche in Listing~\ref{lst:formularverarbeitung_im_controller} verwendet wird.
+Dem verwendeten \lstinline|number|-Mapping werden außerdem noch Mindest- und Höchstwert mitgeteilt, damit nur glaubwürdige Werte in die Statistik gelangen.
+
+Die \lstinline|input|-Action benötigt einen \lstinline|Request|-Parameter, um die Formulardaten lesen zu können.
+\lstinline|ageForm.bindFromRequest| füllt die Server-seitige Darstellung des Formulars über den impliziten \lstinline|Request|-Parameter mit Daten, womit mittels der \lstinline|fold|-Methode dann weitergearbeitet werden kann.
+\lstinline|fold| nimmt als Argumente zwei Funktionen.
+Die erste Funktion wird ausgeführt, wenn die Formulardaten nicht auf die interne Formulardarstellung abgebildet werden konnten.
+Die zweite Funktion wird ausgeführt, wenn es keine Fehler gab, dann kann mit den übergebenen Formulardaten weitergearbeitet werden.
+
+In der \lstinline|input|-Action wird im Fehlerfall eine Fehlermeldung angezeigt, die zum Zwecke dieses Beispiels nur im JSON-Format vorliegt, die von Play automatisch generiert wird.
+Der Fehlerfall kann eintreten, obwohl in der View Minimum und Maximum des Altersfeldes angegeben sind, wenn z.~B. der Nutzer die Prüfung aus dem ausgelieferten HTML-Code entfernt.
+Tritt kein Fehler auf, so werden die Altersstatistiken aktualisiert und eine Weiterleitung auf die \lstinline|index|-Action ausgelöst.
+Dadurch landet der Nutzer/die Nutzerin nach Versendung des Formulars wieder auf der Hauptseite und sieht die aktualisierte Statistik.
+Die finale Version der Website ist in Abb.~\ref{fig:die_altersstatistiken_view_mit_formular} zu sehen.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{age_statistics.png}
+\caption{Die Altersstatistiken-View mit Formular}
+\label{fig:die_altersstatistiken_view_mit_formular}
+\end{figure}
+
+% subsubsection action_im_controller (end)
+
+% subsection sammeln_der_statistiken (end)
+
+
+% section beispielanwendung (end)
 
 
 % chapter grundlagen (end)

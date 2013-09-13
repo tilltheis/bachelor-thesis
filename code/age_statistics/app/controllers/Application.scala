@@ -8,12 +8,12 @@ import play.api.data._
 import models.AgeStatistics
 
 object Application extends Controller {
-  var ageStatistics = AgeStatistics.sample
+  var ageStatistics = AgeStatistics.empty
 
-  val ageForm = Form("age" -> number)
+  val ageForm = Form("age" -> number(1, 99))
 
   def index = Action {
-    Ok(views.html.index(AgeStatistics.sample))
+    Ok(views.html.index(ageStatistics))
   }
 
   def input = Action { implicit request =>
@@ -25,5 +25,4 @@ object Application extends Controller {
       }
     )
   }
-
 }
