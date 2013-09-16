@@ -240,8 +240,8 @@ Neben \lstinline|Ok| gibt es u.~a. noch \lstinline|BadRequest| für fehlerhafte 
 \subsection{View} % (fold)
 \label{sub:view}
 
-Im vorigen Abschnitt wurde gezeigt, wie mittels \lstinline|Ok(views.html.index(ageStatistics))| eine View gerendert und als HTTP-Antwort verschickt wurde.
-Das View-Template befindet sich unter \lstinline|app/views/index.scala.html|.
+Im vorigen Abschnitt wurde gezeigt, wie mittels \lstinline|Ok(views.html.index(ageStatistics))| eine View gerendert und als HTTP-Antwort verschickt werden kann.
+Das dazugehörige View-Template befindet sich unter \lstinline|app/views/index.scala.html|.
 Bevor die Implementierung dieses Templates gezeigt wird, soll an einem einfacheren Beispiel verdeutlicht werden, wie View-Templates geschrieben werden.
 
 \subsubsection{Views in Play} % (fold)
@@ -296,7 +296,9 @@ Das gesamte Template hat den in Listing~\ref{lst:das_view_template} vereinfacht 
 \lstinline|makeAgeStatisticsChart| erwartet neben dem CSS-Selector, der das Diagramm-Element identifiziert, die Altersstatistiken, die auf Server-Seite als \lstinline|Map| vorliegen.
 Diese werden auf der JS-Seite als Objekt erwartet, weil JS keine \lstinline|Map|s kennt, aber Objekte eine ähnliche Funktionalität bieten.
 Weil JS-Objekte die Schlüsselwerte als \lstinline|String| erwarten, müssen die Schlüssel serverseitig erst in \lstinline|String|s konvertiert werden.
-Anschließend kann mittels \lstinline|Json.toJson| \todo{dazu später mehr} die \lstinline|Map| in ein JS-Objekt konvertiert und mit \lstinline|toString| und \lstinline|Html| in das Template eingefügt werden.
+Anschließend kann mittels \lstinline|Json.toJson| die \lstinline|Map| in ein JS-Objekt konvertiert und mit \lstinline|toString| und \lstinline|Html| in das Template eingefügt werden.
+Das \lstinline|play.api.libs.json|-Paket enthält verschiedene Werkzeuge, um Scala-Werte in eine JS-kompatible Darstellung zu konvertieren und umgekehrt.
+\lstinline|Json.toJson| ist ein besonders einfacher Weg diese Konvertierung durchzuführen und funktioniert ohne weiteres Zu-Tun für unterschiedliche Scala-Typen, darunter auch \lstinline|Map[String, Int]| \cite[vgl.][S.~266]{play_for_scala_v8}.
 Wenn die \lstinline|statistics|-Variable serverseitig \lstinline|Map(51 -> 3, 16 -> 5, 10 -> 2)| enthält, so wird dies für die Client-Seite in \lstinline|{"51":3,"16":5,"10":2}| konvertiert.
 Aus diesen konvertierten Daten wird dann das Diagramm erstellt, das in Abb.~\ref{fig:die_altersstatistiken_view} zu sehen ist.
 
@@ -314,10 +316,10 @@ Aus diesen konvertierten Daten wird dann das Diagramm erstellt, das in Abb.~\ref
 
 \subsection{Sammeln der Statistiken} % (fold)
 \label{sub:sammeln_der_statistiken}
-\todo{Quellen}
+
 Die Nutzer sollen die Möglichkeit erhalten, der Website mitzuteilen, wie alt sie sind, um in die Statistik einzugehen.
 Um das Beispiel einfach zu halten, soll nicht geprüft werden, ob jemand bereits sein Alter angegeben hat.
-Um die Anwendung um Nutzer-Interaktion zu erweitern, müssen unterschiedliche Komponenten erweitert werden.
+Um die Anwendung um Nutzer-Interaktion zu erweitern, müssen View, Routen-Datei und Controller erweitert werden.
 
 \subsubsection{Formular in der View} % (fold)
 \label{ssub:formular_in_der_view}
@@ -345,7 +347,7 @@ Der Einfachheit halber werden nur Altersangaben zwischen einem und 99 Jahren akz
 \label{ssub:eintrag_in_der_routen_datei}
 
 Wenn dieses Formular abgesendet wird, wird nicht wie zuvor ein \lstinline|GET|-Request an den Server gesendet, sondern ein \lstinline|POST|-Request, wie im \lstinline|method|-Attribut des \lstinline|form|-Tags angegeben.
-In der \lstinline|conf/routes|-Datei muss deshalb ein neuer Eintrag hinzugefügt werden, der \lstinline|POST|-Requests abdeckt, wie in Listing~\ref{lst:die_routen_eintrag_fuer_formulareingaben} zu sehen.
+In der \lstinline|conf/routes|-Datei muss deshalb ein neuer Eintrag hinzugefügt werden, der \lstinline|POST|-Requests abdeckt und an den Controller weiterleitet, wie in Listing~\ref{lst:die_routen_eintrag_fuer_formulareingaben} zu sehen.
 
 \begin{lstlisting}[caption=Die Routen-Eintrag für Formulareingaben, label=lst:die_routen_eintrag_fuer_formulareingaben]
 POST    /    controllers.Application.input
@@ -384,15 +386,15 @@ Das obige Listing beginnt mit der Definition der Server-seitigen Formulardarstel
 Ein \lstinline|Mapping| bildet ein oder mehrere Formularfelder auf einen Wert mit assoziiertem Datentyp ab.
 Das \lstinline|play.api.data.Forms|-Hilfsobjekt enthält u.~a. die Methode \lstinline|tuple|, die aus Paaren von Formularfeldname und \lstinline|Mapping| ein einziges \lstinline|Mapping|-Objekt erstellt.
 \lstinline|tuple("name" -> text, "age" -> number)| würde ein \lstinline|Mapping| für zwei Formularfelder erstellen, das beide Werte auf ein Tupel abbildet.
-\lstinline|text| und \lstinline|number| sind vordefinierte \lstinline|Mapping|s des \lstinline|Forms|-Hilfsobjekts, die Zeichenketten, bzw. Zahlen erwarten.
+\lstinline|text| und \lstinline|number| sind vordefinierte \lstinline|Mapping|s des \lstinline|Forms|-Hilfsobjekts, die Zeichenketten, bzw. Zahlen erwarten \cite[vgl.][S~217--219]{play_for_scala_v8}.
 Für den Fall dass nur ein Formularfeld erwartet wird, gibt es eine weitere Variante von \lstinline|Form.apply|, die einen Formularfeldnamen und ein \lstinline|Mapping| erwartet, welche in Listing~\ref{lst:formularverarbeitung_im_controller} verwendet wird.
 Dem verwendeten \lstinline|number|-Mapping werden außerdem noch Mindest- und Höchstwert mitgeteilt, damit nur glaubwürdige Werte in die Statistik gelangen.
 
 Die \lstinline|input|-Action benötigt einen \lstinline|Request|-Parameter, um die Formulardaten lesen zu können.
-\lstinline|ageForm.bindFromRequest| füllt die Server-seitige Darstellung des Formulars über den impliziten \lstinline|Request|-Parameter mit Daten, womit mittels der \lstinline|fold|-Methode dann weitergearbeitet werden kann.
+\lstinline|ageForm.bindFromRequest| füllt die Server-seitige Darstellung des Formulars über den impliziten \lstinline|Request|-Parameter mit Daten, womit mittels der \lstinline|fold|-Methode dann weitergearbeitet werden kann \cite[vgl.][S.~223--224]{play_for_scala_v8}.
 \lstinline|fold| nimmt als Argumente zwei Funktionen.
 Die erste Funktion wird ausgeführt, wenn die Formulardaten nicht auf die interne Formulardarstellung abgebildet werden konnten.
-Die zweite Funktion wird ausgeführt, wenn es keine Fehler gab, dann kann mit den übergebenen Formulardaten weitergearbeitet werden.
+Die zweite Funktion wird ausgeführt, wenn es keine Fehler gab, dann kann mit den übergebenen Formulardaten weitergearbeitet werden \cite[vgl.][S.~219--220]{play_for_scala_v8}.
 
 In der \lstinline|input|-Action wird im Fehlerfall eine Fehlermeldung angezeigt, die zum Zwecke dieses Beispiels nur im JSON-Format vorliegt, die von Play automatisch generiert wird.
 Der Fehlerfall kann eintreten, obwohl in der View Minimum und Maximum des Altersfeldes angegeben sind, wenn z.~B. der Nutzer die Prüfung aus dem ausgelieferten HTML-Code entfernt.
