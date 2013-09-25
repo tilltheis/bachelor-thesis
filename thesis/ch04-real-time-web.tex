@@ -3,4 +3,146 @@
 \chapter{Real-Time-Web} % (fold)
 \label{cha:real_time_web}
 
+Nachdem im vorigen Kapitel Plays Streams vorgestellt wurden, wird in diesem Kapitel der letzte Teil vorgestellt, der für den Real-Time-Aspekt von Web-Anwendungen notwendig ist.
+In diesem Kapitel sollen die Client-seitigen Werkzeuge vorgestellt werden, die Real-Time-Web-Anwendungen möglich machen.
+Dafür gibt es zwei Techniken.
+Diese sind Web-Sockets und Server Sent Events.
+Ersteres bildetet das bekannte Socket-Konzept im Browser ab, wohingegen letzteres eine Einweg-Kommunikation vom Server zum Client ermöglicht.
+Die Kommunikation in entgegengesetzter Richtung erfolgt hierbei über herkömmliche Wege, wie z.~B. \gls{ajax}.
+
+\section{Web-Sockets} % (fold)
+\label{sec:web_sockets}
+
+Das Web-Socket-Protokoll ermöglicht es Client und Server sich gegenseitig über ein Web-Socket Nachrichten zu schicken.
+Auf Client-Seite gibt es hierfür den \lstinline|WebSocket|-Typ.
+Auf Server-Seite (Play) gibt es ebenfalls eine Klasse namens \lstinline|WebSocket|, die im Controller anstelle von \lstinline|Action| als Request-Handler verwendet werden kann.
+
+\subsection{Web-Sockets auf Client-Seite} % (fold)
+\label{sub:web_sockets_auf_client_seite}
+
+\citealt{js_websockets} definiert das Interface für Web-Sockets in JavaScript.
+Die für diese Arbeit relevanten Teile des Interfaces sind die folgenden:
+In Listing~\ref{lst:das_websocket_interface_in_javascript} ist eine vereinfachte Version des Interfaces abgebildet, die nur die für diese Arbeit relevanten Teile zeigt.
+Ein \lstinline|EventHandler| kann jede beliebige Funktion sein, beim Aufruf wird ein \lstinline|Event|-Objekt übergeben, das Informationen über das jeweilige Ereignis enthält \cite[vgl.][]{js_eventhandler}.
+
+\begin{lstlisting}[language=idl, caption=Das WebSocket-Interface in JavaScript, label=lst:das_websocket_interface_in_javascript]
+[Constructor(DOMString url)]
+interface WebSocket {
+  attribute EventHandler onopen;
+  attribute EventHandler onerror;
+  attribute EventHandler onclose;
+  attribute EventHandler onmessage;
+  void close();
+  void send(DOMString data);
+};
+\end{lstlisting}
+
+Mittels \lstinline[language=javascript]|new WebSocket(url)| lässt sich ein WebSocket auf die angegebene URL öffnen.
+Auf \lstinline|onopen|, \lstinline|onerror|, \lstinline|onclose| und \lstinline|onmessage| können \lstinline|EventHandler| registriert werden, die bei Auftreten des jeweils gleichnamigen Events aufgerufen werden.
+Das \lstinline|Event|, das dem \lstinline|onmessage|-Handler übergeben wird, enthält ein Attribut \lstinline|data|, das den Inhalt der empfangenen Nachricht als \lstinline|String| enthält.
+Mit \lstinline|send| können Daten an den Server übertragen werden.
+Die \lstinline|close|-Methode schließt das \lstinline|WebSocket| wieder.
+
+% subsection web_sockets_auf_client_seite (end)
+
+\subsection{Web-Sockets auf Server-Seite} % (fold)
+\label{sub:web_sockets_auf_server_seite}
+
+Auf der Server-Seite wird ein \lstinline|WebSocket| ähnlich wie eine \lstinline|Action| dargestellt.
+Statt eines \lstinline|Action { ... }|-Blocks wird im Controller ein \lstinline|WebSocket.using { ... }|-Block verwendet.
+\lstinline|WebSocket.using[A]| erwartet als Argument eine Funktion von \lstinline|RequestHeader| nach \lstinline|(Iteratee[A, _], Enumerator[A])|.
+\lstinline|A| ist der Typ der Nachrichten, die mit dem Client ausgetauscht werden, dieser ist der gleiche für eingehende und ausgehende Nachrichten.
+Der \lstinline|Request-Handler| muss in der Regel nicht direkt verwendet werden.
+Die Funktion muss ein Paar aus \lstinline|Iteratee| und \lstinline|Enumerator| zurückgeben.
+Der \lstinline|Iteratee| empfängt die eingehenden Nachrichten des Clients und der \lstinline|Enumerator| generiert Nachrichten, die an den Client verschickt werden.
+
+Zusätzlich zur oben beschriebenen Methode im Controller, muss eine entsprechende Route in der \lstinline|conf/routes|-Datei angelegt werden.
+Dieser Eintrag unterscheidet sich nicht von denen für reguläre \lstinline|Action|s und wird für die HTTP-Methode \lstinline|GET| definiert.
+
+% subsection web_sockets_auf_server_seite (end)
+
+\subsection{Web-Sockets in der Altersstatistiken-Anwendung} % (fold)
+\label{sub:web_sockets_in_der_altersstatistiken_anwendung}
+
+Um die statische Anwendung zur Erfassung von Altersstatistiken soll dynamisch werden und neue Einträge in Echtzeit anzuzeigen.
+Dazu sollen die Altersangaben nach der Eingabe an alle aktiven Clients gesendet werden, damit diese daraufhin ihre Darstellung aktualisieren.
+Es hierfür View, Controller und Routen-Datei geändert werden.
+In der \lstinline|conf/routes|-Datei wird der Eintrag, der auf die \lstinline|input|-Action zeigt auf die in Listing~\ref{lst:web_sockets_in_der_routes_datei_der_altersstatistiken_anwendung} gezeigte Definition geändert.
+
+\begin{lstlisting}[caption=Web-Sockets in der routes-Datei der Altersstatistiken-Anwendung, label=lst:web_sockets_in_der_routes_datei_der_altersstatistiken_anwendung]
+GET    /input    controllers.Application.input
+\end{lstlisting}
+
+Die \lstinline|input|-\lstinline|Action| wird durch einen im vorigen Unterabschnitt eingeführten \lstinline|WebSocket.using|-Block ersetzt, der in Listing~\ref{lst:web_sockets_im_controller_der_altersstatistiken_anwendung} zu sehen ist.
+Als Nachrichtentyp ist hierbei \lstinline|String| gewählt, weil sowohl Client, als auch Server gut damit arbeiten können.
+Denkbar wären auch \lstinline|Int| oder \lstinline|JsValue| für \gls{json}-Nachrichten, diese würden das Beispiel allerdings verkomplizieren.
+Um möglichst einfach alle aktiven Clients erreichen zu können, wird mit Hilfe der Konstruktormethode \lstinline|Concurrent.broadcast|, die in Unterabschnitt~\ref{sub:anwendung_von_enumerators} (\nameref{sub:anwendung_von_enumerators}) vorgestellt wurde, ein \lstinline|Enumerator| mit assoziiertem \lstinline|Channel| erstellt.
+Über diesen \lstinline|Channel| können imperativ Elemente an den \lstinline|Enumerator| übergeben werden.
+Sobald eine neue Altersangabe über den \lstinline|Iteratee| bekannt wird, wird diese über den \lstinline|Enumerator| an alle Clients verbreitet, damit sie ihre Datendarstellung aktualisieren können.
+
+\begin{lstlisting}[caption=Web-Sockets im Controller der Altersstatistiken-Anwendung, label=lst:web_sockets_im_controller_der_altersstatistiken_anwendung]
+val (outEnumerator, outChannel) = Concurrent.broadcast[String]
+
+def input = WebSocket.using[String] { request =>
+  val in = Iteratee.foreach[String] { ageString =>
+    type NFE = NumberFormatException
+    catching(classOf[NFE]).opt(ageString.toInt).foreach { age =>
+      if (age > 0 && age < 100) {
+        ageStatistics =
+          ageStatistics.updated(age, ageStatistics(age) + 1)
+        outChannel.push(age.toString)
+      }
+    }
+  }
+
+  (in, outEnumerator)
+}
+\end{lstlisting}
+
+In der View muss weiterer JS-Code eingefügt werden, das zuvor erstellte Formular und auch der Rest der View kann wiederverwendet werden
+Listing~\ref{lst:web_sockets_in_der_view_der_altersstatistiken_anwendung} zeigt, den neu hinzugekommenen Code.
+Der darin zu sehende Code \lstinline|@routes.Application.input.webSocketURL()| ist ein Beispiel von sog. reverse routing.
+Dabei wird die URL für einen Routen-Eintrag in der \lstinline|routes|-Datei berechnet.
+Der Aufruf von \lstinline|webSocketURL| sorgt dafür, dass die Route das Web-Socket-Protokoll verwendet \cite[vgl.][S.~117, 355]{play_for_scala_v8}.\todo{Seitenzahlen an finale Version anpassen}
+Obige Anweisung wird bei einer lokalen Installation zu \lstinline[language=sh]|ws://localhost:9000/input|.
+
+\begin{lstlisting}[language=javascript, caption=Web-Sockets in der View der Altersstatistiken-Anwendung, label=lst:web_sockets_in_der_view_der_altersstatistiken_anwendung]
+var ws =
+  new WebSocket("@routes.Application.input.webSocketURL()");
+
+ws.onopen = function() {
+  $("form").submit(function(event) {
+    event.preventDefault();
+    ws.send($("#ageInput").val());
+    this.reset();
+  });
+};
+
+ws.onmessage = function(event) {
+  var age = parseInt(event.data, 10);
+  chart.increment(age);
+  chart.update();
+};
+\end{lstlisting}
+
+Bevor das \lstinline|WebSocket| geöffnet und nachdem es geschlossen wurde, muss verhindert werden, dass das Formular abgeschickt werden kann, weil Server-seitig keine \lstinline|Action| für das Formular existiert.
+Der Code dafür soll an dieser Stelle aber nicht gezeigt werden werden.
+Sobald das \lstinline|WebSocket| geöffnet ist, wird dafür gesorgt, dass bei Formularabsendung das \lstinline|WebSocket| verwendet wird, statt einer regulären Formularübertragung.
+Sobald vom Server eine Nachricht eintrifft, wird das Diagramm beim Client über die bereits vorhandene \lstinline|chart|-Variable aktualisiert.\todo{FireFox braucht Prefix}
+Diese Variable wurde zuvor mittels der \lstinline|makeAgeStatisticsChart|-Funktion erstellt, die sich in der Datei \lstinline|public/javascripts/main.js| befindet.
+
+% subsection web_sockets_in_der_altersstatistiken_anwendung (end)
+
+% section web_sockets (end)
+
+\section{Server Sent Events} % (fold)
+\label{sec:server_sent_events}
+
+% section server_sent_events (end)
+
+\section{Comet Sockets} % (fold)
+\label{sec:comet_sockets}
+
+% section comet_sockets (end)
+
 % chapter real_time_web (end)

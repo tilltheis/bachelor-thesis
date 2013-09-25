@@ -704,7 +704,7 @@ val numberEnumeratorFromApply: Enumerator[Int] =
 \label{par:erstellung_durch_konstruktormethode_im_concurrent_objekt}\mbox{} % force new line
 
 Das Objekt \lstinline|Concurrent| stellt weitere Konstruktoren für \lstinline|Enumerator|s bereit.
-Unter anderem beinhaltet dieses Objekt die Methode \lstinline|unicast|, die imperatives schreiben auf einen \lstinline|Iteratee| erlaubt.
+Unter anderem beinhaltet dieses Objekt die Methode \lstinline|unicast|, die imperatives schreiben auf einen \lstinline|Iteratee| erlaubt.\todo{durch `broadcast` ersetzten}
 Die Signatur von \lstinline|unicast| ist wie in Listing~\ref{lst:unicast_signatur} dargestellt.
 
 \begin{lstlisting}[caption=Die Signatur von Concurrent.unicast, label=lst:unicast_signatur]
