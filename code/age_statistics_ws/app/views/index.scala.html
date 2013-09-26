@@ -6,9 +6,8 @@
 <html>
 <head>
   <title>Age Statistics</title>
-  <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.css")">
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
   <script src="@routes.Assets.at("javascripts/jquery-1.10.2.js")"></script>
-  <script src="@routes.Assets.at("javascripts/bootstrap.js")"></script>
   <script src="@routes.Assets.at("javascripts/d3.js")"></script>
   <script src="@routes.Assets.at("javascripts/nv.d3.js")"></script>
   <script src="@routes.Assets.at("javascripts/underscore.js")"></script>
@@ -16,79 +15,79 @@
 </head>
 <body>
 
-  <div class="container">
+  <div>
 
-    <div class="page-header">
+    <header>
       <h1>Age Statistics</h1>
-    </div>
+    </header>
 
-    <div class="row">
-      <div class="col-lg-6">
+    <div>
+      <div>
         <div id="ageChart">
           <svg></svg>
         </div>
       </div>
-      <div class="col-lg-6">
+      <div>
         <form method="post">
           <fieldset>
             <legend>Your Age</legend>
-            <div class="form-group">
+            <div>
               <label for="ageInput">How Old Are You?</label>
-              <input type="number" min="1" max="99" class="form-control" id="ageInput" name="age" placeholder="Enter Age">
+              <input type="number" min="1" max="99" id="ageInput" name="age" placeholder="Enter Age">
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit">Submit</button>
           </fieldset>
         </form>
       </div>
     </div>
 
-    <script>
-
-      function disableFormSubmittal() {
-        $("form").off("submit"); // remove old event handler
-        $("form").submit(function(event) {
-          event.preventDefault();
-        });
-      }
-
-      disableFormSubmittal();
-
-      var ws =
-        new WebSocket("@routes.Application.input.webSocketURL()");
-
-      ws.onopen = function() {
-        $("form").submit(function(event) {
-          event.preventDefault();
-          ws.send($("#ageInput").val());
-          this.reset();
-        });
-      };
-
-      ws.onclose = disableFormSubmittal;
-
-      ws.onmessage = function(event) {
-        var age = parseInt(event.data, 10);
-        chart.increment(age);
-        chart.update();
-      };
-
-
-      function adjustContainerSize() {
-        var container = $("#ageChart");
-        container.height(container.width());
-      }
-
-      window.onresize = adjustContainerSize;
-      adjustContainerSize();
-
-      var statistics = @Html(Json.toJson(statistics.map { case (k, v) =>
-        (k.toString, v)
-      }).toString);
-
-      var chart = makeAgeStatisticsChart("#ageChart svg", statistics);
-    </script>
-
   </div>
+
+  <script>
+
+    function disableFormSubmittal() {
+      $("form").off("submit"); // remove old event handler
+      $("form").submit(function(event) {
+        event.preventDefault();
+      });
+    }
+
+    disableFormSubmittal();
+
+    var ws =
+      new WebSocket("@routes.Application.input.webSocketURL()");
+
+    ws.onopen = function() {
+      $("form").submit(function(event) {
+        event.preventDefault();
+        ws.send($("#ageInput").val());
+        this.reset();
+      });
+    };
+
+    ws.onclose = disableFormSubmittal;
+
+    ws.onmessage = function(event) {
+      var age = parseInt(event.data, 10);
+      chart.increment(age);
+      chart.update();
+    };
+
+
+    function adjustContainerSize() {
+      var container = $("#ageChart");
+      container.height(container.width());
+    }
+
+    window.onresize = adjustContainerSize;
+    adjustContainerSize();
+
+    var statistics = @Html(Json.toJson(statistics.map { case (k, v) =>
+      (k.toString, v)
+    }).toString);
+
+    var chart = makeAgeStatisticsChart("#ageChart svg", statistics);
+  </script>
 
 </body>
 </html>
