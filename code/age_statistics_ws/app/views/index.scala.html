@@ -48,6 +48,7 @@
     var form = document.forms[0];
     var input = document.getElementById("ageInput");
     var chartContainer = document.getElementById("ageChart");
+    var svg = document.getElementsByTagName("svg")[0];
 
     // prevent form submission
     form.onsubmit = function() { return false; };
@@ -76,7 +77,11 @@
 
 
     function autoResizeChart() {
-      chartContainer.style.height = chartContainer.clientWidth + "px";
+      var offsetTop = chartContainer.getBoundingClientRect().top;
+      var dimensionValue = Math.min(window.innerHeight - offsetTop, chartContainer.clientWidth);
+      var value = dimensionValue + "px";
+      svg.style.width = value;
+      svg.style.height = value;
     }
 
     window.onresize = autoResizeChart;
