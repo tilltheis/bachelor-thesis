@@ -1,0 +1,5 @@
+guard :shell do
+  watch /main\.less$/ do |f|
+    `lessc main.less > main.css`
+  end
+end

@@ -111,11 +111,11 @@ var ws =
   new WebSocket("@routes.Application.input.webSocketURL()");
 
 ws.onopen = function() {
-  $("form").submit(function(event) {
-    event.preventDefault();
-    ws.send($("#ageInput").val());
-    this.reset();
-  });
+  form.onsubmit = function() {
+    ws.send(input.value)
+    form.reset();
+    return false; // prevent submission
+  }
 };
 
 ws.onmessage = function(event) {
@@ -127,6 +127,7 @@ ws.onmessage = function(event) {
 
 Bevor das \lstinline|WebSocket| geöffnet und nachdem es geschlossen wurde, muss verhindert werden, dass das Formular abgeschickt werden kann, weil Server-seitig keine \lstinline|Action| für das Formular existiert.
 Der Code dafür soll an dieser Stelle aber nicht gezeigt werden werden.
+Die verwendeten Variablen \lstinline|form| und \lstinline|input| enthalten Referenzen auf die \gls{dom}-Objekte für das HTML-Formular und das Eingabefeld.
 Sobald das \lstinline|WebSocket| geöffnet ist, wird dafür gesorgt, dass bei Formularabsendung das \lstinline|WebSocket| verwendet wird, statt einer regulären Formularübertragung.
 Sobald vom Server eine Nachricht eintrifft, wird das Diagramm beim Client über die bereits vorhandene \lstinline|chart|-Variable aktualisiert.\todo{FireFox braucht Prefix}
 Diese Variable wurde zuvor mittels der \lstinline|makeAgeStatisticsChart|-Funktion erstellt, die sich in der Datei \lstinline|public/javascripts/main.js| befindet.

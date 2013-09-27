@@ -1,0 +1,96 @@
+@(statistics: AgeStatistics)(implicit request: RequestHeader)
+
+@import play.api.libs.json._
+
+<!doctype html>
+<html>
+<head>
+  <title>Age Statistics</title>
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+  <script src="@routes.Assets.at("javascripts/jquery-1.10.2.js")"></script>
+  <script src="@routes.Assets.at("javascripts/d3.js")"></script>
+  <script src="@routes.Assets.at("javascripts/nv.d3.js")"></script>
+  <script src="@routes.Assets.at("javascripts/underscore.js")"></script>
+  <script src="@routes.Assets.at("javascripts/main.js")"></script>
+</head>
+<body>
+
+  <div>
+
+    <header>
+      <h1>Age Statistics</h1>
+    </header>
+
+    <div>
+      <div>
+        <div id="ageChart">
+          <svg></svg>
+        </div>
+      </div>
+      <div>
+        <form method="post">
+          <fieldset>
+            <legend>Your Age</legend>
+            <div>
+              <label for="ageInput">How Old Are You?</label>
+              <input type="number" min="1" max="99" id="ageInput" name="age" placeholder="Enter Age">
+            </div>
+            <button type="submit">Submit</button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+
+    var form = document.forms[0];
+    var input = document.getElementById("ageInput");
+    var chartContainer = document.getElementById("ageChart");
+    var svg = document.getElementsByTagName("svg")[0];
+
+
+
+    form.onsubmit = function() {
+      var params = "age=" + input.value;
+      var request = new XMLHttpRequest();
+      request.open("POST", "@routes.Application.input");
+      request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      request.send(params);
+
+      form.reset();
+      return false; // prevent submission
+    }
+
+    var eventSource = new EventSource("@routes.Application.stream");
+
+    eventSource.onmessage = function(event) {
+      console.log("message: " + event.data)
+      var age = parseInt(event.data, 10);
+      chart.increment(age);
+      chart.update();
+    };
+
+
+
+    function autoResizeChart() {
+      var offsetTop = chartContainer.getBoundingClientRect().top;
+      var dimensionValue = Math.min(window.innerHeight - offsetTop, chartContainer.clientWidth);
+      var value = dimensionValue + "px";
+      svg.style.width = value;
+      svg.style.height = value;
+    }
+
+    window.onresize = autoResizeChart;
+    autoResizeChart();
+
+    var statistics = @Html(Json.toJson(statistics.map { case (k, v) =>
+      (k.toString, v)
+    }).toString);
+
+    var chart = makeAgeStatisticsChart("#ageChart svg", statistics);
+  </script>
+
+</body>
+</html>
