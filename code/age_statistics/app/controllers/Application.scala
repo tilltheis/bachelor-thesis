@@ -1,21 +1,15 @@
 package controllers
 
-// includes for http, web sockets, server sent events
+import scala.util.control.Exception.catching
+
 import play.api._
 import play.api.mvc._
 import play.api.data.Forms._
 import play.api.data._
-
-import models.AgeStatistics
-
-// includes for web sockets and server sent events
+import play.api.libs.{Comet, EventSource}
 import play.api.libs.iteratee._
 
-// includes for web sockets
-import scala.util.control.Exception.catching
-
-// includes for server sent events
-import play.api.libs.{Comet, EventSource}
+import models.AgeStatistics
 
 
 object Application extends Controller {

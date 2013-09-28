@@ -24,7 +24,6 @@ function useWebSockets() {
   // };
 
   ws.onmessage = function(event) {
-    console.log("ws.onmessage");
     var age = parseInt(event.data, 10);
     chart.increment(age);
     chart.update();
@@ -37,7 +36,6 @@ function useWebSockets() {
 
 function dontUseWebSockets() {
   if (globalWebSocket.readyState !== WebSocket.CLOSED) {
-    console.log("globalWebSocket.close");
     globalWebSocket.close();
   }
   globalWebSocket = undefined;

@@ -9,7 +9,9 @@ function useServerSentEvents() {
     var request = new XMLHttpRequest();
     request.open("POST", "/");
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    request.send(params);
+    try {
+      request.send(params);
+    } catch (e) {} // invalid input will result in "400 (Bad Request)"
 
     form.reset();
     return false; // prevent submission
@@ -19,7 +21,6 @@ function useServerSentEvents() {
   var eventSource = new EventSource(eventSourceUrl);
 
   eventSource.onmessage = function(event) {
-    console.log("eventSource.onmessage");
     var age = parseInt(event.data, 10);
     chart.increment(age);
     chart.update();
@@ -31,7 +32,6 @@ function useServerSentEvents() {
 
 function dontUseServerSentEvents() {
   if (globalEventSource.readyState !== EventSource.CLOSED) {
-    console.log("globalEventSource.close");
     globalEventSource.close();
   }
   globalEventSource = undefined;
