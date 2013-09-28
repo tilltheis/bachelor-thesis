@@ -1,7 +1,7 @@
 // requires nv.d3.js and underscore.js
 
 // statistics is a dictionary object { age: count } like { 6: 1, 10: 2 }
-function makeAgeStatisticsChart(chartElementSelector, statisticsParameter) {
+function makeAgeStatisticsChart(chartElementSelector, statistics) {
 
   function dataFromStatistics(statistics) {
     function sum(xs) { return _.reduce(xs, function(sum, x) { return sum + x; }, 0); }
@@ -16,6 +16,8 @@ function makeAgeStatisticsChart(chartElementSelector, statisticsParameter) {
     }, []);
   }
 
+  var data = dataFromStatistics(statistics);
+
   function dataFunction() {
     return [{
       key: "Age Statistics",
@@ -23,18 +25,6 @@ function makeAgeStatisticsChart(chartElementSelector, statisticsParameter) {
     }];
   }
 
-  function draw() {
-    // long bars will be cut off if domain is not set explicitly
-    chart.yDomain([0, d3.max(data, function (d) { return d.value; })]);
-
-    d3.select(chartElementSelector)
-      .datum(dataFunction)
-      .transition().duration(500)
-      .call(chart);
-  }
-
-  var statistics = _.clone(statisticsParameter);
-  var data = dataFromStatistics(statistics);
   var chart;
 
   // see http://nvd3.org/ghpages/discreteBar.html
@@ -49,22 +39,22 @@ function makeAgeStatisticsChart(chartElementSelector, statisticsParameter) {
       .margin({bottom: 100})
       .valueFormat(d3.format(",.0f"));
 
+
     chart.yAxis.axisLabel("#Votes").tickFormat(d3.format(",.0f"));
     chart.xAxis.axisLabel("Age (in Years)");
 
-    draw();
+    // long bars will be cut off if domain is not set explicitly
+    chart.yDomain([0, d3.max(data, function (d) { return d.value; })]);
+
+    d3.select(chartElementSelector)
+        .datum(dataFunction)
+      .transition().duration(500)
+        .call(chart);
 
     nv.utils.windowResize(chart.update);
 
     return chart;
   });
 
-  return {
-    increment: function(age) {
-      var oldValue = _.has(statistics, age) ? statistics[age] : 0;
-      statistics[age] = oldValue + 1;
-      data = dataFromStatistics(statistics);
-    },
-    update: draw
-  }
+  return chart;
 }
