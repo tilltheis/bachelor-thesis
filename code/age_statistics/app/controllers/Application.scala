@@ -8,6 +8,7 @@ import play.api.data.Forms._
 import play.api.data._
 import play.api.libs.{Comet, EventSource}
 import play.api.libs.iteratee._
+import play.api.libs.concurrent.Execution.Implicits._
 
 import models.AgeStatistics
 
@@ -62,6 +63,6 @@ object Application extends Controller {
 
   implicit val intMessage = Comet.CometMessage[Int](_.toString)
   def eventSource = Action {
-    Ok.stream(sseOutEnumerator.through(EventSource())).as("text/event-stream")
+    Ok.chunked(sseOutEnumerator.through(EventSource())).as("text/event-stream")
   }
 }
