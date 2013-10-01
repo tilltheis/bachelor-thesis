@@ -13,9 +13,10 @@ Die Kommunikation in entgegengesetzter Richtung erfolgt hierbei über herkömmli
 \section{Web-Sockets} % (fold)
 \label{sec:web_sockets}
 
-Das Web-Socket-Protokoll ermöglicht es Client und Server sich gegenseitig über ein Web-Socket Nachrichten zu schicken.
+Das Web-Socket-Protokoll \cite{websocket_protocol} ermöglicht es Client und Server sich gegenseitig über ein Web-Socket Nachrichten zu schicken.
 Auf Client-Seite gibt es hierfür den \lstinline|WebSocket|-Typ.
 Auf Server-Seite (Play) gibt es ebenfalls eine Klasse namens \lstinline|WebSocket|, die im Controller anstelle von \lstinline|Action| als Request-Handler verwendet werden kann.
+Web-Sockets werden von Chrome 14, Firefox 11 und Internet Explorer 10 und in neueren Versionen unterstützt \cite[vgl.][]{js_websocket_compatibility}.
 
 \subsection{Web-Sockets auf Client-Seite} % (fold)
 \label{sub:web_sockets_auf_client_seite}
@@ -29,7 +30,6 @@ Ein \lstinline|EventHandler| kann jede beliebige Funktion sein, beim Aufruf wird
 [Constructor(DOMString url)]
 interface WebSocket {
   attribute EventHandler onopen;
-  attribute EventHandler onerror;
   attribute EventHandler onclose;
   attribute EventHandler onmessage;
   void close();
@@ -76,7 +76,7 @@ GET    /input    controllers.Application.input
 Die \lstinline|input|-\lstinline|Action| wird durch einen im vorigen Unterabschnitt eingeführten \lstinline|WebSocket.using|-Block ersetzt, der in Listing~\ref{lst:web_sockets_im_controller_der_altersstatistiken_anwendung} zu sehen ist.
 Als Nachrichtentyp ist hierbei \lstinline|String| gewählt, weil sowohl Client, als auch Server gut damit arbeiten können.
 Denkbar wären auch \lstinline|Int| oder \lstinline|JsValue| für \gls{json}-Nachrichten, diese würden das Beispiel allerdings verkomplizieren.
-Um möglichst einfach alle aktiven Clients erreichen zu können, wird mit Hilfe der Konstruktormethode \lstinline|Concurrent.broadcast|, die in Unterabschnitt~\ref{sub:anwendung_von_enumerators} (\nameref{sub:anwendung_von_enumerators}) vorgestellt wurde, ein \lstinline|Enumerator| mit assoziiertem \lstinline|Channel| erstellt.
+Um möglichst einfach alle aktiven Clients erreichen zu können, wird mit Hilfe der Konstruktormethode \lstinline|Concurrent.broadcast|, die in Unterabschnitt~\ref{sub:enumerators} (\nameref{sub:enumerators}) vorgestellt wurde, ein \lstinline|Enumerator| mit assoziiertem \lstinline|Channel| erstellt.
 Über diesen \lstinline|Channel| können imperativ Elemente an den \lstinline|Enumerator| übergeben werden.
 Sobald eine neue Altersangabe über den \lstinline|Iteratee| bekannt wird, wird diese über den \lstinline|Enumerator| an alle Clients verbreitet, damit sie ihre Datendarstellung aktualisieren können.
 
@@ -139,11 +139,135 @@ Diese Variable wurde zuvor mittels der \lstinline|makeAgeStatisticsChart|-Funkti
 \section{Server Sent Events} % (fold)
 \label{sec:server_sent_events}
 
+Server Sent Events ist eine Technologie, bei der die Server-Seite Nachrichten an die Client-Seite senden kann.
+Dabei wird im Gegensatz zu Web-Sockets kein eigenständiges Protokoll verwendet, sondern auf HTTP zurückgegriffen.
+Server Sent Events wird von Chrome 6 und Firefox 6 und in neueren Versionen, nicht aber von Internet Explorer unterstützt \cite[vgl.][]{js_eventsource_compatibility}.
+
+\subsection{Server Sent Events auf Client-Seite} % (fold)
+\label{sub:server_sent_events_auf_client_seite}
+
+Auf der Client-Seite gibt es das \lstinline|EventSource|-Interface, das, wie der Name schon sagt, die serverseitige Datenquelle repräsentiert.
+Eine vereinfachte Darstellung des Interfaces, die nur die für diese Arbeit relevanten Teile enthält, ist in Listing~\ref{lst:das_eventsource_interface_in_javascript} zu sehen \cite[vgl.][]{js_eventsource}.
+
+\begin{lstlisting}[caption=Das EventSource-Interface in JavaScript, label=lst:das_eventsource_interface_in_javascript]
+[Constructor(DOMString url)]
+interface EventSource {
+  attribute EventHandler onopen;
+  attribute EventHandler onmessage;
+  void close();
+};
+\end{lstlisting}
+
+Das \lstinline|EventSource|-Interface hat große Ähnlichkeit mit dem \lstinline|WebSocket|-Interface.
+Was im Vergleich dazu allerdings fehlt, ist die \lstinline|send|-Methode, weil Server Sent Events nur Kommunikation in eine Richtung erlauben.
+Abgesehen davon erfüllen die Attribute und Methoden die gleichen Aufgaben, wie ihre Pendants im \lstinline|WebSocket|-Interface.
+Die empfangenen Nachrichten sind \lstinline|String|s.
+
+% subsection server_sent_events_auf_client_seite (end)
+
+\subsection{Server Sent Events auf der Server-Seite} % (fold)
+\label{sub:server_sent_events_auf_der_server_seite}
+
+Play unterstützt Server Sent Events mit Hilfe von Actions, die statt einer einfachen Antwort einen Datenstrom zurückliefern.
+Das HTTP-Protokoll unterstützt mittels Chunked Transfer Encoding das kontinuierliche Senden von Daten vom Server an den Client, anstelle von Antworten fester Größe.
+Um eine HTTP-Antwort dieser Form zu erstellen kann auf einem Wert des Typs \lstinline|play.api.mvc.Results.Status| die \lstinline|chunked|-Methode aufgerufen werden.
+Diese Methode lässt aus einem übergebenen \lstinline|Enumerator| die Inhalte der Antwort generieren \cite{play_streams}.
+Ein solcher Stream ist allerdings noch keine gültige Datenquelle für Server Sent Events.
+Um das zu ändern muss der übergebene \lstinline|Enumerator| durch den \lstinline|play.api.libs.EventSource|-\lstinline|Enumeratee| transformiert werden, wodurch die Stream-Elemente korrekt kodiert werden.
+Anschließend muss der MIME-Type auf \lstinline|text/event-stream| gesetzt werden.\todo{Glossareintrag fuer MIME}
+Eine gültige \lstinline|EventSource| ist in Listing~\ref{lst:server_sent_events_auf_server_sent_events_auf_der_server_seite} zu sehen.
+
+\begin{lstlisting}[caption=Server Sent Events auf Server-Seite, label=lst:server_sent_events_auf_server_seite]
+def eventSource = Action {
+  Ok.chunked(Enumerator("44", "34", "50").through(EventSource()))
+    .as("text/event-stream")
+}
+\end{lstlisting}\todo{testen}
+
+% subsection server_seite (end)
+
+\subsection{Server Sent Events in der Altersstatistiken-Anwendung} % (fold)
+\label{sub:server_sent_events_in_der_altersstatistiken_anwendung}
+
+Die Altersangaben werden wie bei der statischen Variante über separate HTTP-Nachrichten empfangen, wofür nach wie vor im Controller die \lstinline|input|-Action zuständig ist.
+Um diese Antworten an alle verbundenen Clients weiterzuleiten wird, wie auch schon bei den Web Sockets mit einem \lstinline|Enumerator| und \lstinline|Concurrent.broadcast| gearbeitet.
+Um nach Empfang einer Altersangabe diese Information an den \lstinline|Enumerator| zu übergeben, wird die \lstinline|input|-Action, wie in Listing~\ref{lst:} zu sehen, um eine Zeile erweitert.
+
+\begin{lstlisting}[caption=Server Sent Events in der input-Action der Altersstatistiken-Anwendung, label=lst:server_sent_events_in_der_input_action_der_altersstatistiken_anwendung]
+val (sseOutEnumerator, sseOutChannel) = Concurrent.broadcast[Int]
+
+def input = Action { implicit request =>
+  ageForm.bindFromRequest.fold(
+    invalidForm => BadRequest(invalidForm.errorsAsJson.toString),
+    { age =>
+      ageStatistics = ageStatistics.updated(age,
+        ageStatistics(age) + 1)
+      sseOutChannel.push(age) // only needed for SSE
+      Redirect(routes.Application.index)
+    }
+  )
+}
+\end{lstlisting}
+
+Um die Datenquelle vom Server abrufen zu können, muss zunächst ein Eintrag in der \lstinline|routes|-Datei hinzugefügt werden.
+Die Datenquelle soll über die URL \lstinline|/dataSource| erreichbar sein, woraus sich der Eintrag aus Listing~\ref{lst:server_sent_events_in_der_routes_datei_der_altersstatistiken_anwendung} ergibt.
+
+\begin{lstlisting}[caption=Server Sent Events in der routes-Datei der Altersstatistiken-Anwendung, label=lst:server_sent_events_in_der_routes_datei_der_altersstatistiken_anwendung]
+GET    /eventSource    controllers.Application.eventSource
+\end{lstlisting}
+
+Bei der Implementierung der \lstinline|eventSource|-Action im Controller fällt wieder mehr Arbeit an.
+Der im vorigen Unterabschnitt gezeigt \lstinline|EventSource|-\lstinline|Enumeratee| ist ursprünglich auf eine andere Technologie namens Comet Sockets ausgelegt gewesen.
+Im Falle von Comet Sockets wird anstelle von einfachen Nachrichten, wie bei Server Sent Events, kompletter JavaScript-Code an den Client gesendet, weshalb o.~g. \lstinline|Enumeratee| übergebene \lstinline|String|s in doppelte Anführungszeichen \lstinline|"| setzt, sobald eine \lstinline|String|-Nachricht an den Client gesendet wird.
+Wenn vom Server aus die \lstinline|String|-Nachricht mit dem Inhalt \lstinline|35| an den Client gesendet wird, so kommt beim Client eine \lstinline|String|-Nachricht mit dem Inhalt \lstinline|"35"| an, was in diesem Fall nicht gewollt ist.\todo{keine Quelle, weil durch Ausprobieren herausgefunden}
+
+Der \lstinline|EventSource|-\lstinline|Enumeratee| nimmt allerdings u.~a. einen impliziten Parameter vom Typ \lstinline|CometMessage[A]|.
+Diese \lstinline|case class| nimmt als Konstruktorargument eine Funktion vom Typ \lstinline|A => String|.
+Mit einem passenden Wert lässt sich oben beschriebenes Phänomen also umgehen.
+Die in Listing~\ref{lst:server_sent_events_im_controller_der_altersstatistiken_anwendung} gezeigte Lösung nutzt daher den impliziten Wert \lstinline|intMessage|, um die Zahlen des \lstinline|Enumerator|s in \lstinline|String|s umzuformen, ohne sie mit Anführungszeichen zu umgeben.
+
+\begin{lstlisting}[caption=Server Sent Events im Controller der Altersstatistiken-Anwendung, label=lst:server_sent_events_im_controller_der_altersstatistiken_anwendung]
+implicit val intMessage = Comet.CometMessage[Int](_.toString)
+def eventSource = Action {
+  Ok.chunked(sseOutEnumerator.through(EventSource()))
+    .as("text/event-stream")
+}
+\end{lstlisting}
+
+Auf der Client-Seite wird zuerst dafür gesorgt, dass beim Absenden des Formulars die Seite nicht neu geladen wird, sondern im Hintergrund ein \gls{ajax}-Request mit dem Formulardaten versendet wird.
+Dann wird der entsprechende \lstinline|EventHandler| für \lstinline|onmessage| gesetzt, um bei neuen Informationen das Diagramm zu aktualisieren.
+Dies ist in Listing~\ref{lst:server_sent_events_in_der_view_der_altersstatistiken_anwendung} zu sehen.
+
+\begin{lstlisting}[caption=Server Sent Events in der View der Altersstatistiken-Anwendung, label=lst:server_sent_events_in_der_view_der_altersstatistiken_anwendung]
+var form = document.forms[0];
+var input = document.getElementById("ageInput");
+
+form.onsubmit = function() {
+  var params = "age=" + input.value;
+  var request = new XMLHttpRequest();
+  request.open("POST", "/");
+  request.setRequestHeader("Content-type",
+                           "application/x-www-form-urlencoded");
+  try {
+    request.send(params);
+  } catch (e) {} // invalid input will result in Bad Request
+
+  form.reset();
+  return false; // prevent submission
+}
+
+var eventSource =
+  new EventSource("@routes.Application.eventSource");
+
+eventSource.onmessage = function(event) {
+  var age = parseInt(event.data, 10);
+  chart.increment(age);
+  chart.update();
+};
+\end{lstlisting}
+
+% subsection server_sent_events_in_der_altersstatistiken_anwendung (end)
+
 % section server_sent_events (end)
-
-\section{Comet Sockets} % (fold)
-\label{sec:comet_sockets}
-
-% section comet_sockets (end)
 
 % chapter real_time_web (end)

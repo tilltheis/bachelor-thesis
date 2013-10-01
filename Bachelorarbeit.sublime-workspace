@@ -539,7 +539,7 @@
 			"file": "code/age_statistics/app/controllers/Application.scala",
 			"settings":
 			{
-				"buffer_size": 1866,
+				"buffer_size": 1696,
 				"line_ending": "Unix"
 			}
 		},
@@ -547,7 +547,7 @@
 			"file": "thesis/thesis.bib",
 			"settings":
 			{
-				"buffer_size": 16112,
+				"buffer_size": 16288,
 				"line_ending": "Unix"
 			}
 		},
@@ -563,7 +563,7 @@
 			"file": "thesis/ch04-real-time-web.tex",
 			"settings":
 			{
-				"buffer_size": 9373,
+				"buffer_size": 10045,
 				"line_ending": "Unix"
 			}
 		}
@@ -692,6 +692,7 @@
 	},
 	"file_history":
 	[
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/public/javascripts/webSocketCommunication.js",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/project/Build.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch04-real-time-web.tex",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_ws/app/controllers/Application.scala",
@@ -818,8 +819,7 @@
 		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/factories/states.rb",
 		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121122010226_create_states.rb",
 		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/manager/resource_controller.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/manager/parents_controller.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/parent/children/index.html.slim"
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/manager/parents_controller.rb"
 	],
 	"find":
 	{
@@ -1210,7 +1210,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1866,
+						"buffer_size": 1696,
 						"regions":
 						{
 						},
@@ -1240,15 +1240,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16112,
+						"buffer_size": 16288,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								927,
-								927
+								16251,
+								16251
 							]
 						],
 						"settings":
@@ -1349,7 +1349,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 455.0,
+						"translation.y": 8313.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1379,7 +1379,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 481.0,
+						"translation.y": 107.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1390,26 +1390,27 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 9373,
+						"buffer_size": 10045,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9373,
-								9373
+								9763,
+								9763
 							]
 						],
 						"settings":
 						{
 							"WordCountShouldRun": true,
+							"spell_check": true,
 							"syntax": "Packages/LaTeX/LaTeX.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2197.0,
+						"translation.y": 2851.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1463,6 +1464,10 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"websockcom",
+				"code/age_statistics/public/javascripts/webSocketCommunication.js"
+			],
 			[
 				"ch04",
 				"thesis/ch04-real-time-web.tex"

@@ -30,7 +30,7 @@ object Application extends Controller {
       invalidForm => BadRequest(invalidForm.errorsAsJson.toString),
       { age =>
         ageStatistics = ageStatistics.updated(age, ageStatistics(age) + 1)
-        sseOutChannel.push(age) // only needed for server sent events
+        sseOutChannel.push(age) // only needed for SSE
         Redirect(routes.Application.index)
       }
     )

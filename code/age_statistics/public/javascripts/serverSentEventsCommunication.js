@@ -8,10 +8,11 @@ function useServerSentEvents() {
     var params = "age=" + input.value;
     var request = new XMLHttpRequest();
     request.open("POST", "/");
-    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    request.setRequestHeader("Content-type",
+                             "application/x-www-form-urlencoded");
     try {
       request.send(params);
-    } catch (e) {} // invalid input will result in "400 (Bad Request)"
+    } catch (e) {} // invalid input will result in Bad Request
 
     form.reset();
     return false; // prevent submission
