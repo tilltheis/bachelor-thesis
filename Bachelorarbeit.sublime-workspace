@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"Enu",
+				"Enumerator"
+			],
+			[
+				"En",
+				"Enumeratee"
+			],
+			[
+				"Evens",
+				"EventSource"
+			],
+			[
+				"Eve",
+				"EventSource"
+			],
+			[
 				"Requesh",
 				"RequestHeader"
 			],
@@ -26,10 +42,6 @@
 			[
 				"sumI",
 				"sumIterateeAfterE1"
-			],
-			[
-				"En",
-				"Enumerator"
 			],
 			[
 				"fol",
@@ -134,10 +146,6 @@
 			[
 				"Kom",
 				"Kompositionen"
-			],
-			[
-				"Enu",
-				"Enumerator"
 			],
 			[
 				"Elem",
@@ -506,14 +514,6 @@
 			[
 				"Serv",
 				"ServiceName"
-			],
-			[
-				"Prod",
-				"ProductOfGCD"
-			],
-			[
-				"Nu",
-				"Number"
 			]
 		]
 	},
@@ -528,26 +528,10 @@
 			}
 		},
 		{
-			"file": "code/age_statistics_http/app/controllers/Application.scala",
-			"settings":
-			{
-				"buffer_size": 637,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "code/age_statistics/app/controllers/Application.scala",
-			"settings":
-			{
-				"buffer_size": 1696,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "thesis/thesis.bib",
 			"settings":
 			{
-				"buffer_size": 16288,
+				"buffer_size": 17109,
 				"line_ending": "Unix"
 			}
 		},
@@ -563,7 +547,39 @@
 			"file": "thesis/ch04-real-time-web.tex",
 			"settings":
 			{
-				"buffer_size": 10045,
+				"buffer_size": 17684,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "code/age_statistics/app/controllers/Application.scala",
+			"settings":
+			{
+				"buffer_size": 1736,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "code/examples/build.sbt",
+			"settings":
+			{
+				"buffer_size": 698,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "code/age_statistics/public/javascripts/serverSentEventsCommunication.js",
+			"settings":
+			{
+				"buffer_size": 1044,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "code/age_statistics/app/views/index.scala.html",
+			"settings":
+			{
+				"buffer_size": 2852,
 				"line_ending": "Unix"
 			}
 		}
@@ -692,12 +708,21 @@
 	},
 	"file_history":
 	[
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch03-reaktive-programmierung.tex",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/public/javascripts/serverSentEventsCommunication.js",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/conf/routes",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/streams/Iteratees.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/project/Build.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/build.sbt",
+		"/Users/till/.profile",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/project/build.properties",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/project/plugins.sbt",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/app/controllers/Application.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/app/controllers/Application.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/public/javascripts/webSocketCommunication.js",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/project/Build.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch04-real-time-web.tex",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_ws/app/controllers/Application.scala",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch03-reaktive-programmierung.tex",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/conf/routes",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch02-grundlagen.tex",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/glossar.tex",
 		"/Users/till/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
@@ -707,11 +732,9 @@
 		"/Users/till/Dropbox/Entwicklung/github/tilltheis.github.com/projects/index.html",
 		"/Users/till/Library/Application Support/Sublime Text 3/Packages/User/Package Control.sublime-settings",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/IterateesSpec.scala",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/streams/Iteratees.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/EnumeratorsSpec.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/streams/Enumerators.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/CompositionSpec.scala",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/build.sbt",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/EnumeratorsSpec",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/Streams.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/IterateesSpec",
@@ -741,7 +764,6 @@
 		"/var/folders/d0/fmyndhpd0jd3tbygjv5klxt00000gn/T/sbt1460601328027460305.log",
 		"/Users/till/Dropbox/Smooth Gestures/Smooth_Gestures_Settings.html",
 		"/Users/till/Library/Application Support/Firefox/Profiles/ogfghv2n.default/gm_scripts/Hacker_News_Enhancements/Hacker_News_Enhancements.user.js",
-		"/Users/till/.profile",
 		"/Users/till/Library/Application Support/Firefox/Profiles/ogfghv2n.default/gm_scripts/HackemUp/100977.user.js",
 		"/Users/till/Dropbox/Entwicklung/Chrome Addons/hacker-news-enhancements/yt-fullwindow.sublime-workspace",
 		"/Users/till/Dropbox/Entwicklung/haskell/propositional-logic/index.html",
@@ -813,13 +835,7 @@
 		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/fee.rb",
 		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/seeds.rb",
 		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121122015606_remove_state_id_from_rates.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121122015538_add_state_id_to_fees.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/admin/kindergartens_controller.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121122012340_add_state_id_to_rates.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/factories/states.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121122010226_create_states.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/manager/resource_controller.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/manager/parents_controller.rb"
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121122015538_add_state_id_to_fees.rb"
 	],
 	"find":
 	{
@@ -839,6 +855,13 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"eventso",
+			"server_seite",
+			"client_seite",
+			"work.com",
+			"anwendung_von_enumerators",
+			"anwendung_",
+			"unterabsch",
 			"json",
 			"subsection",
 			"sub:die_list_monade",
@@ -959,14 +982,7 @@
 			"{input",
 			"send_message",
 			"{slot",
-			"Sample",
-			"sample_b",
-			"HAW_Logo",
-			"logout",
-			"listOptions",
-			" :",
-			"losable",
-			"Kindergartenleiter"
+			"Sample"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1007,7 +1023,7 @@
 	"groups":
 	[
 		{
-			"selected": 5,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -1023,8 +1039,8 @@
 						"selection":
 						[
 							[
-								1196,
-								1196
+								5751,
+								5751
 							]
 						],
 						"settings":
@@ -1169,86 +1185,26 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 135.0,
+						"translation.y": 3570.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "code/age_statistics_http/app/controllers/Application.scala",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 637,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"WordCountShouldRun": false,
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 108.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "code/age_statistics/app/controllers/Application.scala",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1696,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"WordCountShouldRun": false,
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
 					"file": "thesis/thesis.bib",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16288,
+						"buffer_size": 17109,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16251,
-								16251
+								17024,
+								17024
 							]
 						],
 						"settings":
@@ -1349,13 +1305,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 8313.0,
+						"translation.y": 9134.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 2,
 					"file": "thesis/glossar.tex",
 					"semi_transient": false,
 					"settings":
@@ -1385,20 +1341,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 3,
 					"file": "thesis/ch04-real-time-web.tex",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10045,
+						"buffer_size": 17684,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9763,
-								9763
+								16914,
+								16914
 							]
 						],
 						"settings":
@@ -1410,7 +1366,125 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2851.0,
+						"translation.y": 5001.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "code/age_statistics/app/controllers/Application.scala",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1736,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								850,
+								850
+							]
+						],
+						"settings":
+						{
+							"WordCountShouldRun": false,
+							"syntax": "Packages/Scala/Scala.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 143.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "code/examples/build.sbt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 698,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								374,
+								374
+							]
+						],
+						"settings":
+						{
+							"WordCountShouldRun": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "code/age_statistics/public/javascripts/serverSentEventsCommunication.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1044,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								140,
+								56
+							]
+						],
+						"settings":
+						{
+							"WordCountShouldRun": false,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "code/age_statistics/app/views/index.scala.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2852,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2440,
+								2473
+							]
+						],
+						"settings":
+						{
+							"WordCountShouldRun": false,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 998.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1465,6 +1539,50 @@
 		"selected_items":
 		[
 			[
+				"scalahtml",
+				"code/age_statistics/app/views/index.scala.html"
+			],
+			[
+				"serc",
+				"code/age_statistics/public/javascripts/serverSentEventsCommunication.js"
+			],
+			[
+				"routes",
+				"code/age_statistics/conf/routes"
+			],
+			[
+				"iteratees",
+				"code/examples/src/reactive/streams/Iteratees.scala"
+			],
+			[
+				"buildsb",
+				"code/examples/build.sbt"
+			],
+			[
+				"build",
+				"code/age_statistics/project/Build.scala"
+			],
+			[
+				"buildpr",
+				"code/age_statistics/project/build.properties"
+			],
+			[
+				"agebuild",
+				"code/age_statistics/project/build.properties"
+			],
+			[
+				"appsc",
+				"code/age_statistics/app/controllers/Application.scala"
+			],
+			[
+				"ch03",
+				"thesis/ch03-reaktive-programmierung.tex"
+			],
+			[
+				"server",
+				"code/age_statistics/public/javascripts/serverSentEventsCommunication.js"
+			],
+			[
 				"websockcom",
 				"code/age_statistics/public/javascripts/webSocketCommunication.js"
 			],
@@ -1475,10 +1593,6 @@
 			[
 				"httpproje",
 				"code/age_statistics_http/project/Build.scala"
-			],
-			[
-				"ch03",
-				"thesis/ch03-reaktive-programmierung.tex"
 			],
 			[
 				"route",
@@ -1502,10 +1616,6 @@
 			],
 			[
 				"exam",
-				"code/examples/build.sbt"
-			],
-			[
-				"build",
 				"code/examples/build.sbt"
 			],
 			[
@@ -1603,10 +1713,6 @@
 			[
 				"viemangroued",
 				"app/views/manager/groups/edit.html.slim"
-			],
-			[
-				"routes",
-				"config/routes.rb"
 			],
 			[
 				"modkin",
