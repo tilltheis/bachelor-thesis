@@ -3,13 +3,15 @@ import org.specs2.time.NoTimeConversions
 
 import scala.concurrent._
 import scala.concurrent.duration._
+import ExecutionContext.Implicits.global
 
 import play.api.libs.iteratee._
 import play.api.libs.iteratee.Enumerator.enumInput
 
-import examples.reactive.streams.Enumeratees
+import play.api.test.Helpers.defaultAwaitTimeout
+import play.api.test.Helpers // for await
 
-import test.Helpers.await
+import examples.reactive.streams.Enumeratees
 
 class EnumerateesSpec extends Specification with NoTimeConversions {
   Seq(
@@ -26,7 +28,7 @@ class EnumerateesSpec extends Specification with NoTimeConversions {
         val iteratee: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
 
         val transformedIteratee = enumeratee.transform(iteratee)
-        await(enumerator.run(transformedIteratee)) === 91
+        Helpers.await(enumerator.run(transformedIteratee)) === 91
       }
 
       "work with prematurely done iteratees" in {
@@ -36,10 +38,10 @@ class EnumerateesSpec extends Specification with NoTimeConversions {
         }
 
         val transformedIteratee = enumeratee.transform(iteratee)
-        await(enumerator.run(transformedIteratee)) === 22
+        Helpers.await(enumerator.run(transformedIteratee)) === 22
 
         val transformedIteratee2 = enumeratee.transform(iteratee)
-        await(Enumerator.enumInput(Input.Empty).run(transformedIteratee2)) must throwAn[Exception]
+        Helpers.await(Enumerator.enumInput(Input.Empty).run(transformedIteratee2)) must throwAn[Exception]
       }
     }
   }
@@ -48,7 +50,7 @@ class EnumerateesSpec extends Specification with NoTimeConversions {
   "applying an enumeratee to an iteratee" should {
     "get back the original iteratee afterwards" in {
       val result = Enumeratees.ApplicationOnIteratees.result
-      await(result) === List(22, 44, 22, 54)
+      Helpers.await(result) === List(22, 44, 22, 54)
     }
   }
 
@@ -57,13 +59,13 @@ class EnumerateesSpec extends Specification with NoTimeConversions {
       val e = Enumeratees.ApplicationOnEnumerators.transformedE
       val i = Iteratee.getChunks[String]
       val result = e.run(i)
-      await(result) === List("1", "2", "3")
+      Helpers.await(result) === List("1", "2", "3")
     }
   }
 
   "applying an enumeratee to an enumeratee" should {
     "chain the enumeratees together" in {
-      await(Enumeratees.ApplicationOnEnumeratees.result) === List(22, 25, 44)
+      Helpers.await(Enumeratees.ApplicationOnEnumeratees.result) === List(22, 25, 44)
     }
   }
 }

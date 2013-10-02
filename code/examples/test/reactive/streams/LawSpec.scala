@@ -8,7 +8,8 @@ import scala.concurrent.Future
 
 import play.api.libs.iteratee._
 
-import test.Helpers.await
+import play.api.test.Helpers.defaultAwaitTimeout
+import play.api.test.Helpers // for await
 
 class LawSpec extends Specification with ScalaCheck {
 
@@ -44,12 +45,12 @@ class LawSpec extends Specification with ScalaCheck {
   "unsafeHeadIteratee" should {
     "recognize inputs with at least one element" in check {
       (s: String) => !s.isEmpty ==> {
-        await(runM(en_str(s)(unsafeHeadIteratee))) === s.head
+        Helpers.await(runM(en_str(s)(unsafeHeadIteratee))) === s.head
       }
     }
 
     "not recognize empty inputs" in {
-      await(unsafeHeadIteratee[Any].run) must throwA[RuntimeException].like {
+      Helpers.await(unsafeHeadIteratee[Any].run) must throwA[RuntimeException].like {
         case e => e.getMessage === "premature EOF"
       }
     }
@@ -59,13 +60,13 @@ class LawSpec extends Specification with ScalaCheck {
     "recognize inputs that begin with a given prefix" in check {
       (s: String) => {
         val prefix = s.take(scala.util.Random.nextInt(s.length + 1))
-        await(runM(en_str(s)(prefixIteratee(prefix)))) === prefix
+        Helpers.await(runM(en_str(s)(prefixIteratee(prefix)))) === prefix
       }
     }
 
     "not recognize inputs that do not begin with a given prefix" in check {
       (s: String, prefix: String) => !s.startsWith(prefix) ==> {
-        await(prefixIteratee(prefix).run) must throwA[RuntimeException].like {
+        Helpers.await(prefixIteratee(prefix).run) must throwA[RuntimeException].like {
           case e => e.getMessage === "prefix not found"
         }
       }
@@ -82,7 +83,7 @@ class LawSpec extends Specification with ScalaCheck {
 
       val i = Iteratee.head[Char]
 
-      await(runM(left(i))) === await(runM(right(i)))
+      Helpers.await(runM(left(i))) === Helpers.await(runM(right(i)))
     }
   }
 
@@ -99,7 +100,7 @@ class LawSpec extends Specification with ScalaCheck {
         val left: IM[String] = en_str(s1 + s2)(i.flatMap(f))
         val right: IM[String] = flatMap(en_str(s1)(i), (x: E) => en_str(s2)(f(x)))
 
-        await(runM(left)) === await(runM(right))
+        Helpers.await(runM(left)) === Helpers.await(runM(right))
       }
     }
   }
@@ -118,13 +119,13 @@ class LawSpec extends Specification with ScalaCheck {
         runM(right).foreach(x => println(s"right: $x"))
 
         def matchNotRecognizingIteratee(i: IM[String]) =
-          await(runM(i)) must throwA[RuntimeException].like {
+          Helpers.await(runM(i)) must throwA[RuntimeException].like {
             case e => e.getMessage === "prefix not found"
           }
 
         matchNotRecognizingIteratee(left) and matchNotRecognizingIteratee(right)
       }
-    }.set(minTestsOk = 1000)
+    }
   }
 
 
@@ -139,7 +140,7 @@ class LawSpec extends Specification with ScalaCheck {
       val right: I[String] = failure
 
       def matchDivergingIteratee[A](i: I[A]) =
-        await(i.run) must throwA[RuntimeException].like {
+        Helpers.await(i.run) must throwA[RuntimeException].like {
           case e => e.getMessage === "diverging iteratee after Input.EOF"
         }
 
@@ -161,9 +162,9 @@ class LawSpec extends Specification with ScalaCheck {
           val leftResult: M[(A, A)] = left.flatMap(p => toFuturePair(p._1.run, p._2.run))
           val rightResult: M[(A, A)] = right.flatMap(p => toFuturePair(p._1.run, p._2.run))
 
-          // println("left: " + await(leftResult) + " right: " + await(rightResult))
+          // println("left: " + Helpers.await(leftResult) + " right: " + Helpers.await(rightResult))
 
-          await(leftResult) == await(rightResult)
+          Helpers.await(leftResult) == Helpers.await(rightResult)
         }
 
         // left biased alternative
@@ -191,7 +192,7 @@ class LawSpec extends Specification with ScalaCheck {
         // run(right).foreach(x => println(s"right: $x"))
 
         val matchIdempotence = isIdempotent(i) === true
-        val matchEquality = await(run(left)) === await(run(right))
+        val matchEquality = Helpers.await(run(left)) === Helpers.await(run(right))
 
         matchIdempotence and matchEquality
       }

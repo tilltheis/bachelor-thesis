@@ -8,12 +8,14 @@ object Iteratees extends App {
   object Creation {
 
     case class SumIteratee(sum: Int = 0) extends Iteratee[Int, Int] {
-      def fold[B](folder: Step[Int, Int] => Future[B]): Future[B] = {
+      def fold[B](folder: Step[Int, Int] => Future[B])
+          (implicit ec: ExecutionContext): Future[B] = {
         folder(Step.Cont {
           case Input.El(i) => SumIteratee(sum + i)
           case Input.Empty => this
           case Input.EOF   => new Iteratee[Int, Int] {
-            def fold[B](folder: Step[Int, Int] => Future[B]) = {
+            def fold[B](folder: Step[Int, Int] => Future[B])
+                (implicit ec: ExecutionContext) = {
               folder(Step.Done(sum, Input.EOF))
             }
           }
