@@ -1,17 +1,14 @@
 package reactive.streams
 
-import org.specs2.mutable._
-import org.specs2.ScalaCheck
-import org.scalacheck._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+import org.specs2.ScalaCheck
+
 import play.api.libs.iteratee._
+import play.api.test._
 
-import play.api.test.Helpers.defaultAwaitTimeout
-import play.api.test.Helpers // for await
-
-class LawSpec extends Specification with ScalaCheck {
+class LawSpec extends PlaySpecification with ScalaCheck {
 
   type E     = Char           // Der Eingabeelementtyp (Char)
   type I[A]  = Iteratee[E, A] // Ein Iteratee von Char nach A

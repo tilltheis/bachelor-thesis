@@ -1,19 +1,13 @@
-import org.specs2.mutable._
-import org.specs2.time.NoTimeConversions
-
 import scala.concurrent._
-import scala.concurrent.duration._
 import ExecutionContext.Implicits.global
 
 import play.api.libs.iteratee._
-import play.api.libs.iteratee.Enumerator.enumInput
 
-import play.api.test.Helpers.defaultAwaitTimeout
-import play.api.test.Helpers // for await
+import play.api.test._
 
 import examples.reactive.streams.Enumeratees
 
-class EnumerateesSpec extends Specification with NoTimeConversions {
+class EnumerateesSpec extends PlaySpecification {
   Seq(
       ("inheritance", Enumeratees.Creation.Rejuvinating.enumerateeFromInheritance),
       ("constructor", Enumeratees.Creation.Rejuvinating.enumerateeFromConstructor)
@@ -28,7 +22,7 @@ class EnumerateesSpec extends Specification with NoTimeConversions {
         val iteratee: Iteratee[Int, Int] = Iteratee.fold(0)(_ + _)
 
         val transformedIteratee = enumeratee.transform(iteratee)
-        Helpers.await(enumerator.run(transformedIteratee)) === 91
+        await(enumerator.run(transformedIteratee)) === 91
       }
 
       "work with prematurely done iteratees" in {
@@ -38,10 +32,10 @@ class EnumerateesSpec extends Specification with NoTimeConversions {
         }
 
         val transformedIteratee = enumeratee.transform(iteratee)
-        Helpers.await(enumerator.run(transformedIteratee)) === 22
+        await(enumerator.run(transformedIteratee)) === 22
 
         val transformedIteratee2 = enumeratee.transform(iteratee)
-        Helpers.await(Enumerator.enumInput(Input.Empty).run(transformedIteratee2)) must throwAn[Exception]
+        await(Enumerator.enumInput(Input.Empty).run(transformedIteratee2)) must throwAn[Exception]
       }
     }
   }
@@ -50,7 +44,7 @@ class EnumerateesSpec extends Specification with NoTimeConversions {
   "applying an enumeratee to an iteratee" should {
     "get back the original iteratee afterwards" in {
       val result = Enumeratees.ApplicationOnIteratees.result
-      Helpers.await(result) === List(22, 44, 22, 54)
+      await(result) === List(22, 44, 22, 54)
     }
   }
 
@@ -59,13 +53,13 @@ class EnumerateesSpec extends Specification with NoTimeConversions {
       val e = Enumeratees.ApplicationOnEnumerators.transformedE
       val i = Iteratee.getChunks[String]
       val result = e.run(i)
-      Helpers.await(result) === List("1", "2", "3")
+      await(result) === List("1", "2", "3")
     }
   }
 
   "applying an enumeratee to an enumeratee" should {
     "chain the enumeratees together" in {
-      Helpers.await(Enumeratees.ApplicationOnEnumeratees.result) === List(22, 25, 44)
+      await(Enumeratees.ApplicationOnEnumeratees.result) === List(22, 25, 44)
     }
   }
 }
