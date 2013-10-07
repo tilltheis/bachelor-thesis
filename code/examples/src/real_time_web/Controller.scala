@@ -12,7 +12,7 @@ object Controller extends Controller {
   }
 
   def correctEventSource = Action {
-    implicit val intMessage = Comet.CometMessage[Int](_.toString)
+    implicit val stringMessage = Comet.CometMessage[String](identity)
     Ok.chunked(Enumerator("44", "34", "50").through(EventSource()))
       .as("text/event-stream")
   }

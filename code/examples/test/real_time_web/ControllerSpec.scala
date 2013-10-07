@@ -21,6 +21,7 @@ class ControllerSpec extends PlaySpecification {
       val result = contentAsString(resultM)
 
       Seq(44, 34, 50).foreach { x =>
+        result must not contain(s"'$x'")
         result must contain(x.toString)
       }
     }
