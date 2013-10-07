@@ -225,7 +225,8 @@ Wenn vom Server aus die \lstinline|String|-Nachricht mit dem Inhalt \lstinline|3
 Der \lstinline|EventSource|-\lstinline|Enumeratee| nimmt allerdings u.~a. einen impliziten Parameter vom Typ \lstinline|CometMessage[A]|.
 Diese \lstinline|case class| nimmt als Konstruktorargument eine Funktion vom Typ \lstinline|A => String|.
 Mit einem passenden Wert lässt sich oben beschriebenes Phänomen also umgehen.
-Die in Listing~\ref{lst:server_sent_events_im_controller_der_altersstatistiken_anwendung} gezeigte Lösung nutzt daher den impliziten Wert \lstinline|intMessage|, um die Zahlen des \lstinline|Enumerator|s in \lstinline|String|s umzuformen, ohne sie mit Anführungszeichen zu umgeben.
+Weil es in diesem Fall also nicht zu vermeiden ist, einen impliziten Parameter mitzugeben, kann auch gleich mit \lstinline|Int|s gearbeitet werden, indem ein impliziter Wert vom Typ \lstinline|CometMessage[Int]| bereitgestellt wird.
+Die in Listing~\ref{lst:server_sent_events_im_controller_der_altersstatistiken_anwendung} gezeigte Lösung nutzt daher den impliziten Wert \lstinline|intMessage|, um die Zahlen des \lstinline|Enumerator|s in \lstinline|String|s umzuformen.
 
 \begin{lstlisting}[caption=Server Sent Events im Controller der Altersstatistiken-Anwendung, label=lst:server_sent_events_im_controller_der_altersstatistiken_anwendung]
 implicit val intMessage = Comet.CometMessage[Int](_.toString)
@@ -235,8 +236,8 @@ def eventSource = Action {
 }
 \end{lstlisting}
 
-Auf der Client-Seite wird zuerst dafür gesorgt, dass beim Absenden des Formulars die Seite nicht neu geladen wird, sondern im Hintergrund ein \gls{ajax}-Request mit dem Formulardaten versendet wird.
-Dann wird der entsprechende \lstinline|EventHandler| für \lstinline|onmessage| gesetzt, um bei neuen Informationen das Diagramm zu aktualisieren.
+Auf der Client-Seite wird zunächst dafür gesorgt, dass beim Absenden des Formulars die Seite nicht neu geladen wird, sondern im Hintergrund ein \gls{ajax}-Request mit dem Formulardaten versendet wird.
+Dann wird der entsprechende \lstinline|EventHandler| für \lstinline|onmessage| gesetzt, um nach Empfang neuer Informationen das Diagramm zu aktualisieren.
 Dies ist in Listing~\ref{lst:server_sent_events_in_der_view_der_altersstatistiken_anwendung} zu sehen.
 
 \begin{lstlisting}[caption=Server Sent Events in der View der Altersstatistiken-Anwendung, label=lst:server_sent_events_in_der_view_der_altersstatistiken_anwendung]

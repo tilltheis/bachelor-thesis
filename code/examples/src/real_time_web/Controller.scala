@@ -17,4 +17,10 @@ object Controller extends Controller {
       .as("text/event-stream")
   }
 
+  def intEventSource = Action {
+    implicit val intMessage = Comet.CometMessage[Int](_.toString)
+    Ok.chunked(Enumerator(44, 34, 50).through(EventSource()))
+      .as("text/event-stream")
+  }
+
 }
