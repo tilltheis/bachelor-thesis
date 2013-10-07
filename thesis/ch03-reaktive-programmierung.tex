@@ -209,7 +209,101 @@ Die jeweiligen beiden Seiten von $=$, bzw. \lstinline|=| sind gleich.
 \section{Futures und Promises} % (fold)
 \label{sec:futures_und_promises}
 
-Futures und Promises mit den Quellen \citealt{haller2013} und \citealt{typesafe2013}.
+Ein \lstinline|Future| ist ein Platzhalter für das Ergebnis einer nebenläufigen Berechnung und hält nach Beendigung dieser Berechnung dessen Ergebnis.
+Ein \lstinline|Future| ist an ein \lstinline|Promise| gekoppelt, welches einmalig den Wert des \lstinline|Future|s setzen kann.
+\lstinline|Future|s sind nur lesbar, wohingegen \lstinline|Promise|s einmalig schreibbar sind.
+Dieser Abschnitt behandelt diese beiden Datentypen und orientiert sich dabei an den Quellen \citealt{futures_scala} und \citealt{futures_akka}.
+
+\subsection{Futures} % (fold)
+\label{sub:futures}
+
+\lstinline|Future| ist eine Monade, die das Ergebnis einer nebenläufigen Berechnung kapselt.
+Ein \lstinline|Future| ein \gls{adt}, der entweder für ein erfolgreich berechnetes Ergebnis, oder für einen aufgetretenen Fehler steht.
+Solange kein Fehler aufgetreten und auch die Berechnung noch nicht vollendet ist, ist auch das \lstinline|Future| noch nicht vollendet und hält kein Ergebnis.
+
+\subsubsection{Futures ohne Promise erstellen} % (fold)
+\label{ssub:futures_erstellen}
+
+Um ohne \lstinline|Promise| einen \lstinline|Future|-Wert zu erstellen, stellt das \lstinline|Future|-Companion-Objekt mehrere Konstruktormethoden bereit.
+\lstinline|Future.successful| erstellt aus einem konkreten Wert einen bereits vollendeten \lstinline|Future|.
+\lstinline|Future.failed| erstellt aus einem \lstinline|Throwable| einen \lstinline|Future| im Fehlerzustand.
+\lstinline|Future.apply| erstellt aus einer Berechnung (\lstinline|=> A|) einen \lstinline|Future| im erfolgreich vollendeten Zustand, wenn die Berechnung zu einem Ergebnis kommt oder einen \lstinline|Future| im Fehlerzustand, wenn die Berechnung eine \lstinline|Exception| wirft.
+Fatale \lstinline|Exceptions| (\lstinline|VirtualMachineError|, \lstinline|NotImplementedError| u.~a., vgl.~\citealt{nonfatal_exceptions}) werden im Thread, in dem \lstinline|Future.apply| aufgerufen wurde allerdings wieder geworfen.
+Im Falle von \lstinline|Future.apply| wird die Berechnung im Hintergrund ausgeführt, sodass die Berechnung nicht die aktuellen Thread blockiert.
+Wodurch dieses Verhalten realisiert wird, wird in Unterabschnitt~\ref{sub:execution_contexts} beschrieben.
+
+% subsubsection futures_erstellen (end)
+
+\subsubsection{Futures verwenden} % (fold)
+\label{ssub:futures_verwenden}
+
+Wie alle Monaden in Scala, haben \lstinline|Future|s die Methoden \lstinline|map| und \lstinline|flatMap| womit auf das jeweils berechnete Ergebnis zugegriffen werden kann.
+\lstinline|def map[S](f: T => S): Future[S]| führt die übergebene Funktion aus, sobald die Berechnung des \lstinline|Future|s zu einem Ergebnis gekommen ist.
+Führt die Berechnung zu keinem Ergebnis, weil ein Fehler aufgetreten ist, so wird auch die übergebene Funktion nicht ausgeführt.
+Mit \lstinline|def flatMap[S](f: T => Future[S]): Future[S]| verhält es sich genauso.
+
+Um mehrere \lstinline|Future|s zu kombinieren, bedeutet zu warten, bis alle \lstinline|Future|s ihre Berechneten Werte halten, erst dann kann mit diesen Werten weitergearbeitet werden.
+Listing~\ref{lst:futures_kombinieren} zeigt, wie dies für zwei \lstinline|Future|s umgesetzt werden könnte.
+Die Werte \lstinline|f1| und \lstinline|f2| könnten für die nächsten beiden eingehenden Altersangaben der Statistikenanwendung stehen.
+
+\begin{lstlisting}[caption=Futures kombinieren, label=lst:futures_kombinieren]
+val f1: Future[Int] = Future(35)
+val f2: Future[Int] = Future(40)
+
+val f1f2: Future[(Int, Int)] = for {
+  age1 <- f1
+  age2 <- f2
+} yield (age1, age2)
+// f1f2 hat den Wert Future((35, 40))
+\end{lstlisting}
+
+Das \lstinline|Future|-Trait und das dazugehörige Companion-Objekt bieten noch weitere Möglichkeiten, mit \lstinline|Futures| zu arbeiten, sie zu kombinieren und v.~a. Fehler zu behandeln.
+Dieser Abschnitt beschränkt sich allerdings auf die monadischen Operationen auf \lstinline|Futures|.
+
+% subsubsection futures_verwenden (end)
+
+% subsection futures (end)
+
+\subsection{Promises} % (fold)
+\label{sub:promises}
+
+\lstinline|Promise|s sind neben \lstinline|Future|s der zweite Teil der \lstinline|Future|s-API.
+Mit Hilfe von \lstinline|Promise|s können \lstinline|Future|s einmalig Werte zugewiesen werden, wonach diese nicht mehr verändert werden können.
+Um \lstinline|Promise|s zu erstellen können im Companion-Objekt die drei Methoden \lstinline|Promise.success|, \lstinline|Promise.failure| und \lstinline|Promise.apply| verwendet werden.
+\lstinline|success| und \lstinline|failure| nehmen einen konkreten Wert, bzw. einen \lstinline|Throwable|-Wert, mit dem das assoziierte \lstinline|Future|-Objekt vollendet wird.
+\lstinline|apply| erstellt ein \lstinline|Promise|, dessen \lstinline|Future| noch keinen Wert besitzt.
+
+Um dem \lstinline|Future| eines \lstinline|Promise|s, das mit \lstinline|Promise.apply| erstellt wurde, einen Wert zuzuweisen, können die Methoden \lstinline|success|, bzw. \lstinline|failure| auf dem \lstinline|Promise| aufgerufen werden, die wieder einen konkreten Wert, bzw. ein \lstinline|Throwable|-Objekt als Argument nehmen.
+Der Rückgabewert dieser beiden Methoden ist das \lstinline|Promise|-Objekt, auf dem sie aufgerufen wurden.
+Wird ein zweites Mal versucht, dem assoziierten \lstinline|Future| einen Wert zuzuweisen, wird eine \lstinline|IllegalStateException| geworfen.
+Mit der Methode \lstinline|future| kann auf das assoziierte \lstinline|Future|-Objekt eines \lstinline|Promise|s zugegriffen werden.
+Listing~\ref{lst:future_erstellung_mit_einem_promise} zeigt, wie ein Future erstellt wird, das nach 2 Sekunden mit einem \lstinline|Int| erfüllt wird.
+
+\begin{lstlisting}[caption=Future-Erstellung mit einem Promise, label=lst:future_erstellung_mit_einem_promise]
+val promise: Promise[Int] = Promise()
+val future: Future[Int] = promise.future
+
+future.foreach(x => println(s"Die Zahl ist $x."))
+// gibt nach 2 Sekunden "Die Zahl ist 42." aus
+
+Future {
+  Thread.sleep(2000)
+  promise.success(42)
+}
+\end{lstlisting}
+
+% subsection promises (end)
+
+\subsection{Execution Contexts} % (fold)
+\label{sub:execution_contexts}
+
+Die nebenläufigen Berechnungen, die von \lstinline|Future|s ausgeführt werden, werden innerhalb von \lstinline|ExecutionContext|s ausgeführt.
+Ein \lstinline|ExecutionContext| ist vergleichbar mit einem Thread-Pool\todo{braucht das eine Definition?} und ist dafür zuständig, dass an ihn delegierte Aufgaben im Hintergrund ausgeführt werden.
+Die zuvor vorgestellte Methode \lstinline|Future.apply| nimmt neben der Berechnungsanweisung auch einen impliziten Parameter vom Typ \lstinline|ExecutionContext|.
+Dieser \lstinline|ExecutionContext| muss nicht per Hand erstellt werden.
+Mittels \lstinline|import scala.concurrent.ExecutionContext.Implicits.global| kann ein vordefinierter \lstinline|ExecutionContext| importiert werden.
+
+% subsection execution_contexts (end)
 
 % section futures_und_promises (end)
 
