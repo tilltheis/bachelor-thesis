@@ -101,7 +101,7 @@ Monaden finden sich in vielen bekannten Datentypen wieder, wie z.~B. \lstinline|
 \label{ssub:die_option_monade}
 
 \lstinline|Option| ist ein Datentyp, um optionale Daten darzustellen.
-Optionale Daten sind Daten, die vielleicht nicht vorhanden sind und würden in Sprachen, wie z.~B. Java als \lstinline|null| dargestellt werden \cite[vgl.][S.~329]{programming_in_scala}\todo{Seite verifizieren}.\todo{Auf algebraischen Datentyp eingehen?}
+Optionale Daten sind Daten, die vielleicht nicht vorhanden sind und würden in Sprachen, wie z.~B. Java als \lstinline|null| dargestellt werden \cite[vgl.][S.~289]{programming_in_scala}.\todo{Auf algebraischen Datentyp eingehen?}
 \lstinline|Some| entspricht dabei \lstinline|unit| und hebt einen Wert in die Monade, wohingegen \lstinline|None| ein Objekt ohne Wert erstellt.
 Mit \lstinline|map| und \lstinline|flatMap| kann ein Wert, der mit \lstinline|Some| in die Monade gehoben wurde, verändert werden.
 
@@ -159,7 +159,7 @@ for {
 
 Ausdrücke der Form \lstinline|x <- m| werden Generatoren genannt.
 Generatoren werden in \lstinline|map|- und \lstinline|flatMap|-Operationen übersetzt.
-Die ersten Generatoren innerhalb einer \lstinline|for|-Comprehension werden zu \lstinline|flatMap|s und der letzte Generator wird zu \lstinline|map| \cite[vgl.][S.~525]{programming_in_scala}\todo{Seiten in der Print-Version nachschlagen}.
+Die ersten Generatoren innerhalb einer \lstinline|for|-Comprehension werden zu \lstinline|flatMap|s und der letzte Generator wird zu \lstinline|map| \cite[vgl.][S.~490]{programming_in_scala}.
 Wird der Code aus Listing~\ref{lst:monaden_operationen_mit_for_comprehension} nach diesen Regeln umgeformt, so ergibt sich wieder der ursprüngliche Code aus Listing~\ref{lst:die_option_monade}.
 
 % subsection for_comprehensions (end)
@@ -348,7 +348,7 @@ object Input {
 \end{lstlisting}
 
 Der Datentyp ist über den \glslink{kovarianz}{kovarianten} Typ \lstinline|E| der gehaltenen Elemente parametrisiert.
-\gls{kovarianz} bedeutet, dass wenn \lstinline|F| ein spezialisierter Typ von \lstinline|E| ist, \lstinline|Input[F]| auch ein spezialisierter Typ von \lstinline|Input[E]| ist \cite[vgl.][S.~430]{programming_in_scala}.
+\gls{kovarianz} bedeutet, dass wenn \lstinline|F| ein spezialisierter Typ von \lstinline|E| ist, \lstinline|Input[F]| auch ein spezialisierter Typ von \lstinline|Input[E]| ist \cite[vgl.][S.~393]{programming_in_scala}.
 Dadurch wären beispielsweise sowohl \lstinline|Input[Cat]|, als auch \lstinline|Input[Dog]| Spezialisierungen von \lstinline|Input[Animal]|.
 Wäre \lstinline|Input| nicht \glslink{kovarianz}{kovariant} über den Typ der der gehaltenen Elemente, wären \lstinline|Input[Cat]|, \lstinline|Input[Dog]| und \lstinline|Input[Animal]| völlig unterschiedliche Typen.
 
@@ -372,7 +372,7 @@ Wenn die Datenquelle erschöpft ist, wird dies mit dem Objekt \lstinline|Input.E
 Sowohl \lstinline|Input.Empty|, als auch \lstinline|Input.EOF| sind vom Typ \lstinline[mathescape]|$\text{\gls{nothing}}$|.
 \lstinline[mathescape]|$\text{\gls{nothing}}$| ist ein besonderer Typ in Scala, ein so genannter Bottom-Typ.
 Das bedeutet, dass er ganz unten in der Klassenhierarchie steht und eine Spezialisierung jedes anderen Typs ist.
-Es gibt Instanz vom Typ \lstinline[mathescape]|$\text{\gls{nothing}}$|, aufgrund seiner Position in der Klassenhierarchie kann er jedoch jeden anderen Typ annehmen \cite[vgl.][S.~256--257]{programming_in_scala}.
+Es gibt Instanz vom Typ \lstinline[mathescape]|$\text{\gls{nothing}}$|, aufgrund seiner Position in der Klassenhierarchie kann er jedoch jeden anderen Typ annehmen \cite[vgl.][S.~216]{programming_in_scala}.
 Weil der Typparameter des \lstinline|Input|-Datentyps \glslink{kovarianz}{kovariant} ist, lassen sich \lstinline|Input.Empty| und \lstinline|Input.EOF| mit jedem anderen \lstinline|Input| kombinieren.
 
 Ein Wert vom Typ \lstinline|Input| hat also drei mögliche Zustände:
