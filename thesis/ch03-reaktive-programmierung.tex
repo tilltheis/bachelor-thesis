@@ -1299,7 +1299,7 @@ val right: I[String] = failure
   \item Rechtsdistributivität
 
     \lstinline|flatMap| ist rechtsdistributiv, sofern der \lstinline|Iteratee| idempotent ist.
-    Eine Funktion $f$ ist idempotent, wenn $f(x) = f(f(x))$\todo{Quelle}, mehr dazu im nächsten Absatz.
+    Eine Funktion $f$ ist idempotent, wenn $f(x) = f(f(x))$ \cite[vgl.][S.~1]{idempotence}, mehr dazu im nächsten Absatz.
 
     \begin{lstlisting}[caption=Rechtsdistributivitätsregel, label=lst:rechtsdistributivitaetsregel]
 val left: I[String] =

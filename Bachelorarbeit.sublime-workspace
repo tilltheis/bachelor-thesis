@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"Ex",
+				"ExecutionContext"
+			],
+			[
+				"future",
+				"future futures_scala: Futures and Promises"
+			],
+			[
+				"Com",
+				"CometMessage"
+			],
+			[
 				"Enu",
 				"Enumerator"
 			],
@@ -502,18 +514,6 @@
 			[
 				"neig",
 				"neighbors"
-			],
-			[
-				"Clien",
-				"Clients"
-			],
-			[
-				"nameser",
-				"nameservice_lookup"
-			],
-			[
-				"Serv",
-				"ServiceName"
 			]
 		]
 	},
@@ -531,7 +531,7 @@
 			"file": "thesis/thesis.bib",
 			"settings":
 			{
-				"buffer_size": 17109,
+				"buffer_size": 17452,
 				"line_ending": "Unix"
 			}
 		},
@@ -539,47 +539,40 @@
 			"file": "thesis/glossar.tex",
 			"settings":
 			{
-				"buffer_size": 2587,
+				"buffer_size": 2582,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "# Programming in Scala - Second Edition\nOnline vs Offline\n329   289\n525   490\n430   393\n256-257   216\n\n\n# Play for Scala\nv8 vs final\n9   9\n51-53   45-48\n10    10\n12-13    12\n6   7\n227   179\n136   111\n266   214-215\n217-219   174-175\n223-224   179\n219-220   176\n117   98\n355   281\n\n\n\n\n\n\n\"Es gibt Instanz vom Typ Nothing\" => \"Es gibt keine...\"",
+			"settings":
+			{
+				"buffer_size": 340,
+				"line_ending": "Unix",
+				"name": "# Programming in Scala - Second Edition"
 			}
 		},
 		{
 			"file": "thesis/ch04-real-time-web.tex",
 			"settings":
 			{
-				"buffer_size": 17684,
+				"buffer_size": 17921,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "code/age_statistics/app/controllers/Application.scala",
+			"file": "thesis/ch03-reaktive-programmierung.tex",
 			"settings":
 			{
-				"buffer_size": 1736,
+				"buffer_size": 87984,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "code/examples/build.sbt",
+			"file": "thesis/ch02-grundlagen.tex",
 			"settings":
 			{
-				"buffer_size": 698,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "code/age_statistics/public/javascripts/serverSentEventsCommunication.js",
-			"settings":
-			{
-				"buffer_size": 1044,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "code/age_statistics/app/views/index.scala.html",
-			"settings":
-			{
-				"buffer_size": 2852,
+				"buffer_size": 26429,
 				"line_ending": "Unix"
 			}
 		}
@@ -587,7 +580,7 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 71.0,
+		"height": 27.0,
 		"selected_items":
 		[
 			[
@@ -708,22 +701,25 @@
 	},
 	"file_history":
 	[
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch01-einleitung.tex",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch02-grundlagen.tex",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch03-reaktive-programmierung.tex",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/app/controllers/Application.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch04-real-time-web.tex",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/build.sbt",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/public/javascripts/serverSentEventsCommunication.js",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/app/views/index.scala.html",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/Helpers.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/conf/routes",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/streams/Iteratees.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/project/Build.scala",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/build.sbt",
 		"/Users/till/.profile",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/project/build.properties",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/project/plugins.sbt",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/app/controllers/Application.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/app/controllers/Application.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/public/javascripts/webSocketCommunication.js",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/project/Build.scala",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch04-real-time-web.tex",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_ws/app/controllers/Application.scala",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch02-grundlagen.tex",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/glossar.tex",
 		"/Users/till/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/streams/Composition.scala",
@@ -832,10 +828,7 @@
 		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/rate.rb",
 		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/models/rate_spec.rb",
 		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/spec/models/fee_spec.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/fee.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/seeds.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121122015606_remove_state_id_from_rates.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/migrate/20121122015538_add_state_id_to_fees.rb"
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/fee.rb"
 	],
 	"find":
 	{
@@ -855,6 +848,15 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"{play_for_scala_v8}",
+			"hilton",
+			"play_for_scala",
+			"hilton u.",
+			"play_for_scala",
+			"programming_in_scala",
+			"epfl",
+			"doc.akka",
+			"escape",
 			"eventso",
 			"server_seite",
 			"client_seite",
@@ -973,16 +975,7 @@
 			"25",
 			"sending_time_difference",
 			"log",
-			"calculate_free",
-			"calc",
-			"calculate_free_sloe",
-			"calculate_free_slot",
-			"revise",
-			"kill",
-			"{input",
-			"send_message",
-			"{slot",
-			"Sample"
+			"calculate_free"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -990,6 +983,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"{play_for_scala}",
 			"From",
 			".\n",
 			"\n.",
@@ -1023,7 +1017,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -1039,8 +1033,8 @@
 						"selection":
 						[
 							[
-								5751,
-								5751
+								2499,
+								2505
 							]
 						],
 						"settings":
@@ -1185,7 +1179,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3570.0,
+						"translation.y": 101.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1196,15 +1190,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 17109,
+						"buffer_size": 17452,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								17024,
-								17024
+								7464,
+								7464
 							]
 						],
 						"settings":
@@ -1305,7 +1299,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 9134.0,
+						"translation.y": 3807.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1316,15 +1310,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2587,
+						"buffer_size": 2582,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2536,
-								2536
+								1722,
+								1722
 							]
 						],
 						"settings":
@@ -1335,92 +1329,31 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 107.0,
+						"translation.y": 560.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
-					"file": "thesis/ch04-real-time-web.tex",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 17684,
+						"buffer_size": 340,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								16914,
-								16914
-							]
-						],
-						"settings":
-						{
-							"WordCountShouldRun": true,
-							"spell_check": true,
-							"syntax": "Packages/LaTeX/LaTeX.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 5001.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "code/age_statistics/app/controllers/Application.scala",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1736,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								850,
-								850
+								265,
+								265
 							]
 						],
 						"settings":
 						{
 							"WordCountShouldRun": false,
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 143.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "code/examples/build.sbt",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 698,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								374,
-								374
-							]
-						],
-						"settings":
-						{
-							"WordCountShouldRun": false,
+							"auto_name": "# Programming in Scala - Second Edition",
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
@@ -1430,61 +1363,91 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"file": "code/age_statistics/public/javascripts/serverSentEventsCommunication.js",
+					"buffer": 4,
+					"file": "thesis/ch04-real-time-web.tex",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1044,
+						"buffer_size": 17921,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								140,
-								56
+								7557,
+								7557
 							]
 						],
 						"settings":
 						{
-							"WordCountShouldRun": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"WordCountShouldRun": true,
+							"syntax": "Packages/LaTeX/LaTeX.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2022.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 7,
-					"file": "code/age_statistics/app/views/index.scala.html",
+					"buffer": 5,
+					"file": "thesis/ch03-reaktive-programmierung.tex",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2852,
+						"buffer_size": 87984,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2440,
-								2473
+								11281,
+								11281
 							]
 						],
 						"settings":
 						{
-							"WordCountShouldRun": false,
-							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"WordCountShouldRun": true,
+							"syntax": "Packages/LaTeX/LaTeX.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 998.0,
+						"translation.y": 3331.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "thesis/ch02-grundlagen.tex",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 26429,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								125,
+								141
+							]
+						],
+						"settings":
+						{
+							"WordCountShouldRun": true,
+							"syntax": "Packages/LaTeX/LaTeX.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1539,6 +1502,26 @@
 		"selected_items":
 		[
 			[
+				"ch02",
+				"thesis/ch02-grundlagen.tex"
+			],
+			[
+				"ch03",
+				"thesis/ch03-reaktive-programmierung.tex"
+			],
+			[
+				"ch01",
+				"thesis/ch01-einleitung.tex"
+			],
+			[
+				"ch04",
+				"thesis/ch04-real-time-web.tex"
+			],
+			[
+				"app",
+				"code/age_statistics/app/controllers/Application.scala"
+			],
+			[
 				"scalahtml",
 				"code/age_statistics/app/views/index.scala.html"
 			],
@@ -1575,20 +1558,12 @@
 				"code/age_statistics/app/controllers/Application.scala"
 			],
 			[
-				"ch03",
-				"thesis/ch03-reaktive-programmierung.tex"
-			],
-			[
 				"server",
 				"code/age_statistics/public/javascripts/serverSentEventsCommunication.js"
 			],
 			[
 				"websockcom",
 				"code/age_statistics/public/javascripts/webSocketCommunication.js"
-			],
-			[
-				"ch04",
-				"thesis/ch04-real-time-web.tex"
 			],
 			[
 				"httpproje",
@@ -1601,10 +1576,6 @@
 			[
 				"gloss",
 				"thesis/glossar.tex"
-			],
-			[
-				"ch02",
-				"thesis/ch02-grundlagen.tex"
 			],
 			[
 				"gl",
