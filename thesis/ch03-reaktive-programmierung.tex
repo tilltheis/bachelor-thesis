@@ -336,7 +336,7 @@ Diese Komponenten und ihr jeweiliger Verwendungszweck werden in den folgenden Ab
 \label{sub:design_inputs}
 
 Die von der Datenquelle generierten Elemente werden in \lstinline|Input|s verpackt.
-Der Datentyp \lstinline|Input| ist definiert, wie in Listing~\ref{lst:der_input_datentyp} gezeigt \cite[vgl.][Z.~224]{play_iteratee_source_code}.
+Der Datentyp \lstinline|Input| ist definiert, wie in Listing~\ref{lst:der_input_datentyp} gezeigt \cite[vgl.][Z.~239]{play_iteratee_source_code}.
 
 \begin{lstlisting}[caption=Der Input-Datentyp, label=lst:der_input_datentyp]
 sealed trait Input[+E]
@@ -390,7 +390,7 @@ Ein Wert vom Typ \lstinline|Input| hat also drei mögliche Zustände:
 
 Die von der Datenquelle in \lstinline|Input|s verpackten Elemente werden von \lstinline|Iteratee|s konsumiert, um daraus ein Ergebnis aufzubauen.
 \lstinline|Iteratee|s kapseln ihren Zustand \lstinline|Step|, der den Verarbeitungszustand widerspiegelt.
-Der Typ des \lstinline|Step|-Zustands ist wie in Listing~\ref{lst:der_step_datentyp} gezeigt \cite[vgl.][Z.~256]{play_iteratee_source_code}.
+Der Typ des \lstinline|Step|-Zustands ist wie in Listing~\ref{lst:der_step_datentyp} gezeigt \cite[vgl.][Z.~271]{play_iteratee_source_code}.
 \begin{lstlisting}[caption=Der Step-Datentyp, label=lst:der_step_datentyp]
 sealed trait Step[E, +A]
 object Step {
@@ -568,9 +568,10 @@ Die Codebeispiele stammen, sofern nicht anders vermerkt, vom Autor.
 Plays \lstinline|Iteratee|s kapseln ihren \lstinline|Step|-Zustand.
 Dadurch werden, wie bei objektorientierten Sprachen üblich\todo{Zitat}, Daten und Operationen gebündelt.
 Die elementare Methode dieses Traits ist \lstinline|fold|.
-Die Signatur dazu ist in Listing~\ref{lst:fold_signatur} zu lesen.
+Die Signatur dazu ist in Listing~\ref{lst:fold_signatur} zu lesen \cite[vgl.][Z.~400]{play_iteratee_source_code}.
 \begin{lstlisting}[caption=Die Signatur von fold, label=lst:fold_signatur]
-def fold[B](folder: Step[E, A] => Future[B]): Future[B]
+def fold[B](folder: Step[E, A] => Future[B])
+  (implicit ec: ExecutionContext): Future[B]
 \end{lstlisting}
 
 Mit Hilfe von \lstinline|fold| lässt sich der Zustand des \lstinline|Iteratee|s transformieren.
@@ -578,6 +579,8 @@ Deshalb sind sehr viele Methoden des \lstinline|Iteratee|-Traits auf Basis von \
 Durch Übergabe eines \lstinline|Step|-Werts an die \lstinline|folder|-Funktion bestimmt die konkrete \lstinline|Iteratee|-Implementierung, wie mit übergebenen Elementen umzugehen ist und ob überhaupt weitere Elemente akzeptiert werden.
 Nur durch die im \lstinline|Step|-Wert befindliche Eingabeverarbeitung kann ein \lstinline|Iteratee| neue Elemente empfangen.
 Dadurch wird nach und nach der zu berechnende Wert aufgebaut.
+Der implizite Parameter \lstinline|ec| definiert den \lstinline|ExecutionContext|, in dem die internen \lstinline|Future|-Berechnungen ausgeführt werden sollen.
+\lstinline|ExecutionContext|s wurden in Unterabschnitt~\ref{sub:execution_contexts} im Kontext von \nameref{sec:futures_und_promises} behandelt.
 
 \subsubsection{Iteratees erstellen} % (fold)
 \label{ssub:iteratees_erstellen}
@@ -601,12 +604,14 @@ In Listing~\ref{lst:iteratee_durch_vererbung} ist die Implementierung eines Aufs
 
 \begin{lstlisting}[caption=Erstellung eines Iteratees durch Vererbung, label=lst:iteratee_durch_vererbung]
 case class SumIteratee(sum: Int = 0) extends Iteratee[Int, Int] {
-  def fold[B](folder: Step[Int, Int] => Future[B]): Future[B] = {
+  def fold[B](folder: Step[Int, Int] => Future[B])
+      (implicit ec: ExecutionContext): Future[B] = {
     folder(Step.Cont {
       case Input.El(i) => SumIteratee(sum + i)
       case Input.Empty => this
       case Input.EOF   => new Iteratee[Int, Int] {
-        def fold[B](folder: Step[Int, Int] => Future[B]) = {
+        def fold[B](folder: Step[Int, Int] => Future[B])
+            (implicit ec: ExecutionContext) = {
           folder(Step.Done(sum, Input.EOF))
         }
       }
@@ -625,6 +630,7 @@ Bei diesem Zustandsübergang wird auch die interne Berechnung fortgesetzt.
 Es wird also in einen \lstinline|Cont|-Zustand übergegangen, der die aktualisierte Summe hält.
 Wenn ein leeres Element (\lstinline|Input.Empty|) verarbeitet werden soll, wird der \lstinline|Iteratee| unverändert zurückgegeben, weil sich an der Gesamtsumme nichts geändert hat.
 Sobald keine weiteren Elemente mehr kommen können, wird die Berechnung beendet und ein \lstinline|Iteratee| an den \lstinline|folder| übergeben, der sich immer im \lstinline|Done|-Zustand befindet.
+Mit dem \lstinline|ExecutionContext| muss nicht direkt gearbeitet werden, es muss nur dafür gesorgt werden, dass ein passender implizieter Wert erstellt oder importiert wurde (z.~B. mittels \lstinline|import scala.concurrent.ExecutionContext.Implicits.global|).
 
 % paragraph erstellung_durch_vererbung (end)
 
@@ -633,6 +639,7 @@ Sobald keine weiteren Elemente mehr kommen können, wird die Berechnung beendet 
 
 Die zweite Möglichkeit, einen \lstinline|Iteratee| zu erstellen, ist mit Hilfe einer der Konstruktormethoden.
 Es gibt die Konstruktormethoden \lstinline|Done|, \lstinline|Cont| und \lstinline|Error|, die jeweils einen \lstinline|Iteratee| im gleichnamigen \lstinline|Step|-Zustand erstellen.
+Die Methoden befinden sich direkt im \lstinline|play.api.libs.iteratee|-Paket und sind eigentlich einfache Objekte mit einer \lstinline|apply|-Methode, können aber wie Methoden verwendet werden.
 Jede diese Methoden nimmt auch die gleichen Argumente, wie ihr Pendant.
 Der Code, der einen Aufsummierungs-\lstinline|Iteratee| mit Hilfe dieser Methoden erstellt, ist in Listing~\ref{lst:iteratee_durch_konstruktormethode} zu sehen.
 
@@ -772,7 +779,7 @@ Alles was ein \lstinline|Enumerator| zu tun hat, ist seine Daten an den übergeb
 Dieses Vorgehen ist in diesem Beispiel als Fold über den \lstinline|Iteratee| implementiert.
 Es wird immer ein Element an den \lstinline|Iteratee| übergeben und der resultierende \lstinline|Iteratee| als neues Zwischenergebnis verwendet.
 Falls der \lstinline|Iteratee| keine weiteren Elemente akzeptiert, obwohl noch Elemente übrig sind, wird dieser als Endergebnis verwendet.
-Das hier vorgestellte Verfahren ist in leicht abgewandelter Form der Implementierung von \lstinline|Enumerator.apply| entnommen \cite[vgl.][Z.~663 und Z.~690]{play_enumerator_source_code}.
+Das hier vorgestellte Verfahren ist in leicht abgewandelter Form der Implementierung von \lstinline|Enumerator.apply| entnommen \cite[vgl.][Z.~611 und Z.~654]{play_enumerator_source_code}.
 
 % paragraph enumeratorerstellung_durch_vererbung (end)
 
@@ -946,7 +953,7 @@ val enumerateeFromInheritance: Enumeratee[Int, Int] =
 \end{lstlisting}
 
 Die Implementierung dieses \lstinline|Enumeratee|s ist der von \lstinline|Enumeratee.map| nachempfunden.
-Sie ist allerdings weniger abstrakt, als in der Referenzimplementierung \cite[vgl.][Z.~268, Z.~174 und Z.~81]{play_enumeratee_source_code}.
+Sie ist allerdings weniger abstrakt, als in der Referenzimplementierung \cite[vgl.][Z.~372, Z.~196 und Z.~85]{play_enumeratee_source_code}.
 Der \lstinline|Enumeratee| prüft, ob der innere \lstinline|Iteratee| weitere Elemente annehmen kann.
 Kann er keine weiteren Elemente annehmen, wird er als Ergebnis zurückgegeben.
 Kann er Elemente annehmen, werden diese transformiert und anschließend weitergegeben.
@@ -961,9 +968,14 @@ Die zweite hier vorgestellte Möglichkeit, einen \lstinline|Enumeratee| zu erste
 Im Companion-Objekt finden sich mehrere Konstruktormethoden, die Listenoperationen sehr ähneln, wie z.~B. \lstinline|drop|, \lstinline|filter|, \lstinline|map| oder \lstinline|zip|.
 Um alle Elemente des \lstinline|Iteratees| zu transformieren bietet sich \lstinline|map| an.
 Mit Hilfe dieser Methode werden alle Elemente durch eine angegebene Funktion transformiert, bevor sie an das innere \lstinline|Iteratee| gegeben werden.
-\lstinline|map| hat folgende Signatur:
+\lstinline|map| hat folgende Signatur \cite[vgl.][Z.~361]{play_enumeratee_source_code}:
 \begin{lstlisting}[caption=Die Signatur von Enumeratee.map, label=lst:die_signatur_von_enumeratee_map]
-def map[E]: AnyRef { def apply[NE](f: E => NE): Enumeratee[E,NE]}
+trait Map[E] {
+  def apply[NE](f: E => NE)(implicit ec: ExecutionContext):
+    Enumeratee[E, NE]
+}
+
+def map[E]: Map[E]
 \end{lstlisting}
 Diese Signatur wirkt sperrig, lässt sich aber sinngemäß auf folgende Vereinfachung reduzieren:
 \begin{lstlisting}[caption=Die vereinfachte Signatur von Enumeratee.map, label=lst:die_vereinfachte_signatur_von_enumeratee_map]
@@ -975,6 +987,7 @@ Erst das zurückgegebene Objekt verlangt den zweiten Typ \lstinline|NE|.
 Dadurch wird, so vermutet der Autor, Code, der diese Methode nutzt, kürzer, weil der Parameter \lstinline|NE| in der Regel vom Compiler abgeleitet werden kann.
 So muss in aller Regel, sofern überhaupt nötig, nur noch der erste Typ-Parameter angegeben werden.
 Zu einem früheren Entwicklungsstand des Frameworks wurde die zweite Variante verwendet und wurde erst später zur aktuellen Signatur abgeändert \cite[vgl.][]{play_enumeratee_map_signatur}.
+Der implizite \lstinline|ExecutionContext|-Parameter wird wieder für die interne Arbeit mit \lstinline|Future|s benötigt.
 
 Unter Einsatz dieser \lstinline|map|-Methode ist die Transformation in einer einzigen Anweisung möglich.
 Der dazu nötige Code kann Listing~\ref{lst:enumerateeerstellung_durch_companion_konstruktormethode} entnommen werden.

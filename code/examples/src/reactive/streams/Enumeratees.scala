@@ -3,7 +3,6 @@ package examples.reactive.streams
 import play.api.libs.iteratee._
 import scala.concurrent._
 import ExecutionContext.Implicits.global
-import scala.language.reflectiveCalls
 
 object Enumeratees {
   object Creation {
