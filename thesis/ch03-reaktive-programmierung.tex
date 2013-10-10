@@ -805,42 +805,28 @@ val numberEnumeratorFromApply: Enumerator[Int] =
 \label{par:erstellung_durch_konstruktormethode_im_concurrent_objekt}\mbox{} % force new line
 
 Das Objekt \lstinline|Concurrent| stellt weitere Konstruktoren für \lstinline|Enumerator|s bereit.
-Unter anderem beinhaltet dieses Objekt die Methode \lstinline|unicast|, die imperatives schreiben auf einen \lstinline|Iteratee| erlaubt.\todo{durch `broadcast` ersetzten}
-Die Signatur von \lstinline|unicast| ist wie in Listing~\ref{lst:unicast_signatur} dargestellt.
+Unter anderem beinhaltet dieses Objekt die Methode \lstinline|broadcast|, die imperatives schreiben auf einen oder mehrere \lstinline|Iteratee|s erlaubt.
+\lstinline|broadcast| nimmt keine Argumente und gibt \lstinline|(Enumerator[E], Channel[E])| zurück.
+Mit Hilfe des \lstinline|Channel|s können imperativ Daten an den \lstinline|Enumerator| übergeben werden.
+Ein \lstinline|Channel| hat u.~a. die Methoden \lstinline|def push(item: E): Unit| und \lstinline|def end(): Unit|.
+Diese Methoden erlauben es, ein Element an die verbundenen \lstinline|Iteratee|s zu übergeben, bzw. zu signalisieren, dass der \lstinline|Enumerator| keine weiteren Elemente mehr hat.
 
-\begin{lstlisting}[caption=Die Signatur von Concurrent.unicast, label=lst:unicast_signatur]
-def unicast[E](
-  onStart: (Channel[E]) => Unit,
-  onComplete: => Unit,
-  onError: (String, Input[E]) => Unit): Enumerator[E]
-\end{lstlisting}
+Listing~\ref{lst:enumeratorerstellung_durch_broadcast} zeigt, wie \lstinline|Concurrent.broadcast| verwendet werden kann.
+Zu beachten ist hierbei, dass ein verbundener \lstinline|Iteratee| nur die Elemente empfängt, die an den \lstinline|Enumerator| übergeben wurden, nachdem der \lstinline|Iteratee| mit dem \lstinline|Enumerator| verbunden wurde.
+Alte Elemente werden vom \lstinline|Enumerator| nicht für neue \lstinline|Iteratee|s gespeichert.
+Nach Übergabe aller Zahlen muss der \lstinline|Channel| wieder geschlossen werden, andernfalls wird niemals signalisiert, dass keine weiteren Elemente mehr kommen und verbundene \lstinline|Iteratee|s werden nicht in den \lstinline|Step.Done|-Zustand übergehen.
+In Unterabschnitt~\ref{sub:server_sent_events_in_der_altersstatistiken_anwendung} im \nameref{cha:real_time_web}-Kapitel wird die hier beschriebene Methode verwendet, um mittels Server Sent Events die Altersangaben an alle verbundenen Clients zu verbreiten.
 
-Die Methode nimmt als Argumente drei Funktionen: \lstinline|onStart|, \lstinline|onComplete| und \lstinline|onError|.
-\lstinline|onStart| wird immer aufgerufen, wenn die \lstinline|apply|-Methode des \lstinline|Enumerator|s aufgerufen wird.
-\lstinline|onComplete| wird aufgerufen, wenn der \lstinline|Iteratee| in den \lstinline|Step.Done|-Zustand übergegangen ist.
-\lstinline|onError| wird aufgerufen, wenn der \lstinline|Iteratee| in den \lstinline|Step.Error|-Zustand übergegangen ist.
-Die letzten beiden Funktionen sind optionale Argumente.
+\begin{lstlisting}[caption=Erstellung eines Enumerators durch die broadcast-Konstruktormethode, label=lst:enumeratorerstellung_durch_broadcast]
+val (numberEnumeratorFromBroadcast, broadcastChannel) =
+  Concurrent.broadcast[Int]
 
-Die \lstinline|onStart|-Funktion nimmt ein Argument vom Typ \lstinline|Channel|.
-Ein \lstinline|Channel| hat u.~a. die Methoden \lstinline[breaklines=true]|def push(item: E): Unit| und \lstinline[breaklines=true]|def end(): Unit|.
-Diese Methoden erlauben es, ein Element an das verbundene \lstinline|Iteratee| zu übergeben, bzw. zu signalisieren, dass der \lstinline|Enumerator| keine weiteren Elemente mehr hat.
+// Iteratee(s) mit numberEnumeratorFromBroadcast verbinden
 
-Um mit Hilfe der \lstinline|unicast|-Methode einen \lstinline|Enumerator| zu erstellen, der die Alterszahlen für die Altersstatistik liefert, wird nur die \lstinline|onStart|-Funktion benötigt.
-Diese Funktion ist dafür zuständig, die Elemente an den \lstinline|Channel| und somit an den verbundenen \lstinline|Iteratee| zu übergeben.
-Wichtig ist dabei jedoch, dass nach Übergabe aller Zahlen der \lstinline|Channel| wieder geschlossen wird.
-Andernfalls wird niemals signalisiert, dass keine weiteren Elemente mehr kommen und der \lstinline|Iteratee| wird nicht in den \lstinline|Step.Done|-Zustand übergehen.
-Die Implementation dazu ist in Listing~\ref{lst:enumeratorerstellung_durch_unicast} zu sehen.
-
-\begin{lstlisting}[caption=Erstellung eines Enumerators durch die unicast-Konstruktormethode, label=lst:enumeratorerstellung_durch_unicast]
-def numberEnumerator(xs: Int*): Enumerator[Int] = {
-  Concurrent.unicast { channel =>
-    xs.foreach(channel.push(_))
-    channel.end
-  }
-}
-
-val numberEnumeratorFromUnicast: Enumerator[Int] =
-  numberEnumerator(22, 25, 54)
+broadcastChannel.push(22)
+broadcastChannel.push(25)
+broadcastChannel.push(54)
+broadcastChannel.end()
 \end{lstlisting}
 
 % paragraph erstellung_durch_konstruktormethode_im_concurrent_objekt (end)

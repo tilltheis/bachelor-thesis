@@ -28,18 +28,13 @@ object Enumerators {
     val numberEnumeratorFromInheritance: Enumerator[Int] =
       NumberEnumerator(22, 25, 54)
 
+
     val numberEnumeratorFromApply: Enumerator[Int] =
       Enumerator(22, 25, 54)
 
-    def numberEnumerator(xs: Int*): Enumerator[Int] = {
-      Concurrent.unicast { channel =>
-        xs.foreach(channel.push(_))
-        channel.end
-      }
-    }
 
-    val numberEnumeratorFromUnicast: Enumerator[Int] =
-      numberEnumerator(22, 25, 54)
+    val (numberEnumeratorFromBroadcast, broadcastChannel) =
+      Concurrent.broadcast[Int]
   }
 
   object Application {

@@ -1,12 +1,12 @@
-import play.api.test._
+package examples.reactive.streams
 
-import examples.reactive.streams.Enumerators
+import play.api.test._
+import play.api.libs.iteratee.Iteratee
 
 class EnumeratorsSpec extends PlaySpecification {
   Seq(
     ("inheritance", Enumerators.Creation.numberEnumeratorFromInheritance),
-    ("apply",       Enumerators.Creation.numberEnumeratorFromApply),
-    ("unicast",     Enumerators.Creation.numberEnumeratorFromUnicast)
+    ("apply",       Enumerators.Creation.numberEnumeratorFromApply)
   ).foreach { pair =>
     val (kind, enumerator) = pair
 
@@ -16,6 +16,20 @@ class EnumeratorsSpec extends PlaySpecification {
         val sum = await(enumerator.run(iteratee))
         sum === 101
       }
+    }
+  }
+
+  "broadcast enumerators" should {
+    import Enumerators.Creation._
+
+    "enumerate correctly" in {
+      val enumerator = numberEnumeratorFromBroadcast
+      val iteratee = Iteratee.flatten(enumerator(Enumerators.sumIteratee))
+      broadcastChannel.push(22)
+      broadcastChannel.push(25)
+      broadcastChannel.push(54)
+      broadcastChannel.end()
+      await(iteratee.run) === 101
     }
   }
 
