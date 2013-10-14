@@ -3,8 +3,6 @@
 \chapter{Grundlagen} % (fold)
 \label{cha:grundlagen}
 
-Grundlagen mit den bisherigen Quellen \citealt{play_for_scala}.
-
 In diesem Kapitel werden die grundlegenden Techniken zur Webseiten-Entwicklung mit dem Play-Framework vorgestellt.
 Dabei wird notwendiges Hintergrundwissen bereitgestellt und erklärt, welche Werkzeuge benötigt werden.
 Schließlich werden durch die Entwicklung einer kleinen Anwendung die einzelnen Komponenten erklärt.
@@ -89,14 +87,14 @@ Bevor mit der Implementierung gestartet werden kann, muss allerdings die die Gru
 Auf der untersten Ebene existiert ein Web-Server, der mit dem Framework ausgeliefert wird.
 Die Anfragen, die der Web-Server empfängt werden an Play weitergeleitet und schließlich von der Anwendung verarbeitet.
 Nach der Verarbeitung wird eine Antwort generiert und schließlich als HTTP-Antwort versendet.
-Der Anwendungscode einer Play-Applikation ist nach der Model-View-Controller-Architektur aufgebaut.
+Der Anwendungscode einer Play-Applikation ist nach der Model-View-Controller-Architektur (MVC) aufgebaut.
 
 Models beinhalten die Anwendungslogik der Applikation.
 Views stellen Informationen der Models i.~d.~R. als HTML-Seiten dar.
 Controller bilden eingehende HTTP-Anfragen mit Hilfe von Models und Views auf HTTP-Antworten ab.
 Controller empfangen HTTP-Anfragen, berechnen mit Hilfe der Models eine Antwort, lassen diese von einer View übersetzen, um das Ergebnis der View schließlich als HTTP-Antwort zurückzusenden \cite[vgl.][S.~45--48]{play_for_scala}.
 
-Klickt ein(e) Webseitenbesucher(in) beispielsweise auf den Link eines Nutzerprofils, so generiert der Web-Browser eine HTTP-Anfrage, die an den von Play verwendeten Web-Server gesendet wird.
+Ruft ein(e) WebseitenbesucherIn beispielsweise ein Nutzerprofil auf, so generiert der Web-Browser eine HTTP-Anfrage, die an den von Play verwendeten Web-Server gesendet wird.
 Das Play-Framework ermittelt den zuständigen Controller für die Anfrage und übergibt ihm diese.
 Der Controller sucht mit Hilfe der Anwendungslogik den passenden Nutzer (z.~B. aus der Datenbank) heraus und übergibt dieses Nutzer-Model an die passende View.
 Die View bereitet die im Nutzer-Model gekapselten Informationen als HTML-Seite auf.
