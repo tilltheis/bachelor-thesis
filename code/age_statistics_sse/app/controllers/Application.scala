@@ -24,7 +24,8 @@ object Application extends Controller {
     ageForm.bindFromRequest.fold(
       invalidForm => BadRequest(invalidForm.errorsAsJson.toString),
       { age =>
-        ageStatistics = ageStatistics.updated(age, ageStatistics(age) + 1)
+        ageStatistics =
+          ageStatistics.updated(age, ageStatistics(age) + 1)
         outChannel.push(age)
         Ok
       }
@@ -32,7 +33,8 @@ object Application extends Controller {
   }
 
   implicit val intMessage = Comet.CometMessage[Int](_.toString)
-  def stream = Action {
-    Ok.stream(outEnumerator.through(EventSource())).as("text/event-stream")
+  def eventSource = Action {
+    Ok.chunked(outEnumerator.through(EventSource()))
+      .as("text/event-stream")
   }
 }

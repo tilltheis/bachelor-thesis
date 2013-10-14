@@ -1,6 +1,7 @@
 package controllers
 
 import scala.util.control.Exception._
+import scala.concurrent.ExecutionContext.Implicits.global
 
 import play.api._
 import play.api.mvc._

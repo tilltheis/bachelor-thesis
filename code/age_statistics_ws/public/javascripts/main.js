@@ -1,19 +1,47 @@
-// requires nv.d3.js and underscore.js
+// auto-resize chart to always make it look nice
+var chartContainer = document.getElementById("ageChart");
+var svg = document.getElementsByTagName("svg")[0];
+
+function autoResizeChart() {
+  var offsetTop = chartContainer.getBoundingClientRect().top;
+  // 75px left padding to match the chart margin
+  var dimensionValue = Math.min(window.innerHeight - offsetTop, chartContainer.clientWidth) - 75;
+  var value = dimensionValue + "px";
+  svg.style.width = value;
+  svg.style.height = value;
+}
+
+window.onresize = autoResizeChart;
+autoResizeChart();
+
+
+// requires nv.d3.js
 
 // statistics is a dictionary object { age: count } like { 6: 1, 10: 2 }
 function makeAgeStatisticsChart(chartElementSelector, statisticsParameter) {
 
+
+  // [ { label: "0-9", value: 9 } ]
   function dataFromStatistics(statistics) {
-    function sum(xs) { return _.reduce(xs, function(sum, x) { return sum + x; }, 0); }
-    return _.reduce(_.range(0, 100, 10), function(data, i) {
-      var value = sum(_.values(_.filter(statistics, function(_count, age) {
-        return age >= i && age <= i + 9;
-      })));
-      return data.concat([{
-        label: i + "-" + (i + 9),
-        value: value
-      }]);
-    }, []);
+    var data = [];
+
+    for (var tens = 0; tens < 100; tens += 10) {
+      var sum = 0;
+
+      for (var units = 0; units < 10; ++units) {
+        var age = tens + units;
+        if (statistics.hasOwnProperty(age)) {
+          sum += statistics[age];
+        }
+      }
+
+      data.push({
+        label: tens + "-" + (tens + 9),
+        value: sum
+      });
+    }
+
+    return data;
   }
 
   function dataFunction() {
@@ -25,7 +53,11 @@ function makeAgeStatisticsChart(chartElementSelector, statisticsParameter) {
 
   function draw() {
     // long bars will be cut off if domain is not set explicitly
-    chart.yDomain([0, d3.max(data, function (d) { return d.value; })]);
+    if (data !== []) {
+        chart.yDomain([0, d3.max(data, function (d) { return d.value; })]);
+    } else {
+        chart.yDomain(0)
+    }
 
     d3.select(chartElementSelector)
       .datum(dataFunction)
@@ -33,7 +65,15 @@ function makeAgeStatisticsChart(chartElementSelector, statisticsParameter) {
       .call(chart);
   }
 
-  var statistics = _.clone(statisticsParameter);
+  function clone(o) {
+    var result = {};
+    for (var k in o) {
+      if (o.hasOwnProperty(k)) { result[k] = o[k]; }
+    }
+    return result;
+  }
+
+  var statistics = clone(statisticsParameter);
   var data = dataFromStatistics(statistics);
   var chart;
 
@@ -45,8 +85,8 @@ function makeAgeStatisticsChart(chartElementSelector, statisticsParameter) {
       .staggerLabels(true)
       .tooltips(false)
       .showValues(true)
-      .margin({left: 100})
-      .margin({bottom: 100})
+      .margin({left: 75})
+      .margin({bottom: 60})
       .valueFormat(d3.format(",.0f"));
 
     chart.yAxis.axisLabel("#Votes").tickFormat(d3.format(",.0f"));
@@ -61,7 +101,7 @@ function makeAgeStatisticsChart(chartElementSelector, statisticsParameter) {
 
   return {
     increment: function(age) {
-      var oldValue = _.has(statistics, age) ? statistics[age] : 0;
+      var oldValue = statistics.hasOwnProperty(age) ? statistics[age] : 0;
       statistics[age] = oldValue + 1;
       data = dataFromStatistics(statistics);
     },

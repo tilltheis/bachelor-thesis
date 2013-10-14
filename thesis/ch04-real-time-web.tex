@@ -195,16 +195,16 @@ Um diese Antworten an alle verbundenen Clients weiterzuleiten wird, wie auch sch
 Um nach Empfang einer Altersangabe diese Information an den \lstinline|Enumerator| zu übergeben, wird die \lstinline|input|-Action, wie in Listing~\ref{lst:server_sent_events_in_der_input_action_der_altersstatistiken_anwendung} zu sehen, um eine Zeile erweitert.
 
 \begin{lstlisting}[caption=Server Sent Events in der input-Action der Altersstatistiken-Anwendung, label=lst:server_sent_events_in_der_input_action_der_altersstatistiken_anwendung]
-val (sseOutEnumerator, sseOutChannel) = Concurrent.broadcast[Int]
+val (outEnumerator, outChannel) = Concurrent.broadcast[Int]
 
 def input = Action { implicit request =>
   ageForm.bindFromRequest.fold(
     invalidForm => BadRequest(invalidForm.errorsAsJson.toString),
     { age =>
-      ageStatistics = ageStatistics.updated(age,
-        ageStatistics(age) + 1)
-      sseOutChannel.push(age) // only needed for SSE
-      Redirect(routes.Application.index)
+      ageStatistics =
+        ageStatistics.updated(age, ageStatistics(age) + 1)
+      outChannel.push(age)
+      Ok
     }
   )
 }
@@ -231,7 +231,7 @@ Die in Listing~\ref{lst:server_sent_events_im_controller_der_altersstatistiken_a
 \begin{lstlisting}[caption=Server Sent Events im Controller der Altersstatistiken-Anwendung, label=lst:server_sent_events_im_controller_der_altersstatistiken_anwendung]
 implicit val intMessage = Comet.CometMessage[Int](_.toString)
 def eventSource = Action {
-  Ok.chunked(sseOutEnumerator.through(EventSource()))
+  Ok.chunked(outEnumerator.through(EventSource()))
     .as("text/event-stream")
 }
 \end{lstlisting}

@@ -20,7 +20,8 @@ object Application extends Controller {
     ageForm.bindFromRequest.fold(
       invalidForm => BadRequest(invalidForm.errorsAsJson.toString),
       { age =>
-        ageStatistics = ageStatistics.updated(age, ageStatistics(age) + 1)
+        ageStatistics =
+          ageStatistics.updated(age, ageStatistics(age) + 1)
         Redirect(routes.Application.index)
       }
     )

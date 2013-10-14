@@ -6,36 +6,29 @@
 <html>
 <head>
   <title>Age Statistics</title>
-  <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-  <script src="@routes.Assets.at("javascripts/jquery-1.10.2.js")"></script>
-  <script src="@routes.Assets.at("javascripts/d3.js")"></script>
-  <script src="@routes.Assets.at("javascripts/nv.d3.js")"></script>
-  <script src="@routes.Assets.at("javascripts/underscore.js")"></script>
-  <script src="@routes.Assets.at("javascripts/main.js")"></script>
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.css")">
 </head>
 <body>
 
-  <div>
+  <div class="container">
 
-    <header>
-      <h1>Age Statistics</h1>
-    </header>
+    <h1>Age Statistics</h1>
 
-    <div>
-      <div>
+    <div class="row">
+      <div class="col-lg-6">
         <div id="ageChart">
           <svg></svg>
         </div>
       </div>
-      <div>
+      <div class="col-lg-6">
         <form method="post">
           <fieldset>
             <legend>Your Age</legend>
-            <div>
+            <div class="form-group">
               <label for="ageInput">How Old Are You?</label>
-              <input type="number" min="1" max="99" id="ageInput" name="age" placeholder="Enter Age">
+              <input type="number" min="1" max="99" class="form-control" id="ageInput" name="age" placeholder="Enter Age">
             </div>
-            <button type="submit">Submit</button>
+            <button type="submit" class="btn btn-default">Submit</button>
           </fieldset>
         </form>
       </div>
@@ -43,47 +36,39 @@
 
   </div>
 
+
+  <script src="@routes.Assets.at("javascripts/d3.js")"></script>
+  <script src="@routes.Assets.at("javascripts/nv.d3.js")"></script>
+  <script src="@routes.Assets.at("javascripts/main.js")"></script>
+
   <script>
 
     var form = document.forms[0];
     var input = document.getElementById("ageInput");
-    var chartContainer = document.getElementById("ageChart");
-    var svg = document.getElementsByTagName("svg")[0];
-
-
 
     form.onsubmit = function() {
       var params = "age=" + input.value;
       var request = new XMLHttpRequest();
       request.open("POST", "@routes.Application.input");
-      request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      request.send(params);
+      request.setRequestHeader("Content-type",
+                               "application/x-www-form-urlencoded");
+      try {
+        request.send(params);
+      } catch (e) {} // invalid input will result in Bad Request
 
       form.reset();
       return false; // prevent submission
     }
 
-    var eventSource = new EventSource("@routes.Application.stream");
+    var eventSource = new EventSource("@routes.Application.eventSource");
 
     eventSource.onmessage = function(event) {
-      console.log("message: " + event.data)
       var age = parseInt(event.data, 10);
       chart.increment(age);
       chart.update();
     };
 
 
-
-    function autoResizeChart() {
-      var offsetTop = chartContainer.getBoundingClientRect().top;
-      var dimensionValue = Math.min(window.innerHeight - offsetTop, chartContainer.clientWidth);
-      var value = dimensionValue + "px";
-      svg.style.width = value;
-      svg.style.height = value;
-    }
-
-    window.onresize = autoResizeChart;
-    autoResizeChart();
 
     var statistics = @Html(Json.toJson(statistics.map { case (k, v) =>
       (k.toString, v)
