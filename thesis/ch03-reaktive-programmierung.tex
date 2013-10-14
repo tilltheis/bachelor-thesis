@@ -24,7 +24,8 @@ In diesem Abschnitt sollen die mathematischen Hintergründe von Monaden kurz ang
 Eine Monade in einer Kategorie $C$ ist ein Tripel $T = (T, \eta, \mu)$, wobei $T$ ein Funktor $T: C \to C$ ist und $\eta$ und $\mu$ natürliche Transformationen mit $\eta: Id_C \to T$ und $\mu: T^2 \to T$ sind \citetext{vgl.~\citealp[S.~137]{monads_category_theory}, \citealp[S.~2]{monads_program_structure}}.
 
 Um diese Definition in den Kontext der Programmierung zu übersetzen, soll folgende vereinfachte Erklärung dienen \cite[vgl.][S.~2--3]{monads_programming}:
-Die Kategorie $C$ ist die Programmiersprache selber, mitsamt ihrer Typen und den Operationen auf den Werten dieser Typen \cite[vgl.][S.~6--8]{category_theory_and_programming}.
+Eine Kategorie in der Mathematik ist, sehr vereinfacht dargestellt, eine Menge von Objekten und den Operationen auf diesen Objekten \cite[vgl.][S.~7]{monads_category_theory}.
+Als die Kategorie $C$ kann die Programmiersprache selber, mitsamt ihrer Typen und den Operationen auf den Werten dieser Typen gesehen werden\cite[vgl.][S.~6--8]{category_theory_and_programming}.
 Ein Funktor $T$ ist eine Struktur mit einem einem Operator, der Funktionen $A \to B$ zu Funktionen $T A \to T B$ transformiert.
 Natürliche Transformationen können als Funktionen aufgefasst werden.
 $\eta$ hebt einen Wert in die Monade und $\mu$ macht aus einer verschachtelten Monade ein nicht-verschachtelte Monade.
@@ -51,7 +52,7 @@ Eine Monade ist eine Art Container mit drei assoziierten Operationen.
 Ein Kleisli-Tripel über einer Kategorie $C$ ist $T = (T, \eta, \_^*)$, wobei $T: Obj(C) \to Obj(C)$, $\eta_A: A \to T A$ und $^*$ ein Operator ist, der Morphismen der Art $f: A \to T B$ nach $f^*: T A \to T B$ umformt \cite[vgl.][S.~2]{monads_program_structure}.
 
 Eine vereinfachte Erklärung für den Kontext der Programmierung ist folgende:
-$T$ ist eine Abbildung von einem Objekt der Kategorie $C$ auf ein anderes und dient als Typ des Tripels.\todo{Korrekt? Eigene Interpretation. Quellen nicht auffindbar.}
+$T$ ist eine Abbildung von einem Objekt der Kategorie $C$ auf ein anderes.
 $\eta$ und $^*$ können wieder als Funktionen aufgefasst werden.
 $\eta$ hebt einen Wert in den Tripel und $^*$ lässt eine Funktion, die auf Werten arbeitet, die keine Tripel sind, auf Tripeln arbeiten.
 
