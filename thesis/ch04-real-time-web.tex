@@ -272,4 +272,18 @@ eventSource.onmessage = function(event) {
 
 % section server_sent_events (end)
 
+\section{Web Sockets vs. Server Sent Events} % (fold)
+\label{sec:web_sockets_vs_server_sent_events}
+
+Wann ist es angebracht Web Sockets zu verwenden und wann sollten besser Server Sent Events eingesetzt werden?
+Web Sockets sind relativ mächtig, indem sie bidirektionale Kommunikation über ein eigenes Protokoll ermöglichen, wohingegen Server Sent Events lediglich eine Kommunikationsrichtung unterstützen, dafür aber auf HTTP zurückgreifen.
+\citealt{ws_vs_sse_performance} hat in einem Test herausgefunden, dass Server Sent Events in einer Anwendung ähnlich der hier entwickelten Altersstatistikenanwendung performanter als Web Sockets sind.
+Wird also nur Kommunikation in eine Richtung benötigt, sollten Server Sent Events eingesetzt werden.
+
+Bei Anwendungen, bei denen viel Kommunikation zwischen Client und Server anfällt, wie es z.~B. bei Spielen der Fall sein kann, bieten sich stattdessen Web Sockets an, weil diese Kommunikation über die gleiche Verbindung durchgeführt werden kann.
+Bei Anwendungen, die hauptsächlich Nachrichten vom Server zum Client versenden, aber nur wenige Nachrichten in die andere Richtung, können auch Server Sent Events verwendet werden.
+In diesem Fall würden die wenigen Nachrichten, die zum Server gesendet werden, mittels \gls{ajax} im Hintergrund versendet werden, wie es in Unterabschnitt~\ref{sub:server_sent_events_in_der_altersstatistiken_anwendung} demonstriert wurde \cite[vgl.][]{ws_vs_sse}.
+
+% section web_sockets_vs_server_sent_events (end)
+
 % chapter real_time_web (end)
