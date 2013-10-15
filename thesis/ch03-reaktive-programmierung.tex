@@ -1295,8 +1295,8 @@ val right: IM[String] = en_str(s)(i).map(_.flatMap(f))
     Ein abweichender \lstinline|Iteratee| ist ein absorbierendes Element bzgl. \lstinline|flatMap|.
     Ein abweichender \lstinline|Iteratee| ist ein \lstinline|Iteratee|, der nach Empfang von \lstinline|Input.EOF| nicht in einen Endzustand übergeht.
     \lstinline|failure| in Listing~\ref{lst:nullelementregel} ist ein solcher \lstinline|Iteratee|.
-    Ein absorbierendes Element ist ein Element, das, mit jedem anderen Element verknüpft, wieder das absorbierende Element ergibt.
-    Die Null beispielsweise ist das absorbierende Element der Multiplikation\todo{Zitat}.
+    Ein absorbierendes Element ist ein Element, das, mit jedem anderen Element verknüpft, wieder das absorbierende Element ergibt \cite[vgl.][S.~15]{absorbing_element}.
+    Die Null beispielsweise, ist das absorbierende Element der Multiplikation.
 
     \begin{lstlisting}[caption=Nullelementregel, label=lst:nullelementregel]
 def failure[A]: I[A] = Cont(_ => failure)
