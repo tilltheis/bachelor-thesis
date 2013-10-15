@@ -335,7 +335,7 @@ Dieses Formular ist der View schnell mit einigen Zeilen HTML hinzugefügt, wie i
 Der Einfachheit halber werden nur Altersangaben zwischen einem und 99 Jahren akzeptiert.
 
 \begin{lstlisting}[language=html, caption=Das View-Template mit Formular, label=lst:das_view_template_mit_formular]
-<form method="post">
+<form method="post" action="@routes.Application.input">
   <fieldset>
     <legend>Your Age</legend>
     <div>
@@ -346,6 +346,11 @@ Der Einfachheit halber werden nur Altersangaben zwischen einem und 99 Jahren akz
   </fieldset>
 </form>
 \end{lstlisting}
+
+Der im obigen Listing zu sehende Code \lstinline|@routes.Application.input| ist ein Beispiel von sog. Reverse Routing.
+Dabei wird die URL für einen Routen-Eintrag in der \lstinline|routes|-Datei berechnet und muss deshalb bei Änderungen nicht auch in der View geändert werden \cite[vgl.][S.~98--100]{play_for_scala}.
+In diesem Fall wird die URL für die Controller-\lstinline|Action|, die für die Formularverarbeitung zuständig ist von einem Helper generiert.
+Die hier verwendete Routing-Eintrag wird im folgenden Unterabschnitt angelegt.
 
 % subsubsection formular_in_der_view (end)
 

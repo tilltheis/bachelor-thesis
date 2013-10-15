@@ -101,8 +101,7 @@ def input = WebSocket.using[String] { request =>
 
 In der View muss weiterer JS-Code eingefügt werden, das zuvor erstellte Formular und auch der Rest der View kann wiederverwendet werden
 Listing~\ref{lst:web_sockets_in_der_view_der_altersstatistiken_anwendung} zeigt, den neu hinzugekommenen Code.
-Der darin zu sehende Code \lstinline|@routes.Application.input.webSocketURL()| ist ein Beispiel von sog. reverse routing \cite[vgl.][S.~98]{play_for_scala}.
-Dabei wird die URL für einen Routen-Eintrag in der \lstinline|routes|-Datei berechnet.
+Der darin zu sehende Code \lstinline|@routes.Application.input.webSocketURL()| führt neben dem in Unterabschnitt~\ref{ssub:formular_in_der_view} eingeführten Reverse Routing auf der generierten URL einen Aufruf von \lstinline|webSocketURL| durch.
 Der Aufruf von \lstinline|webSocketURL| sorgt dafür, dass die Route das Web-Socket-Protokoll verwendet \cite[vgl.][S.~281]{play_for_scala}.
 Obige Anweisung wird bei einer lokalen Installation zu \lstinline[language=sh]|ws://localhost:9000/input|.
 
