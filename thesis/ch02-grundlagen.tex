@@ -111,7 +111,7 @@ Anschließend kann mit \lstinline[language=sh]|play new <project name>| ein neue
 In diesem Fall ist der Projektname \lstinline|age_statistics_http|.
 Im startenden Assistenten wählt man die Hauptprogrammiersprache aus (Java oder Scala), in diesem Fall Scala.
 Daraufhin wird im aktuellen Verzeichnis ein neuer Ordner mit dem vorher angegebenen Namen \lstinline|age_statistics| angelegt \cite[vgl.][S.~10]{play_for_scala}.
-Die darin vorzufindende Verzeichnisstruktur wird im nächsten Abschnitt beschrieben.
+Die darin vorzufindende Verzeichnisstruktur wird im nächsten Unterabschnitt beschrieben.
 
 % subsection erstellen_einer_anwendung (end)
 
@@ -237,7 +237,7 @@ Dies ist z.~B. dann notwendig, wenn Formulare verarbeitet werden sollen, was in 
 
 Um eine HTTP-Antwort zu generieren, stellt das Objekt \lstinline|play.api.mvc.Results|, von dem \lstinline|play.api.mvc.Controller| erbt, mehrere Konstruktoren zur Verfügung.
 Der in Listing~\ref{lst:application_controller_mit_index_aktion} verwendete Konstruktor \lstinline|Ok| erstellt eine HTTP-Antwort mit dem Status-Code \lstinline|200 OK|.
-Der Inhalt dieser Antwort ist das Ergebnis der View \lstinline|views.html.index|, worauf im folgenden Abschnitt näher eingegangen wird.
+Der Inhalt dieser Antwort ist das Ergebnis der View \lstinline|views.html.index|, worauf im folgenden Unterabschnitt näher eingegangen wird.
 Neben \lstinline|Ok| gibt es u.~a. noch \lstinline|BadRequest| für fehlerhafte Anfragen (z.~B. unvollständiges Formular) und \lstinline|Redirect|, um eine Seitenweiterleitung auf eine angegebene URL durchzuführen \cite[vgl.][]{play_controllers}.
 
 % subsection controller (end)
@@ -246,7 +246,7 @@ Neben \lstinline|Ok| gibt es u.~a. noch \lstinline|BadRequest| für fehlerhafte 
 \subsection{View} % (fold)
 \label{sub:view}
 
-Im vorigen Abschnitt wurde gezeigt, wie mittels \lstinline|Ok(views.html.index(ageStatistics))| eine View gerendert und als HTTP-Antwort verschickt werden kann.
+Im vorigen Unterabschnitt wurde gezeigt, wie mittels \lstinline|Ok(views.html.index(ageStatistics))| eine View gerendert und als HTTP-Antwort verschickt werden kann.
 Das dazugehörige View-Template befindet sich unter \lstinline|app/views/index.scala.html|.
 Bevor die Implementierung dieses Templates gezeigt wird, soll an einem einfacheren Beispiel verdeutlicht werden, wie View-Templates geschrieben werden.
 
