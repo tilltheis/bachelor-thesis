@@ -13,7 +13,7 @@ Die Kommunikation in entgegengesetzter Richtung erfolgt hierbei über herkömmli
 \section{Web-Sockets} % (fold)
 \label{sec:web_sockets}
 
-Das Web-Socket-Protokoll \cite{websocket_protocol} ermöglicht es Client und Server sich gegenseitig über ein Web-Socket Nachrichten zu schicken.
+Das Web-Socket-Protokoll \cite[vgl.][]{websocket_protocol} ermöglicht es Client und Server sich gegenseitig über ein Web-Socket Nachrichten zu schicken.
 Auf Client-Seite gibt es hierfür den \lstinline|WebSocket|-Typ.
 Auf Server-Seite (Play) gibt es ebenfalls eine Klasse namens \lstinline|WebSocket|, die im Controller anstelle von \lstinline|Action| als Request-Handler verwendet werden kann.
 Web-Sockets werden von Chrome 14, Firefox 11 und Internet Explorer 10 und in neueren Versionen unterstützt \cite[vgl.][]{js_websocket_compatibility}.
@@ -129,7 +129,7 @@ Bevor das \lstinline|WebSocket| geöffnet und nachdem es geschlossen wurde, muss
 Der Code dafür soll an dieser Stelle aber nicht gezeigt werden werden.
 Die verwendeten Variablen \lstinline|form| und \lstinline|input| enthalten Referenzen auf die \gls{dom}-Objekte für das HTML-Formular und das Eingabefeld.
 Sobald das \lstinline|WebSocket| geöffnet ist, wird dafür gesorgt, dass bei Formularabsendung das \lstinline|WebSocket| verwendet wird, statt einer regulären Formularübertragung.
-Sobald vom Server eine Nachricht eintrifft, wird das Diagramm beim Client über die bereits vorhandene \lstinline|chart|-Variable aktualisiert.\todo{FireFox braucht Prefix}
+Sobald vom Server eine Nachricht eintrifft, wird das Diagramm beim Client über die bereits vorhandene \lstinline|chart|-Variable aktualisiert.
 Diese Variable wurde zuvor mittels der \lstinline|makeAgeStatisticsChart|-Funktion erstellt, die sich in der Datei \lstinline|public/javascripts/main.js| befindet.
 
 % subsection web_sockets_in_der_altersstatistiken_anwendung (end)

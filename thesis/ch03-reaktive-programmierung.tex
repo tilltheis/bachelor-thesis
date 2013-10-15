@@ -109,7 +109,7 @@ Mit \lstinline|map| und \lstinline|flatMap| kann ein Wert, der mit \lstinline|So
 Wenn im Kontext der Altersstatistiken-Anwendung zwei Altersgruppen zusammengezählt werden sollen, könnte dies aussehen, wie in Listing~\ref{lst:die_option_monade}.
 Dabei soll für dieses Beispiel ignoriert werden, dass alle Statistiken einen Standardwert von null~(0) für unbekannte Altersangaben zurückgeben.
 Dazu werden beide Altersgruppen mit \lstinline|get| ausgelesen, wobei \lstinline|get| das \lstinline|get| von \lstinline|scala.collection.Map| ist und das Ergebnis als \lstinline|Option| zurückliefert.
-Anschließend werden beide Ergebnisse mit Hilfe der Monaden-Operationen kombiniert.\todo{AgeStatistics ohne Default-Value, um Beispiel sinnvoller zu machen}
+Anschließend werden beide Ergebnisse mit Hilfe der Monaden-Operationen kombiniert.
 
 \begin{lstlisting}[caption=Die Option-Monade, label=lst:die_option_monade]
 val statistics: AgeStatistics = AgeStatistics(20 -> 4, 30 -> 17)
@@ -722,7 +722,7 @@ Das Übergeben von Daten mittels der \lstinline|fold|-Methode ist, wie in Listin
 Dies kommt daher, dass zwei Zustände geprüft werden müssen.
 Zum Einen muss der Zustand der Eingabemenge geprüft werden, ob noch Elemente existieren, die an den \lstinline|Iteratee| übergeben werden sollen.
 Zum Anderen muss sichergestellt werden, dass der \lstinline|Iteratee| sich korrekt verhält.
-Ein \lstinline|Iteratee| verhält sich korrekt, wenn er nach dem Empfang von \lstinline|Input.EOF| keine weiteren Element annimmt, also in einen Endzustand übergeht.\todo{muss er auch bis EOF Elemente annehmen?}
+Ein \lstinline|Iteratee| verhält sich korrekt, wenn er nach dem Empfang von \lstinline|Input.EOF| keine weiteren Element annimmt, also in einen Endzustand übergeht.
 Nur wenn all diese Voraussetzungen erfüllt wurden, kann am Ende das Ergebnis dem \lstinline|Iteratee| im \lstinline|Step.Done|-Zustand entnommen werden.
 Durch Verwendung von \lstinline|Enumerator|s wird dies allerdings wesentlich einfacher.
 
