@@ -210,8 +210,8 @@ Die jeweiligen beiden Seiten von $=$, bzw. \lstinline|=| sind gleich.
 \section{Futures und Promises} % (fold)
 \label{sec:futures_und_promises}
 
-Ein \lstinline|Future| ist ein Platzhalter für das Ergebnis einer nebenläufigen Berechnung und hält nach Beendigung dieser Berechnung dessen Ergebnis.
-Ein \lstinline|Future| ist an ein \lstinline|Promise| gekoppelt, welches einmalig den Wert des \lstinline|Future|s setzen kann.
+Ein \lstinline|scala.concurrent.Future| ist ein Platzhalter für das Ergebnis einer nebenläufigen Berechnung und hält nach Beendigung dieser Berechnung dessen Ergebnis.
+Ein \lstinline|Future| ist an ein \lstinline|scala.concurrent.Promise| gekoppelt, welches einmalig den Wert des \lstinline|Future|s setzen kann.
 \lstinline|Future|s sind nur lesbar, wohingegen \lstinline|Promise|s einmalig schreibbar sind.
 Dieser Abschnitt behandelt diese beiden Datentypen und orientiert sich dabei an den Quellen \citealt{futures_scala} und \citealt{futures_akka}.
 
@@ -219,7 +219,7 @@ Dieser Abschnitt behandelt diese beiden Datentypen und orientiert sich dabei an 
 \label{sub:futures}
 
 \lstinline|Future| ist eine Monade, die das Ergebnis einer nebenläufigen Berechnung kapselt.
-Ein \lstinline|Future| ein \gls{adt}, der entweder für ein erfolgreich berechnetes Ergebnis, oder für einen aufgetretenen Fehler steht.
+Ein \lstinline|Future| ein Datentyp, der entweder für ein erfolgreich berechnetes Ergebnis, für einen aufgetretenen Fehler, oder für eine noch andauernde Berechnung steht.
 Solange kein Fehler aufgetreten und auch die Berechnung noch nicht vollendet ist, ist auch das \lstinline|Future| noch nicht vollendet und hält kein Ergebnis.
 
 \subsubsection{Futures ohne Promise erstellen} % (fold)
@@ -298,7 +298,7 @@ Future {
 \subsection{Execution Contexts} % (fold)
 \label{sub:execution_contexts}
 
-Die nebenläufigen Berechnungen, die von \lstinline|Future|s ausgeführt werden, werden innerhalb von \lstinline|ExecutionContext|s ausgeführt.
+Die nebenläufigen Berechnungen, die von \lstinline|Future|s ausgeführt werden, werden innerhalb von \lstinline|scala.concurrent.ExecutionContext|s ausgeführt.
 Ein \lstinline|ExecutionContext| ist vergleichbar mit einem Thread-Pool\todo{braucht das eine Definition?} und ist dafür zuständig, dass an ihn delegierte Aufgaben im Hintergrund ausgeführt werden.
 Die zuvor vorgestellte Methode \lstinline|Future.apply| nimmt neben der Berechnungsanweisung auch einen impliziten Parameter vom Typ \lstinline|ExecutionContext|.
 Dieser \lstinline|ExecutionContext| muss nicht per Hand erstellt werden.

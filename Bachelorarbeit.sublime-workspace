@@ -520,10 +520,13 @@
 	"buffers":
 	[
 		{
+			"contents": "\\documentclass[draft=false\n              ,paper=a4\n              ,twoside=false\n              ,fontsize=11pt\n              ,headsepline\n              ,BCOR10mm\n              ,DIV11\n              ]{scrbook}\n\\usepackage[ngerman,english]{babel}\n%% see http://www.tex.ac.uk/cgi-bin/texfaq2html?label=uselmfonts\n\\usepackage[T1]{fontenc}\n\\usepackage[utf8]{inputenc}\n% \\usepackage[latin1]{inputenc}\n\\usepackage{libertine}\n\\usepackage{pifont}\n\\usepackage{microtype}\n\\usepackage{textcomp}\n\\usepackage[german,refpage]{nomencl}\n\\usepackage{setspace}\n\\usepackage{makeidx}\n\\usepackage{listings}\n\\usepackage{natbib}\n\\usepackage[ngerman,colorlinks=true]{hyperref}\n\\usepackage{soul}\n\\usepackage{hawstyle}\n\\usepackage{lipsum} %% for sample text\n\\usepackage{scrhack} %% remove warning http://tex.stackexchange.com/questions/51867/koma-warning-about-toc\n\\usepackage{todonotes}\n\\usepackage[nomain,acronym,toc]{glossaries}\n\\usepackage{enumitem} % aligned description lists\n\\usepackage{amstext} % \\text{} within math-mode for text in normal font instead of italics\n\\usepackage{mathtools} % begin{align} for math block mode\n\\usepackage{fixltx2e} % for $g \\circ f$\n\\usepackage{color} % for listings javascript definition\n\n\n\\makeglossaries\n\n\\bibpunct[, ]{(}{)}{,}{a}{}{;} % correct citation format (no comma before year)\n\n\\includeonly{glossar,ch01-einleitest\nung,ch02-grundlagen,ch03-reaktive-programmierung,ch04-real-time-web,ch05-anwendung,ch06-schluss}\n\n\\graphicspath{{./logo/}{./img/}} % {./logo/} comes from hawstyle.sty (this \\graphicspath overrides that one)\n\n\\lstset{literate={/}{}{0\\discretionary{/}{}{/}}} % break on /\n\\lstset{literate={.}{}{0\\discretionary{.}{}{.}}} % break on .\n\n\\lstset{breaklines=true}\n\\lstset{breakatwhitespace=true}\n\n\n%% define some colors\n\\colorlet{BackgroundColor}{gray!20}\n\\colorlet{KeywordColor}{blue}\n\\colorlet{CommentColor}{black!60}\n%% for tables\n\\colorlet{HeadColor}{gray!60}\n\\colorlet{Color1}{blue!10}\n\\colorlet{Color2}{white}\n\n%% configure colors\n\\HAWifprinter{\n  \\colorlet{BackgroundColor}{gray!20}\n  \\colorlet{KeywordColor}{black}\n  \\colorlet{CommentColor}{gray}\n  % for tables\n  \\colorlet{HeadColor}{gray!60}\n  \\colorlet{Color1}{gray!40}\n  \\colorlet{Color2}{white}\n}{}\n\\lstset{%\n  numbers=left,\n  numberstyle=\\tiny,\n  stepnumber=1,\n  numbersep=5pt,\n  basicstyle=\\ttfamily\\small,\n  keywordstyle=\\color{KeywordColor}\\bfseries,\n  identifierstyle=\\color{black},\n  commentstyle=\\color{CommentColor},\n  backgroundcolor=\\color{BackgroundColor},\n  captionpos=b,\n  fontadjust=true\n}\n\\lstset{escapeinside={(*@}{@*)}, % used to enter latex code inside listings\n        morekeywords={uint32_t, int32_t}\n}\n\\ifpdfoutput{\n  \\hypersetup{bookmarksopen=false,bookmarksnumbered,linktocpage}\n}{}\n\n% \"define\" Scala http://tex.stackexchange.com/questions/47175/scala-support-in-listings-package\n\\lstdefinelanguage{scala}{\n  morekeywords={abstract,case,catch,class,def,%\n    do,else,extends,false,final,finally,%\n    for,if,implicit,import,match,mixin,%\n    new,null,object,override,package,%\n    private,protected,requires,return,sealed,%\n    super,this,throw,trait,true,try,%\n    type,val,var,while,with,yield},\n  otherkeywords={=>,<-,<\\%,<:,>:,\\#,@},\n  sensitive=true,\n  morecomment=[l]{//},\n  morecomment=[n]{/*}{*/},\n  morestring=[b]\",\n  morestring=[b]',\n  morestring=[b]\"\"\"\n}\n\n% \"define\" JavaScript http://tex.stackexchange.com/questions/89574/language-option-supported-in-listings\n\\definecolor{lightgray}{rgb}{.9,.9,.9}\n\\definecolor{darkgray}{rgb}{.4,.4,.4}\n\\definecolor{purple}{rgb}{0.65, 0.12, 0.82}\n\n\\lstdefinelanguage{JavaScript}{\n  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},\n  keywordstyle=\\color{blue}\\bfseries,\n  ndkeywords={class, export, boolean, throw, implements, import, this},\n  ndkeywordstyle=\\color{darkgray}\\bfseries,\n  identifierstyle=\\color{black},\n  sensitive=false,\n  comment=[l]{//},\n  morecomment=[s]{/*}{*/},\n  commentstyle=\\color{purple}\\ttfamily,\n  stringstyle=\\color{red}\\ttfamily,\n  morestring=[b]',\n  morestring=[b]\"\n}\n\n%% more fancy C++\n\\DeclareRobustCommand{\\cxx}{C\\raisebox{0.25ex}{{\\scriptsize +\\kern-0.25ex +}}}\n\n\\clubpenalty=10000\n\\widowpenalty=10000\n\\displaywidowpenalty=10000\n\n% unknown hyphenations\n\\hyphenation{\n}\n\n%% recalculate text area\n\\typearea[current]{last}\n\n\\makeindex\n\\makenomenclature\n\n\\begin{document}\n\\selectlanguage{ngerman}\n\\lstset{language=Scala}\n\n%%%%%\n%% customize (see readme.pdf for supported values)\n\\HAWThesisProperties{Author={Till Theis}\n                    ,Title={Das Play-Framework und dessen Einsatz zur Entwicklung von Real-Time-Web-Anwendungen}\n                    ,EnglishTitle={The Play Framework and its Use for Developing Real-Time Web Applications}\n                    ,ThesisType={Bachelorarbeit}\n                    ,ExaminationType={Bachelorprüfung}\n                    ,DegreeProgramme={Bachelor of Science Angewandte Informatik}\n                    ,ThesisExperts={Prof.\nDr.\nFriedrich Esser \\and Prof.\nDr.\nZweitprüfer}\n                    ,ReleaseDate={1.\nJanuar 2345}\n                  }\n\n%% title\n\\frontmatter\n\n%% output title page\n\\maketitle\n\n\\onehalfspacing\n\n%% add abstract pages\n%% note: this is one command on multiple lines\n\\HAWAbstractPage\n%% German abstract\n{Schlüsselwort 1, Schlüsselwort 2}%\n{Dieses Dokument \\ldots}\n%% English abstract\n{keyword 1, keyword 2}%\n{This document \\ldots}\n\n\\newpage\n\\singlespacing\n\n\\tableofcontents\n\\newpage\n%% enable if these lists should be shown on their own page\n%%\\listoftables\n\\listoffigures\n\\lstlistoflistings\n\n%% main\n\\mainmatter\n\\onehalfspacing\n%% write to the log/stdout\n\\typeout{===== File: chapter 1}\n%% include chapter file (chapter1.tex)\n%%\\include{chapter1}\n\n%%%%\n\n\n\n\n\\include{glossar}\n\n\\include{ch01-einleitung}\n\\include{ch02-grundlagen}\n\\include{ch03-reaktive-programmierung}\n\\include{ch04-real-time-web}\n\\include{ch05-anwendung}\n\\include{ch06-schluss}\n\n\n\n\n%%%%\n\n%% appendix if used\n%%\\appendix\n%%\\typeout{===== File: appendix}\n%%\\include{appendix}\n\n% bibliography and other stuff\n\\backmatter\n\n\\typeout{===== Section: literature}\n%% read the documentation for customizing the style\n\\bibliographystyle{dinat}\n\\bibliography{thesis}\n\n\\typeout{===== Section: nomenclature}\n%% uncomment if a TOC entry is needed\n% \\addcontentsline{toc}{chapter}{Glossar} % done via \\usepackage[toc]{glossaries}\n\\renewcommand{\\nomname}{Glossar}\n\n% s/Glossary/Glossar/\n% \\renewcommand*{\\glossaryname}{Glossar}\n% \\deftranslation{Glossary}{Glossar}\n\\renewcommand*{\\acronymname}{Glossar}\n\\deftranslation{Acronyms}{Glossar}\n\n\\printglossaries\n\\clearpage\n\\markboth{\\nomname}{\\nomname} %% see nomencl doc, page 9, section 4.1\n\\printnomenclature\n\n%% index\n\\typeout{===== Section: index}\n\\printindex\n\n\\HAWasurency\n\n\\end{document}\n",
 			"file": "thesis/thesis.tex",
+			"file_size": 6719,
+			"file_write_time": 130244304440000000,
 			"settings":
 			{
-				"buffer_size": 6715,
+				"buffer_size": 6719,
 				"line_ending": "Unix"
 			}
 		},
@@ -547,23 +550,23 @@
 			"file": "thesis/ch04-real-time-web.tex",
 			"settings":
 			{
-				"buffer_size": 17921,
+				"buffer_size": 17854,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "thesis/ch02-grundlagen.tex",
+			"file": "code/age_statistics_sse/conf/routes",
 			"settings":
 			{
-				"buffer_size": 27514,
+				"buffer_size": 459,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "thesis/ch01-einleitung.tex",
+			"file": "code/age_statistics_sse/app/controllers/Application.scala",
 			"settings":
 			{
-				"buffer_size": 3874,
+				"buffer_size": 983,
 				"line_ending": "Unix"
 			}
 		},
@@ -571,15 +574,15 @@
 			"file": "code/age_statistics_http/app/views/index.scala.html",
 			"settings":
 			{
-				"buffer_size": 1343,
+				"buffer_size": 1314,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "code/age_statistics/public/javascripts/httpCommunication.js",
+			"file": "code/age_statistics_ws/public/javascripts/main.js",
 			"settings":
 			{
-				"buffer_size": 88,
+				"buffer_size": 2688,
 				"line_ending": "Unix"
 			}
 		}
@@ -587,12 +590,24 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 27.0,
+		"height": 49.0,
 		"selected_items":
 		[
 			[
 				"install",
 				"Package Control: Install Package"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"enable",
+				"Package Control: Enable Package"
+			],
+			[
+				"disable",
+				"Package Control: Disable Package"
 			],
 			[
 				"delsur",
@@ -651,10 +666,6 @@
 				"Snippet: Listing"
 			],
 			[
-				"remove",
-				"Package Control: Remove Package"
-			],
-			[
 				"lower",
 				"Convert Case: Lower Case"
 			],
@@ -708,6 +719,21 @@
 	},
 	"file_history":
 	[
+		"/Users/till/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/CHANGELOG",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_sse/public/javascripts/main.js",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/public/javascripts/main.js",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_ws/app/views/index.scala.html",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_sse/app/views/index.scala.html",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/app/views/index.scala.html",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_ws/public/javascripts/main.js",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_sse/app/controllers/Application.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch02-grundlagen.tex",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch01-einleitung.tex",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/public/javascripts/webSocketCommunication.js",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/public/javascripts/serverSentEventsCommunication.js",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/public/javascripts/httpCommunication.js",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/public/javascripts/common.js",
+		"/Users/till/Library/Application Support/Sublime Text 3/Packages/User/SideBarEnhancements/Open With/Side Bar.sublime-menu",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/app/views/index.scala.html",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/app/views/exampleIndex.scala.html",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/app/views/exampleIndex.scala.html",
@@ -720,14 +746,11 @@
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/streams/Enumerators.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch03-reaktive-programmierung.tex",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/LawSpec.scala",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch02-grundlagen.tex",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/streams/Composition.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/streams/Enumeratees.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/streams/Iteratees.scala",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch01-einleitung.tex",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/app/controllers/Application.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch04-real-time-web.tex",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/public/javascripts/serverSentEventsCommunication.js",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/Helpers.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/conf/routes",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/project/Build.scala",
@@ -735,7 +758,6 @@
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/project/build.properties",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/project/plugins.sbt",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/app/controllers/Application.scala",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/public/javascripts/webSocketCommunication.js",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/project/Build.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_ws/app/controllers/Application.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/glossar.tex",
@@ -824,18 +846,7 @@
 		"/Users/till/.gitconfig",
 		"/Users/till/.gitignore",
 		"/Users/till/Dropbox/Entwicklung/Studium/wpitsec/a3/crypto.scala",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/schema.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/oauths_controller.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/manager.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/admin/managers_controller.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/groups/edit.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/config/routes.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/groups/index.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/groups/waitlist.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/controllers/manager/groups_controller.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/kindergarten.rb",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/admin/kindergartens/index.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/models/state.rb"
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/schema.rb"
 	],
 	"find":
 	{
@@ -1024,7 +1035,7 @@
 	"groups":
 	[
 		{
-			"selected": 4,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -1033,15 +1044,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6715,
+						"buffer_size": 6719,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2499,
-								2505
+								196,
+								196
 							]
 						],
 						"settings":
@@ -1186,7 +1197,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 101.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1324,8 +1335,8 @@
 						"selection":
 						[
 							[
-								420,
-								420
+								280,
+								280
 							]
 						],
 						"settings":
@@ -1347,15 +1358,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 17921,
+						"buffer_size": 17854,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7316,
-								7316
+								6664,
+								6664
 							]
 						],
 						"settings":
@@ -1366,67 +1377,65 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 713.0,
+						"translation.y": 1554.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 4,
-					"file": "thesis/ch02-grundlagen.tex",
+					"file": "code/age_statistics_sse/conf/routes",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 27514,
+						"buffer_size": 459,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5958,
-								5958
+								271,
+								271
 							]
 						],
 						"settings":
 						{
-							"WordCountShouldRun": true,
-							"spell_check": true,
-							"syntax": "Packages/LaTeX/LaTeX.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"WordCountShouldRun": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1402.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 5,
-					"file": "thesis/ch01-einleitung.tex",
+					"file": "code/age_statistics_sse/app/controllers/Application.scala",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3874,
+						"buffer_size": 983,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2914,
-								2914
+								342,
+								342
 							]
 						],
 						"settings":
 						{
-							"WordCountShouldRun": true,
-							"spell_check": true,
-							"syntax": "Packages/LaTeX/LaTeX.tmLanguage"
+							"WordCountShouldRun": false,
+							"syntax": "Packages/Scala/Scala.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 576.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1437,15 +1446,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1343,
+						"buffer_size": 1314,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1091,
+								1091
 							]
 						],
 						"settings":
@@ -1456,35 +1465,37 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 66.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 7,
-					"file": "code/age_statistics/public/javascripts/httpCommunication.js",
+					"file": "code/age_statistics_ws/public/javascripts/main.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 88,
+						"buffer_size": 2688,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								2688,
+								2688
 							]
 						],
 						"settings":
 						{
 							"WordCountShouldRun": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 990.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1525,7 +1536,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 102.0
+		"height": 114.0
 	},
 	"project": "Bachelorarbeit.sublime-project",
 	"replace":
@@ -1538,6 +1549,54 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"wsmain",
+				"code/age_statistics_ws/public/javascripts/main.js"
+			],
+			[
+				"ssemain",
+				"code/age_statistics_sse/public/javascripts/main.js"
+			],
+			[
+				"httpmain",
+				"code/age_statistics_http/public/javascripts/main.js"
+			],
+			[
+				"httpindex",
+				"code/age_statistics_http/app/views/index.scala.html"
+			],
+			[
+				"wsindex",
+				"code/age_statistics_ws/app/views/index.scala.html"
+			],
+			[
+				"sseindex",
+				"code/age_statistics_sse/app/views/index.scala.html"
+			],
+			[
+				"wsmainjs",
+				"code/age_statistics_ws/public/javascripts/main.js"
+			],
+			[
+				"ssemainjs",
+				"code/age_statistics_sse/public/javascripts/main.js"
+			],
+			[
+				"sseapplicasca",
+				"code/age_statistics_sse/app/controllers/Application.scala"
+			],
+			[
+				"sseroute",
+				"code/age_statistics_sse/conf/routes"
+			],
+			[
+				"webs",
+				"code/age_statistics/public/javascripts/webSocketCommunication.js"
+			],
+			[
+				"ssecom",
+				"code/age_statistics/public/javascripts/serverSentEventsCommunication.js"
+			],
 			[
 				"ch01",
 				"thesis/ch01-einleitung.tex"
