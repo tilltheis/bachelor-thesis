@@ -246,7 +246,7 @@ var input = document.getElementById("ageInput");
 form.onsubmit = function() {
   var params = "age=" + input.value;
   var request = new XMLHttpRequest();
-  request.open("POST", "/");
+  request.open("POST", "@routes.Application.input");
   request.setRequestHeader("Content-type",
                            "application/x-www-form-urlencoded");
   try {
