@@ -1,0 +1,7 @@
+# rename this file to twitter.conf and change the values to you twitter api credentials
+
+# twitter api credentials
+twitter.consumer_key="YOUR_CONSUMER_KEY"
+twitter.consumer_key_secret="YOUR_CONSUMER_KEY_SECRET"
+twitter.access_token="YOUR_ACCESS_TOKEN"
+twitter.access_token_secret="YOUR_ACCESS_TOKEN_SECRET"

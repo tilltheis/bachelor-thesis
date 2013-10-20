@@ -1,0 +1,73 @@
+.tweet {
+  border: none;
+  padding: none;
+}
+
+.tweet > div > div {
+  margin-top: -10px;
+}
+
+.tweet .follow-btn {
+  color: #777;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px;
+}
+
+.tweet .avatar img {
+  margin-right: 1em;
+}
+
+.tweet .name a {
+  color: #000;
+}
+
+.tweet .screen-name a {
+  font-weight: normal;
+  color: #555;
+}
+
+.tweet .date {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+.tweet .date a {
+  color: #777
+}
+
+.tweet .actions {
+  margin-top: 5px;
+  margin-bottom: -10px;
+}
+
+.tweet .actions a {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-top: 5px;
+  margin-bottom: -7px
+  background-image: none;
+  background-size: contain;
+}
+
+.tweet .actions .reply {
+  background-image: url("https://si0.twimg.com/images/dev/cms/intents/icons/reply.png");
+}
+.tweet .actions .reply:hover {
+  background-image: url("https://si0.twimg.com/images/dev/cms/intents/icons/reply_hover.png");
+}
+
+.tweet .actions .retweet {
+  background-image: url("https://si0.twimg.com/images/dev/cms/intents/icons/retweet.png");
+}
+.tweet .actions .retweet:hover {
+  background-image: url("https://si0.twimg.com/images/dev/cms/intents/icons/retweet_hover.png");
+}
+
+.tweet .actions .favorite {
+  background-image: url("https://si0.twimg.com/images/dev/cms/intents/icons/favorite.png");
+}
+.tweet .actions .favorite:hover {
+  background-image: url("https://si0.twimg.com/images/dev/cms/intents/icons/favorite_hover.png");
+}

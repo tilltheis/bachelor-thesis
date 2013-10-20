@@ -1,0 +1,214 @@
+@(mostTweeted: Map[String, Int], mostRetweeted: Seq[Tweet], mostDiscussed: Seq[Tweet])
+
+@import play.api.libs.json.Json
+
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Twitter News</title>
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.css")">
+  <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
+  <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+  <script src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
+</head>
+<body>
+
+  <script type="text/template" id="tweetTemplate">
+   <blockquote class="tweet">
+      <div class="media panel panel-default">
+        <div class="panel-body">
+          <div class="media-heading">
+            <a href="https://twitter.com/intent/user?user_id={{userId}}" class="pull-right follow-btn btn btn-default">
+              <img src="https://dev.twitter.com/sites/default/files/images_documentation/bird_blue_16.png">
+              Follow
+            </a>
+            <a class="avatar" href="https://twitter.com/intent/user?user_id={{userId}}"><img class="pull-left img-rounded media-object" src="{{avatarUrl}}" alt="Avatar"></a>
+            <h4 class="name"><a href="https://twitter.com/intent/user?user_id={{userId}}">{{userName}}</a></h4>
+            <h5 class="screen-name"><a href="https://twitter.com/intent/user?user_id={{userId}}" class="text-muted">@@{{userScreenName}}</a></h5>
+          </div>
+          <p class="media-body">
+            {{text}}
+          </p>
+          <div class="media-footer">
+            <div class="date">
+              <small><a href="https://twitter.com/{{userScreenName}}/statuses/{{id}}">{{dateString}}</a></small>
+            </div>
+            <div class="pull-right actions">
+              <a href="https://twitter.com/intent/tweet?in_reply_to={{id}}" class="reply"></a>
+              <a href="https://twitter.com/intent/retweet?tweet_id={{id}}" class="retweet"></a>
+              <a href="https://twitter.com/intent/favorite?tweet_id={{id}}" class="favorite"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </blockquote>
+  </script>
+
+  <div class="container">
+    <header class="page-header">
+      <h1>Twitter News</h1>
+    </header>
+
+    <div class="row">
+      <div class="col-lg-4 col-lg-offset-2">
+        <h2>Most Tweeted</h2>
+        <div id="mostTweetedChart"><svg></svg></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <h2>Most Retweeted</h2>
+        <div id="mostRetweetedList"></div>
+      </div>
+      <div class="col-lg-6">
+        <h2>Most Discussed</h2>
+        <div id="mostDiscussedList"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="@routes.Assets.at("javascripts/d3.js")"></script>
+  <script src="@routes.Assets.at("javascripts/nv.d3.js")"></script>
+  <script src="@routes.Assets.at("javascripts/main.js")"></script>
+  <script>
+
+    var escapeForHtml = function(s) {
+      // already escaped when coming from eventSource
+      // var pairs = [["&", "&amp;"], ["<", "&lt;"], [">", "&gt;"]];
+      // pairs.forEach(function(pair) {
+      //   s = s.replace(new RegExp(pair[0], "g"), pair[1]);
+      // });
+      return s;
+    };
+
+    // 2011-11-07T20:21:07+00:00
+    var dateDataString = function(d) {
+      var padNumber = function(n) {
+        if (n < 10) return "0" + n; else return n;
+      };
+      return d.getUTCFullYear() + "-" +
+             (d.getUTCMonth() + 1) + "-" +
+             padNumber(d.getUTCDate()) + "T" +
+             padNumber(d.getUTCHours()) + ":" +
+             padNumber(d.getUTCMinutes()) + ":" +
+             padNumber(d.getUTCSeconds()) + "+00:00";
+    };
+
+    // 10:12 PM - 16 Oct 13
+    var dateString = function(d) {
+      var padNumber = function(n) {
+        if (n < 10) return "0" + n; else return n;
+      };
+      var months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ];
+      return padNumber(d.getHours()) + ":" +
+             padNumber(d.getMinutes()) + " " +
+             (d.getHours() <= 12 ? "AM" : "PM") + " - " +
+             d.getDate() + " " +
+             months[d.getMonth()] + " " +
+             d.getFullYear();
+    };
+
+    var textToHtml = function(text) {
+      var html = escapeForHtml(text);
+      html = html.replace(/(^|\s)(https?:\/\/\S+)/gi, '$1<a href="$2">$2</a>');
+      html = html.replace(/(^|\s)(www\.\S+)/gi, '$1<a href="http://$2">$2</a>');
+      html = html.replace(/(\b|^|\s)@@([0-9a-z_]+)/gi, '$1<a href="https://twitter.com/$2">@@$2</a>');
+      html = html.replace(/(\b|^|\s)#([0-9a-z_]+)/gi, '$1<a href="https://twitter.com/search?q=%23$2&src=hash">#$2</a>');
+      return html;
+    }
+
+    var tweetHtml = function(tweet) {
+      var html = document.getElementById("tweetTemplate").innerHTML;
+      html = html.replace(/{{text}}/g, textToHtml(tweet["text"]));
+      for (var key in tweet) {
+        if (tweet.hasOwnProperty(key)) {
+          html = html.replace(new RegExp("{{" + key + "}}", "g"), tweet[key]);
+        }
+      }
+      return html;
+    };
+
+
+    var chart = makeMostTweetedChart("#mostTweetedChart svg", @Html(Json.toJson(mostTweeted).toString));
+
+    var mostTweetedEventSource = new EventSource("@routes.Application.mostTweetedEventSource");
+    mostTweetedEventSource.onmessage = function(e) {
+      console.log("mostTweeted");
+      console.log(e);
+      var map = JSON.parse(e.data);
+      console.log(map);
+      console.log("\n");
+      chart.setData(map);
+      chart.update();
+    };
+
+
+    var mostRetweetedEventSource = new EventSource("@routes.Application.mostRetweetedEventSource");
+    mostRetweetedEventSource.onmessage = function(e) {
+      console.log("mostRetweeted");
+      console.log(e);
+      var seq = JSON.parse(e.data);
+      console.log(seq);
+      console.log("\n");
+
+      mostRetweetedList.innerHTML = "";
+
+      seq.forEach(function(tweet, i) {
+        // var tweetElement = document.getElementById("mostRetweetedListItem" + i);
+        // if (parseInt(tweetElement.dataset.tweetId, 10) !== tweet.id) {
+          var date = new Date(tweet.date);
+          tweet.dateString = dateString(date);
+          // tweetElement.dataset.tweetId = tweet.id
+          // tweetElement.innerHTML = tweetHtml(tweet);
+          mostRetweetedList.innerHTML += tweetHtml(tweet);
+        // }
+      });
+    };
+
+
+    var mostDiscussedEventSource = new EventSource("@routes.Application.mostDiscussedEventSource");
+    mostDiscussedEventSource.onmessage = function(e) {
+      console.log("mostDiscussed");
+      console.log(e);
+      var seq = JSON.parse(e.data);
+      console.log(seq);
+      console.log("\n");
+
+      mostDiscussedList.innerHTML = "";
+
+      seq.forEach(function(tweet, i) {
+        // var tweetElement = document.getElementById("mostDiscussedListItem" + i);
+        // if (parseInt(tweetElement.dataset.tweetId, 10) !== tweet.id) {
+          var date = new Date(tweet.date);
+          tweet.dateString = dateString(date);
+          // tweetElement.dataset.tweetId = tweet.id
+          // tweetElement.innerHTML = tweetHtml(tweet);
+          mostDiscussedList.innerHTML += tweetHtml(tweet);
+        // }
+      });
+    };
+
+    function close() {
+      mostTweetedEventSource.close();
+      mostRetweetedEventSource.close();
+      mostDiscussedEventSource.close();
+    }
+
+  </script>
+
+</body>
+</html>
