@@ -3,16 +3,16 @@ package models
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.FiniteDuration
+import scala.collection.mutable
+
+import akka.actor.Cancellable
 
 import play.api.{Play, Logger}
 import play.api.Play.current
 import play.api.libs.iteratee.{Enumeratee, Concurrent, Enumerator, Iteratee}
-import akka.actor.Cancellable
 import play.api.libs.concurrent.Akka
-import scala.concurrent.duration.FiniteDuration
 import play.api.libs.json.Json
-
-// for Play.configuration
 import play.api.libs.ws.{SignatureCalculator, WS}
 import play.api.libs.oauth.{RequestToken, ConsumerKey, OAuthCalculator}
 
@@ -63,12 +63,40 @@ trait TwitterSignatureComponent {
 
 trait Twitter { this: TwitterUrlComponent with TwitterTimeoutComponent with TwitterSignatureComponent =>
 
+  // can't use play.api.cache.Cache for testing (https://groups.google.com/forum/#!topic/play-framework/PBIfeiwl5rU)
+  // therefore roll out a new simple solution
+  object TweetCache {
+    // the vars must only be accessed via set()
+    private val size = 1000
+    private var cache: mutable.Map[Long, Tweet] = mutable.Map.empty
+    private var insertionOrder: mutable.Queue[Long] = mutable.Queue.empty
+  
+    def get(id: Long): Option[Tweet] = cache.get(id)
+    
+    def set(tweet: Tweet): Unit = synchronized {
+      cache.update(tweet.id, tweet)
+      insertionOrder.enqueue(tweet.id)
+  
+      if (cache.size > size) {
+        val keysToRemove = insertionOrder.take(cache.size - size)
+        insertionOrder = insertionOrder.drop(cache.size - size)
+        cache --= keysToRemove
+      }
+    }
+  }
+
+
   def fetchTweet(id: Long): Future[Tweet] =
-    WS.url(tweetUrlFromId(id)).sign(signature).get().flatMap { response =>
-      response.json.validate[Tweet].fold(
-        invalid = _ => Future.failed(new RuntimeException("invalid tweet format")),
-        valid = Future.successful
-      )
+    TweetCache.get(id).map(Future.successful).getOrElse {
+      WS.url(tweetUrlFromId(id)).sign(signature).get().flatMap { response =>
+        response.json.validate[Tweet].fold(
+          invalid = _ => Future.failed(new RuntimeException("invalid tweet format")),
+          valid = tweet => {
+            TweetCache.set(tweet)
+            Future.successful(tweet)
+          }
+        )
+      }
     }
 
 

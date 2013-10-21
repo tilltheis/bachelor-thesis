@@ -10,6 +10,7 @@ import play.api.test.FakeApplication
 import play.api.mvc.{Handler, Action}
 import play.api.libs.ws.SignatureCalculator
 import play.api.libs.ws.WS.WSRequest
+import java.util.concurrent.TimeoutException
 
 class TwitterSpec extends PlaySpecification {
 
@@ -97,6 +98,21 @@ class TwitterSpec extends PlaySpecification {
   "fetchTweet" should {
     "load a single tweet from the web service" in new WithServer(tweetWebService) {
       await((new TestTwitter).fetchTweet(tweet.id)) === tweet
+    }
+
+    val tweetUrl = "/" + tweet.id
+    val slowWebService = FakeApplication(withRoutes = {
+      case (GET, `tweetUrl`) => Action {
+        Thread.sleep(1000)
+        Ok(tweetJsonString)
+      }
+    })
+
+    "cache fetched tweets" in new WithServer(slowWebService) {
+      val twitter = new TestTwitter
+      await(twitter.fetchTweet(tweet.id), 500) must throwA[TimeoutException]
+      Thread.sleep(500)
+      await(twitter.fetchTweet(tweet.id), 500) === tweet
     }
   }
 
