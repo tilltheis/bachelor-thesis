@@ -8,7 +8,7 @@ import scala.collection.mutable
 
 import akka.actor.Cancellable
 
-import play.api.{Play, Logger}
+import play.api.Play
 import play.api.Play.current
 import play.api.libs.iteratee.{Enumeratee, Concurrent, Enumerator, Iteratee}
 import play.api.libs.concurrent.Akka
@@ -140,11 +140,8 @@ trait Twitter { this: TwitterUrlComponent with TwitterTimeoutComponent with Twit
   }
 
   private def byteArrayToTweet(bytes: Array[Byte]): Option[Tweet] = {
+    // some invalid tweets are expected. e.g. tweet deletion messages
     val tweetM = Json.parse(bytes).validate[Tweet].asOpt
-    if (tweetM.isEmpty) {
-      val s = new String(bytes, "UTF-8")
-      Logger.error("Twitter: could not parse tweet: " + s)
-    }
     tweetM
   }
 }
