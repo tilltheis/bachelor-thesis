@@ -15,7 +15,7 @@ import play.api.libs.ws.WS.WSRequest
 import helpers.TweetSamples._
 
 
-class TwitterSpec extends PlaySpecification {
+class TwitterImplSpec extends PlaySpecification {
 
   trait TestSignatureComponent extends TwitterSignatureComponent {
     val signature: SignatureCalculator = new SignatureCalculator {
@@ -28,7 +28,7 @@ class TwitterSpec extends PlaySpecification {
     def statusStreamUrl: String = "http://localhost:" + testServerPort
   }
 
-  class TestTwitter extends Twitter with TestUrlComponent with TwitterTimeoutComponent with TestSignatureComponent {
+  class TestTwitter extends TwitterImpl with TestUrlComponent with TwitterTimeoutComponent with TestSignatureComponent {
     def timeout: FiniteDuration = 1.hour
   }
 
@@ -68,7 +68,7 @@ class TwitterSpec extends PlaySpecification {
     })
 
     "reconnect to the web service after not receiving any messages for a given time period" in new WithServer(firstRequestIgnoringWebService) {
-      val twitter: Twitter = new Twitter with TestUrlComponent with TwitterTimeoutComponent with TestSignatureComponent {
+      val twitter: Twitter = new TwitterImpl with TestUrlComponent with TwitterTimeoutComponent with TestSignatureComponent {
         val timeout = 1.second
       }
 

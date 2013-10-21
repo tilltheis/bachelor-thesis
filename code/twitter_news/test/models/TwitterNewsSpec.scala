@@ -1,16 +1,12 @@
 package models
 
-import scala.concurrent.duration._
 import scala.concurrent.Future
-import scala.concurrent.duration.FiniteDuration
 
 import org.joda.time.{Duration => JodaDuration, DateTime}
 
 import play.api.test._
 import play.api.libs.iteratee.{Enumeratee, Iteratee, Concurrent}
 import play.api.libs.iteratee.Concurrent.Channel
-import play.api.libs.ws.SignatureCalculator
-import play.api.libs.ws.WS.WSRequest
 
 import helpers.TweetSamples._
 
@@ -20,20 +16,6 @@ class TwitterNewsSpec extends PlaySpecification {
   def pushAll[E](channel: Channel[E], sleepDuration: Long, elements: E*) =
     elements.foreach { x => channel.push(x) ; Thread.sleep(sleepDuration) }
 
-  trait TestSignatureComponent extends TwitterSignatureComponent {
-    val signature: SignatureCalculator = new SignatureCalculator {
-      def sign(request: WSRequest): Unit = ()
-    }
-  }
-
-  trait TestUrlComponent extends TwitterUrlComponent {
-    def tweetUrlFromId(id: Long): String = s"http://localhost:$testServerPort/$id"
-    def statusStreamUrl: String = "http://localhost:" + testServerPort
-  }
-
-  class TestTwitter extends Twitter with TestUrlComponent with TwitterTimeoutComponent with TestSignatureComponent {
-    def timeout: FiniteDuration = 1.hour
-  }
 
   def twitterWithChannel: (Twitter, Channel[Tweet]) = {
     val (enumerator, channel) = Concurrent.broadcast[Tweet]
@@ -42,7 +24,7 @@ class TwitterNewsSpec extends PlaySpecification {
                          , tweetWithReply.id -> tweetWithReply
                          , tweetWithRetweetAndReply.id -> tweetWithRetweetAndReply
                          )
-    val twitter = new TestTwitter {
+    val twitter = new Twitter {
       override val statusStream = enumerator
       override def fetchTweet(id: Long): Future[Tweet] = {
         println(s"fetchTweet($id)")
@@ -51,6 +33,7 @@ class TwitterNewsSpec extends PlaySpecification {
     }
     (twitter, channel)
   }
+
 
   "the mostRetweetedEnumerator" should {
     "enumerate the most retweeted tweets" in new WithApplication {

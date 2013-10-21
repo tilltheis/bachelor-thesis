@@ -24,7 +24,7 @@ object TwitterNews {
             mostTweetedLimit: Int = 10,
             mostRetweetedLimit: Int = 10,
             mostDiscussedLimit: Int = 10): TwitterNews =
-    new TwitterNews(Twitter,
+    new TwitterNews(TwitterImpl,
                     relevantDuration,
                     mostTweetedLimit,
                     mostRetweetedLimit,
