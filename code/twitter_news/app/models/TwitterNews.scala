@@ -116,16 +116,6 @@ class TwitterNews(val twitter: Twitter,
 
 
 
-  def throttledMostTweetedEnumerator(sleepingDuration: JodaDuration): Enumerator[Map[String, Int]] =
-    mostTweetedEnumerator.through(SleepingEnumeratee(sleepingDuration))
-
-  def throttledMostRetweetedEnumerator(sleepingDuration: JodaDuration): Enumerator[Seq[Tweet]] =
-    mostRetweetedEnumerator.through(SleepingEnumeratee(sleepingDuration))
-
-  def throttledMostDiscussedEnumerator(sleepingDuration: JodaDuration): Enumerator[Seq[Tweet]] =
-    mostDiscussedEnumerator.through(SleepingEnumeratee(sleepingDuration))
-
-
   private def updatedMostTweeted(mostTweeted: Map[String, Int],
                                  newIrrelevantTweets: Seq[Tweet],
                                  newRelevantTweet: Tweet): Map[String, Int] = {

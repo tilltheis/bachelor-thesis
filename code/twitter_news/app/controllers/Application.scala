@@ -7,10 +7,10 @@ import org.joda.time.{Duration => JodaDuration}
 import play.api.mvc._
 import play.api.libs.EventSource
 import play.api.libs.json._
-
-import models.TwitterNews
-import models.JsonImplicits._
 import play.api.libs.iteratee.Enumerator
+
+import models.{SleepingEnumeratee, TwitterNews}
+import models.JsonImplicits._
 
 
 // tweet format: https://dev.twitter.com/docs/platform-objects/tweets
@@ -24,7 +24,7 @@ object Application extends Controller {
 
   private val mostTweetedUpdateInterval = JodaDuration.standardSeconds(1)
   private val mostRetweetedUpdateInterval = JodaDuration.standardSeconds(5)
-  private val mostDiscussedUpdateInterval = JodaDuration.standardSeconds(10)
+  private val mostDiscussedUpdateInterval = JodaDuration.standardSeconds(5)
 
 
   def index = Action {
@@ -34,17 +34,20 @@ object Application extends Controller {
   }
 
   def mostTweetedEventSource =
-    jsonEventSourceHandler(twitterNews.throttledMostTweetedEnumerator(mostTweetedUpdateInterval))
+    jsonEventSourceHandler(throttle(twitterNews.mostTweetedEnumerator, mostTweetedUpdateInterval))
 
   def mostRetweetedEventSource =
-    jsonEventSourceHandler(twitterNews.throttledMostRetweetedEnumerator(mostRetweetedUpdateInterval))
+    jsonEventSourceHandler(throttle(twitterNews.mostRetweetedEnumerator, mostRetweetedUpdateInterval))
 
   def mostDiscussedEventSource =
-    jsonEventSourceHandler(twitterNews.throttledMostDiscussedEnumerator(mostDiscussedUpdateInterval))
+    jsonEventSourceHandler(throttle(twitterNews.mostDiscussedEnumerator, mostDiscussedUpdateInterval))
 
 
   private def jsonEventSourceHandler[A](e: Enumerator[A])(implicit ev: Writes[A]) = Action {
     Ok.chunked(e.map(Json.toJson(_)).through(EventSource())).as("text/event-stream")
   }
+
+  private def throttle[E](e: Enumerator[E], d: JodaDuration): Enumerator[E] =
+    e.through(SleepingEnumeratee(d))
 
 }
