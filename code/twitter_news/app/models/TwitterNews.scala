@@ -10,7 +10,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import org.joda.time.{Duration => JodaDuration}
 
 import play.api.libs.iteratee.{Concurrent, Enumeratee, Enumerator}
-import play.api.{Logger, Play}
+import play.api.Play
 import play.api.Play.current
 import scala.util.{Failure, Success, Try}
 import play.api.cache.Cache
@@ -96,14 +96,11 @@ class TwitterNews(val twitter: Twitter,
     mostDiscussedIdsEnumerator.through(
       Concurrent.buffer(1).compose(
         Enumeratee.map[Seq[Long]] { ids =>
-          val r = Try(Await.result(twitter.fetchTweets(ids), tweetFetchingTimeout))
-          Logger.debug(s"RESULT: $r")
-          r
+          Try(Await.result(twitter.fetchTweets(ids), tweetFetchingTimeout))
         }
       ).compose(
         Enumeratee.collect {
           case Success(tweets) =>
-            Logger.debug(s"save $tweets")
             mostDiscussed = tweets
             tweets
         }
