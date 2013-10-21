@@ -5,7 +5,7 @@ import scala.concurrent.Future
 import org.joda.time.{Duration => JodaDuration, DateTime}
 
 import play.api.test._
-import play.api.libs.iteratee.{Enumeratee, Iteratee, Concurrent}
+import play.api.libs.iteratee.{Enumerator, Enumeratee, Iteratee, Concurrent}
 import play.api.libs.iteratee.Concurrent.Channel
 
 import helpers.TweetSamples._
@@ -20,10 +20,10 @@ class TwitterNewsSpec extends PlaySpecification {
   def twitterWithChannel: (Twitter, Channel[Tweet]) = {
     val (enumerator, channel) = Concurrent.broadcast[Tweet]
     val idsToTweets = Map( tweet.id -> tweet
-                         , tweetWithRetweet.id -> tweetWithRetweet
-                         , tweetWithReply.id -> tweetWithReply
-                         , tweetWithRetweetAndReply.id -> tweetWithRetweetAndReply
-                         )
+      , tweetWithRetweet.id -> tweetWithRetweet
+      , tweetWithReply.id -> tweetWithReply
+      , tweetWithRetweetAndReply.id -> tweetWithRetweetAndReply
+    )
     val twitter = new Twitter {
       override val statusStream = enumerator
       override def fetchTweet(id: Long): Future[Tweet] = {
@@ -35,12 +35,28 @@ class TwitterNewsSpec extends PlaySpecification {
   }
 
 
+  def twitterFromEnumerator(e: Enumerator[Tweet]): Twitter = {
+    val idsToTweets = Map( tweet.id -> tweet
+      , tweetWithRetweet.id -> tweetWithRetweet
+      , tweetWithReply.id -> tweetWithReply
+      , tweetWithRetweetAndReply.id -> tweetWithRetweetAndReply
+    )
+    new Twitter {
+      override val statusStream = e
+      override def fetchTweet(id: Long): Future[Tweet] = {
+        println(s"fetchTweet($id)")
+        Future.successful(idsToTweets(id))
+      }
+    }
+  }
+
+
   "the mostRetweetedEnumerator" should {
     "enumerate the most retweeted tweets" in new WithApplication {
       val (twitter, channel) = twitterWithChannel
       val e = twitter.statusStream
       val twitterNews = new TwitterNews(twitter, JodaDuration.standardDays(99999), 10, 10, 10)
-      val i = Enumeratee.take(5).transform(Iteratee.getChunks[Seq[Tweet]])
+      val i = Enumeratee.take(5).transform(Iteratee.getChunks[Map[Tweet, Int]])
       val mostRetweetedSeqsM = twitterNews.mostRetweetedEnumerator.run(i)
 
       pushAll(channel, tweet,
@@ -49,13 +65,13 @@ class TwitterNewsSpec extends PlaySpecification {
                        tweetWithRetweetAndReply,
                        tweetWithRetweet)
 
-      val actual: List[Seq[Tweet]] = await(mostRetweetedSeqsM)
-      val expected: List[Seq[Tweet]] =
-        List( Seq.empty
-            , Seq(tweetWithRetweet)
-            , Seq(tweetWithRetweet)
-            , Seq(tweetWithRetweet, tweet)
-            , Seq(tweet, tweetWithRetweet)
+      val actual: List[Map[Tweet, Int]] = await(mostRetweetedSeqsM)
+      val expected: List[Map[Tweet, Int]] =
+        List( Map.empty
+            , Map(tweetWithRetweet -> 1)
+            , Map(tweetWithRetweet -> 1)
+            , Map(tweetWithRetweet -> 1, tweet -> 1)
+            , Map(tweet -> 2, tweetWithRetweet -> 1)
             )
 
       actual === expected
@@ -63,14 +79,14 @@ class TwitterNewsSpec extends PlaySpecification {
 
     "enumerate the most retweeted tweets in a given time period" in new WithApplication {
       val (twitter, channel) = twitterWithChannel
-      val e = twitter.statusStream
-      val twitterNews = new TwitterNews(twitter, JodaDuration.standardSeconds(1), 0, 10, 0)
+      val twitterNews1 = new TwitterNews(twitter, JodaDuration.standardSeconds(1), 0, 10, 0)
+      val twitterNews2 = new TwitterNews(twitter, JodaDuration.standardSeconds(1), 0, 10, 0)
 
-      val i1 = Enumeratee.take(2).transform(Iteratee.getChunks[Seq[Tweet]])
-      val mostRetweetedSeqsM1 = twitterNews.mostRetweetedEnumerator.run(i1)
+      val i1 = Enumeratee.take(2).transform(Iteratee.getChunks[Map[Tweet, Int]])
+      val mostRetweetedSeqsM1 = twitterNews1.mostRetweetedEnumerator.run(i1)
 
-      val i2 = Enumeratee.take(3).transform(Iteratee.getChunks[Seq[Tweet]])
-      val mostRetweetedSeqsM2 = twitterNews.mostRetweetedEnumerator.run(i2)
+      val i2 = Enumeratee.take(3).transform(Iteratee.getChunks[Map[Tweet, Int]])
+      val mostRetweetedSeqsM2 = twitterNews2.mostRetweetedEnumerator.run(i2)
 
       val tweet1 = tweetWithRetweet.copy(date = DateTime.now().minusSeconds(2))
       val tweet2 = tweet.copy(retweetOfTweet = Some(tweetWithRetweet), date = DateTime.now())
@@ -78,16 +94,16 @@ class TwitterNewsSpec extends PlaySpecification {
 
       pushAll(channel, tweet1, tweet2)
 
-      val actual1: List[Seq[Tweet]] = await(mostRetweetedSeqsM1)
-      val expected1: List[Seq[Tweet]] = List(Seq.empty, Seq(tweetWithRetweet))
+      val actual1: List[Map[Tweet, Int]] = await(mostRetweetedSeqsM1)
+      val expected1: List[Map[Tweet, Int]] = List(Map.empty, Map(tweetWithRetweet -> 1))
       actual1 === expected1
 
       Thread.sleep(1000)
 
       channel.push(tweet3)
 
-      val actual2: List[Seq[Tweet]] = await(mostRetweetedSeqsM2)
-      val expected2: List[Seq[Tweet]] = List(Seq.empty, Seq(tweetWithRetweet), Seq.empty)
+      val actual2: List[Map[Tweet, Int]] = await(mostRetweetedSeqsM2)
+      val expected2: List[Map[Tweet, Int]] = List(Map.empty, Map(tweetWithRetweet -> 1), Map.empty)
       actual2 === expected2
     }
 
@@ -95,18 +111,18 @@ class TwitterNewsSpec extends PlaySpecification {
       val (twitter, channel) = twitterWithChannel
       val e = twitter.statusStream
       val twitterNews = new TwitterNews(twitter, JodaDuration.standardDays(99999), 10, 2, 10)
-      val i = Enumeratee.take(3).transform(Iteratee.getChunks[Seq[Tweet]])
+      val i = Enumeratee.take(3).transform(Iteratee.getChunks[Map[Tweet, Int]])
       val mostRetweetedSeqsM = twitterNews.mostRetweetedEnumerator.run(i)
 
       pushAll(channel, tweetWithRetweet,
                        tweet.copy(retweetOfTweet = Some(tweetWithRetweet)),
                        tweet.copy(retweetOfTweet = Some(tweetWithReply)))
 
-      val actual: List[Seq[Tweet]] = await(mostRetweetedSeqsM)
-      val expected: List[Seq[Tweet]] =
-        List( Seq(tweet)
-            , Seq(tweet, tweetWithRetweet)
-            , Seq(tweet, tweetWithRetweet)
+      val actual: List[Map[Tweet, Int]] = await(mostRetweetedSeqsM)
+      val expected: List[Map[Tweet, Int]] =
+        List( Map(tweet -> 1)
+            , Map(tweet -> 1, tweetWithRetweet -> 1)
+            , Map(tweet -> 1, tweetWithRetweet -> 1)
             )
 
       actual === expected

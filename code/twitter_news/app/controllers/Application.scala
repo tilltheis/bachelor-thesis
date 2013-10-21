@@ -36,8 +36,14 @@ object Application extends Controller {
   def mostTweetedEventSource =
     jsonEventSourceHandler(throttle(twitterNews.mostTweetedEnumerator, mostTweetedUpdateInterval))
 
-  def mostRetweetedEventSource =
-    jsonEventSourceHandler(throttle(twitterNews.mostRetweetedEnumerator, mostRetweetedUpdateInterval))
+  def mostRetweetedEventSource = {
+    val e = throttle(twitterNews.mostRetweetedEnumerator, mostRetweetedUpdateInterval).map { map =>
+      map.toSeq.sortBy(-_._2).map { case (tweet, retweetCount) =>
+        Json.obj("tweet" -> tweet, "retweetCount" -> retweetCount)
+      }
+    }
+    jsonEventSourceHandler(e)
+  }
 
   def mostDiscussedEventSource =
     jsonEventSourceHandler(throttle(twitterNews.mostDiscussedEnumerator, mostDiscussedUpdateInterval))

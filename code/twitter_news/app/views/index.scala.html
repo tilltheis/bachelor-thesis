@@ -1,4 +1,4 @@
-@(mostTweeted: Map[String, Int], mostRetweeted: Seq[Tweet], mostDiscussed: Seq[Tweet])
+@(mostTweeted: Map[String, Int], mostRetweeted: Map[Tweet, Int], mostDiscussed: Seq[Tweet])
 
 @import play.api.libs.json.Json
 
@@ -34,6 +34,7 @@
             <div class="date">
               <small><a href="https://twitter.com/{{userScreenName}}/statuses/{{id}}">{{dateString}}</a></small>
             </div>
+            <div class="pull-left extra">{{extra}}</div>
             <div class="pull-right actions">
               <a href="https://twitter.com/intent/tweet?in_reply_to={{id}}" class="reply"></a>
               <a href="https://twitter.com/intent/retweet?tweet_id={{id}}" class="retweet"></a>
@@ -167,7 +168,9 @@
 
       mostRetweetedList.innerHTML = "";
 
-      seq.forEach(function(tweet, i) {
+      seq.forEach(function(object, i) {
+        var tweet = object.tweet
+        tweet.extra = object.retweetCount + " Retweets"
         // var tweetElement = document.getElementById("mostRetweetedListItem" + i);
         // if (parseInt(tweetElement.dataset.tweetId, 10) !== tweet.id) {
           var date = new Date(tweet.date);

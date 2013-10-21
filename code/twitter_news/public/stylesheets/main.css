@@ -33,7 +33,13 @@
 }
 
 .tweet .date a {
-  color: #777
+  color: #777;
+}
+
+.tweet .extra {
+  margin-top: 10px;
+  margin-bottom: -7px;
+  color: #777;
 }
 
 .tweet .actions {

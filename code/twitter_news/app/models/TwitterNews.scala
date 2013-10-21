@@ -47,20 +47,20 @@ class TwitterNews(val twitter: Twitter,
   @volatile private var mostDiscussedIds: Seq[Long] = Seq.empty
 
   @volatile private var _mostTweeted: Map[String, Int] = Map.empty
-  @volatile private var _mostRetweeted: Seq[Tweet] = Seq.empty
+  @volatile private var _mostRetweeted: Map[Tweet, Int] = Map.empty
   @volatile private var _mostDiscussed: Seq[Tweet] = Seq.empty
 
   def mostTweeted: Map[String, Int] = _mostTweeted
   private def mostTweeted_=(value: Map[String, Int]): Unit = _mostTweeted = value
 
-  def mostRetweeted: Seq[Tweet] = _mostRetweeted
-  private def mostRetweeted_=(value: Seq[Tweet]): Unit = _mostRetweeted = value
+  def mostRetweeted: Map[Tweet, Int] = _mostRetweeted
+  private def mostRetweeted_=(value: Map[Tweet, Int]): Unit = _mostRetweeted = value
 
   def mostDiscussed: Seq[Tweet] = _mostDiscussed
   private def mostDiscussed_=(value: Seq[Tweet]): Unit = _mostDiscussed = value
 
 
-  private val newsEnumerator: Enumerator[(Map[String, Int], Seq[Tweet], Seq[Long])] = {
+  private val newsEnumerator: Enumerator[(Map[String, Int], Map[Tweet, Int], Seq[Long])] = {
     def isOutdated(tweet: Tweet): Boolean =
       tweet.date.withDurationAdded(relevantDuration, 1).isBeforeNow
 
@@ -83,7 +83,7 @@ class TwitterNews(val twitter: Twitter,
 
 
   val mostTweetedEnumerator: Enumerator[Map[String, Int]] = newsEnumerator.map(_._1)
-  val mostRetweetedEnumerator: Enumerator[Seq[Tweet]] = newsEnumerator.map(_._2)
+  val mostRetweetedEnumerator: Enumerator[Map[Tweet, Int]] = newsEnumerator.map(_._2)
   val mostDiscussedIdsEnumerator: Enumerator[Seq[Long]] = newsEnumerator.map(_._3)
 
 
@@ -143,14 +143,14 @@ class TwitterNews(val twitter: Twitter,
   }
 
 
-  private def updatedMostRetweeted: Seq[Tweet] = {
+  private def updatedMostRetweeted: Map[Tweet, Int] = {
     val map = relevantTweets.foldLeft(Map.empty[Tweet, Int]) { case (map, tweet) =>
       tweet.retweetOfTweet.map { originalTweet =>
         map.updated(originalTweet, map.getOrElse(originalTweet, 0) + 1)
       }.getOrElse(map)
     }
 
-    map.toSeq.sortBy { case (id, count) => -count }.take(mostRetweetedLimit).map(_._1)
+    map.toSeq.sortBy { case (id, count) => -count }.take(mostRetweetedLimit).toMap
   }
 
 
