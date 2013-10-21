@@ -3,8 +3,9 @@ package models
 import java.util.Locale
 
 import scala.io.{Codec, Source}
+import scala.util.{Success, Try}
 import scala.concurrent.duration._
-import scala.concurrent.{Future, Await}
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import org.joda.time.{Duration => JodaDuration}
@@ -12,8 +13,6 @@ import org.joda.time.{Duration => JodaDuration}
 import play.api.libs.iteratee.{Concurrent, Enumeratee, Enumerator}
 import play.api.Play
 import play.api.Play.current
-import scala.util.{Failure, Success, Try}
-import play.api.cache.Cache
 
 
 object TwitterNews {

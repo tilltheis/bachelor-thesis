@@ -1,7 +1,8 @@
 package models
 
-import play.api.libs.iteratee._
 import org.joda.time.{Duration, DateTime}
+
+import play.api.libs.iteratee._
 import play.api.libs.iteratee.Enumeratee.CheckDone
 
 

@@ -4,14 +4,14 @@ import java.util.Locale
 
 import scala.util.control.Exception.catching
 
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.json.JsString
 import play.api.data.validation.ValidationError
 import play.api.libs.json.JsSuccess
-
-import org.joda.time.DateTime
-import org.joda.time.format.DateTimeFormat
 
 
 // json reads and writes for tweets (see https://dev.twitter.com/docs/platform-objects/tweets)

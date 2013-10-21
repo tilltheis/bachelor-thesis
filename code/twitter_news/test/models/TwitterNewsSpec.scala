@@ -1,20 +1,19 @@
 package models
 
 import scala.concurrent.duration._
-import scala.concurrent.{Future, Promise}
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
+import scala.concurrent.duration.FiniteDuration
 
 import org.joda.time.{Duration => JodaDuration, DateTime}
 
 import play.api.test._
 import play.api.libs.iteratee.{Enumeratee, Iteratee, Concurrent}
-
-import helpers.TweetSamples._
 import play.api.libs.iteratee.Concurrent.Channel
 import play.api.libs.ws.SignatureCalculator
 import play.api.libs.ws.WS.WSRequest
-import scala.concurrent.duration.FiniteDuration
-import scala.{concurrent, Some}
+
+import helpers.TweetSamples._
+
 
 class TwitterNewsSpec extends PlaySpecification {
   def pushAll[E](channel: Channel[E], elements: E*) = elements.foreach(channel.push)

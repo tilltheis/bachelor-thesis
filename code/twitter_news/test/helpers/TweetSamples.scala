@@ -3,8 +3,11 @@ package helpers
 import java.util.Locale
 
 import org.joda.time.format.DateTimeFormat
+
 import play.api.libs.json.Json
+
 import models.Tweet
+
 
 object TweetSamples {
   val tweet = Tweet(390480969875996673L, "tweet1", 1277548441L, "name1", "screenName1", "http://example.org/img1.png", stringToDateTime("Wed Oct 16 14:14:52 +0000 2013"), None, None)

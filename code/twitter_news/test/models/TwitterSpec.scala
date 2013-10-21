@@ -1,16 +1,19 @@
 package models
 
+import java.util.concurrent.TimeoutException
+
 import scala.concurrent.duration._
 
 import play.api.test._
 import play.api.mvc.Results._
 import play.api.libs.iteratee.{Iteratee, Enumeratee, Enumerator}
-import helpers.TweetSamples._
 import play.api.test.FakeApplication
 import play.api.mvc.{Handler, Action}
 import play.api.libs.ws.SignatureCalculator
 import play.api.libs.ws.WS.WSRequest
-import java.util.concurrent.TimeoutException
+
+import helpers.TweetSamples._
+
 
 class TwitterSpec extends PlaySpecification {
 

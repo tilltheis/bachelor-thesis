@@ -1,8 +1,11 @@
 package models
 
-import play.api.test._
 import org.joda.time.Duration
+
+import play.api.test._
+
 import play.api.libs.iteratee.{Enumerator, Enumeratee, Iteratee, Concurrent}
+
 
 class SleepingEnumerateeSpec extends PlaySpecification {
   "The SleepingEnumeratee" should {

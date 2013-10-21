@@ -5,10 +5,9 @@ import org.joda.time.DateTime
 import play.api.test.PlaySpecification
 import play.api.libs.json.{JsSuccess, Json}
 
-import helpers.TweetSamples
-import TweetSamples._
-
 import JsonImplicits._
+import helpers.TweetSamples._
+
 
 class JsonImplicitsSpec extends PlaySpecification {
   "JsonImplicits" should {
