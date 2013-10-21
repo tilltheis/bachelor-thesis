@@ -4,15 +4,16 @@ import java.util.Locale
 
 import scala.io.{Codec, Source}
 import scala.concurrent.duration._
-import scala.concurrent.Await
+import scala.concurrent.{Future, Await}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import org.joda.time.{Duration => JodaDuration}
 
-import play.api.libs.iteratee.{Enumeratee, Enumerator}
-import play.api.Play
+import play.api.libs.iteratee.{Concurrent, Enumeratee, Enumerator}
+import play.api.{Logger, Play}
 import play.api.Play.current
-import scala.util.{Success, Try}
+import scala.util.{Failure, Success, Try}
+import play.api.cache.Cache
 
 
 object TwitterNews {
@@ -74,8 +75,8 @@ class TwitterNews(val twitter: Twitter,
 
       mostTweeted = updatedMostTweeted(mostTweeted, newIrrelevantTweets, tweet)
       mostRetweeted = updatedMostRetweeted
-      mostDiscussedIds = updatedMostDiscussed
-      // mostDiscussed will be updated by updateMostDiscussedEnumeratee
+      mostDiscussedIds = updatedMostDiscussedIds
+      // mostDiscussed will be updated by mostDiscussedEnumerator
 
       (mostTweeted, mostRetweeted, mostDiscussedIds)
     }
@@ -84,7 +85,35 @@ class TwitterNews(val twitter: Twitter,
 
   val mostTweetedEnumerator: Enumerator[Map[String, Int]] = newsEnumerator.map(_._1)
   val mostRetweetedEnumerator: Enumerator[Seq[Tweet]] = newsEnumerator.map(_._2)
-  val mostDiscussedEnumerator: Enumerator[Seq[Long]] = newsEnumerator.map(_._3)
+  val mostDiscussedIdsEnumerator: Enumerator[Seq[Long]] = newsEnumerator.map(_._3)
+
+
+  // translate tweet ids to real tweets by fetching tweets from twitter
+  // times out after <tweetFetchingTimeout> and continues with the next list of ids
+  // it will buffer one set of incoming ids and will skip old ids if fetching takes too long
+  val tweetFetchingTimeout: Duration = 10.seconds
+  val mostDiscussedEnumerator: Enumerator[Seq[Tweet]] =
+    mostDiscussedIdsEnumerator.through(
+      Concurrent.buffer(1).compose(
+        Enumeratee.map[Seq[Long]] { ids =>
+          val r = Try(Await.result(twitter.fetchTweets(ids), tweetFetchingTimeout))
+          Logger.debug(s"RESULT: $r")
+          r
+        }
+      ).compose(
+        Enumeratee.collect {
+          case Success(tweets) =>
+            Logger.debug(s"save $tweets")
+            mostDiscussed = tweets
+            tweets
+        }
+      )
+    )
+
+//  the following doesn't work because the updateMostDiscussedEnumeratee at the end will make the whole thing do nothing (don't know why)
+//    mostDiscussedIdsEnumerator.through(discussionTweetFetchingEnumeratee(tweetFetchingTimeout)) // would return Seq[Tweet]
+//                              .through(updateMostDiscussedEnumeratee)                           // would update mostDiscussed-var
+
 
 
   def throttledMostTweetedEnumerator(sleepingDuration: JodaDuration): Enumerator[Map[String, Int]] =
@@ -95,23 +124,6 @@ class TwitterNews(val twitter: Twitter,
 
   def throttledMostDiscussedEnumerator(sleepingDuration: JodaDuration): Enumerator[Seq[Tweet]] =
     mostDiscussedEnumerator.through(SleepingEnumeratee(sleepingDuration))
-                           .map(ids => Try(Await.result(twitter.fetchTweets(ids), sleepingDuration.getMillis.millis)))
-                           .through(Enumeratee.collect { case Success(tweets) => tweets })
-//                           .through(discussionTweetFetchingEnumeratee(sleepingDuration.getMillis.millis))
-                           .through(updateMostDiscussedEnumeratee)
-
-
-  private val updateMostDiscussedEnumeratee: Enumeratee[Seq[Tweet], Seq[Tweet]] =
-    Enumeratee.map { tweets => { mostDiscussed = tweets ; tweets } }
-
-
-  // translate tweet ids to real tweets by fetching tweets from twitter
-  // times out after mostDiscussedUpdateRate and continues with the next list of ids
-  // it should be used with a SleepingEnumeratee because fetching tweets takes time
-  private def discussionTweetFetchingEnumeratee(timeout: Duration): Enumeratee[Seq[Long], Seq[Tweet]] =
-    Enumeratee.map[Seq[Long]] { ids =>
-      Try(Await.result(twitter.fetchTweets(ids), timeout))
-    }.compose(Enumeratee.collect { case Success(tweets) => tweets })
 
 
   private def updatedMostTweeted(mostTweeted: Map[String, Int],
@@ -156,7 +168,7 @@ class TwitterNews(val twitter: Twitter,
   }
 
 
-  private def updatedMostDiscussed: Seq[Long] = {
+  private def updatedMostDiscussedIds: Seq[Long] = {
     val map = relevantTweets.foldLeft(Map.empty[Long, Int]) { case (map, tweet) =>
       tweet.replyToTweetId.map { discussedTweetId =>
         map.updated(discussedTweetId, map.getOrElse(discussedTweetId, 0) + 1)
