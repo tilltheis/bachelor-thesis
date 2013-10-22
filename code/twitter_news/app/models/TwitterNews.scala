@@ -10,7 +10,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import org.joda.time.{Duration => JodaDuration}
 
-import play.api.libs.iteratee.{Concurrent, Enumeratee, Enumerator}
+import play.api.libs.iteratee.{Iteratee, Concurrent, Enumeratee, Enumerator}
 import play.api.Play
 import play.api.Play.current
 
@@ -44,47 +44,47 @@ class TwitterNews(val twitter: Twitter,
 
   // these vars are accessed inside of different iteratees/enumerators/enumeratees
   // better make them volatile to make sure changes are immediately visible
-  @volatile private var mostDiscussedIds: Map[Long, Int] = Map.empty
-
   @volatile private var _mostTweeted: Map[String, Int] = Map.empty
   @volatile private var _mostRetweeted: Map[Tweet, Int] = Map.empty
+  @volatile private var _mostDiscussedIds: Map[Long, Int] = Map.empty
   @volatile private var _mostDiscussed: Map[Tweet, Int] = Map.empty
 
-  def mostTweeted: Map[String, Int] = _mostTweeted
-  private def mostTweeted_=(value: Map[String, Int]): Unit = _mostTweeted = value
-
-  def mostRetweeted: Map[Tweet, Int] = _mostRetweeted
-  private def mostRetweeted_=(value: Map[Tweet, Int]): Unit = _mostRetweeted = value
-
-  def mostDiscussed: Map[Tweet, Int] = _mostDiscussed
-  private def mostDiscussed_=(value: Map[Tweet, Int]): Unit = _mostDiscussed = value
+  def mostTweeted = _mostTweeted
+  def mostRetweeted = _mostRetweeted
+  def mostDiscussedIds = _mostDiscussedIds
+  def mostDiscussed = _mostDiscussed
 
 
-  private val newsEnumerator: Enumerator[(Map[String, Int], Map[Tweet, Int], Map[Long, Int])] = {
-    def isOutdated(tweet: Tweet): Boolean =
-      tweet.date.withDurationAdded(relevantDuration, 1).isBeforeNow
+  private val (_mostTweetedEnumerator, _mostTweetedChannel) = Concurrent.broadcast[Map[String, Int]]
+  private val (_mostRetweetedEnumerator, _mostRetweetedChannel) = Concurrent.broadcast[Map[Tweet, Int]]
+  private val (_mostDiscussedIdsEnumerator, _mostDiscussedIdsChannel) = Concurrent.broadcast[Map[Long, Int]]
 
-    tweetEnumerator.map { tweet =>
-      // clean up old tweets and add new one in one step
-      val newIrrelevantTweets = relevantTweets.takeWhile(isOutdated)
-      relevantTweets = relevantTweets.dropWhile(isOutdated)
-      if (!isOutdated(tweet)) {
-        relevantTweets = relevantTweets :+ tweet
-      }
+  val mostTweetedEnumerator = _mostTweetedEnumerator
+  val mostRetweetedEnumerator = _mostRetweetedEnumerator
+  val mostDiscussedIdsEnumerator = _mostDiscussedIdsEnumerator
+  // mostDiscussedEnumerator is defined further down
 
-      mostTweeted = updatedMostTweeted(mostTweeted, newIrrelevantTweets, tweet)
-      mostRetweeted = updatedMostRetweeted
-      mostDiscussedIds = updatedMostDiscussedIds
-      // mostDiscussed will be updated by mostDiscussedEnumerator
 
-      (mostTweeted, mostRetweeted, mostDiscussedIds)
+  private def isOutdated(tweet: Tweet): Boolean =
+    tweet.date.withDurationAdded(relevantDuration, 1).isBeforeNow
+
+  twitter.statusStream.run(Iteratee.foreach[Tweet] { tweet =>
+    // clean up old tweets and add new one in one step
+    val newIrrelevantTweets = relevantTweets.takeWhile(isOutdated)
+    relevantTweets = relevantTweets.dropWhile(isOutdated)
+    if (!isOutdated(tweet)) {
+      relevantTweets = relevantTweets :+ tweet
     }
-  }
 
+    _mostTweeted = updatedMostTweeted(mostTweeted, newIrrelevantTweets, tweet)
+    _mostRetweeted = updatedMostRetweeted
+    _mostDiscussedIds = updatedMostDiscussedIds
+    // mostDiscussed will be updated by mostDiscussedEnumerator
 
-  val mostTweetedEnumerator: Enumerator[Map[String, Int]] = newsEnumerator.map(_._1)
-  val mostRetweetedEnumerator: Enumerator[Map[Tweet, Int]] = newsEnumerator.map(_._2)
-  val mostDiscussedIdsEnumerator: Enumerator[Map[Long, Int]] = newsEnumerator.map(_._3)
+    _mostTweetedChannel.push(mostTweeted)
+    _mostRetweetedChannel.push(mostRetweeted)
+    _mostDiscussedIdsChannel.push(mostDiscussedIds)
+  })
 
 
   // translate tweet ids to real tweets by fetching tweets from twitter
@@ -102,15 +102,11 @@ class TwitterNews(val twitter: Twitter,
       ).compose(
         Enumeratee.collect {
           case Success(tweets) =>
-            mostDiscussed = tweets
+            _mostDiscussed = tweets
             tweets
         }
       )
     )
-
-//  the following doesn't work because the updateMostDiscussedEnumeratee at the end will make the whole thing do nothing (don't know why)
-//    mostDiscussedIdsEnumerator.through(discussionTweetFetchingEnumeratee(tweetFetchingTimeout)) // would return Seq[Tweet]
-//                              .through(updateMostDiscussedEnumeratee)                           // would update mostDiscussed-var
 
 
 

@@ -182,7 +182,7 @@ class TwitterNewsSpec extends PlaySpecification {
       val actual2: List[Map[Long, Int]] = await(mostDiscussedIdsM2)
       val expected2: List[Map[Long, Int]] = List(Map.empty, Map(tweetWithReply.id -> 1), Map.empty)
       actual2 === expected2
-    }.pendingUntilFixed("no duplicate tweets")
+    }
 
     "enumerate the most discussed tweets up to given limit" in {
       val (twitter, channel) = twitterWithChannel
@@ -206,6 +206,20 @@ class TwitterNewsSpec extends PlaySpecification {
   }
 
   "mostDiscussedEnumerator" should {
+    "not receive duplicate tweets when being applied to multiple iteratees" in {
+      val (twitter, channel) = twitterWithChannel
+      val twitterNews = new TwitterNews(twitter, JodaDuration.standardDays(99999), 10, 10, 10)
+      val i1 = Enumeratee.take(2).transform(Iteratee.getChunks[Map[Tweet, Int]])
+      val i2 = Enumeratee.take(2).transform(Iteratee.getChunks[Map[Tweet, Int]])
+      val resultM1 = twitterNews.mostRetweetedEnumerator.run(i1)
+      val resultM2 = twitterNews.mostRetweetedEnumerator.run(i2)
+
+      pushAll(channel, tweetWithRetweet, tweet.copy(retweetOfTweet = Some(tweetWithRetweet)))
+
+      await(resultM1) === Seq(Map(tweet -> 1), Map(tweet -> 1, tweetWithRetweet -> 1))
+      await(resultM2) === Seq(Map(tweet -> 1), Map(tweet -> 1, tweetWithRetweet -> 1))
+    }
+
     "enumerate most discussed tweets" in {
       val (twitter, channel) = twitterWithChannel
       val twitterNews = new TwitterNews(twitter, JodaDuration.standardDays(99999), 10, 10, 10)
