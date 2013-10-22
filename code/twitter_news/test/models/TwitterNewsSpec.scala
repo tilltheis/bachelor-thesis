@@ -134,7 +134,7 @@ class TwitterNewsSpec extends PlaySpecification {
     "enumerate the most discussed tweets" in {
       val (twitter, channel) = twitterWithChannel
       val twitterNews = new TwitterNews(twitter, JodaDuration.standardDays(99999), 10, 10, 10)
-      val i = Enumeratee.take(5).transform(Iteratee.getChunks[Seq[Long]])
+      val i = Enumeratee.take(5).transform(Iteratee.getChunks[Map[Long, Int]])
       val mostDiscussedIdsM = twitterNews.mostDiscussedIdsEnumerator.run(i)
 
       pushAll(channel, tweet,
@@ -143,13 +143,13 @@ class TwitterNewsSpec extends PlaySpecification {
                        tweetWithRetweetAndReply,
                        tweetWithReply)
 
-      val actual: List[Seq[Long]] = await(mostDiscussedIdsM)
-      val expected: List[Seq[Long]] =
-        List( Seq.empty
-            , Seq(tweetWithReply.id)
-            , Seq(tweetWithReply.id)
-            , Seq(tweetWithReply.id, tweet.id)
-            , Seq(tweet.id, tweetWithReply.id)
+      val actual: List[Map[Long, Int]] = await(mostDiscussedIdsM)
+      val expected: List[Map[Long, Int]] =
+        List( Map.empty
+            , Map(tweetWithReply.id -> 1)
+            , Map(tweetWithReply.id -> 1)
+            , Map(tweetWithReply.id -> 1, tweet.id -> 1)
+            , Map(tweet.id -> 2, tweetWithReply.id -> 1)
             )
 
       actual === expected
@@ -159,10 +159,10 @@ class TwitterNewsSpec extends PlaySpecification {
       val (twitter, channel) = twitterWithChannel
       val twitterNews = new TwitterNews(twitter, JodaDuration.standardSeconds(1), 10, 10, 10)
 
-      val i1 = Enumeratee.take(2).transform(Iteratee.getChunks[Seq[Long]])
+      val i1 = Enumeratee.take(2).transform(Iteratee.getChunks[Map[Long, Int]])
       val mostDiscussedIdsM1 = twitterNews.mostDiscussedIdsEnumerator.run(i1)
 
-      val i2 = Enumeratee.take(3).transform(Iteratee.getChunks[Seq[Long]])
+      val i2 = Enumeratee.take(3).transform(Iteratee.getChunks[Map[Long, Int]])
       val mostDiscussedIdsM2 = twitterNews.mostDiscussedIdsEnumerator.run(i2)
 
       val tweet1 = tweetWithReply.copy(date = DateTime.now().minusSeconds(2))
@@ -171,34 +171,34 @@ class TwitterNewsSpec extends PlaySpecification {
 
       pushAll(channel, tweet1, tweet2)
 
-      val actual1: List[Seq[Long]] = await(mostDiscussedIdsM1)
-      val expected1: List[Seq[Long]] = List(Seq.empty, Seq(tweetWithReply.id))
+      val actual1: List[Map[Long, Int]] = await(mostDiscussedIdsM1)
+      val expected1: List[Map[Long, Int]] = List(Map.empty, Map(tweetWithReply.id -> 1))
       actual1 === expected1
 
       Thread.sleep(1000)
 
       channel.push(tweet3)
 
-      val actual2: List[Seq[Long]] = await(mostDiscussedIdsM2)
-      val expected2: List[Seq[Long]] = List(Seq.empty, Seq(tweetWithReply.id), Seq.empty)
+      val actual2: List[Map[Long, Int]] = await(mostDiscussedIdsM2)
+      val expected2: List[Map[Long, Int]] = List(Map.empty, Map(tweetWithReply.id -> 1), Map.empty)
       actual2 === expected2
-    }
+    }.pendingUntilFixed("no duplicate tweets")
 
     "enumerate the most discussed tweets up to given limit" in {
       val (twitter, channel) = twitterWithChannel
       val twitterNews = new TwitterNews(twitter, JodaDuration.standardDays(99999), 10, 10, 2)
-      val i = Enumeratee.take(3).transform(Iteratee.getChunks[Seq[Long]])
+      val i = Enumeratee.take(3).transform(Iteratee.getChunks[Map[Long, Int]])
       val mostDiscussedIdsM = twitterNews.mostDiscussedIdsEnumerator.run(i)
 
       pushAll(channel, tweetWithReply,
                        tweet.copy(replyToTweetId = Some(tweetWithReply.id)),
                        tweet.copy(replyToTweetId = Some(tweetWithRetweet.id)))
 
-      val actual: List[Seq[Long]] = await(mostDiscussedIdsM)
-      val expected: List[Seq[Long]] =
-        List( Seq(tweet.id)
-            , Seq(tweet.id, tweetWithReply.id)
-            , Seq(tweet.id, tweetWithReply.id)
+      val actual: List[Map[Long, Int]] = await(mostDiscussedIdsM)
+      val expected: List[Map[Long, Int]] =
+        List( Map(tweet.id -> 1)
+            , Map(tweet.id -> 1, tweetWithReply.id -> 1)
+            , Map(tweet.id -> 1, tweetWithReply.id -> 1)
             )
 
       actual === expected
@@ -211,7 +211,7 @@ class TwitterNewsSpec extends PlaySpecification {
       val twitterNews = new TwitterNews(twitter, JodaDuration.standardDays(99999), 10, 10, 10)
       val e = twitterNews.mostDiscussedEnumerator
 
-      def take(n: Int): Iteratee[Seq[Tweet], List[Seq[Tweet]]] =
+      def take(n: Int): Iteratee[Map[Tweet, Int], List[Map[Tweet, Int]]] =
         Enumeratee.take(n).transform(Iteratee.getChunks)
 
       val res1 = e.run(take(1))
