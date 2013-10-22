@@ -1,4 +1,4 @@
-@(mostTweeted: Map[String, Int], mostRetweeted: Map[Tweet, Int], mostDiscussed: Seq[Tweet])
+@(mostTweeted: Map[String, Int], mostRetweeted: Map[Tweet, Int], mostDiscussed: Map[Tweet, Int])
 
 @import play.api.libs.json.Json
 
@@ -143,6 +143,10 @@
       return html;
     };
 
+    var numberWord = function(n, singular, plural) {
+      if (n === 1) { return singular; } else { return plural; }
+    }
+
 
     var chart = makeMostTweetedChart("#mostTweetedChart svg", @Html(Json.toJson(mostTweeted).toString));
 
@@ -170,7 +174,7 @@
 
       seq.forEach(function(object, i) {
         var tweet = object.tweet
-        tweet.extra = object.retweetCount + " Retweets"
+        tweet.extra = object.retweetCount + numberWord(object.retweetCount, " Retweet", " Retweets")
         // var tweetElement = document.getElementById("mostRetweetedListItem" + i);
         // if (parseInt(tweetElement.dataset.tweetId, 10) !== tweet.id) {
           var date = new Date(tweet.date);
@@ -193,7 +197,9 @@
 
       mostDiscussedList.innerHTML = "";
 
-      seq.forEach(function(tweet, i) {
+      seq.forEach(function(object, i) {
+        var tweet = object.tweet
+        tweet.extra = object.replyCount + numberWord(object.retweetCount, " Reply", " Replies")
         // var tweetElement = document.getElementById("mostDiscussedListItem" + i);
         // if (parseInt(tweetElement.dataset.tweetId, 10) !== tweet.id) {
           var date = new Date(tweet.date);

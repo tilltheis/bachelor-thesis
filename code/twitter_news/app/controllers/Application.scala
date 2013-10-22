@@ -9,7 +9,7 @@ import play.api.libs.EventSource
 import play.api.libs.json._
 import play.api.libs.iteratee.Enumerator
 
-import models.{SleepingEnumeratee, TwitterNews}
+import models.{Tweet, SleepingEnumeratee, TwitterNews}
 import models.JsonImplicits._
 
 
@@ -37,17 +37,20 @@ object Application extends Controller {
     jsonEventSourceHandler(throttle(twitterNews.mostTweetedEnumerator, mostTweetedUpdateInterval))
 
   def mostRetweetedEventSource = {
-    val e = throttle(twitterNews.mostRetweetedEnumerator, mostRetweetedUpdateInterval).map { map =>
-      map.toSeq.sortBy(-_._2).map { case (tweet, retweetCount) =>
-        Json.obj("tweet" -> tweet, "retweetCount" -> retweetCount)
-      }
-    }
-    jsonEventSourceHandler(e)
+    val e = throttle(twitterNews.mostRetweetedEnumerator, mostRetweetedUpdateInterval)
+    jsonEventSourceHandler(e.map(tweetOccurenceMapToJson("retweetCount")))
   }
 
-  def mostDiscussedEventSource =
-    jsonEventSourceHandler(throttle(twitterNews.mostDiscussedEnumerator, mostDiscussedUpdateInterval))
+  def mostDiscussedEventSource = {
+    val e = throttle(twitterNews.mostDiscussedEnumerator, mostDiscussedUpdateInterval)
+    jsonEventSourceHandler(e.map(tweetOccurenceMapToJson("replyCount")))
+  }
 
+
+  private def tweetOccurenceMapToJson(jsonOccurenceKey: String)(map: Map[Tweet, Int]): JsValue =
+    Json.toJson(map.toSeq.sortBy(-_._2).map { case (tweet, occurenceCount) =>
+      Json.obj("tweet" -> tweet, jsonOccurenceKey -> occurenceCount)
+    })
 
   private def jsonEventSourceHandler[A](e: Enumerator[A])(implicit ev: Writes[A]) = Action {
     Ok.chunked(e.map(Json.toJson(_)).through(EventSource())).as("text/event-stream")

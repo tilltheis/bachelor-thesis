@@ -44,11 +44,11 @@ class TwitterNews(val twitter: Twitter,
 
   // these vars are accessed inside of different iteratees/enumerators/enumeratees
   // better make them volatile to make sure changes are immediately visible
-  @volatile private var mostDiscussedIds: Seq[Long] = Seq.empty
+  @volatile private var mostDiscussedIds: Map[Long, Int] = Map.empty
 
   @volatile private var _mostTweeted: Map[String, Int] = Map.empty
   @volatile private var _mostRetweeted: Map[Tweet, Int] = Map.empty
-  @volatile private var _mostDiscussed: Seq[Tweet] = Seq.empty
+  @volatile private var _mostDiscussed: Map[Tweet, Int] = Map.empty
 
   def mostTweeted: Map[String, Int] = _mostTweeted
   private def mostTweeted_=(value: Map[String, Int]): Unit = _mostTweeted = value
@@ -56,11 +56,11 @@ class TwitterNews(val twitter: Twitter,
   def mostRetweeted: Map[Tweet, Int] = _mostRetweeted
   private def mostRetweeted_=(value: Map[Tweet, Int]): Unit = _mostRetweeted = value
 
-  def mostDiscussed: Seq[Tweet] = _mostDiscussed
-  private def mostDiscussed_=(value: Seq[Tweet]): Unit = _mostDiscussed = value
+  def mostDiscussed: Map[Tweet, Int] = _mostDiscussed
+  private def mostDiscussed_=(value: Map[Tweet, Int]): Unit = _mostDiscussed = value
 
 
-  private val newsEnumerator: Enumerator[(Map[String, Int], Map[Tweet, Int], Seq[Long])] = {
+  private val newsEnumerator: Enumerator[(Map[String, Int], Map[Tweet, Int], Map[Long, Int])] = {
     def isOutdated(tweet: Tweet): Boolean =
       tweet.date.withDurationAdded(relevantDuration, 1).isBeforeNow
 
@@ -84,18 +84,20 @@ class TwitterNews(val twitter: Twitter,
 
   val mostTweetedEnumerator: Enumerator[Map[String, Int]] = newsEnumerator.map(_._1)
   val mostRetweetedEnumerator: Enumerator[Map[Tweet, Int]] = newsEnumerator.map(_._2)
-  val mostDiscussedIdsEnumerator: Enumerator[Seq[Long]] = newsEnumerator.map(_._3)
+  val mostDiscussedIdsEnumerator: Enumerator[Map[Long, Int]] = newsEnumerator.map(_._3)
 
 
   // translate tweet ids to real tweets by fetching tweets from twitter
   // times out after <tweetFetchingTimeout> and continues with the next list of ids
   // it will buffer one set of incoming ids and will skip old ids if fetching takes too long
   val tweetFetchingTimeout: Duration = 10.seconds
-  val mostDiscussedEnumerator: Enumerator[Seq[Tweet]] =
+  val mostDiscussedEnumerator: Enumerator[Map[Tweet, Int]] =
     mostDiscussedIdsEnumerator.through(
       Concurrent.buffer(1).compose(
-        Enumeratee.map[Seq[Long]] { ids =>
-          Try(Await.result(twitter.fetchTweets(ids), tweetFetchingTimeout))
+        Enumeratee.map[Map[Long, Int]] { map =>
+          val (ids, replyCounts) = map.toSeq.unzip
+          val tweetsM = Try(Await.result(twitter.fetchTweets(ids), tweetFetchingTimeout))
+          tweetsM.map(_.zip(replyCounts).toMap)
         }
       ).compose(
         Enumeratee.collect {
@@ -154,13 +156,13 @@ class TwitterNews(val twitter: Twitter,
   }
 
 
-  private def updatedMostDiscussedIds: Seq[Long] = {
+  private def updatedMostDiscussedIds: Map[Long, Int] = {
     val map = relevantTweets.foldLeft(Map.empty[Long, Int]) { case (map, tweet) =>
       tweet.replyToTweetId.map { discussedTweetId =>
         map.updated(discussedTweetId, map.getOrElse(discussedTweetId, 0) + 1)
       }.getOrElse(map)
     }
 
-    map.toSeq.sortBy { case (id, count) => -count }.take(mostDiscussedLimit).map(_._1)
+    map.toSeq.sortBy { case (id, count) => -count }.take(mostDiscussedLimit).toMap
   }
 }
