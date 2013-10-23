@@ -84,7 +84,7 @@ class TwitterNews(val twitter: Twitter,
     _mostTweetedChannel.push(mostTweeted)
     _mostRetweetedChannel.push(mostRetweeted)
     _mostDiscussedIdsChannel.push(mostDiscussedIds)
-  })
+  }.map(_ => println(""))) // we need io somewhere or the iteratee won't do anything - no idea why...
 
 
   // translate tweet ids to real tweets by fetching tweets from twitter
