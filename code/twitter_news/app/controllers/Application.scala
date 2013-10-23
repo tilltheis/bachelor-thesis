@@ -20,9 +20,9 @@ import models.JsonImplicits._
 
 // use cake pattern to make controller testable
 object Application extends Controller {
-  private val twitterNews = TwitterNews(JodaDuration.standardHours(1))
+  private val twitterNews = TwitterNews(JodaDuration.standardMinutes(5), 150)
 
-  private val mostTweetedUpdateInterval = JodaDuration.standardSeconds(1)
+  private val mostTweetedUpdateInterval = JodaDuration.standardSeconds(5)
   private val mostRetweetedUpdateInterval = JodaDuration.standardSeconds(5)
   private val mostDiscussedUpdateInterval = JodaDuration.standardSeconds(5)
 

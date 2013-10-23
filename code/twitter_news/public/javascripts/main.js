@@ -1,16 +1,16 @@
-
-
-
 // auto-resize chart to always make it look nice
 var chartContainer = document.getElementById("mostTweetedChart");
 var svg = document.getElementsByTagName("svg")[0];
+var globalLastStatistics;
 
 function autoResizeChart() {
   var offsetTop = chartContainer.getBoundingClientRect().top;
-  var dimensionValue = Math.min(window.innerHeight - offsetTop, chartContainer.clientWidth);
-  var value = window.innerWidth/2 + "px";
-  svg.style.width = value;
-  svg.style.height = value;
+  svg.style.height = Math.min(window.innerHeight - offsetTop, chartContainer.clientWidth / 2) + "px";
+  svg.style.width = chartContainer.offsetWidth + "px";
+
+  if (globalLastStatistics !== undefined) {
+    makeMostTweetedChart("#mostTweetedChart svg", globalLastStatistics);
+  }
 }
 
 window.onresize = autoResizeChart;
@@ -18,97 +18,68 @@ autoResizeChart();
 
 
 
-// requires nv.d3.js
+// requires d3.layout.cloud.js
 
-// statistics is a dictionary object { age: count } like { 6: 1, 10: 2 }
-function makeMostTweetedChart(chartElementSelector, statisticsParameter) {
+// most of this code is taken from https://github.com/jasondavies/d3-cloud/blob/c14b0c4d0a1bc08891b10fbeb443a23b063e7df9/examples/simple.html
+// license: BSD
+// statistics is a dictionary object { wourd: occurenceCount } like { "foo": 1, "bar": 2 }
+// String x { String: Number } -> Unit
+function makeMostTweetedChart(chartElementSelector, statistics) {
+  var svg = document.querySelector(chartElementSelector);
+  var width = parseInt(svg.style.width, 10);
+  var height = parseInt(svg.style.height, 10);
 
-
-  // [ { label: "0-9", value: 9 } ]
+  // { String: Number } -> [ { text: String, size: Number } ]
   function dataFromStatistics(statistics) {
     var data = [];
 
     for (var word in statistics) {
       if (statistics.hasOwnProperty(word)) {
         data.push({
-          label: word,
-          value: statistics[word]
+          text: word,
+          size: 9 + statistics[word] * 3
         });
       }
     }
 
-    // sort highest occurences first
-    data.sort(function(x, y) {
-      return y.value - x.value;
-    });
-
     return data;
   }
 
-  function dataFunction() {
-    return [{
-      key: "Most Tweeted",
-      values: data
-    }];
-  }
+  var fill = d3.scale.category20();
 
-  function draw() {
-    // long bars will be cut off if domain is not set explicitly
-    if (data !== []) {
-        chart.yDomain([0, d3.max(data, function (d) { return d.value; })]);
-    } else {
-        chart.yDomain(0)
+  // { text: String, size: Number } -> Unit
+  function draw(words) {
+    var g = d3.select(chartElementSelector + " g")
+    if (g.empty()) {
+      g = d3.select(chartElementSelector)
+              .attr("width", width)
+              .attr("height", height)
+            .append("g")
+              .attr("transform", "translate(" + (width/2) + "," + (height/2) + ")")
     }
 
-    d3.select(chartElementSelector)
-      .datum(dataFunction)
-      .transition().duration(500)
-      .call(chart);
+
+    var selection = g.selectAll("text").data(words)
+    selection.text(function(d) { return d.text; })
+    selection.enter()
+      .append("text")
+      .style("font-size", function(d) { return d.size + "px"; })
+      .style("font-family", "Impact")
+      .style("fill", function(d, i) { return fill(i); })
+      .attr("text-anchor", "middle")
+      .attr("transform", function(d) {
+        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+      })
+      .text(function(d) { return d.text; });
+    selection.exit().remove();
   }
 
-  function clone(o) {
-    var result = {};
-    for (var k in o) {
-      if (o.hasOwnProperty(k)) { result[k] = o[k]; }
-    }
-    return result;
-  }
-
-  var statistics = clone(statisticsParameter);
-  var data = dataFromStatistics(statistics);
-  var chart;
-
-  // see http://nvd3.org/ghpages/discreteBar.html
-  nv.addGraph(function() {
-    chart = nv.models.discreteBarChart()
-      .x(function(d) { return d.label; })
-      .y(function(d) { return d.value; })
-      .staggerLabels(true)
-      .tooltips(false)
-      .showValues(true)
-      .margin({left: 100})
-      .margin({bottom: 100})
-      .valueFormat(d3.format(",.0f"));
-
-    chart.yAxis.axisLabel("#Occurences").tickFormat(d3.format(",.0f"));
-    chart.xAxis.axisLabel("Words");
-
-    draw();
-
-    nv.utils.windowResize(chart.update);
-
-    return chart;
-  });
-
-  return {
-    increment: function(age) {
-      var oldValue = statistics.hasOwnProperty(age) ? statistics[age] : 0;
-      statistics[age] = oldValue + 1;
-      data = dataFromStatistics(statistics);
-    },
-    setData: function(statistics) {
-      data = dataFromStatistics(statistics);
-    },
-    update: draw
-  }
+  d3.layout.cloud().size([width, height])
+    .words(dataFromStatistics(statistics))
+    .padding(5)
+    .rotate(function() { return ~~(Math.random() * 2) * 90; })
+    .font("Impact")
+    .fontSize(function(d) { return d.size; })
+    .on("end", draw)
+    .start();
 }

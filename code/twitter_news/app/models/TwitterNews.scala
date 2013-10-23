@@ -17,8 +17,11 @@ import play.api.Play.current
 
 object TwitterNews {
   private lazy val ignoredWords: Seq[String] =
-    Source.fromFile(Play.getFile("conf/ignored-words.txt"))(Codec.UTF8)
-          .getLines().filterNot(_.isEmpty).map(_.toLowerCase(Locale.ENGLISH)).toSeq
+    Source
+      .fromFile(Play.getFile("conf/ignored-words.txt"))(Codec.UTF8)
+      .getLines()
+      .filterNot(w => w.isEmpty || w.startsWith("//"))
+      .map(_.toLowerCase(Locale.ENGLISH)).toSeq
 
   def apply(relevantDuration: JodaDuration,
             mostTweetedLimit: Int = 10,
@@ -84,7 +87,7 @@ class TwitterNews(val twitter: Twitter,
     _mostTweetedChannel.push(mostTweeted)
     _mostRetweetedChannel.push(mostRetweeted)
     _mostDiscussedIdsChannel.push(mostDiscussedIds)
-  }.map(_ => println(""))) // we need io somewhere or the iteratee won't do anything - no idea why...
+  }).map(_ => println("")) // we need io somewhere or the iteratee won't do anything - no idea why...
 
 
   // translate tweet ids to real tweets by fetching tweets from twitter
@@ -113,15 +116,27 @@ class TwitterNews(val twitter: Twitter,
   private def updatedMostTweeted(mostTweeted: Map[String, Int],
                                  newIrrelevantTweets: Seq[Tweet],
                                  newRelevantTweet: Tweet): Map[String, Int] = {
-    def isAllowedWord(word: String): Boolean =
+
+    // word should already be lower case
+    def isAllowedWord(word: String) =
       word.length > 1 &&
-      !TwitterNews.ignoredWords.contains(word.toLowerCase(Locale.ENGLISH)) &&
-      !word.startsWith("http://") &&
-      !word.startsWith("@") &&
+      !TwitterNews.ignoredWords.contains(word)
+
+    def isSpecialWord(word: String) =
+      word.startsWith("http://") ||
+      word.startsWith("@") ||
       word.startsWith("#")
 
+    
+    def relevantWords(text: String): Seq[String] = {
+      val words = text.split("\\s+").map(_.toLowerCase(Locale.ENGLISH))
+      val withoutSpecialWords = words.filterNot(isSpecialWord)
+      val simpleLetterWords = withoutSpecialWords.map(_.dropWhile(!_.isLetterOrDigit).takeWhile(_.isLetterOrDigit))
+      simpleLetterWords.filter(isAllowedWord)
+    }
+
     val withoutIrrelevantTweets = newIrrelevantTweets.foldLeft(mostTweeted) { case (map, tweet) =>
-      tweet.text.split(' ').filter(isAllowedWord).foldLeft(map) { case (map, word) =>
+      relevantWords(tweet.text).foldLeft(map) { case (map, word) =>
         val oldCount = map.getOrElse(word, 1)
         if (oldCount == 1) {
           map - word
@@ -131,7 +146,7 @@ class TwitterNews(val twitter: Twitter,
       }
     }
 
-    val newRelevantWords = newRelevantTweet.text.split(' ').filter(isAllowedWord)
+    val newRelevantWords = relevantWords(newRelevantTweet.text)
 
     val withNewRelevantTweet = newRelevantWords.foldLeft(withoutIrrelevantTweets) { (map, word) =>
       map.updated(word, map.getOrElse(word, 0) + 1)
