@@ -199,7 +199,7 @@
 
       seq.forEach(function(object, i) {
         var tweet = object.tweet
-        tweet.extra = object.replyCount + numberWord(object.retweetCount, " Reply", " Replies")
+        tweet.extra = object.replyCount + numberWord(object.replyCount, " Reply", " Replies")
         // var tweetElement = document.getElementById("mostDiscussedListItem" + i);
         // if (parseInt(tweetElement.dataset.tweetId, 10) !== tweet.id) {
           var date = new Date(tweet.date);
