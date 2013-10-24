@@ -8,6 +8,8 @@ import play.api.mvc._
 import play.api.libs.EventSource
 import play.api.libs.json._
 import play.api.libs.iteratee.Enumerator
+import play.api.Play
+import play.api.Play.current
 
 import models.{SleepingEnumeratee, TwitterNews}
 import models.Json.tweetOccurenceMapToJson
@@ -21,11 +23,15 @@ import models.Json.Implicits._
 
 // use cake pattern to make controller testable
 object Application extends Controller {
-  private val twitterNews = TwitterNews(JodaDuration.standardMinutes(5), 150)
+  private val relevantDuration = readDuration("twitter.relevant_duration")
+  private val twitterNews = TwitterNews(relevantDuration, 150)
 
-  private val mostTweetedUpdateInterval = JodaDuration.standardSeconds(5)
-  private val mostRetweetedUpdateInterval = JodaDuration.standardSeconds(5)
-  private val mostDiscussedUpdateInterval = JodaDuration.standardSeconds(5)
+  private val mostTweetedUpdateInterval =
+    readDuration("twitter.most_tweeted_update_interval")
+  private val mostRetweetedUpdateInterval =
+    readDuration("twitter.most_retweeted_update_interval")
+  private val mostDiscussedUpdateInterval =
+    readDuration("twitter.most_discussed_update_interval")
 
 
   def index = Action {
@@ -45,6 +51,12 @@ object Application extends Controller {
   def mostDiscussedEventSource = {
     val e = throttle(twitterNews.mostDiscussedEnumerator, mostDiscussedUpdateInterval)
     jsonEventSourceHandler(e.map(tweetOccurenceMapToJson("replyCount")))
+  }
+
+
+  private def readDuration(key: String): JodaDuration = {
+    val ms = Play.configuration.getMilliseconds(key).get
+    JodaDuration.millis(ms)
   }
 
 

@@ -33,8 +33,10 @@ object TwitterImpl extends TwitterImpl with TwitterUrlComponent with TwitterTime
     "https://stream.twitter.com/1.1/statuses/filter.json?follow=" + userIds.mkString(",")
 
 
-  val reconnectTimeout: FiniteDuration = 90.seconds
-  val tweetFetchTimeout: FiniteDuration = 10.seconds
+  val reconnectTimeout: FiniteDuration =
+    Play.configuration.getMilliseconds("twitter.reconnect_timeout").get.millis
+  val tweetFetchTimeout: FiniteDuration =
+    Play.configuration.getMilliseconds("twitter.tweet_fetch_timeout").get.millis
 
 
   // use get() because we cannot work without the values

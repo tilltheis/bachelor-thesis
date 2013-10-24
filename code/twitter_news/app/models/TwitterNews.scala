@@ -1,6 +1,7 @@
 package models
 
 import java.util.Locale
+import java.util.concurrent.TimeoutException
 
 import scala.io.{Codec, Source}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -10,7 +11,6 @@ import org.joda.time.{Duration => JodaDuration}
 import play.api.libs.iteratee.{Iteratee, Concurrent, Enumeratee, Enumerator}
 import play.api.Play
 import play.api.Play.current
-import java.util.concurrent.TimeoutException
 
 
 object TwitterNews {
@@ -21,10 +21,15 @@ object TwitterNews {
       .filterNot(w => w.isEmpty || w.startsWith("//"))
       .map(_.toLowerCase(Locale.ENGLISH)).toSeq
 
+
+  private lazy val mostTweetedLimit = Play.configuration.getInt("twitter.most_tweeted_limit").get
+  private lazy val mostRetweetedLimit = Play.configuration.getInt("twitter.most_retweeted_limit").get
+  private lazy val mostDiscussedLimit = Play.configuration.getInt("twitter.most_discussed_limit").get
+
   def apply(relevantDuration: JodaDuration,
-            mostTweetedLimit: Int = 10,
-            mostRetweetedLimit: Int = 10,
-            mostDiscussedLimit: Int = 10): TwitterNews =
+            mostTweetedLimit: Int = mostTweetedLimit,
+            mostRetweetedLimit: Int = mostRetweetedLimit,
+            mostDiscussedLimit: Int = mostDiscussedLimit): TwitterNews =
     new TwitterNews(TwitterImpl,
                     relevantDuration,
                     mostTweetedLimit,
