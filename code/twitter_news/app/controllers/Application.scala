@@ -9,8 +9,9 @@ import play.api.libs.EventSource
 import play.api.libs.json._
 import play.api.libs.iteratee.Enumerator
 
-import models.{Tweet, SleepingEnumeratee, TwitterNews}
-import models.JsonImplicits._
+import models.{SleepingEnumeratee, TwitterNews}
+import models.Json.tweetOccurenceMapToJson
+import models.Json.Implicits._
 
 
 // tweet format: https://dev.twitter.com/docs/platform-objects/tweets
@@ -46,11 +47,6 @@ object Application extends Controller {
     jsonEventSourceHandler(e.map(tweetOccurenceMapToJson("replyCount")))
   }
 
-
-  private def tweetOccurenceMapToJson(jsonOccurenceKey: String)(map: Map[Tweet, Int]): JsValue =
-    Json.toJson(map.toSeq.sortBy(-_._2).map { case (tweet, occurenceCount) =>
-      Json.obj("tweet" -> tweet, jsonOccurenceKey -> occurenceCount)
-    })
 
   private def jsonEventSourceHandler[A](e: Enumerator[A])(implicit ev: Writes[A]) = Action {
     Ok.chunked(e.map(Json.toJson(_)).through(EventSource())).as("text/event-stream")

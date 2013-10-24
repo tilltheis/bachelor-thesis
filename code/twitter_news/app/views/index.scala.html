@@ -1,6 +1,7 @@
 @(mostTweeted: Map[String, Int], mostRetweeted: Map[Tweet, Int], mostDiscussed: Map[Tweet, Int])
 
 @import play.api.libs.json.Json
+@import models.Json.tweetOccurenceMapToJson
 
 <!DOCTYPE html>
 
@@ -73,7 +74,15 @@
   <script src="@routes.Assets.at("javascripts/main.js")"></script>
   <script>
 
-    makeMostTweetedChart("#mostTweetedChart svg", @Html(Json.toJson(mostTweeted).toString));
+    var mostTweetedJson = @Html(Json.toJson(mostTweeted).toString);
+    makeMostTweetedChart("#mostTweetedChart svg", mostTweetedJson);
+
+    var mostRetweetedJson = @Html(tweetOccurenceMapToJson("retweetCount")(mostRetweeted).toString);
+    showRetweetOccurences(mostRetweetedJson, mostRetweetedList);
+
+    var mostDiscussedJson = @Html(tweetOccurenceMapToJson("replyCount")(mostDiscussed).toString);
+    showReplyOccurences(mostDiscussedJson, mostDiscussedList);
+
 
     var mostTweetedEventSource = new EventSource("@routes.Application.mostTweetedEventSource");
     mostTweetedEventSource.onmessage = function(e) {
@@ -82,32 +91,45 @@
 
 
     var mostRetweetedEventSource = new EventSource("@routes.Application.mostRetweetedEventSource");
-    mostRetweetedEventSource.onmessage =
-      tweetOccurencesMessageHandler(mostRetweetedList, function(object) {
-        return object.retweetCount + numberWord(object.retweetCount, " Retweet", " Retweets")
-      });
+    mostRetweetedEventSource.onmessage = function(e) {
+      showRetweetOccurences(JSON.parse(e.data), mostRetweetedList);
+    };
 
 
     var mostDiscussedEventSource = new EventSource("@routes.Application.mostDiscussedEventSource");
-    mostDiscussedEventSource.onmessage =
-      tweetOccurencesMessageHandler(mostDiscussedList, function(object) {
-        return object.replyCount + numberWord(object.replyCount, " Reply", " Replies")
-      });
+    mostDiscussedEventSource.onmessage = function(e) {
+      showReplyOccurences(JSON.parse(e.data), mostDiscussedList);
+    };
 
 
     // DOMElement x (Object -> String) -> (DOMEvent -> Unit)
     function tweetOccurencesMessageHandler(tweetsContainerElement, generateTweetExtra) {
       return function(event) {
-        tweetsContainerElement.innerHTML = "";
-
-        var tweetsWithOccurences = JSON.parse(event.data);
-        tweetsWithOccurences.forEach(function(object, i) {
-          var tweet = object.tweet;
-          tweet.extra = generateTweetExtra(object);
-          tweet.dateString = dateString(new Date(tweet.date));
-          tweetsContainerElement.innerHTML += tweetToHtml(tweet);
-        });
+        showTweetOccurences(JSON.parse(event.data), tweetsContainerElement, generateTweetExtra);
       };
+    }
+
+    function showTweetOccurences(tweetsWithOccurences, tweetsContainerElement, generateTweetExtra) {
+      tweetsContainerElement.innerHTML = "";
+
+      tweetsWithOccurences.forEach(function(object, i) {
+        var tweet = object.tweet;
+        tweet.extra = generateTweetExtra(object);
+        tweet.dateString = dateString(new Date(tweet.date));
+        tweetsContainerElement.innerHTML += tweetToHtml(tweet);
+      });
+    }
+
+    function showRetweetOccurences(tweetsWithOccurences, tweetsContainerElement) {
+      showTweetOccurences(tweetsWithOccurences, tweetsContainerElement, function(object) {
+        return object.retweetCount + numberWord(object.retweetCount, " Retweet", " Retweets")
+      });
+    }
+
+    function showReplyOccurences(tweetsWithOccurences, tweetsContainerElement) {
+      showTweetOccurences(tweetsWithOccurences, tweetsContainerElement, function(object) {
+        return object.replyCount + numberWord(object.replyCount, " Reply", " Replies")
+      });
     }
 
 

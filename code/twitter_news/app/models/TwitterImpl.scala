@@ -12,11 +12,11 @@ import play.api.{Logger, Play}
 import play.api.Play.current
 import play.api.libs.iteratee.{Enumeratee, Concurrent, Enumerator, Iteratee}
 import play.api.libs.concurrent.Akka
-import play.api.libs.json.Json
+import play.api.libs.json.{Json => Js}
 import play.api.libs.ws.{SignatureCalculator, WS}
 import play.api.libs.oauth.{RequestToken, ConsumerKey, OAuthCalculator}
 
-import JsonImplicits._
+import Json.Implicits._
 
 
 // cake pattern for testing
@@ -144,7 +144,7 @@ trait TwitterImpl extends Twitter { this: TwitterUrlComponent with TwitterTimeou
 
   private def byteArrayToTweet(bytes: Array[Byte]): Option[Tweet] = {
     // some invalid tweets are expected. e.g. tweet deletion messages
-    val tweetM = Json.parse(bytes).validate[Tweet].asOpt
+    val tweetM = Js.parse(bytes).validate[Tweet].asOpt
     if (tweetM.isEmpty) {
       val s = new String(bytes, "UTF-8")
       Logger.info(s"invalid tweet format: $s")
