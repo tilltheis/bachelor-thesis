@@ -3,9 +3,6 @@ package models
 import java.util.Locale
 
 import scala.io.{Codec, Source}
-import scala.util.{Success, Try}
-import scala.concurrent.duration._
-import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import org.joda.time.{Duration => JodaDuration}
@@ -13,6 +10,7 @@ import org.joda.time.{Duration => JodaDuration}
 import play.api.libs.iteratee.{Iteratee, Concurrent, Enumeratee, Enumerator}
 import play.api.Play
 import play.api.Play.current
+import java.util.concurrent.TimeoutException
 
 
 object TwitterNews {
@@ -87,24 +85,24 @@ class TwitterNews(val twitter: Twitter,
     _mostTweetedChannel.push(mostTweeted)
     _mostRetweetedChannel.push(mostRetweeted)
     _mostDiscussedIdsChannel.push(mostDiscussedIds)
-  }).map(_ => println("")) // we need io somewhere or the iteratee won't do anything - no idea why...
+  })
 
 
   // translate tweet ids to real tweets by fetching tweets from twitter
   // times out after <tweetFetchingTimeout> and continues with the next list of ids
   // it will buffer one set of incoming ids and will skip old ids if fetching takes too long
-  val tweetFetchingTimeout: Duration = 10.seconds
   val mostDiscussedEnumerator: Enumerator[Map[Tweet, Int]] =
     mostDiscussedIdsEnumerator.through(
       Concurrent.buffer(1).compose(
-        Enumeratee.map[Map[Long, Int]] { map =>
+        Enumeratee.mapM[Map[Long, Int]] { map =>
           val (ids, replyCounts) = map.toSeq.unzip
-          val tweetsM = Try(Await.result(twitter.fetchTweets(ids), tweetFetchingTimeout))
-          tweetsM.map(_.zip(replyCounts).toMap)
+          val tweetsM = twitter.fetchTweets(ids)
+          val mapM = tweetsM.map(_.zip(replyCounts).toMap)
+          mapM.map(Some(_)).recover { case _: TimeoutException => None }
         }
       ).compose(
         Enumeratee.collect {
-          case Success(tweets) =>
+          case Some(tweets) =>
             _mostDiscussed = tweets
             tweets
         }

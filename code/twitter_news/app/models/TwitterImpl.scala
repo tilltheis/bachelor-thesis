@@ -33,7 +33,8 @@ object TwitterImpl extends TwitterImpl with TwitterUrlComponent with TwitterTime
     "https://stream.twitter.com/1.1/statuses/filter.json?follow=" + userIds.mkString(",")
 
 
-  val timeout: FiniteDuration = 90.seconds
+  val reconnectTimeout: FiniteDuration = 90.seconds
+  val tweetFetchTimeout: FiniteDuration = 10.seconds
 
 
   // use get() because we cannot work without the values
@@ -53,8 +54,8 @@ trait TwitterUrlComponent {
 }
 
 trait TwitterTimeoutComponent {
-  // the amount of time to wait for messages from twitter before reconnecting
-  def timeout: FiniteDuration
+  def reconnectTimeout: FiniteDuration
+  def tweetFetchTimeout: FiniteDuration
 }
 
 trait TwitterSignatureComponent {
@@ -89,7 +90,10 @@ trait TwitterImpl extends Twitter { this: TwitterUrlComponent with TwitterTimeou
 
   def fetchTweet(id: Long): Future[Tweet] =
     TweetCache.get(id).map(Future.successful).getOrElse {
-      WS.url(tweetUrlFromId(id)).sign(signature).get().flatMap { response =>
+      WS.url(tweetUrlFromId(id))
+        .sign(signature)
+        .withRequestTimeout(tweetFetchTimeout.toMillis.toInt)
+        .get().flatMap { response =>
         response.json.validate[Tweet].fold(
           invalid = _ => Future.failed(new RuntimeException("invalid tweet format")),
           valid = tweet => {
@@ -121,12 +125,12 @@ trait TwitterImpl extends Twitter { this: TwitterUrlComponent with TwitterTimeou
     // use vars instead of vals because the callbacks that use them must be defined before the var-values are known
     @volatile var iterateeM: Option[Iteratee[Array[Byte], Unit]] = None
     @volatile var reconnectTaskM: Option[Cancellable] =
-      Some(Akka.system.scheduler.scheduleOnce(timeout)(iterateeM.foreach(connect)))
+      Some(Akka.system.scheduler.scheduleOnce(reconnectTimeout)(iterateeM.foreach(connect)))
 
     val (enumerator, channel) = Concurrent.broadcast[Array[Byte]]
     val timeOutResettingT = Enumeratee.mapInput[Array[Byte]] { in =>
       reconnectTaskM.foreach(_.cancel())
-      reconnectTaskM = Some(Akka.system.scheduler.scheduleOnce(timeout)(iterateeM.foreach(connect)))
+      reconnectTaskM = Some(Akka.system.scheduler.scheduleOnce(reconnectTimeout)(iterateeM.foreach(connect)))
       in
     }
     val channelPushingI = Iteratee.foreach[Array[Byte]](channel.push)

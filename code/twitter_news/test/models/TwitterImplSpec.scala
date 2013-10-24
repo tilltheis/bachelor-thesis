@@ -2,6 +2,7 @@ package models
 
 import java.util.concurrent.TimeoutException
 
+import scala.util.Failure
 import scala.concurrent.duration._
 
 import play.api.test._
@@ -29,7 +30,8 @@ class TwitterImplSpec extends PlaySpecification {
   }
 
   class TestTwitter extends TwitterImpl with TestUrlComponent with TwitterTimeoutComponent with TestSignatureComponent {
-    def timeout: FiniteDuration = 1.hour
+    def reconnectTimeout: FiniteDuration = 1.hour
+    def tweetFetchTimeout: FiniteDuration = 5.seconds
   }
 
 
@@ -68,8 +70,8 @@ class TwitterImplSpec extends PlaySpecification {
     })
 
     "reconnect to the web service after not receiving any messages for a given time period" in new WithServer(firstRequestIgnoringWebService) {
-      val twitter: Twitter = new TwitterImpl with TestUrlComponent with TwitterTimeoutComponent with TestSignatureComponent {
-        val timeout = 1.second
+      val twitter: Twitter = new TestTwitter {
+        override val reconnectTimeout = 1.second
       }
 
       val i = Enumeratee.take(4).transform(Iteratee.getChunks[Tweet])
@@ -114,8 +116,18 @@ class TwitterImplSpec extends PlaySpecification {
     "cache fetched tweets" in new WithServer(slowWebService) {
       val twitter = new TestTwitter
       await(twitter.fetchTweet(tweet.id), 500) must throwA[TimeoutException]
-      Thread.sleep(500)
+      await(twitter.fetchTweet(tweet.id)) // let it cache
       await(twitter.fetchTweet(tweet.id), 500) === tweet
+    }
+
+    "time out after a specified duration" in new WithServer(slowWebService) {
+      val twitter = new TestTwitter {
+        override val tweetFetchTimeout = 500.millis
+      }
+
+      val f = twitter.fetchTweet(tweet.id)
+      Thread.sleep(500) // don't use await/Await.{ready,result) because they throw on Future.failed
+      f.value must beAnInstanceOf[Some[Failure[TimeoutException]]]
     }
   }
 
