@@ -49,29 +49,25 @@ function makeMostTweetedChart(chartElementSelector, statistics) {
 
   // { text: String, size: Number } -> Unit
   function draw(words) {
-    var g = d3.select(chartElementSelector + " g")
-    if (g.empty()) {
-      g = d3.select(chartElementSelector)
-              .attr("width", width)
-              .attr("height", height)
-            .append("g")
-              .attr("transform", "translate(" + (width/2) + "," + (height/2) + ")")
-    }
+    // completely rebuild
+    d3.select(chartElementSelector + " g").remove();
 
-
-    var selection = g.selectAll("text").data(words)
-    selection.text(function(d) { return d.text; })
-    selection.enter()
-      .append("text")
-      .style("font-size", function(d) { return d.size + "px"; })
-      .style("font-family", "Impact")
-      .style("fill", function(d, i) { return fill(i); })
-      .attr("text-anchor", "middle")
-      .attr("transform", function(d) {
-        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-      })
-      .text(function(d) { return d.text; });
-    selection.exit().remove();
+    d3.select(chartElementSelector)
+        .attr("width", width)
+        .attr("height", height)
+      .append("g")
+        .attr("transform", "translate(" + (width/2) + "," + (height/2) + ")")
+      .selectAll("text")
+        .data(words)
+      .enter().append("text")
+        .style("font-size", function(d) { return d.size + "px"; })
+        .style("font-family", "Impact")
+        .style("fill", function(d, i) { return fill(i); })
+        .attr("text-anchor", "middle")
+        .attr("transform", function(d) {
+          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+        })
+        .text(function(d) { return d.text; });
   }
 
   d3.layout.cloud().size([width, height])
