@@ -121,7 +121,8 @@ class TwitterNews(val twitter: Twitter,
     def isSpecialWord(word: String) =
       word.startsWith("http://") ||
       word.startsWith("@") ||
-      word.startsWith("#")
+      word.startsWith("#") ||
+      word == "&amp;"
 
     
     def relevantWords(text: String): Seq[String] = {

@@ -1,6 +1,5 @@
 via
 rt
-&amp;
 
 
 // from http://www.ranks.nl/resources/stopwords.html
