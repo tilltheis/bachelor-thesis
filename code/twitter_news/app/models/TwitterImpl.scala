@@ -105,15 +105,14 @@ trait TwitterImpl extends Twitter { this: TwitterUrlComponent with TwitterTimeou
     }
 
 
-  def statusStream: Enumerator[Tweet] = {
+  lazy val statusStream: Enumerator[Tweet] =
     plainStatusStream.map(byteArrayToTweet).through(Enumeratee.collect {
       case Some(tweet) => tweet // with replies/retweets/...
       //      case Some(tweet) if userIds.contains(tweet.userId) => tweet // without replies/reetweets/...
     })
-  }
 
 
-  private def plainStatusStream: Enumerator[Array[Byte]] = {
+  private lazy val plainStatusStream: Enumerator[Array[Byte]] = {
     // the data stram will sometimes stop generating elements
     // therefore we need to be able to reconnection after timeout
     def connect(i: Iteratee[Array[Byte], Unit]) =

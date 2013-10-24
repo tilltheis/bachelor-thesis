@@ -38,8 +38,6 @@ class TwitterNews(val twitter: Twitter,
                   val mostRetweetedLimit: Int,
                   val mostDiscussedLimit: Int) {
 
-  val tweetEnumerator: Enumerator[Tweet] = twitter.statusStream
-
   // old tweets to the left, new tweets to the right
   private var relevantTweets: Vector[Tweet] = Vector.empty
 

@@ -36,7 +36,7 @@ class TwitterImplSpec extends PlaySpecification {
 
 
 
-    "the statusStream enumerator" should {
+  "the statusStream enumerator" should {
     val webService = FakeApplication(withRoutes = {
       case ("GET", "/") => Action {
         Ok.chunked(Enumerator(tweetJsonString, tweetWithRetweetJsonString, tweetWithReplyJsonString, tweetWithRetweetAndReplyJsonString)).as("application/json")
@@ -78,6 +78,22 @@ class TwitterImplSpec extends PlaySpecification {
       val streamedTweets = await(twitter.statusStream.run(i))
 
       streamedTweets === List(tweet, tweetWithRetweet, tweetWithReply, tweetWithRetweetAndReply)
+    }
+
+
+    var requestCount = 0
+    val requestCountingWebService = FakeApplication(withRoutes = {
+      case ("GET", "/") => Action {
+        requestCount += 1
+        Ok.chunked(Enumerator.empty[String]).as("application/json")
+      }
+    })
+
+    "only connect once" in new WithServer(requestCountingWebService) {
+      val twitter = new TestTwitter
+      twitter.statusStream
+      twitter.statusStream
+      requestCount === 1
     }
   }
 
