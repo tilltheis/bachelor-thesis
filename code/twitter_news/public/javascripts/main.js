@@ -37,7 +37,7 @@ function makeMostTweetedChart(chartElementSelector, statistics) {
       if (statistics.hasOwnProperty(word)) {
         data.push({
           text: word,
-          size: 9 + statistics[word] * 3
+          size: 9 + statistics[word] * 4
         });
       }
     }
