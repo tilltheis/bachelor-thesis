@@ -5,3 +5,18 @@ twitter.consumer_key="YOUR_CONSUMER_KEY"
 twitter.consumer_key_secret="YOUR_CONSUMER_KEY_SECRET"
 twitter.access_token="YOUR_ACCESS_TOKEN"
 twitter.access_token_secret="YOUR_ACCESS_TOKEN_SECRET"
+
+
+# show twitter news of the last <twitter.relevant_duration>
+twitter.relevant_duration=2m
+
+twitter.most_tweeted_update_interval=1s
+twitter.most_retweeted_update_interval=5s
+twitter.most_discussed_update_interval=5s
+
+twitter.most_tweeted_limit=150
+twitter.most_retweeted_limit=10
+twitter.most_discussed_limit=10
+
+twitter.reconnect_timeout=30s
+twitter.tweet_fetch_timeout=10s
