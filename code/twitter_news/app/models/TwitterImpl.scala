@@ -113,7 +113,10 @@ trait TwitterImpl extends Twitter { this: TwitterUrlComponent with TwitterTimeou
     // the data stram will sometimes stop generating elements
     // therefore we need to be able to reconnection after timeout
     def connect(i: Iteratee[Array[Byte], Unit]) =
-      WS.url(statusStreamUrl).sign(signature).get(_ => i)
+      WS.url(statusStreamUrl).sign(signature).get { headers =>
+        Logger.info(s"connection response headers: $headers")
+        i
+      }
 
     // use vars instead of vals because the callbacks that use them must be defined before the var-values are known
     @volatile var iterateeM: Option[Iteratee[Array[Byte], Unit]] = None
