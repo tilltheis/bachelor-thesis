@@ -29,6 +29,8 @@ function makeMostTweetedChart(chartElementSelector, statistics) {
   var width = parseInt(svg.style.width, 10);
   var height = parseInt(svg.style.height, 10);
 
+  globalLastStatistics = statistics;
+
   // { String: Number } -> [ { text: String, size: Number } ]
   function dataFromStatistics(statistics) {
     var data = [];
