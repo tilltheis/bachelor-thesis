@@ -14,22 +14,10 @@ import play.api.Play.current
 
 
 object TwitterNews {
-  private lazy val ignoredWords: Seq[String] =
-    Source
-      .fromFile(Play.getFile("conf/ignored-words.txt"))(Codec.UTF8)
-      .getLines()
-      .filterNot(w => w.isEmpty || w.startsWith("//"))
-      .map(_.toLowerCase(Locale.ENGLISH)).toSeq
-
-
-  private lazy val mostTweetedLimit = Play.configuration.getInt("twitter.most_tweeted_limit").get
-  private lazy val mostRetweetedLimit = Play.configuration.getInt("twitter.most_retweeted_limit").get
-  private lazy val mostDiscussedLimit = Play.configuration.getInt("twitter.most_discussed_limit").get
-
   def apply(relevantDuration: JodaDuration,
-            mostTweetedLimit: Int = mostTweetedLimit,
-            mostRetweetedLimit: Int = mostRetweetedLimit,
-            mostDiscussedLimit: Int = mostDiscussedLimit): TwitterNews =
+            mostTweetedLimit: Int = Config.mostTweetedLimit,
+            mostRetweetedLimit: Int = Config.mostRetweetedLimit,
+            mostDiscussedLimit: Int = Config.mostDiscussedLimit): TwitterNews =
     new TwitterNews(TwitterImpl,
                     relevantDuration,
                     mostTweetedLimit,
@@ -121,7 +109,7 @@ class TwitterNews(val twitter: Twitter,
     // word should already be lower case
     def isAllowedWord(word: String) =
       word.length > 1 &&
-      !TwitterNews.ignoredWords.contains(word)
+      !Config.ignoredWords.contains(word)
 
     def isSpecialWord(word: String) =
       word.startsWith("http://") ||

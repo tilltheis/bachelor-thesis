@@ -1,14 +1,13 @@
 package models
 
 import scala.concurrent.Future
-import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.FiniteDuration
 import scala.collection.mutable
 
 import akka.actor.Cancellable
 
-import play.api.{Logger, Play}
+import play.api.Logger
 import play.api.Play.current
 import play.api.libs.iteratee.{Enumeratee, Concurrent, Enumerator, Iteratee}
 import play.api.libs.concurrent.Akka
@@ -33,21 +32,13 @@ object TwitterImpl extends TwitterImpl with TwitterUrlComponent with TwitterTime
     "https://stream.twitter.com/1.1/statuses/filter.json?follow=" + userIds.mkString(",")
 
 
-  val reconnectTimeout: FiniteDuration =
-    Play.configuration.getMilliseconds("twitter.reconnect_timeout").get.millis
-  val tweetFetchTimeout: FiniteDuration =
-    Play.configuration.getMilliseconds("twitter.tweet_fetch_timeout").get.millis
+  val reconnectTimeout: FiniteDuration = Config.reconnectTimeout
+  val tweetFetchTimeout: FiniteDuration = Config.tweetFetchTimeout
 
-
-  // use get() because we cannot work without the values
-  private val consumerKey = Play.configuration.getString("twitter.consumer_key").get
-  private val consumerKeySecret = Play.configuration.getString("twitter.consumer_key_secret").get
-  private val accessToken = Play.configuration.getString("twitter.access_token").get
-  private val accessTokenSecret = Play.configuration.getString("twitter.access_token_secret").get
 
   val signature =
-    OAuthCalculator(ConsumerKey(consumerKey, consumerKeySecret),
-                    RequestToken(accessToken, accessTokenSecret))
+    OAuthCalculator(ConsumerKey(Config.consumerKey, Config.consumerKeySecret),
+                    RequestToken(Config.accessToken, Config.accessTokenSecret))
 }
 
 trait TwitterUrlComponent {
