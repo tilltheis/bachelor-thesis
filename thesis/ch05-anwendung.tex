@@ -46,45 +46,53 @@ Es werden konkret verwendete Teile der Iteratee-Streams-Bibliothek gezeigt und e
 
 \begin{figure}
 \centering
-\begin{tikzpicture}[
-  scale=0.9,
-  auto,
-  every node/.style={transform shape}
-]
 
-  \tikzstyle{box}=[draw, thick, text centered, text width=2.5cm, node distance=4cm, inner sep=.2cm]
-  \tikzstyle{terminator}=[box, rounded corners]
-  \tikzstyle{class}=[box, rectangle split, rectangle split parts=2]
-  \tikzstyle{line}=[->,>=stealth',shorten >=1pt, semithick, font=\footnotesize]
-  \tikzstyle{legend}=[scale=.87]
+\tikzstyle{box}=[draw, thick, text centered, text width=2.5cm, node distance=1.5cm and 3cm, inner sep=.2cm]
+\tikzstyle{terminator}=[box, rounded corners]
+\tikzstyle{class}=[box, rectangle split, rectangle split parts=2]
+\tikzstyle{line}=[->,>=stealth',shorten >=1pt, semithick, font=\footnotesize]
 
-  \node[terminator] (twitter_api) {Twitter-API};
-  \node[class, right of=twitter_api] (twitter) {\textbf{Twitter}\nodepart{second}Konvertiere JSON zu Tweets};
-  \node[class, right of=twitter] (twitter_news) {\textbf{TwitterNews}\nodepart{second}Analysiere Tweets};
-  \node[terminator, right=2.5cm of twitter_news] (web_browser) {Web-Browser};
+\resizebox{\linewidth}{!}{%
+  \begin{tikzpicture}
+    \node[terminator] (twitter_api) {Twitter-API};
+    \node[class, below=of twitter_api] (twitter) {\textbf{Twitter}\nodepart{second}Konvertiere JSON zu Tweets};
+    \node[class, right=of twitter] (twitter_news) {\textbf{TwitterNews}\nodepart{second}Analysiere Tweets};
+    \node[class, right=of twitter_news] (application) {\textbf{Application}\nodepart{second}Konvertiere Tweets zu JSON};
+    \node[terminator, below=of application] (web_browser) {Web-Browser};
 
-  \draw[line] (twitter_api) -- (twitter) node[above, midway] {JSON};
-  \draw[line] (twitter) -- (twitter_news) node[above, midway] {Tweets};
-  \draw[line] (twitter_news) to[bend left] node[above, midway] {meistgetweetet} (web_browser);
-  \draw[line] (twitter_news) -- (web_browser) node[above, midway] {meistgeretweetet};
-  \draw[line] (twitter_news) to[bend right] node[below, midway] {meistdiskutiert} (web_browser);
+    \draw[line] (twitter_api) -- (twitter) node[auto, midway] {JSON};
+    \draw[line] (twitter) -- (twitter_news) node[auto, midway] {Tweets};
 
+    \draw[line] (twitter_news) to[bend left] node[auto, midway] {meistgetweetet} (application);
+    \draw[line] (twitter_news) -- (application) node[auto, midway] {meistgeretweetet};
+    \draw[line] (twitter_news) to[bend right] node[below, midway] {meistdiskutiert} (application);
 
+    \draw[line] (application) to[bend right] (web_browser);
+    \draw[line] (application) -- (web_browser);
+    \draw[line] (application) to[bend left] node[right, midway] {JSON} (web_browser);
+  \end{tikzpicture}
+}
+
+\vspace{5mm}
+
+\resizebox{\linewidth}{!}{%
   % legend
-  \node[terminator, legend, below=2.5cm of twitter_api] (terminator_ex) {Außenwelt};
-  \node[legend, right=.1cm of terminator_ex] (terminator_desc) {Schnittstelle zur Außenwelt};
+  \begin{tikzpicture}
+    \node[terminator, below=7.5cm of twitter_api] (terminator_ex) {Außenwelt};
+    \node[right=.1cm of terminator_ex] (terminator_desc) {Schnittstelle zur Außenwelt};
 
-  \node[class, legend, right=.3cm of terminator_desc] (class_ex) {\textbf{Klasse}\nodepart{second}Aufgabe};
-  \node[legend, right=.1cm of class_ex] (class_desc) {Klasse mit Aufgabe};
+    \node[class, right=.3cm of terminator_desc] (class_ex) {\textbf{Klasse}\nodepart{second}Aufgabe};
+    \node[right=.1cm of class_ex] (class_desc) {Klasse mit Aufgabe};
 
-  \node[legend, right=.3cm of class_desc] (arrow_ex_start) {};
-  \node[legend, right=.9cm of arrow_ex_start] (arrow_ex_end) {};
-  \draw[line] (arrow_ex_start) -- (arrow_ex_end);
-  \node[legend, right=.1cm of arrow_ex_end] (arrow_desc) {Datenfluss};
+    \node[right=.3cm of class_desc] (arrow_ex_start) {};
+    \node[right=.9cm of arrow_ex_start] (arrow_ex_end) {};
+    \draw[line] (arrow_ex_start) -- (arrow_ex_end);
+    \node[right=.1cm of arrow_ex_end] (arrow_desc) {Datenfluss};
 
-  \node[box, fit={(terminator_ex) (terminator_desc) (class_ex) (class_desc) (arrow_ex_start) (arrow_ex_end) (arrow_desc)}] (legend) {};
+    \node[box, fit={(terminator_ex) (terminator_desc) (class_ex) (class_desc) (arrow_ex_start) (arrow_ex_end) (arrow_desc)}] (legend) {};
+  \end{tikzpicture}
+}
 
-\end{tikzpicture}
 \caption{Der Datenfluss der Twitter News-Anwendung}
 \label{fig:der_datenfluss_der_twitter_news_anwendung}
 \end{figure}
