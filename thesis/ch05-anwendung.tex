@@ -102,7 +102,7 @@ Die Anwendungslogik besteht im Kern aus den zwei Klassen \lstinline|Twitter| und
 \lstinline|TwitterNews| liest diesen Tweet-Stream und und erstellt daraus Statistiken über Tweets für einen bestimmten Zeitraum.
 Diese Statistiken bestehen aus den meistgetweeteten Worten, den meistgeretweeteten Tweets und den meistdiskutierten Tweets.
 Für jede dieser drei Teilstatistiken wird ein Stream bereitgestellt, der immer aktualisiert wird, sobald ein neuer Tweet analysiert wird.
-Diese drei Streams werden schließlich an die verbundenen Clients gesendet, wo die Daten im Web-Browser angezeigt werden.
+Diese drei Streams werden schließlich vom \lstinline|Application|-Controller im \gls{json}-Format an die verbundenen Clients gesendet, wo die Daten im Web-Browser angezeigt werden.
 Abb.~\ref{fig:der_datenfluss_der_twitter_news_anwendung} stellt den beschriebenen Datenfluss grafisch dar.
 
 % subsection architektur (end)
