@@ -107,6 +107,24 @@ Abb.~\ref{fig:der_datenfluss_der_twitter_news_anwendung} stellt den beschriebene
 
 % subsection architektur (end)
 
+\subsection{Die Twitter-Klasse} % (fold)
+\label{sub:die_twitter_klasse}
+
+Die \lstinline|Twitter|-Klasse ist für die Kommunikation mit der Twitter-API zuständig.
+Sobald der Tweet-Stream angefordert wird, wird eine Verbindung zur Twitter-API aufgebaut.
+Die daraufhin empfangenen Tweets werden in eine interne \lstinline|Tweet|-Repräsentation konvertiert und schließlich als Tweet-Stream ausgeliefert.
+Die Besonderheit hierbei ist, dass die Twitter-API nach einiger Zeit keine Tweets mehr versendet und die Verbindung erneuert werden muss, bevor neue Tweets empfangen werden können.
+Mögliche Gründe hierfür sind beispielsweise das Öffnen einer weiteren Verbindung mit dem gleichen API-Schlüssel (es ist nur eine einzige Verbindung erlaubt) oder das Neustarten eines Streaming-Servers auf Twitters Seite \cite[vgl.][]{twitter_connecting_to_streaming_endpoint}.
+Der Autor beobachtet allerdings, dass ca. alle 90 Sekunden keine Tweets mehr empfangen werden, was nach seinem Verständnis nicht mit den oben beschriebenen Gründen vereinbar ist.
+
+Um zu erkennen, wann die Verbindung erneuert werden muss, wird bei Empfang neuer Daten ein Timer gesetzt, der nach Ablauf einer bestimmten Zeitspanne eine neue Verbindung aufbaut.
+Sobald aber weitere Daten empfangen werden, wird der zuvor erstellte Timer gestoppt und erneut gestellt.
+Falls keine weiteren Daten empfangen werden und eine neue Verbindung aufgebaut wird, werden alle über die neue Verbindung empfangenen Tweets wieder an den ursprünglichen Tweet-Stream geleitet.
+Um letzteres zu ermöglichen, wird der Tweet-\lstinline|Enumerator| zusammen mit einem \lstinline|Channel| mittels der Methode \lstinline|play.api.libs.iteratee.Concurrent.broadcast| erstellt, welche in Abschnitt~\ref{par:erstellung_durch_konstruktormethode_im_concurrent_objekt} (unter \nameref{par:erstellung_durch_konstruktormethode_im_concurrent_objekt}) behandelt wurde.
+Über diesen \lstinline|Channel| können auch aus neuen Verbindungen heraus Daten an den ursprünglichen \lstinline|Enumerator| übergeben werden.
+
+% subsection die_twitter_klasse (end)
+
 % section umsetzung (end)
 
 % chapter anwendung (end)
