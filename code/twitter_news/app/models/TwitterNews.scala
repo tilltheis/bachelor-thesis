@@ -60,7 +60,7 @@ class TwitterNews(val twitter: Twitter,
   private def isOutdated(tweet: Tweet): Boolean =
     tweet.date.withDurationAdded(relevantDuration, 1).isBeforeNow
 
-  twitter.statusStream.run(Iteratee.foreach[Tweet] { tweet =>
+  twitter.statusStream(Iteratee.foreach[Tweet] { tweet =>
     // clean up old tweets and add new one in one step
     val newIrrelevantTweets = relevantTweets.takeWhile(isOutdated)
     relevantTweets = relevantTweets.dropWhile(isOutdated)
@@ -117,7 +117,7 @@ class TwitterNews(val twitter: Twitter,
       word.startsWith("#") ||
       word == "&amp;"
 
-    
+
     def relevantWords(text: String): Seq[String] = {
       val words = text.split("\\s+").map(_.toLowerCase(Locale.ENGLISH))
       val withoutSpecialWords = words.filterNot(isSpecialWord)
