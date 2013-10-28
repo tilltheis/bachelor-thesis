@@ -1,6 +1,104 @@
 %!TEX root = thesis.tex
 
-\chapter{Anwendung} % (fold)
+\chapter{Anwendung: Twitter News} % (fold)
 \label{cha:anwendung}
+
+In diesem Kapitel wird eine Real-Time-Web-Anwendung entwickelt, welche die in den vorigen Kapiteln vorgestellten Techniken verwendet.
+Twitter News analysiert Tweets von Nachrichtenseiten und extrahiert dabei die meistgetweeteten Wörter, die meistretweeteten und die meistdiskutierten Tweets.
+Hierbei wird in erster Linie demonstriert, wie Plays reaktive Komponenten eingesetzt werden, um die auftretenden Probleme zu lösen.
+
+\section{Idee} % (fold)
+\label{sec:idee}
+
+Twitter News soll in anschaulicher Art und Weise die meistgetweeteten Wörter, die meistretweeteten und die meistdiskutierten Tweets von Nachrichtenseiten darstellen.
+Die dargestellten Daten sollen immer aktuell sein, weshalb sie auf einen bestimmten Zeitraum beschränkt werden, wie z.~B. die letzten fünf Minuten.
+Zusätzlich sollen die Daten in Echtzeit\todo{Echtzeit definieren} aktualisiert werden, sodass zu jeder Zeit nur relevante Nachrichten angezeigt werden.
+
+% section idee (end)
+
+\section{Werkzeuge} % (fold)
+\label{sec:werkzeuge}
+
+In diesem Abschnitt sollen die Werkzeuge identifiziert werden, mit denen die zuvor definierte Idee umgesetzt werden kann.
+Um an die Daten von Twitter zu gelangen, stellt Twitter sog. Streaming APIs zur Verfügung \cite[vgl.][]{twitter_streaming_apis}.
+Mit Hilfe der Streaming APIs kann der globale Twitter-Verkehr gefiltert werden, sodass z.~B. nur Tweets von ausgewählten Nachrichtenseiten empfangen werden.
+Diese Streams werden über eine HTTP-Verbindung als \gls{json}-Nachrichten übertragen.
+
+Dieser eingehende Nachrichten-Stream kann auf Seite der Anwendung mit Hilfe von \lstinline|Iteratee|s verarbeitet werden.
+Das Play-Framework enthält Werkzeuge, um HTTP-Anfragen zu versenden und die Antwort mit \lstinline|Iteratee|s nach und nach zu verarbeiten.
+
+Nach Verarbeitung der eingehenden Tweet-Daten müssen die Nachrichten schließlich an die verbundenen Clients gesendet werden.
+Da hierbei nur Daten vom Server an die Clients versendet werden sollen, bieten sich Server Sent Events an.
+Diese Daten werden auf Client-Seite dann möglichst ansprechend dargestellt.
+
+% section werkzeuge (end)
+
+\section{Umsetzung} % (fold)
+\label{sec:umsetzung}
+
+In diesem Abschnitt wird beschrieben, wie die zuvor genannten Werkzeuge genutzt werden, um die Anwendung zu implementieren.
+Dabei wird nicht Schritt für Schritt durch den Entwicklungsprozess geführt, sondern die bereits geschriebene Anwendung vorgestellt.
+Es werden die Teile vorgestellt, die  von den im Hauptteil der Arbeit behandelten Komponenten Gebrauch machen.
+Es werden konkret verwendete Teile der Iteratee-Streams-Bibliothek gezeigt und es wird auf besondere Implementierungsentscheidungen eingegangen.
+
+\subsection{Architektur} % (fold)
+\label{sub:architektur}
+
+\begin{figure}
+\centering
+\begin{tikzpicture}[
+  scale=0.9,
+  auto,
+  every node/.style={transform shape}
+]
+
+  \tikzstyle{box}=[draw, thick, text centered, text width=2.5cm, node distance=4cm, inner sep=.2cm]
+  \tikzstyle{terminator}=[box, rounded corners]
+  \tikzstyle{class}=[box, rectangle split, rectangle split parts=2]
+  \tikzstyle{line}=[->,>=stealth',shorten >=1pt, semithick, font=\footnotesize]
+  \tikzstyle{legend}=[scale=.87]
+
+  \node[terminator] (twitter_api) {Twitter-API};
+  \node[class, right of=twitter_api] (twitter) {\textbf{Twitter}\nodepart{second}Konvertiere JSON zu Tweets};
+  \node[class, right of=twitter] (twitter_news) {\textbf{TwitterNews}\nodepart{second}Analysiere Tweets};
+  \node[terminator, right=2.5cm of twitter_news] (web_browser) {Web-Browser};
+
+  \draw[line] (twitter_api) -- (twitter) node[above, midway] {JSON};
+  \draw[line] (twitter) -- (twitter_news) node[above, midway] {Tweets};
+  \draw[line] (twitter_news) to[bend left] node[above, midway] {meistgetweetet} (web_browser);
+  \draw[line] (twitter_news) -- (web_browser) node[above, midway] {meistgeretweetet};
+  \draw[line] (twitter_news) to[bend right] node[below, midway] {meistdiskutiert} (web_browser);
+
+
+  % legend
+  \node[terminator, legend, below=2.5cm of twitter_api] (terminator_ex) {Außenwelt};
+  \node[legend, right=.1cm of terminator_ex] (terminator_desc) {Schnittstelle zur Außenwelt};
+
+  \node[class, legend, right=.3cm of terminator_desc] (class_ex) {\textbf{Klasse}\nodepart{second}Aufgabe};
+  \node[legend, right=.1cm of class_ex] (class_desc) {Klasse mit Aufgabe};
+
+  \node[legend, right=.3cm of class_desc] (arrow_ex_start) {};
+  \node[legend, right=.9cm of arrow_ex_start] (arrow_ex_end) {};
+  \draw[line] (arrow_ex_start) -- (arrow_ex_end);
+  \node[legend, right=.1cm of arrow_ex_end] (arrow_desc) {Datenfluss};
+
+  \node[box, fit={(terminator_ex) (terminator_desc) (class_ex) (class_desc) (arrow_ex_start) (arrow_ex_end) (arrow_desc)}] (legend) {};
+
+\end{tikzpicture}
+\caption{Der Datenfluss der Twitter News-Anwendung}
+\label{fig:der_datenfluss_der_twitter_news_anwendung}
+\end{figure}
+
+Die Anwendungslogik besteht im Kern aus den zwei Klassen \lstinline|Twitter| und \lstinline|TwitterNews|.
+\lstinline|Twitter| ist dafür zuständig, mit der Twitter-API zu kommunizieren und die empfangenen Daten als Tweet-Stream bereitzustellen.
+\lstinline|TwitterNews| liest diesen Tweet-Stream und und erstellt daraus Statistiken über Tweets für einen bestimmten Zeitraum.
+Diese Statistiken bestehen aus den meistgetweeteten Worten, den meistgeretweeteten Tweets und den meistdiskutierten Tweets.
+Für jede dieser drei Teilstatistiken wird ein Stream bereitgestellt, der immer aktualisiert wird, sobald ein neuer Tweet analysiert wird.
+Diese drei Streams werden schließlich an die verbundenen Clients gesendet, wo die Daten im Web-Browser angezeigt werden.
+Abb.~\ref{fig:der_datenfluss_der_twitter_news_anwendung} stellt den beschriebenen Datenfluss grafisch dar.
+
+% subsection architektur (end)
+
+% section umsetzung (end)
 
 % chapter anwendung (end)
