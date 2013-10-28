@@ -125,6 +125,39 @@ Um letzteres zu ermöglichen, wird der Tweet-\lstinline|Enumerator| zusammen mit
 
 % subsection die_twitter_klasse (end)
 
+\subsection{Die TwitterNews-Klasse} % (fold)
+\label{sub:die_twitternews_klasse}
+
+\lstinline|TwitterNews| konsumiert den von \lstinline|Twitter| bereitgestellten Tweet-Stream und stellt auf Basis von diesem selber drei Streams bereit, wie in Listing~\ref{lst:die_twitternews_klasse} zu sehen.
+
+\begin{lstlisting}[caption=Die TwitterNews-Klasse, label=lst:die_twitternews_klasse]
+class TwitterNews(twitter: Twitter, relevantDuration: Duration) {
+  def mostTweetedEnumerator:   Enumerator[Map[String, Int]] = ???
+  def mostRetweetedEnumerator: Enumerator[Map[Tweet,  Int]] = ???
+  def mostDiscussedEnumerator: Enumerator[Map[Tweet,  Int]] = ???
+}
+\end{lstlisting}
+
+Um den \lstinline|Enumerator[Tweet]| zu verarbeiten, wird dieser intern auf einen \lstinline|Iteratee| angewendet.
+Dieser interne \lstinline|Iteratee| aktualisiert die Menge der für den beobachteten Zeitraum relevanten Tweets und die damit zusammenhängenden Statistiken.
+Diese aktualisierten Daten werden dann an die drei eigenen \lstinline|Enumerator|s übergeben.
+Die beschriebene Form der Datenverarbeitung ist in vereinfachter Form in Listing~\ref{lst:die_verarbeitung_eingehender_tweets_in_der_twitternews_klasse} zu sehen, in dem gezeigt wird, wie der Stream für die meistgetweeteten Wörter aktualisiert wird.
+
+\begin{lstlisting}[caption=Die Verarbeitung eingehender Tweets in der TwitterNews-Klasse, label=lst:die_verarbeitung_eingehender_tweets_in_der_twitternews_klasse]
+var relevantTweets = ???
+val (mostTweetedEnumerator, mostTweetedChannel) =
+  Concurrent.broadcast[Map[String, Int]]
+
+twitter.statusStream(Iteratee.foreach[Tweet] { tweet =>
+  relevantTweets =
+   updatedRelevantTweets(relevantTweets, tweet, relevantDuration)
+  val mostTweeted = updatedMostTweeted(relevantTweets)
+  mostTweetedChannel.push(mostTweeted)
+})
+\end{lstlisting}
+
+% subsection die_twitternews_klasse (end)
+
 % section umsetzung (end)
 
 % chapter anwendung (end)
