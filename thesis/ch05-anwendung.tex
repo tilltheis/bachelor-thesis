@@ -1,5 +1,40 @@
 %!TEX root = thesis.tex
 
+% datastore shape from http://www.texample.net/tikz/examples/data-flow-diagram/
+\makeatletter
+\pgfdeclareshape{datastore}{
+  \inheritsavedanchors[from=rectangle]
+  \inheritanchorborder[from=rectangle]
+  \inheritanchor[from=rectangle]{center}
+  \inheritanchor[from=rectangle]{base}
+  \inheritanchor[from=rectangle]{north}
+  \inheritanchor[from=rectangle]{north east}
+  \inheritanchor[from=rectangle]{east}
+  \inheritanchor[from=rectangle]{south east}
+  \inheritanchor[from=rectangle]{south}
+  \inheritanchor[from=rectangle]{south west}
+  \inheritanchor[from=rectangle]{west}
+  \inheritanchor[from=rectangle]{north west}
+  \backgroundpath{
+    %  store lower right in xa/ya and upper right in xb/yb
+    \southwest \pgf@xa=\pgf@x \pgf@ya=\pgf@y
+    \northeast \pgf@xb=\pgf@x \pgf@yb=\pgf@y
+    \pgfpathmoveto{\pgfpoint{\pgf@xa}{\pgf@ya}}
+    \pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@ya}}
+    \pgfpathmoveto{\pgfpoint{\pgf@xa}{\pgf@yb}}
+    \pgfpathlineto{\pgfpoint{\pgf@xb}{\pgf@yb}}
+ }
+}
+\makeatother
+
+\tikzstyle{box}=[draw, thick, text centered, text width=2.5cm, node distance=1.5cm and 3cm, inner sep=.2cm]
+\tikzstyle{datastore}=[box, shape=datastore]
+\tikzstyle{process}=[box, rectangle]
+\tikzstyle{terminator}=[box, rounded corners]
+\tikzstyle{class}=[box, rectangle split, rectangle split parts=2]
+\tikzstyle{line}=[->,>=stealth',shorten >=1pt, semithick, font=\footnotesize]
+\tikzstyle{container}=[text width=3cm]
+
 \chapter{Anwendung: Twitter News} % (fold)
 \label{cha:anwendung}
 
@@ -46,11 +81,6 @@ Es werden konkret verwendete Teile der Iteratee-Streams-Bibliothek gezeigt und e
 
 \begin{figure}
 \centering
-
-\tikzstyle{box}=[draw, thick, text centered, text width=2.5cm, node distance=1.5cm and 3cm, inner sep=.2cm]
-\tikzstyle{terminator}=[box, rounded corners]
-\tikzstyle{class}=[box, rectangle split, rectangle split parts=2]
-\tikzstyle{line}=[->,>=stealth',shorten >=1pt, semithick, font=\footnotesize]
 
 \resizebox{\linewidth}{!}{%
   \begin{tikzpicture}
@@ -138,6 +168,9 @@ class TwitterNews(twitter: Twitter, relevantDuration: Duration) {
 }
 \end{lstlisting}
 
+\subsubsection{Verarbeitung eingehender Tweets} % (fold)
+\label{ssub:verarbeitung_eingehender_tweets}
+
 Um den \lstinline|Enumerator[Tweet]| zu verarbeiten, wird dieser intern auf einen \lstinline|Iteratee| angewendet.
 Dieser interne \lstinline|Iteratee| aktualisiert die Menge der für den beobachteten Zeitraum relevanten Tweets und die damit zusammenhängenden Statistiken.
 Diese aktualisierten Daten werden dann an die drei eigenen \lstinline|Enumerator|s übergeben.
@@ -155,6 +188,88 @@ twitter.statusStream(Iteratee.foreach[Tweet] { tweet =>
   mostTweetedChannel.push(mostTweeted)
 })
 \end{lstlisting}
+
+% subsubsection verarbeitung_eingehender_tweets (end)
+
+\subsubsection{Sonderfall: meistdiskutierte Tweets} % (fold)
+\label{ssub:sonderfall_meistdiskutierte_tweets}
+
+Bei der Elementgenerierung für den Stream der meistdiskutierten Tweets besteht folgende Herausforderung:
+Tweets die eine Antwort auf einen anderen Tweet sind, beinhalten nicht den gesamten Tweet, auf den sie antworten, sondern nur die ID des anderen Tweets.
+Im Gegensatz zu Retweets, über die der originale Tweet ausgelesen werden kann, muss für jeden diskutierten Tweet eine Anfrage an die Twitter-API gesendet werden, um den ursprünglichen Tweet zu empfangen.
+Um nicht für jede Antwort auf jeden Tweet eine HTTP-Anfrage versenden zu müssen, erfolgen einige aufwandsersparende Maßnahmen.
+
+\begin{figure}
+\centering
+
+\resizebox{\linewidth}{!}{%
+  \begin{tikzpicture}[remember picture]
+    \node[terminator] (twitter_api) {Twitter-API};
+
+    \node[class, container, below=of twitter_api] (twitter) {
+      \textbf{Twitter}
+      \nodepart{second}
+      \begin{tikzpicture}[remember picture]
+        \node[process] (resolve_tweet_id) {Lade Tweets};
+        \node[datastore, below=of resolve_tweet_id] (tweet_cache) {Tweet-Cache};
+      \end{tikzpicture}
+    };
+
+    \node[class, container, right=of twitter.south east, anchor=south west] (twitter_news) {
+      \textbf{TwitterNews}
+      \nodepart{second}
+      \begin{tikzpicture}[remember picture]
+        \node[process] (analyze_tweets) {Analysiere Tweets};
+        \node[datastore, below=of analyze_tweets] (tweet_id_buffer) {Tweet-IDs-Buffer};
+        \node[process, below=of tweet_id_buffer] (request_tweets) {Fordere Tweets an};
+      \end{tikzpicture}
+    };
+
+
+    \draw[line, transform canvas={xshift=-1mm}] (resolve_tweet_id) -- (tweet_cache) node[left, midway] {Tweet-IDs};
+    \draw[line, transform canvas={xshift=1mm}] (tweet_cache) -- (resolve_tweet_id) node[right, midway] {Tweets};
+
+    \draw[line] ([yshift=-1mm] resolve_tweet_id.west) to[bend left=50] node[auto, near end] {Tweet-IDs} ([yshift=1mm] twitter_api.west);
+    \draw[line] ([yshift=-1mm] twitter_api.west) to[bend right] node[auto, near start] {Tweets} ([yshift=1mm] resolve_tweet_id.west);
+
+    \draw[line] (analyze_tweets) -- (tweet_id_buffer) node[fill=white, midway, align=center] {meistdiskutierte\\Tweet-IDs};
+    \draw[line] (tweet_id_buffer) -- (request_tweets) node[fill=white, midway, align=center] {meistdiskutierte\\Tweet-IDs};
+
+    \draw[line, transform canvas={yshift=1mm}] (request_tweets.west) -- (resolve_tweet_id.east) node[sloped, anchor=center, above, midway] {Tweet-IDs};
+    \draw[line, transform canvas={yshift=-1mm}] (resolve_tweet_id.east) -- (request_tweets.west) node[sloped, anchor=center, below, midway] {Tweets};
+
+    \draw[line, transform canvas={yshift=1mm}] ([xshift=-2cm] analyze_tweets.west) -- (analyze_tweets) node[above, midway] {Tweets};
+
+    \draw[line, transform canvas={yshift=1mm}] (analyze_tweets) -- ([xshift=3cm] analyze_tweets.east) node[above, midway] {meistgetweetet};
+    \draw[line, transform canvas={yshift=-1mm}] (analyze_tweets) -- ([xshift=3cm] analyze_tweets.east) node[below, midway] {meistgeretweetet};
+
+    \draw[line, transform canvas={yshift=-1mm}] (request_tweets) -- ([xshift=3cm] request_tweets.east) node[above, midway] {meistdiskutiert};
+  \end{tikzpicture}
+}
+
+\vspace{5mm}
+
+\resizebox{\linewidth}{!}{%
+  % legend
+  \begin{tikzpicture}
+    \node[class] (class_ex) {\textbf{Klasse}\nodepart{second}Details};
+    \node[right=.1cm of class_ex] (class_desc) {Klasse mit Details};
+
+    \node[process, right=3mm of class_desc] (process_ex) {Aufgabe};
+    \node[right=.1cm of process_ex] (process_desc) {Aufgabe};
+
+    \node[datastore, right=3mm of process_desc] (datastore_ex) {Datenspeicher};
+    \node[right=.1cm of datastore_ex] (datastore_desc) {Datenspeicher};
+
+    \node[box, fit={(class_ex) (class_desc) (process_ex) (process_desc) (datastore_ex) (datastore_desc)}] (legend) {};
+  \end{tikzpicture}
+}
+
+\caption{Der Datenfluss zur Auflösung meistdiskutierter Tweet-IDs}
+\label{fig:der_datenfluss_der_twitter_news_anwendung}
+\end{figure}
+
+% subsubsection sonderfall_meistdiskutierte_tweets (end)
 
 % subsection die_twitternews_klasse (end)
 
