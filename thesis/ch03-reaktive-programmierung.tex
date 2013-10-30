@@ -299,7 +299,7 @@ Future {
 \label{sub:execution_contexts}
 
 Die nebenläufigen Berechnungen, die von \lstinline|Future|s ausgeführt werden, werden innerhalb von \lstinline|scala.concurrent.ExecutionContext|s ausgeführt.
-Ein \lstinline|ExecutionContext| ist vergleichbar mit einem Thread-Pool\todo{braucht das eine Definition?} und ist dafür zuständig, dass an ihn delegierte Aufgaben im Hintergrund ausgeführt werden.
+Ein \lstinline|ExecutionContext| ist vergleichbar mit einem Thread-Pool und ist dafür zuständig, dass an ihn delegierte Aufgaben im Hintergrund ausgeführt werden.
 Die zuvor vorgestellte Methode \lstinline|Future.apply| nimmt neben der Berechnungsanweisung auch einen impliziten Parameter vom Typ \lstinline|ExecutionContext|.
 Dieser \lstinline|ExecutionContext| muss nicht per Hand erstellt werden.
 Mittels \lstinline|import scala.concurrent.ExecutionContext.Implicits.global| kann ein vordefinierter \lstinline|ExecutionContext| importiert werden.
@@ -666,7 +666,7 @@ Der Code ist auf die elementaren Aufgaben reduziert und es ist nun klar zu erken
 \label{par:erstellung_durch_konstruktormethode_im_companion_objekt}\mbox{} % force new line
 
 Die dritte und letzte Möglichkeit nutzt eine problemspezifische Konstruktormethode im Companion-Objekt.
-Das Aufsummieren einer Menge von Zahlen lässt sich sehr einfach mit Hilfe eines Folds implementieren\todo{Erklären, was ein Fold ist}.
+Das Aufsummieren einer Menge von Zahlen lässt sich sehr einfach mit Hilfe eines Folds implementieren.
 Das \lstinline|Iteratee|-Companion-Objekt beinhaltet u.~a. die \lstinline|fold|-Konstruktormethode, die für solche Operationen gedacht ist.
 Durch Einsatz dieser Methode wird die Lösung, wie in Listing~\ref{lst:iteratee_durch_hilfsmethode} zu erkennen, zum Einzeiler.
 Es muss nicht mehr zwischen unterschliedlichen \lstinline|Input|-Arten unterschieden werden, sondern es muss sich nur noch um tatsächliche Eingabeelemente gekümmert werden.
