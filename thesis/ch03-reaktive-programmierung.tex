@@ -495,12 +495,14 @@ Die Transformation muss dabei aber nicht ein Element nach genau einem anderen El
 Ein äußeres Element \lstinline|From| kann zu einem, keinem oder auch mehreren inneren Elementen \lstinline|To| abgebildet werden.
 Genauso ist es möglich, dass mehrere äußere Elemente zu einem inneren Element zusammengefasst werden.
 
+\begin{sloppypar} % larger word spacing so that \lstinline will not go out of line margin
 Ein \lstinline|Enumeratee| kann auch als \lstinline|Enumerator| betrachtet werden.
 Dies kommt daher, dass \lstinline|Iteratee|s Monaden sind.
 Ein \lstinline|Enumeratee| ist ein \lstinline|Enumerator|, dessen Ergebnis nicht in der \lstinline|Future|-Monade, sondern in der \lstinline|Iteratee|-Monade liegt.
 Jeder \lstinline|Enumeratee| ist auch ein \lstinline|Iteratee|, wenn man seinen Rückgabewert betrachtet, der vom Typ \lstinline|Iteratee| ist.
 Ein \lstinline|Enumeratee| ist also sowohl in der Rolle eines \lstinline|Iteratee|s, als auch in der Rolle eines \lstinline|Enumerator|s.
 Er ist ein \lstinline|Iteratee| des äußeren Typs \lstinline|From| und ein \lstinline|Enumerator| des inneren Typs \lstinline|To|, weil er Elemente des äußeren Typs konsumiert und Elemente des inneren Typs generiert.
+\end{sloppypar}
 
 % subsection design_enumeratees (end)
 
@@ -910,7 +912,7 @@ Es gibt drei Möglichkeiten, einen \lstinline|Enumeratee| zu erstellen.
 \begin{enumerate}
   \item Durch Erstellung einer neuen Klasse, die das \lstinline|Enumeratee|-Trait implementiert.
   \item Durch Benutzung einer Konstruktormethode des Companion-Objekts (\lstinline|map|, \lstinline|filter|, u.~a.)
-  \item Durch Benutzung einer Konstruktormethode des \lstinline|play.api.libs.iteratee.Traversable|-Objekts (\lstinline|take|, \lstinline|drop|, u.~a.)
+  \item Durch Benutzung einer Konstruktormethode des \lstinline|Traversable|-Objekts aus dem \lstinline|play.api.libs.iteratee|-Paket (\lstinline|take|, \lstinline|drop|, u.~a.)
 \end{enumerate}
 
 Im Folgenden werden die ersten beiden Möglichkeiten vorgestellt und mit Beispielen veranschaulicht.
@@ -1183,10 +1185,12 @@ val result: Future[(Option[Char], Option[Int])] =
 \subsubsection{Sequentielle Komposition von Enumerators} % (fold)
 \label{ssub:anwendung_sequentielle_komposition_von_enumerators}
 
+\begin{sloppypar} % larger word spacing so that \lstinline will not go out of line margin
 Sequentielle Komposition zweier \lstinline|Enumerator|s heißt, dass erst die Elemente des ersten \lstinline|Enumerator|s generiert werden, bis dieser erschöpft ist und anschließend die Elemente des zweiten \lstinline|Enumerator|s generiert werden.
 Das \lstinline|Enumerator|-Trait stellt hierfür die Methode \lstinline|andThen| mit der Signatur \lstinline[breaklines=true]|Enumerator[E] => Enumerator[E]| bereit.
 Diese Methode erstellt einen neuen \lstinline|Enumerator|, der die Elemente des ursprünglichen \lstinline|Enumerator|s und dann die Elemente des übergebenen \lstinline|Enumerator|s enumeriert.
 Listing~\ref{lst:sequentielle_komposition_von_enumerators} zeigt, wie \lstinline|andThen| verwendet werden kann, um zwei \lstinline|Enumerator|s sequentiell zu komponieren.
+\end{sloppypar}
 
 \begin{lstlisting}[caption=Sequentielle Komposition von Enumerators, label=lst:sequentielle_komposition_von_enumerators]
 val i: Iteratee[Int, List[Int]] = Iteratee.getChunks

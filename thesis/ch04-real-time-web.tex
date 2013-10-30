@@ -48,6 +48,7 @@ Die \lstinline|close|-Methode schließt das \lstinline|WebSocket| wieder.
 \subsection{Web-Sockets auf Server-Seite} % (fold)
 \label{sub:web_sockets_auf_server_seite}
 
+\begin{sloppypar} % larger word spacing so that \lstinline will not go out of line margin
 Auf der Server-Seite wird ein \lstinline|WebSocket| ähnlich wie eine \lstinline|Action| dargestellt.
 Statt eines \lstinline|Action { ... }|-Blocks wird im Controller ein \lstinline|WebSocket.using { ... }|-Block verwendet.
 \lstinline|WebSocket.using[A]| erwartet als Argument eine Funktion von \lstinline|RequestHeader| nach \lstinline|(Iteratee[A, _], Enumerator[A])|.
@@ -55,6 +56,7 @@ Statt eines \lstinline|Action { ... }|-Blocks wird im Controller ein \lstinline|
 Der \lstinline|Request-Handler| muss in der Regel nicht direkt verwendet werden.
 Die Funktion muss ein Paar aus \lstinline|Iteratee| und \lstinline|Enumerator| zurückgeben.
 Der \lstinline|Iteratee| empfängt die eingehenden Nachrichten des Clients und der \lstinline|Enumerator| generiert Nachrichten, die an den Client verschickt werden.
+\end{sloppypar}
 
 Zusätzlich zur oben beschriebenen Methode im Controller, muss eine entsprechende Route in der \lstinline|conf/routes|-Datei angelegt werden.
 Dieser Eintrag unterscheidet sich nicht von denen für reguläre \lstinline|Action|s und wird für die HTTP-Methode \lstinline|GET| definiert.
