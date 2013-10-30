@@ -54,6 +54,21 @@
 \lstset{breakatwhitespace=true}
 
 
+% \zzz comand as replacement for \lstinline with hyphenation for camelCase
+% from http://tex.stackexchange.com/questions/66593/automatic-camel-case-breaking
+\makeatletter
+\def\zzz{\leavevmode\begingroup
+\let\ifcase\iftrue
+\def\or##1{%
+  \catcode`##1\active\uccode`\~`##1\uppercase{%
+    \def~{\egroup\penalty2\hbox\bgroup\string##1}}}%
+\@Alph{}%
+\@zzz}
+
+\def\@zzz#1{\ttfamily\small{\hbox\bgroup#1\egroup}\endgroup}
+\makeatother
+
+
 %% define some colors
 \colorlet{BackgroundColor}{gray!20}
 \colorlet{KeywordColor}{blue}
