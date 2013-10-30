@@ -86,8 +86,8 @@ class TwitterNews(val twitter: Twitter,
     mostDiscussedIdsEnumerator.through(
       Concurrent.buffer(1).compose(
         Enumeratee.mapM[Map[Long, Int]] { map =>
-          val (ids, replyCounts) = map.toSeq.unzip
-          val tweetsM = twitter.fetchTweets(ids)
+          val (ids, replyCounts) = map.unzip
+          val tweetsM = twitter.fetchTweets(ids.toSeq)
           val mapM = tweetsM.map(_.zip(replyCounts).toMap)
           mapM.map(Some(_)).recover { case _: TimeoutException => None }
         }
