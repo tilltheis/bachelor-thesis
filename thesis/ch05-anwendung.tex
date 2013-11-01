@@ -323,6 +323,25 @@ Würden die Elemente sofort an die Clients gesendet, so könnte die ständige Ne
 
 % subsection der_application_controller (end)
 
+\subsection{Die Client-Seite} % (fold)
+\label{sub:die_client_seite}
+
+Auf der Client-Seite werden mittels Server Sent Events die Streams der meistgetweeteten Wörter, der meistgeretweeteten Tweets und der meistdiskutierten Tweets empfangen.
+Aufgabe der Client-Seite ist hierbei nur die Veranschaulichung der Daten.
+Dazu werden die meistgetweeteten Wörter in einer Word-Cloud angezeigt, die sich im Sekundentakt aktualisiert und so die meistgetweeteten Wörter der letzten zwei Minuten darstellt.
+Die meistgeretweeteten und meistdiskutierten Tweets werden in einer jeweils eigenen Spalte dargestellt und zeigen neben den jeweiligen Tweets auch die Anzahl der Retweets, bzw. Antworten, nach denen sie auch sortiert sind.
+Diese beiden Spalten werden alle fünf Sekunden aktualisiert, weil diese weniger Veränderungen unterliegen.
+Abb.~\ref{fig:die_twitternews_anwendung} zeigt einen Screenshot der fertigen TwitterNews-Anwendung.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{twitter_news.png}
+\caption{Die TwitterNews-Anwendung}
+\label{fig:die_twitternews_anwendung}
+\end{figure}
+
+% subsection die_client_seite (end)
+
 % section umsetzung (end)
 
 % chapter anwendung (end)
