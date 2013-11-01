@@ -310,6 +310,19 @@ val mostDiscussedEnumerator: Enumerator[Map[Tweet, Int]] =
 
 % subsection die_twitternews_klasse (end)
 
+\subsection{Der Application-Controller} % (fold)
+\label{sub:der_application_controller}
+
+Der \lstinline|Application|-Controller ist der Teil der Anwendung, der direkt mit den Nutzern zu tun hat.
+Dieser Controller sorgt dafür dass Anfragen für die Hauptseite und die \lstinline|EventSource|s für die Server Sent Events beantwortet werden.
+Für die Hauptseite wird ein passendes View-Template gerendert.
+Für die einzelnen \lstinline|EventSource|s werden die jeweiligen Streams des \lstinline|TwitterNews|-Models verwendet.
+Die verwendeten Streams werden allerdings so verlangsamt, dass z.~B. nur alle fünf Sekunden ein Element generiert wird.
+Elemente, die in der Zwischenzeit generiert werden, werden ignoriert, sodass z.~B. nur alle fünf Sekunden das aktuellste Element an die Clients versendet wird.
+Würden die Elemente sofort an die Clients gesendet, so könnte die ständige Neudarstellung der Daten so viel Rechenaufwand bei den Clients erzeugen, dass der gesamte PC des Nutzers/der Nutzerin ausgebremst würde.
+
+% subsection der_application_controller (end)
+
 % section umsetzung (end)
 
 % chapter anwendung (end)
