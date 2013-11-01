@@ -282,7 +282,7 @@ Abb.~\ref{fig:der_datenfluss_zur_aufloesung_meistdikutierter_tweet_ids} zeigt da
 \label{fig:der_datenfluss_zur_aufloesung_meistdikutierter_tweet_ids}
 \end{figure}
 
-In Listing~\ref{lst:der_mostdiscussed_enumerator} ist zu sehen, wie der \lstinline|mostDiscussedEnumerator| mit Hilfe von \lstinline|Enumeratee|s implementiert worden ist.
+In Listing~\ref{lst:der_mostdiscussedenumerator} ist zu sehen, wie der \lstinline|mostDiscussedEnumerator| mit Hilfe von \lstinline|Enumeratee|s implementiert worden ist.
 Wie zuvor beschrieben, werden die Elemente des \zzz{mostDiscussedIdsEnumerator}s in einen Buffer geschrieben.
 Play liefert bereits einen passenden Buffer-\lstinline|Enumeratee|, der im \lstinline|play.api.libs.iteratee.Concurrent|-Objekt zu finden ist.
 Anschließend werden die Elemente aus dem Buffer durch einen weiteren \lstinline|Enumeratee| transformiert, der das jeweilige Element vom Typ \lstinline|Map[Long, Int]| nimmt und die Tweet-IDs mit Hilfe der \lstinline|Twitter|-Klasse auflösen lässt.
@@ -291,7 +291,7 @@ Falls die Tweet-IDs nicht aufgelöst werden konnten, ist der \lstinline|Future| 
 Der verwendete \lstinline|Enumeratee| \lstinline|mapM| ist extra für asynchrone Berechnungen wie diese ausgelegt, weshalb der \lstinline|Future|-Wert als Ergebnis ausreicht, ohne dass in der Berechnung selber auf ein Ergebnis gewartet werden muss.
 Im letzten Schritt werden die positiven Ergebnisse herausgefiltert und als Elemente des \lstinline|mostDiscussedEnumerator|s generiert.
 
-\begin{lstlisting}[caption=Der mostDiscussed-Enumerator, label=lst:der_mostdiscussed_enumerator]
+\begin{lstlisting}[caption=Der mostDiscussedEnumerator, label=lst:der_mostdiscussedenumerator]
 val mostDiscussedEnumerator: Enumerator[Map[Tweet, Int]] =
   mostDiscussedIdsEnumerator.through(
     Concurrent.buffer(1).compose(
