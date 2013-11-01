@@ -84,9 +84,9 @@ class TwitterNews(val twitter: Twitter,
       Concurrent.buffer(1).compose(
         Enumeratee.mapM[Map[Long, Int]] { map =>
           val (ids, replyCounts) = map.unzip
-          val tweetsM = twitter.fetchTweets(ids.toSeq)
-          val mapM = tweetsM.map(_.zip(replyCounts).toMap)
-          mapM.map(Some(_)).recover {
+          val futureTweets = twitter.fetchTweets(ids.toSeq)
+          val futureMostDiscussed = futureTweets.map(_.zip(replyCounts).toMap)
+          futureMostDiscussed.map(Some(_)).recover {
             case _: TimeoutException |
                  _: InvalidTweetFormatException => None
           }
