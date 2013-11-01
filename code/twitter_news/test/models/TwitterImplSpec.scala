@@ -14,6 +14,7 @@ import play.api.libs.ws.SignatureCalculator
 import play.api.libs.ws.WS.WSRequest
 
 import helpers.TweetSamples._
+import scala.util.control.Exception
 
 
 class TwitterImplSpec extends PlaySpecification {
@@ -142,7 +143,7 @@ class TwitterImplSpec extends PlaySpecification {
       }
 
       val f = twitter.fetchTweet(tweet.id)
-      Thread.sleep(500) // don't use await/Await.{ready,result) because they throw on Future.failed
+      try { await(f) } catch { case _: TimeoutException => () }
       f.value must beAnInstanceOf[Some[Failure[TimeoutException]]]
     }
 
