@@ -1,5 +1,7 @@
 package models
 
+import java.util.concurrent.TimeoutException
+
 import scala.concurrent.Future
 
 import org.joda.time.{Duration => JodaDuration, DateTime}
@@ -243,6 +245,66 @@ class TwitterNewsSpec extends PlaySpecification {
             , Map(tweet -> 1)
             , Map(tweet -> 2)
             , Map(tweetWithRetweet -> 1, tweet -> 2)
+            )
+
+      await(resultM) === expected
+    }
+
+    "work with tweets that could not be fetched" in {
+      val (statusStreamE, channel) = Concurrent.broadcast[Tweet]
+
+      // fetching tweetWithRetweet or tweetWithReply for the first time will fail
+      val twitter = new Twitter {
+        val tweetId = tweet.id
+        val tweetWithRetweetId = tweetWithRetweet.id
+        val tweetWithReplyId = tweetWithReply.id
+
+        var tweetWithRetweetRequestCount = 0
+        var tweetWithReplyRequestCount = 0
+
+        def fetchTweet(id: Long): Future[Tweet] = id match {
+          case `tweetId` => Future.successful(tweet)
+
+          case `tweetWithRetweetId` =>
+            if (tweetWithRetweetRequestCount == 0) {
+              tweetWithRetweetRequestCount += 1
+              Future.failed(new TimeoutException)
+            } else {
+              Future.successful(tweetWithRetweet)
+            }
+
+          case `tweetWithReplyId` =>
+            if (tweetWithReplyRequestCount == 0) {
+              tweetWithReplyRequestCount += 1
+              Future.failed(InvalidTweetFormatException("tweet"))
+            } else {
+              Future.successful(tweetWithReply)
+            }
+        }
+
+        def statusStream: Enumerator[Tweet] = statusStreamE
+      }
+
+      val twitterNews = new TwitterNews(twitter, JodaDuration.standardDays(99999), 10, 10, 10)
+
+      val e = twitterNews.mostDiscussedEnumerator
+      val i = Enumeratee.take(4).transform(Iteratee.getChunks[Map[Tweet, Int]])
+      val resultM = e.run(i)
+
+      pushAll(channel, 250, tweetWithReply
+                          , tweet.copy(replyToTweetId = Some(tweetWithRetweet.id))
+                          , tweet.copy(replyToTweetId = Some(tweetWithRetweet.id))
+                          , tweet.copy(replyToTweetId = Some(tweetWithReply.id))
+                          , tweet.copy(replyToTweetId = Some(tweetWithReply.id))
+                          , tweetWithReply
+                          , tweetWithReply
+                          )
+
+      val expected =
+        List( Map(tweet -> 1)
+            , Map(tweet -> 1, tweetWithRetweet -> 2)
+            , Map(tweet -> 1, tweetWithRetweet -> 2, tweetWithReply -> 2)
+            , Map(tweet -> 2, tweetWithRetweet -> 2, tweetWithReply -> 2)
             )
 
       await(resultM) === expected

@@ -145,6 +145,16 @@ class TwitterImplSpec extends PlaySpecification {
       Thread.sleep(500) // don't use await/Await.{ready,result) because they throw on Future.failed
       f.value must beAnInstanceOf[Some[Failure[TimeoutException]]]
     }
+
+
+    val invalidFormatWebService = FakeApplication(withRoutes = {
+      case (GET, _) => Action(Ok("invalid format"))
+    })
+
+    "fail when it receives tweets in an unknown format" in new WithServer(invalidFormatWebService) {
+      val twitter = new TestTwitter
+      await(twitter.fetchTweet(1)) must throwA[InvalidTweetFormatException]
+    }
   }
 
   "fetchTweets" should {

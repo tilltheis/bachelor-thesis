@@ -1,5 +1,6 @@
 package models
 
+import scala.util.control.Exception
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.FiniteDuration
@@ -87,14 +88,18 @@ trait TwitterImpl extends Twitter { this: TwitterUrlComponent with TwitterTimeou
         .sign(signature)
         .withRequestTimeout(tweetFetchTimeout.toMillis.toInt)
         .get().flatMap { response =>
-        response.json.validate[Tweet].fold(
-          invalid = _ => Future.failed(new RuntimeException("invalid tweet format")),
-          valid = tweet => {
-            TweetCache.set(tweet)
-            Future.successful(tweet)
+          // parsing a string into json may throw...
+          lazy val failed = Future.failed(InvalidTweetFormatException(response.body))
+          Exception.nonFatalCatch.withApply(_ => failed) {
+            response.json.validate[Tweet].fold(
+              invalid = _ => failed,
+              valid = tweet => {
+                TweetCache.set(tweet)
+                Future.successful(tweet)
+              }
+            )
           }
-        )
-      }
+        }
     }
 
 

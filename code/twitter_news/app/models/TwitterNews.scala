@@ -3,14 +3,11 @@ package models
 import java.util.Locale
 import java.util.concurrent.TimeoutException
 
-import scala.io.{Codec, Source}
 import scala.concurrent.ExecutionContext.Implicits.global
 
 import org.joda.time.{Duration => JodaDuration}
 
 import play.api.libs.iteratee.{Iteratee, Concurrent, Enumeratee, Enumerator}
-import play.api.Play
-import play.api.Play.current
 
 
 object TwitterNews {
@@ -89,7 +86,10 @@ class TwitterNews(val twitter: Twitter,
           val (ids, replyCounts) = map.unzip
           val tweetsM = twitter.fetchTweets(ids.toSeq)
           val mapM = tweetsM.map(_.zip(replyCounts).toMap)
-          mapM.map(Some(_)).recover { case _: TimeoutException => None }
+          mapM.map(Some(_)).recover {
+            case _: TimeoutException |
+                 _: InvalidTweetFormatException => None
+          }
         }
       ).compose(
         Enumeratee.collect {
