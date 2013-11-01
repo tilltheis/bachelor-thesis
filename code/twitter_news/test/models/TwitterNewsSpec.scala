@@ -224,13 +224,28 @@ class TwitterNewsSpec extends PlaySpecification {
       val (twitter, channel) = twitterWithChannel
       val twitterNews = new TwitterNews(twitter, JodaDuration.standardDays(99999), 10, 10, 10)
       val e = twitterNews.mostDiscussedEnumerator
+      val i = Enumeratee.take(5).transform(Iteratee.getChunks[Map[Tweet, Int]])
+      val resultM = e.run(i)
 
-      def take(n: Int): Iteratee[Map[Tweet, Int], List[Map[Tweet, Int]]] =
-        Enumeratee.take(n).transform(Iteratee.getChunks)
+      // in tests we have to send one more element than actually required
+      // otherwise the buffer (used in the implementation) will not be read.
+      // it actually is read but the tests don't see that...
+      pushAll(channel, 250, tweet,
+                            tweetWithReply,
+                            tweetWithRetweet,
+                            tweetWithReply,
+                            tweet.copy(replyToTweetId = Some(tweetWithRetweet.id)),
+                            tweet)
 
-      val res1 = e.run(take(1))
-      channel.push(tweet)
-      await(res1) === List(Seq.empty)
-    }.pendingUntilFixed("don't know how to test this as tests fail although it works")
+      val expected =
+        List( Map.empty
+            , Map(tweet -> 1)
+            , Map(tweet -> 1)
+            , Map(tweet -> 2)
+            , Map(tweetWithRetweet -> 1, tweet -> 2)
+            )
+
+      await(resultM) === expected
+    }
   }
 }
