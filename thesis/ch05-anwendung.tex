@@ -209,7 +209,7 @@ Deshalb werden die Elemente des Tweet-IDs-Streams vor der Verarbeitung in einen 
 Dieser Buffer fasst immer nur ein Element, also die immer die aktuellste \lstinline|Map| der meistdiskutierten Tweet-IDs.
 Der \lstinline|mostDiscussedEnumerator| übersetzt also nicht alle Elemente des Tweet-IDs-Streams, aber immer die aktuellsten.
 Das Übersetzen aller Elemente ist aufgrund des Zeitaufwands für die HTTP-Anfragen an die Twitter-API schlicht unmöglich, der Durchsatz wird durch das Cachen der Antworten allerdings wesentlich erhöht.
-Wird nach dem Versenden einer Anfrage an die Twitter-API nach dem Verlauf einer bestimmten Zeitspanne keine Antwort empfangen, so wird kein Element für den \lstinline|mostDiscussedEnumerator| generiert.
+Wird nach dem Versenden einer Anfrage an die Twitter-API nach dem Verlauf einer bestimmten Zeitspanne keine Antwort oder eine Antwort, die kein Tweet ist, empfangen, so wird kein Element für den \lstinline|mostDiscussedEnumerator| generiert.
 Abb.~\ref{fig:der_datenfluss_zur_aufloesung_meistdikutierter_tweet_ids} zeigt das beschriebene Verfahren als Diagramm.
 
 \begin{figure}[h]
@@ -287,7 +287,7 @@ Wie zuvor beschrieben, werden die Elemente des \zzz{mostDiscussedIdsEnumerator}s
 Play liefert bereits einen passenden Buffer-\lstinline|Enumeratee|, der im \lstinline|play.api.libs.iteratee.Concurrent|-Objekt zu finden ist.
 Anschließend werden die Elemente aus dem Buffer durch einen weiteren \lstinline|Enumeratee| transformiert, der das jeweilige Element vom Typ \lstinline|Map[Long, Int]| nimmt und die Tweet-IDs mit Hilfe der \lstinline|Twitter|-Klasse auflösen lässt.
 \lstinline|twitter.fetchTweets| gibt einen \lstinline|Future[Seq[Tweet]]| zurück, dessen zukünftiges Ergebnis mit Hilfe der \lstinline|map|-Methode dann in \lstinline|Map[Tweet, Int]| transformiert wird.
-Falls die Tweet-IDs nicht aufgelöst werden konnten, ist der \lstinline|Future| fehlgeschlagen und kann mit einer Prüfung auf die Ursache, in diesem Fall ein Wert von Typ \lstinline|TimeoutException|, in einen erfolgreichen Zustand gebracht werden.
+Falls die Tweet-IDs nicht aufgelöst werden konnten, ist der \lstinline|Future| fehlgeschlagen und kann mit einer Prüfung auf die Ursache, in diesem Fall ein Wert von Typ \lstinline|TimeoutException| oder \lstinline|InvalidTweetFormatException|, in einen erfolgreichen Zustand gebracht werden.
 Der verwendete \lstinline|Enumeratee| \lstinline|mapM| ist extra für asynchrone Berechnungen wie diese ausgelegt, weshalb der \lstinline|Future|-Wert als Ergebnis ausreicht, ohne dass in der Berechnung selber auf ein Ergebnis gewartet werden muss.
 Im letzten Schritt werden die positiven Ergebnisse herausgefiltert und als Elemente des \lstinline|mostDiscussedEnumerator|s generiert.
 
@@ -299,8 +299,10 @@ val mostDiscussedEnumerator: Enumerator[Map[Tweet, Int]] =
         val (ids, replyCounts) = map.unzip
         val tweetsM = twitter.fetchTweets(ids.toSeq)
         val mapM = tweetsM.map(_.zip(replyCounts).toMap)
-        mapM.map(Some(_))
-            .recover { case _: TimeoutException => None }
+        mapM.map(Some(_)).recover {
+          case _: TimeoutException |
+               _: InvalidTweetFormatException => None
+        }
       }
     ).compose(Enumeratee.collect { case Some(tweets) => tweets })
   )
