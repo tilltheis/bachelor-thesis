@@ -221,6 +221,7 @@ Dieser Abschnitt behandelt diese beiden Datentypen und orientiert sich dabei an 
 \lstinline|Future| ist eine Monade, die das Ergebnis einer nebenläufigen Berechnung kapselt.
 Ein \lstinline|Future| ein Datentyp, der entweder für ein erfolgreich berechnetes Ergebnis, für einen aufgetretenen Fehler, oder für eine noch andauernde Berechnung steht.
 Solange kein Fehler aufgetreten und auch die Berechnung noch nicht vollendet ist, ist auch das \lstinline|Future| noch nicht vollendet und hält kein Ergebnis.
+Über den \lstinline|Future|-Datentyp kann in nicht-blockierender Art und Weise auf dem berechneten Ergebnis operiert werden.
 
 \subsubsection{Futures ohne Promise erstellen} % (fold)
 \label{ssub:futures_erstellen}
@@ -242,6 +243,7 @@ Wie alle Monaden in Scala, haben \lstinline|Future|s die Methoden \lstinline|map
 \lstinline|def map[S](f: T => S): Future[S]| führt die übergebene Funktion aus, sobald die Berechnung des \lstinline|Future|s zu einem Ergebnis gekommen ist.
 Führt die Berechnung zu keinem Ergebnis, weil ein Fehler aufgetreten ist, so wird auch die übergebene Funktion nicht ausgeführt.
 Mit \lstinline|def flatMap[S](f: T => Future[S]): Future[S]| verhält es sich genauso.
+Keine dieser Methoden blockiert den aktuellen Thread, weil die übergebenen Funktionen im Hintergrund ausgeführt werden.
 
 Um mehrere \lstinline|Future|s zu kombinieren, bedeutet zu warten, bis alle \lstinline|Future|s ihre Berechneten Werte halten, erst dann kann mit diesen Werten weitergearbeitet werden.
 Listing~\ref{lst:futures_kombinieren} zeigt, wie dies für zwei \lstinline|Future|s umgesetzt werden könnte.
