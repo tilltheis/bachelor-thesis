@@ -351,7 +351,7 @@ object Input {
 \end{lstlisting}
 
 Der Datentyp ist über den \glslink{kovarianz}{kovarianten} Typ \lstinline|E| der gehaltenen Elemente parametrisiert.
-\gls{kovarianz} bedeutet, dass wenn \lstinline|F| ein spezialisierter Typ von \lstinline|E| ist, \lstinline|Input[F]| auch ein spezialisierter Typ von \lstinline|Input[E]| ist \cite[vgl.][S.~393]{programming_in_scala}.
+\gls{kovarianz} eines Typs \lstinline|E| ist in Scala am \lstinline|+|-Prefix zu erkennen und bedeutet, dass wenn \lstinline|F| ein spezialisierter Typ von \lstinline|E| ist, \lstinline|Input[F]| auch ein spezialisierter Typ von \lstinline|Input[E]| ist \cite[vgl.][S.~393]{programming_in_scala}.
 Dadurch wären beispielsweise sowohl \lstinline|Input[Cat]|, als auch \lstinline|Input[Dog]| Spezialisierungen von \lstinline|Input[Animal]|.
 Wäre \lstinline|Input| nicht \glslink{kovarianz}{kovariant} über den Typ der der gehaltenen Elemente, wären \lstinline|Input[Cat]|, \lstinline|Input[Dog]| und \lstinline|Input[Animal]| völlig unterschiedliche Typen.
 
