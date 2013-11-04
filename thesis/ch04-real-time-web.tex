@@ -221,7 +221,8 @@ GET    /eventSource    controllers.Application.eventSource
 Der im vorigen Unterabschnitt gezeigt \lstinline|EventSource|-\lstinline|Enumeratee| nutzt Teile, die auf eine andere Technologie namens Comet Sockets ausgelegt sind.
 Im Falle von Comet Sockets wird anstelle von einfachen Nachrichten, wie bei Server Sent Events, kompletter JavaScript-Code an den Client gesendet \cite[vgl.][]{play_comet_sockets}.
 Dies, so vermutet der Author, wird der Grund sein, weshalb o.~g. \lstinline|Enumeratee| übergebene \lstinline|String|s in Anführungszeichen setzt (\lstinline[mathescape]|'$\ldots$'|), sobald eine \lstinline|String|-Nachricht an den Client gesendet wird.
-Wenn vom Server aus die \lstinline|String|-Nachricht mit dem Inhalt \lstinline|35| an den Client gesendet wird, so kommt beim Client eine \lstinline|String|-Nachricht mit dem Inhalt \lstinline|'35'| an, was in diesem Fall nicht gewollt ist.\todo{keine Quelle, weil durch Ausprobieren herausgefunden}
+Wenn vom Server aus die \lstinline|String|-Nachricht mit dem Inhalt \lstinline|35| an den Client gesendet wird, so kommt beim Client eine \lstinline|String|-Nachricht mit dem Inhalt \lstinline|'35'| an, was in diesem Fall nicht gewollt ist.
+Dieses beobachtete Verhalten ist ein Bug und wird zum Abgabezeitpunkt dieser Arbeit noch diskutiert \cite[vgl.][]{play_eventsource_bug}.
 
 Der \lstinline|EventSource|-\lstinline|Enumeratee| nimmt allerdings u.~a. einen impliziten Parameter vom Typ \lstinline|CometMessage[A]|.
 Diese \lstinline|case class| nimmt als Konstruktorargument eine Funktion vom Typ \lstinline|A => String|.
