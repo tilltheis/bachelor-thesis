@@ -217,9 +217,11 @@ object AgeStatistics {
 \subsection{Controller} % (fold)
 \label{sub:controller}
 
+\begin{sloppypar} % larger word spacing so that \lstinline will not go out of line margin
 Nachdem im Router definiert wurde, welche URLs auf welche Controller-Aktionen abgebildet werden sollen, werden die betroffenen Controller-Aktionen nun implementiert.
-Die zuvor genannte Aktion \lstinline[breaklines=true]|controllers.Application.index| befindet sich in der Datei \lstinline[breaklines=true]|app/controllers/Application.scala|.
+Die zuvor genannte Aktion \lstinline|controllers.Application.index| befindet sich in der Datei \lstinline|app/controllers/Application.scala|.
 Die Standardimplementierung wird wie in Listing~\ref{lst:application_controller_mit_index_aktion} zu sehen, umdefiniert.
+\end{sloppypar}
 
 \begin{lstlisting}[caption=Der Application-Controller mit index-Aktion, label=lst:application_controller_mit_index_aktion]
 object Application extends Controller {
