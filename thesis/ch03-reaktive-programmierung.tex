@@ -737,7 +737,7 @@ Durch Verwendung von \lstinline|Enumerator|s wird dies allerdings wesentlich ein
 \lstinline|Iteratee|s sind Monaden und haben deshalb die in Scala für Monaden üblichen Methoden \lstinline|map| und \lstinline|flatMap|.
 Um einen Wert in die Monade zu heben wird der Konstruktor \lstinline|play.api.libs.iteratee.Done| verwendet, der dadurch erstellte \lstinline|Iteratee| ist anschließend im \lstinline|Step.Done|-Zustand.
 Mit \lstinline|map| kann ein erfolgreich berechneter Wert, also ein Wert innerhalb eines \lstinline|Iteratee|s im \lstinline|Step.Done|-Zustand verändert werden.
-Mit \lstinline|flatMap| kann ebenfalls ein erfolgreich berechneter Wert verändert werden, doch mit dem Unterschied, dass die an \lstinline|flatMap| übergebene Funktion einen neuen \lstinline|Iteratee| zurückgibt, der nicht unbedingt auch \lstinline|Step.Done|-Zustand sein muss.
+Mit \lstinline|flatMap| kann ebenfalls ein erfolgreich berechneter Wert verändert werden, doch mit dem Unterschied, dass die an \lstinline|flatMap| übergebene Funktion einen neuen \lstinline|Iteratee| zurückgibt, der aber nicht unbedingt auch im \lstinline|Step.Done|-Zustand sein muss.
 
 % subsubsection iteratees_sind_monaden (end)
 
