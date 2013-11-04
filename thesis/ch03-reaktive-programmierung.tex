@@ -1084,13 +1084,13 @@ Dabei wird auf die sequentielle und parallele Komposition von \lstinline|Iterate
 \subsubsection{Sequentielle Komposition von Iteratees} % (fold)
 \label{ssub:anwendung_sequentielle_komposition_von_iteratees}
 
-Zwei \lstinline|Iteratee|s sequentiell zu kombinieren, bedeutet zuerst den ersten \lstinline|Iteratee| und dann den zweiten \lstinline|Iteratee| auszuführen.
+Zwei \lstinline|Iteratee|s sequentiell zu kombinieren, bedeutet zuerst den ersten \lstinline|Iteratee| auszuführen, bis er keine Elemente mehr annimmt oder die Datenquelle erschöpft ist und dann den zweiten \lstinline|Iteratee| nach dem gleichen Prinzip auszuführen.
 Dafür eignen sich die Methoden \lstinline|map| und \lstinline|flatMap| des \lstinline|Iteratee|-Traits.
 Diese Methoden erlauben es, wie bei jeder Monade, den Wert innerhalb der Monade zu transformieren.
 Der Wert der \lstinline|Iteratee|-Monade steht fest, sobald der \lstinline|Iteratee| in den \lstinline|Done|-Zustand übergegangen ist.
-Dies geschieht, nachdem der \lstinline|Iteratee| die erforderlichen Elemente empfangen und daraus ein Ergebnis berechnet hat.
-Um zwei \lstinline|Iteratee|s nacheinander auszuführen, wird zuerst per \lstinline|flatMap| auf den Wert des ersten \lstinline|Iteratee|s zugegriffen.
-Anschließend wird ein \lstinline|map| über den zweiten \lstinline|Iteratee| durchgeführt, wobei die Ergebnisse der beiden \lstinline|Iteratee|s kombiniert werden.
+Dies geschieht, nachdem der \lstinline|Iteratee| die für ihn erforderlichen Elemente empfangen und daraus ein Ergebnis berechnet hat.
+Um zwei \lstinline|Iteratee|s nacheinander auszuführen, wird zuerst per \lstinline|flatMap| auf den berechneten Wert des ersten \lstinline|Iteratee|s zugegriffen.
+Anschließend wird ein \lstinline|map| über den zweiten \lstinline|Iteratee| durchgeführt, um an das zweite Ergebnis zu gelangen und beide Ergebnisse zu kombinieren.
 Ein Code-Beispiel, das dieses Prinzip ausnutzt, ist in Listing~\ref{lst:sequentielle_komposition_von_iteratees} zu lesen.
 
 \begin{lstlisting}[caption=Sequentielle Komposition von Iteratees, label=lst:sequentielle_komposition_von_iteratees]
