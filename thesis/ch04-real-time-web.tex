@@ -8,7 +8,7 @@ In diesem Kapitel sollen die Client-seitigen Werkzeuge vorgestellt werden, die R
 Dafür gibt es zwei Techniken.
 Diese sind Web-Sockets und Server Sent Events.
 Ersteres bildetet das bekannte Socket-Konzept im Browser ab, wohingegen letzteres eine Einweg-Kommunikation vom Server zum Client ermöglicht.
-Die Kommunikation in entgegengesetzter Richtung erfolgt hierbei über herkömmliche Wege, wie z.~B. \gls{ajax}.
+Die Kommunikation in entgegengesetzter Richtung erfolgt hierbei über herkömmliche HTTP-Anfragen.
 
 \section{Web-Sockets} % (fold)
 \label{sec:web_sockets}
@@ -128,7 +128,7 @@ ws.onmessage = function(event) {
 
 Bevor das \lstinline|WebSocket| geöffnet und nachdem es geschlossen wurde, muss verhindert werden, dass das Formular abgeschickt werden kann, weil Server-seitig keine \lstinline|Action| für das Formular existiert.
 Der Code dafür soll an dieser Stelle aber nicht gezeigt werden werden.
-Die verwendeten Variablen \lstinline|form| und \lstinline|input| enthalten Referenzen auf die \gls{dom}-Objekte für das HTML-Formular und das Eingabefeld.
+Die verwendeten Variablen \lstinline|form| und \lstinline|input| enthalten Referenzen auf die HTML-Elemente für das Formular und das Eingabefeld.
 Sobald das \lstinline|WebSocket| geöffnet ist, wird dafür gesorgt, dass bei Formularabsendung das \lstinline|WebSocket| verwendet wird, statt einer regulären Formularübertragung.
 Sobald vom Server eine Nachricht eintrifft, wird das Diagramm beim Client über die bereits vorhandene \lstinline|chart|-Variable aktualisiert.
 Diese Variable wurde zuvor mittels der \lstinline|makeAgeStatisticsChart|-Funktion erstellt, die sich in der Datei \lstinline|public/javascripts/main.js| befindet.
@@ -238,7 +238,7 @@ def eventSource = Action {
 }
 \end{lstlisting}
 
-Auf der Client-Seite wird zunächst dafür gesorgt, dass beim Absenden des Formulars die Seite nicht neu geladen wird, sondern im Hintergrund ein \gls{ajax}-Request mit dem Formulardaten versendet wird.
+Auf der Client-Seite wird zunächst dafür gesorgt, dass beim Absenden des Formulars die Seite nicht neu geladen wird, sondern im Hintergrund ein HTTP-Request mit dem Formulardaten versendet wird.
 Dann wird der entsprechende \lstinline|EventHandler| für \lstinline|onmessage| gesetzt, um nach Empfang neuer Informationen das Diagramm zu aktualisieren.
 Dies ist in Listing~\ref{lst:server_sent_events_in_der_view_der_altersstatistiken_anwendung} zu sehen.
 
@@ -284,7 +284,7 @@ Wird also nur Kommunikation in eine Richtung benötigt, sollten Server Sent Even
 
 Bei Anwendungen, bei denen viel Kommunikation zwischen Client und Server anfällt, wie es z.~B. bei Spielen der Fall sein kann, bieten sich stattdessen Web Sockets an, weil diese Kommunikation über die gleiche Verbindung durchgeführt werden kann.
 Bei Anwendungen, die hauptsächlich Nachrichten vom Server zum Client versenden, aber nur wenige Nachrichten in die andere Richtung, können auch Server Sent Events verwendet werden.
-In diesem Fall würden die wenigen Nachrichten, die zum Server gesendet werden, mittels \gls{ajax} im Hintergrund versendet werden, wie es in Unterabschnitt~\ref{sub:server_sent_events_in_der_altersstatistiken_anwendung} demonstriert wurde \cite[vgl.][]{ws_vs_sse}.
+In diesem Fall würden die wenigen Nachrichten, die zum Server gesendet werden, mittels HTTP im Hintergrund versendet, wie es in Unterabschnitt~\ref{sub:server_sent_events_in_der_altersstatistiken_anwendung} demonstriert wurde \cite[vgl.][]{ws_vs_sse}.
 
 % section web_sockets_vs_server_sent_events (end)
 
