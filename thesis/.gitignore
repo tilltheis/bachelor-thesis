@@ -5,6 +5,7 @@
 *.alg
 *.aux
 *.bbl
+*.bcf
 *.blg
 *.dvi
 *.fdb_latexmk
@@ -38,3 +39,9 @@
 *.fls
 *.lol
 *.pdf
+
+
+
+# Sublime Text
+
+*.sublime-workspace
