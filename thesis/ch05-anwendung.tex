@@ -206,15 +206,7 @@ Um für diesen \lstinline|Enumerator| den \lstinline|Enumerator[Map[Tweet, Int]]
 Die Kommunikation mit der Twitter-API wird wieder von der \lstinline|Twitter|-Klasse erledigt, die Tweets zu aufgelösten Tweet-IDs cached, damit für eine ID nicht mehrere Anfragen gesendet werden müssen.
 Diese aufgelösten Tweets werden dann zusammen mit dem jeweiligen Antwortzähler als Element des \lstinline|mostDiscussedEnumerator|s generiert.
 
-Weil das Auflösen der IDs einige Zeit in Anspruch nimmt, ist es wahrscheinlich, dass in der Zwischenzeit mehrere Element des \lstinline|mostDiscussedIdsEnumerator| generiert worden sind.
-Deshalb werden die Elemente des Tweet-IDs-Streams vor der Verarbeitung in einen Buffer geschrieben.
-Dieser Buffer fasst immer nur ein Element, also die immer die aktuellste \lstinline|Map| der meistdiskutierten Tweet-IDs.
-Der \lstinline|mostDiscussedEnumerator| übersetzt also nicht alle Elemente des Tweet-IDs-Streams, aber immer die aktuellsten.
-Das Übersetzen aller Elemente ist aufgrund des Zeitaufwands für die HTTP-Anfragen an die Twitter-API schlicht unmöglich, der Durchsatz wird durch das Cachen der Antworten allerdings wesentlich erhöht.
-Wird nach dem Versenden einer Anfrage an die Twitter-API nach dem Verlauf einer bestimmten Zeitspanne keine Antwort oder eine Antwort, die kein Tweet ist, empfangen, so wird kein Element für den \lstinline|mostDiscussedEnumerator| generiert.
-Abb.~\ref{fig:der_datenfluss_zur_aufloesung_meistdikutierter_tweet_ids} zeigt das beschriebene Verfahren als Diagramm.
-
-\begin{figure}[h]
+\begin{figure}
 \centering
 
 \resizebox{\linewidth}{!}{%
@@ -283,6 +275,14 @@ Abb.~\ref{fig:der_datenfluss_zur_aufloesung_meistdikutierter_tweet_ids} zeigt da
 \caption{Der Datenfluss zur Auflösung meistdiskutierter Tweet-IDs}
 \label{fig:der_datenfluss_zur_aufloesung_meistdikutierter_tweet_ids}
 \end{figure}
+
+Weil das Auflösen der IDs einige Zeit in Anspruch nimmt, ist es wahrscheinlich, dass in der Zwischenzeit mehrere Element des \lstinline|mostDiscussedIdsEnumerator| generiert worden sind.
+Deshalb werden die Elemente des Tweet-IDs-Streams vor der Verarbeitung in einen Buffer geschrieben.
+Dieser Buffer fasst immer nur ein Element, also die immer die aktuellste \lstinline|Map| der meistdiskutierten Tweet-IDs.
+Der \lstinline|mostDiscussedEnumerator| übersetzt also nicht alle Elemente des Tweet-IDs-Streams, aber immer die aktuellsten.
+Das Übersetzen aller Elemente ist aufgrund des Zeitaufwands für die HTTP-Anfragen an die Twitter-API schlicht unmöglich, der Durchsatz wird durch das Cachen der Antworten allerdings wesentlich erhöht.
+Wird nach dem Versenden einer Anfrage an die Twitter-API nach dem Verlauf einer bestimmten Zeitspanne keine Antwort oder eine Antwort, die kein Tweet ist, empfangen, so wird kein Element für den \lstinline|mostDiscussedEnumerator| generiert.
+Abb.~\ref{fig:der_datenfluss_zur_aufloesung_meistdikutierter_tweet_ids} zeigt das beschriebene Verfahren als Diagramm.
 
 In Listing~\ref{lst:der_mostdiscussedenumerator} ist zu sehen, wie der \lstinline|mostDiscussedEnumerator| mit Hilfe von \lstinline|Enumeratee|s implementiert worden ist.
 Wie zuvor beschrieben, werden die Elemente des \zzz{mostDiscussedIdsEnumerator}s in einen Buffer geschrieben.
