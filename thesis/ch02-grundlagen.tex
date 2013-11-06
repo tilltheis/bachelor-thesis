@@ -4,85 +4,15 @@
 \label{cha:grundlagen}
 
 In diesem Kapitel werden die grundlegenden Techniken zur Webseiten-Entwicklung mit dem Play-Framework vorgestellt.
-Dabei wird notwendiges Hintergrundwissen bereitgestellt und erklärt, welche Werkzeuge benötigt werden.
-Schließlich werden durch die Entwicklung einer kleinen Anwendung die einzelnen Komponenten erklärt.
 Es werden hierbei in erster Linie die Komponenten vorgestellt, die für die Entwicklung von Real-Time-Web-Anwendungen unbedingt notwendig sind.
-
-
-\section{Vorbereitung} % (fold)
-\label{sec:vorbereitung}
-
-Bevor auf die eigentliche Arbeit mit dem Play-Framework eingegangen wird, müssen einige vorbereitende Dinge erklärt werden.
-In diesem Abschnitt geht es darum, wie die Entwicklungsumgebung aufgesetzt wird, mit welcher Version der eingesetzten Software gearbeitet wird und wie sich das Play-Framework installieren lässt.
-
-\subsection{Entwicklungsumgebung} % (fold)
-\label{sub:entwicklungsumgebung}
-
-Zum Anlegen von Play-Projekten und Steuern des Web-Servers wird eine Kommandozeile, wie die Eingabeaufforderung unter Windows oder dem Terminal und Mac OS~X benötigt.
-Zum Programmieren kann entweder ein einfacher Text-Editor, oder auch eine IDE verwendet werden.
-Für die einzelnen Programme können teilweise Plugins heruntergeladen werden, die beispielsweise Code Completion oder Syntax Highlighting für Play-spezifische Funktionalitäten bereitstellen.
-
-Für \textbf{Eclipse} kann die Scala IDE von \citealt{scala_ide} heruntergeladen werden.
-Diese IDE ist für die Entwicklung von Scala-Anwendungen mit Eclipse notwendig.
-Für die Scala IDE existiert außerdem ein Plugin für das Play-Framework.
-Eine genaue Installationsanleitung dafür ist unter \citealt{scala_ide_play_plugin} zu finden.
-Um ein Play-Projekt in Eclipse zu bearbeiten, muss dafür nach dem Anlegen des Projekts auf der Kommandozeile ein Eclipse-Projekt exportiert werden.
-Dazu muss in der Play-Konsole des Projekts der Befehl \lstinline|eclipse| ausgeführt werden.
-Dieser Befehl muss jedes Mal ausgeführt werden, wenn die Konfigurationsdateien geändert werden.
-Anschließend kann der Ordner des Play-Projekts als Eclipse-Projekt importiert und geöffnet werden.
-
-Beim Exportieren eines \textbf{IntelliJ IDEA}-Projekts verhält es sich ähnlich, wie im Falle von Eclipse.
-Der einzige Unterschied ist, dass der Befehel \lstinline|idea| verwendet werden muss, um ein IntelliJ IDEA-Projekt zu erstellen.
-Für Text-Editoren, wie z.B. \textbf{VIM}, \textbf{Emacs} oder \textbf{Sublime Text} ist prinzipiell kein Plugin nötig.
-Falls aber ein Plugin für den verwendeten Editor existiert, kann es natürlich installiert werden.
-Weitere Informationen zu diesen und \textbf{anderen Entwicklungsumgebungen} sind in der offiziellen Dokumentation zu finden \cite[vgl.][]{ide}.
-
-% subsection entwicklungsumgebung (end)
-
-
-\subsection{Software-Version} % (fold)
-\label{sub:software_version}
-
-Zum Zeitpunkt dieser Arbeit ist die aktuellste stabile Version des Play-Frameworks die Version 2.2.0.
-Diese Version wird in allen Beispielen und der eigenen entwickelten Anwendung verwendet.
-Für den Einsatz des Frameworks wird das JDK in Version 6 oder 7 benötigt.
-Der Autor arbeitet mit dem JDK~7 unter Mac OS~X.
-Die aktuell verwendete Scala-Version ist 2.10.2, diese ist unabhängig von der systemweit installierten Version und wird beim Anlegen eines Play-Projekts für das jeweilige Projekt installiert.
-
-% subsection software_version (end)
-
-
-\subsection{Installation} % (fold)
-\label{sub:installation}
-
-Zum Installieren von Play kann eine vorkompilierte Version der Software von der offiziellen Website unter \cite{play_download} heruntergeladen werden.
-Nach dem Entpacken der heruntergeladenen Datei kann das Programm namens \lstinline|play|, das sich im entpackten Ordner befindet, auf der Kommandozeile verwendet werden.
-Um für die Verwendung des Programms nicht immer den absoluten Pfad angeben zu müssen, kann der Pfad zum entpackten Ordner in die Systemumgebungsvariable PATH eingetragen werden.
-
-Unter \textbf{Mac OS~X} muss dazu auf der Kommandozeile folgender Befehl ausgeführt werden: \lstinline|export PATH=$PATH:<Pfad zum entpackten Ordner>|.
-Ein konkretes Beispiel könnte so aussehen: \lstinline|export PATH=$PATH:~/Downloads/play-2.1.3|.
-Damit sich der Ordner auch nach dem Schließen des Terminals noch in der \lstinline|PATH|-Variable befindet, sollte der obige Befehl zusätzlich in die \lstinline|~/.profile|-Datei oder in die Konfigurationsdatei der verwendeten Shell eingetragen werden.
-Falls diese Datei nicht existiert, muss sie vorher angelegt werden.
-
-Unter \textbf{Windows} muss dazu in der Eingabeaufforderung folgender Befehl ausgeführt werden: \lstinline|setx PATH "%PATH%;c:\path\to\play" /m|, wobei \lstinline|c:\path\to\play| durch den tatsächlichen Pfad zu ersetzen ist \cite[vgl.][S.~9]{play_for_scala}.
-
-% subsection installation (end)
-
-
-% section vorbereitung (end)
-
-
-\section{Beispielanwendung: Sammeln von Altersstatistiken} % (fold)
-\label{sec:beispielanwendung}
-
 Um die Techniken zur Entwicklung von statischen Web-Anwendungen zu demonstrieren, soll im Folgenden eine kleine Anwendung entwickelt werden.
 Diese Anwendung fragt ihre Benutzer, wie alt sie sind und bildet die gesammelten Information als Diagramm ab.
 Anhand dieser Anwendung soll die Entwicklung mit Models, Views und Controllern erklärt werden.
-Bevor mit der Implementierung gestartet werden kann, muss allerdings die die Grundarchitektur des Frameworks erklärt werden.
+Bevor mit der Implementierung begonnen werden kann, muss allerdings die die Grundarchitektur des Frameworks erklärt werden.
 
 
-\subsection{Architektur} % (fold)
-\label{sub:architektur}
+\section{Architektur} % (fold)
+\label{sec:architektur}
 
 Auf der untersten Ebene existiert ein Web-Server, der mit dem Framework ausgeliefert wird.
 Die Anfragen, die der Web-Server empfängt werden an Play weitergeleitet und schließlich von der Anwendung verarbeitet.
@@ -100,24 +30,24 @@ Der Controller sucht mit Hilfe der Anwendungslogik den passenden Nutzer (z.~B. a
 Die View bereitet die im Nutzer-Model gekapselten Informationen als HTML-Seite auf.
 Anschließend gibt der Controller diese HTML-Darstellung des Nutzerprofils zurück, was vom Web-Server dann an den Web-Browser gesendet und schließlich dem/der Webseitenbesucher(in) angezeigt wird.
 
-% subsection architektur (end)
+% section architektur (end)
 
 
-\subsection{Erstellen einer Anwendung} % (fold)
-\label{sub:erstellen_einer_anwendung}
+\section{Erstellen einer Anwendung} % (fold)
+\label{sec:erstellen_einer_anwendung}
 
 Um eine neue Anwendung mit Play zu erstellen, muss auf der Kommandozeile in den Ordner navigiert werden, in dem das Projekt erstellt werden soll.
 Anschließend kann mit \lstinline[language=sh]|play new <project name>| ein neues Projekt angelegt werden.
 In diesem Fall ist der Projektname \lstinline|age_statistics_http|.
 Im startenden Assistenten wählt man die Hauptprogrammiersprache aus (Java oder Scala), in diesem Fall Scala.
 Daraufhin wird im aktuellen Verzeichnis ein neuer Ordner mit dem vorher angegebenen Namen \lstinline|age_statistics| angelegt \cite[vgl.][S.~10]{play_for_scala}.
-Die darin vorzufindende Verzeichnisstruktur wird im nächsten Unterabschnitt beschrieben.
+Die darin vorzufindende Verzeichnisstruktur wird im nächsten Abschnitt beschrieben.
 
-% subsection erstellen_einer_anwendung (end)
+% section erstellen_einer_anwendung (end)
 
 
-\subsection{Verzeichnisstruktur} % (fold)
-\label{sub:verzeichnisstruktur}
+\section{Verzeichnisstruktur} % (fold)
+\label{sec:verzeichnisstruktur}
 
 Die Verzeichnisstruktur einer Play-Anwendung ist immer gleich.
 An dieser Stelle werden nur die Ordner vorgestellt, die für das Verständnis dieser Arbeit wichtig sind.
@@ -132,11 +62,11 @@ Diese Ordner sind folgende \cite[vgl.][]{play_verzeichnisstruktur}:
   \item[public/] öffentliche statische Dateien (JS, CSS, Bilder)
 \end{description}
 
-% subsection verzeichnisstruktur (end)
+% section verzeichnisstruktur (end)
 
 
-\subsection{Starten einer Anwendung} % (fold)
-\label{sub:starten_einer_anwendung}
+\section{Starten einer Anwendung} % (fold)
+\label{sec:starten_einer_anwendung}
 
 Um die neu erstellte Anwendung zu starten, muss sie erst kompiliert werden.
 Das geschieht ebenfalls mit Hilfe des \lstinline|play|-Befehls.
@@ -156,11 +86,11 @@ Um die Anwendung bei Dateiänderungen automatisch neu kompilieren zu lassen, ohn
 \label{fig:anwendung_nach_erstellung}
 \end{figure}
 
-% subsection starten_einer_anwendung (end)
+% section starten_einer_anwendung (end)
 
 
-\subsection{Routing} % (fold)
-\label{sub:routing}
+\section{Routing} % (fold)
+\label{sec:routing}
 
 Wenn die Website von jemandem aufgerufen wird, soll eine bestimmte Controller-Aktion ausgeführt werden.
 Damit Play weiß, welche Controller-Aktion für die aufgerufene URL ausgeführt werden soll, muss dies in der \lstinline|routes|-Datei definiert werden.
@@ -177,13 +107,13 @@ Die am Häufigsten verwendeten HTTP-Methoden sind \lstinline|GET|, \lstinline|PO
 Der Pfad \lstinline|/| steht für die URL \url{http://localhost:9000/}.
 Es sind auch längere Pfade, wie z.~B. \lstinline|/animals/cat| möglich, davon wird in diesem Beispiel allerdings nicht Gebrauch gemacht.
 Die Controller-Aktion \lstinline|controllers.Application.index|, auf die der Routing-Eintrag zeigt, ist bereits implementiert.
-Diese wird in Unterabschnitt~\ref{sub:controller} allerdings durch eine eigene Implementierung ersetzt.
+Diese wird in Abschnitt~\ref{sec:controller} allerdings durch eine eigene Implementierung ersetzt.
 
-% subsection routing (end)
+% section routing (end)
 
 
-\subsection{Model} % (fold)
-\label{sub:model}
+\section{Model} % (fold)
+\label{sec:model}
 
 Bevor die Anwendung Daten anzeigen kann, muss eine Datenstruktur für die Altersstatistiken entworfen werden.
 Für diese Statistik sollen nur die Alterszahlen und die Personenzahl des jeweiligen Alters gesammelt werden.
@@ -211,11 +141,11 @@ object AgeStatistics {
 }
 \end{lstlisting}
 
-% subsection model (end)
+% section model (end)
 
 
-\subsection{Controller} % (fold)
-\label{sub:controller}
+\section{Controller} % (fold)
+\label{sec:controller}
 
 \begin{sloppypar} % larger word spacing so that \lstinline will not go out of line margin
 Nachdem im Router definiert wurde, welche URLs auf welche Controller-Aktionen abgebildet werden sollen, werden die betroffenen Controller-Aktionen nun implementiert.
@@ -235,25 +165,25 @@ Controller sind Objekte, die von \lstinline|Controller| erben und Aktionen defin
 Aktionen, die beim Aufruf einer URL ausgeführt werden sollen, sind Controller-Objekt-Methoden mit dem Rückgabetyp \lstinline|Action|.
 Eine Aktion, bzw. \lstinline|Action| ist eine Funktion von einer HTTP-Anfrage nach einer HTTP-Antwort.
 In der obigen Form wird die HTTP-Anfrage ignoriert, es können aber auch \lstinline|Action|s mit explizitem oder implizitem Request-Parameter erstellt werden \cite[vgl.][]{play_controllers}.
-Dies ist z.~B. dann notwendig, wenn Formulare verarbeitet werden sollen, was in Unterabschnitt~\ref{ssub:formularverarbeitung_im_controller}~(\nameref{ssub:formularverarbeitung_im_controller}) zu sehen ist.
+Dies ist z.~B. dann notwendig, wenn Formulare verarbeitet werden sollen, was in Unterabschnitt~\ref{sub:formularverarbeitung_im_controller}~(\nameref{sub:formularverarbeitung_im_controller}) zu sehen ist.
 
 Um eine HTTP-Antwort zu generieren, stellt das Objekt \lstinline|play.api.mvc.Results|, von dem \lstinline|play.api.mvc.Controller| erbt, mehrere Konstruktoren zur Verfügung.
 Der in Listing~\ref{lst:application_controller_mit_index_aktion} verwendete Konstruktor \lstinline|Ok| erstellt eine HTTP-Antwort mit dem Status-Code \lstinline|200 OK|.
-Der Inhalt dieser Antwort ist das Ergebnis der View \lstinline|views.html.index|, worauf im folgenden Unterabschnitt näher eingegangen wird.
+Der Inhalt dieser Antwort ist das Ergebnis der View \lstinline|views.html.index|, worauf im folgenden Abschnitt näher eingegangen wird.
 Neben \lstinline|Ok| gibt es u.~a. noch \lstinline|BadRequest| für fehlerhafte Anfragen (z.~B. unvollständiges Formular) und \lstinline|Redirect|, um eine Seitenweiterleitung auf eine angegebene URL durchzuführen \cite[vgl.][]{play_controllers}.
 
-% subsection controller (end)
+% section controller (end)
 
 
-\subsection{View} % (fold)
-\label{sub:view}
+\section{View} % (fold)
+\label{sec:view}
 
-Im vorigen Unterabschnitt wurde gezeigt, wie mittels \lstinline|Ok(views.html.index(ageStatistics))| eine View gerendert und als HTTP-Antwort verschickt werden kann.
+Im vorigen Abschnitt wurde gezeigt, wie mittels \lstinline|Ok(views.html.index(ageStatistics))| eine View gerendert und als HTTP-Antwort verschickt werden kann.
 Das dazugehörige View-Template befindet sich unter \lstinline|app/views/index.scala.html|.
 Bevor die Implementierung dieses Templates gezeigt wird, soll an einem einfacheren Beispiel verdeutlicht werden, wie View-Templates geschrieben werden.
 
-\subsubsection{Views in Play} % (fold)
-\label{ssub:views_in_play}
+\subsection{Views in Play} % (fold)
+\label{sub:views_in_play}
 
 \begin{lstlisting}[caption=Ein einfaches View-Template, label=lst:ein_einfaches_view_template]
 @(title: String)
@@ -279,10 +209,10 @@ Play kodiert aus Sicherheitsgründen Scala-Strings automatisch so, dass dadurch 
 Um dies zu verhindern, kann der \lstinline|Html|-Helper verwendet werden, wie in der letzten Zeile von Listing~\ref{lst:ein_einfaches_view_template} zu erkennen.
 Dieser Helper nimmt als Argument einen String und fügt diesen unverändert an der Stelle des Aufrufs im Template ein \cite[vgl.][]{play_templates}.
 
-% subsubsection views_in_play (end)
+% subsection views_in_play (end)
 
-\subsubsection{Altersstatistiken-View} % (fold)
-\label{ssub:altersstatistiken_view}
+\subsection{Altersstatistiken-View} % (fold)
+\label{sub:altersstatistiken_view}
 
 Das eigentliche View-Template unter \lstinline|app/views/index.scala.html| ist etwas umfangreicher.
 Das Zeichnen des Diagramms erfolgt Client-seitig via JS und ist in \lstinline|public/javascripts/main.js| ausgelagert.
@@ -317,20 +247,20 @@ Aus diesen konvertierten Daten wird dann das Diagramm erstellt, das in Abb.~\ref
 \label{fig:die_altersstatistiken_view}
 \end{figure}
 
-% subsubsection altersstatistiken_view (end)
+% subsection altersstatistiken_view (end)
 
-% subsection view (end)
+% section view (end)
 
 
-\subsection{Sammeln der Statistiken} % (fold)
-\label{sub:sammeln_der_statistiken}
+\section{Sammeln der Statistiken} % (fold)
+\label{sec:sammeln_der_statistiken}
 
 Die Nutzer sollen die Möglichkeit erhalten, der Website mitzuteilen, wie alt sie sind, um in die Statistik einzugehen.
 Um das Beispiel einfach zu halten, soll nicht geprüft werden, ob jemand bereits sein Alter angegeben hat.
 Um die Anwendung um Nutzer-Interaktion zu erweitern, müssen View, Routen-Datei und Controller erweitert werden.
 
-\subsubsection{Formular in der View} % (fold)
-\label{ssub:formular_in_der_view}
+\subsection{Formular in der View} % (fold)
+\label{sub:formular_in_der_view}
 
 Um die Nutzer nach ihrem Alter zu fragen, benötig es erst einmal ein Formular, über das sie ihre Daten angeben können.
 Dieses Formular ist der View schnell mit einigen Zeilen HTML hinzugefügt, wie in Listing~\ref{lst:das_view_template_mit_formular} zu sehen.
@@ -354,10 +284,10 @@ Dabei wird die URL für einen Routen-Eintrag in der \lstinline|routes|-Datei ber
 In diesem Fall wird die URL für die Controller-\lstinline|Action|, die für die Formularverarbeitung zuständig ist von einem Helper generiert.
 Die hier verwendete Routing-Eintrag wird im folgenden Unterabschnitt angelegt.
 
-% subsubsection formular_in_der_view (end)
+% subsection formular_in_der_view (end)
 
-\subsubsection{Eintrag in der Routen-Datei} % (fold)
-\label{ssub:eintrag_in_der_routen_datei}
+\subsection{Eintrag in der Routen-Datei} % (fold)
+\label{sub:eintrag_in_der_routen_datei}
 
 Wenn dieses Formular abgesendet wird, wird nicht wie zuvor ein \lstinline|GET|-Request an den Server gesendet, sondern ein \lstinline|POST|-Request, wie im \lstinline|method|-Attribut des \lstinline|form|-Tags angegeben.
 In der \lstinline|conf/routes|-Datei muss deshalb ein neuer Eintrag hinzugefügt werden, der \lstinline|POST|-Requests abdeckt und an den Controller weiterleitet, wie in Listing~\ref{lst:die_routen_eintrag_fuer_formulareingaben} zu sehen.
@@ -366,10 +296,10 @@ In der \lstinline|conf/routes|-Datei muss deshalb ein neuer Eintrag hinzugefügt
 POST    /    controllers.Application.input
 \end{lstlisting}
 
-% subsubsection eintrag_in_der_routen_datei (end)
+% subsection eintrag_in_der_routen_datei (end)
 
-\subsubsection{Dynamische Statistiken und Formularverarbeitung im Controller} % (fold)
-\label{ssub:formularverarbeitung_im_controller}
+\subsection{Dynamische Statistiken und Formularverarbeitung im Controller} % (fold)
+\label{sub:formularverarbeitung_im_controller}
 
 Damit die Statistiken aktualisiert werden können, wird der Einfachheit halber direkt im \lstinline|Application|-Controller mit \lstinline|var ageStatistics = AgeStatistics.empty| eine Variable eingeführt, die den aktuellen Wert der Statistiken enthält.
 Es wäre auch möglich, ein Model anzulegen, welches die aktuelle Statistik hält, doch weil in diesem Beispiel nur der \lstinline|Application|-Controller auf die Statistik zugreift, ist es auch möglich, die aktuelle Statistik direkt im Controller zu hinterlegen.
@@ -422,12 +352,9 @@ Die finale Version der Website ist in Abb.~\ref{fig:die_altersstatistiken_view_m
 \label{fig:die_altersstatistiken_view_mit_formular}
 \end{figure}
 
-% subsubsection action_im_controller (end)
+% subsection action_im_controller (end)
 
-% subsection sammeln_der_statistiken (end)
-
-
-% section beispielanwendung (end)
+% section sammeln_der_statistiken (end)
 
 
 % chapter grundlagen (end)

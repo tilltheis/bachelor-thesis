@@ -604,7 +604,7 @@ Es wird dabei nach jeder der drei möglichen Varianten implementiert.
 
 Die erste Variante ist, von \lstinline|Iteratee| zu erben und die \lstinline|fold|-Methode zu implementieren.
 Dies erfordert viel Schreibarbeit, weil nur die sehr generische \lstinline|fold|-Methode verwendet werden kann.
-In Listing~\ref{lst:iteratee_durch_vererbung} ist die Implementierung eines Aufsummierungs-\lstinline|Iteratee|s zu sehen, der verwendet werden könnte, um das Gesamtalter der Altersstatistik aus Abschnitt~\ref{sec:beispielanwendung} zu berechnen.
+In Listing~\ref{lst:iteratee_durch_vererbung} ist die Implementierung eines Aufsummierungs-\lstinline|Iteratee|s zu sehen, der verwendet werden könnte, um das Gesamtalter der Altersstatistik aus Kap.~\ref{cha:grundlagen} zu berechnen.
 
 \begin{lstlisting}[caption=Erstellung eines Iteratees durch Vererbung, label=lst:iteratee_durch_vererbung]
 case class SumIteratee(sum: Int = 0) extends Iteratee[Int, Int] {

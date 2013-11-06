@@ -1,0 +1,61 @@
+%!TEX root = thesis.tex
+
+\chapter{Vorbereitung} % (fold)
+\label{cha:anhang_vorbereitung}
+
+In diesem Anhang geht es darum, wie die Entwicklungsumgebung aufgesetzt wird, mit welcher Version der eingesetzten Software gearbeitet wird und wie sich das Play-Framework installieren lässt.
+
+\section{Entwicklungsumgebung} % (fold)
+\label{sec:entwicklungsumgebung}
+
+Zum Anlegen von Play-Projekten und Steuern des Web-Servers wird eine Kommandozeile, wie die Eingabeaufforderung unter Windows oder dem Terminal und Mac OS~X benötigt.
+Zum Programmieren kann entweder ein einfacher Text-Editor, oder auch eine IDE verwendet werden.
+Für die einzelnen Programme können teilweise Plugins heruntergeladen werden, die beispielsweise Code Completion oder Syntax Highlighting für Play-spezifische Funktionalitäten bereitstellen.
+
+Für \textbf{Eclipse} kann die Scala IDE von \citealt{scala_ide} heruntergeladen werden.
+Diese IDE ist für die Entwicklung von Scala-Anwendungen mit Eclipse notwendig.
+Für die Scala IDE existiert außerdem ein Plugin für das Play-Framework.
+Eine genaue Installationsanleitung dafür ist unter \citealt{scala_ide_play_plugin} zu finden.
+Um ein Play-Projekt in Eclipse zu bearbeiten, muss dafür nach dem Anlegen des Projekts auf der Kommandozeile ein Eclipse-Projekt exportiert werden.
+Dazu muss in der Play-Konsole des Projekts der Befehl \lstinline|eclipse| ausgeführt werden.
+Dieser Befehl muss jedes Mal ausgeführt werden, wenn die Konfigurationsdateien geändert werden.
+Anschließend kann der Ordner des Play-Projekts als Eclipse-Projekt importiert und geöffnet werden.
+
+Beim Exportieren eines \textbf{IntelliJ IDEA}-Projekts verhält es sich ähnlich, wie im Falle von Eclipse.
+Der einzige Unterschied ist, dass der Befehel \lstinline|idea| verwendet werden muss, um ein IntelliJ IDEA-Projekt zu erstellen.
+Für Text-Editoren, wie z.B. \textbf{VIM}, \textbf{Emacs} oder \textbf{Sublime Text} ist prinzipiell kein Plugin nötig.
+Falls aber ein Plugin für den verwendeten Editor existiert, kann es natürlich installiert werden.
+Weitere Informationen zu diesen und \textbf{anderen Entwicklungsumgebungen} sind in der offiziellen Dokumentation zu finden \cite[vgl.][]{ide}.
+
+% section entwicklungsumgebung (end)
+
+
+\section{Software-Version} % (fold)
+\label{sec:software_version}
+
+Zum Zeitpunkt dieser Arbeit ist die aktuellste stabile Version des Play-Frameworks die Version 2.2.0.
+Diese Version wird in allen Beispielen und der eigenen entwickelten Anwendung verwendet.
+Für den Einsatz des Frameworks wird das JDK in Version 6 oder 7 benötigt.
+Der Autor arbeitet mit dem JDK~7 unter Mac OS~X.
+Die aktuell verwendete Scala-Version ist 2.10.2, diese ist unabhängig von der systemweit installierten Version und wird beim Anlegen eines Play-Projekts für das jeweilige Projekt installiert.
+
+% section software_version (end)
+
+
+\section{Installation} % (fold)
+\label{sec:installation}
+
+Zum Installieren von Play kann eine vorkompilierte Version der Software von der offiziellen Website unter \cite{play_download} heruntergeladen werden.
+Nach dem Entpacken der heruntergeladenen Datei kann das Programm namens \lstinline|play|, das sich im entpackten Ordner befindet, auf der Kommandozeile verwendet werden.
+Um für die Verwendung des Programms nicht immer den absoluten Pfad angeben zu müssen, kann der Pfad zum entpackten Ordner in die Systemumgebungsvariable PATH eingetragen werden.
+
+Unter \textbf{Mac OS~X} muss dazu auf der Kommandozeile folgender Befehl ausgeführt werden: \lstinline|export PATH=$PATH:<Pfad zum entpackten Ordner>|.
+Ein konkretes Beispiel könnte so aussehen: \lstinline|export PATH=$PATH:~/Downloads/play-2.1.3|.
+Damit sich der Ordner auch nach dem Schließen des Terminals noch in der \lstinline|PATH|-Variable befindet, sollte der obige Befehl zusätzlich in die \lstinline|~/.profile|-Datei oder in die Konfigurationsdatei der verwendeten Shell eingetragen werden.
+Falls diese Datei nicht existiert, muss sie vorher angelegt werden.
+
+Unter \textbf{Windows} muss dazu in der Eingabeaufforderung folgender Befehl ausgeführt werden: \lstinline|setx PATH "%PATH%;c:\path\to\play" /m|, wobei \lstinline|c:\path\to\play| durch den tatsächlichen Pfad zu ersetzen ist \cite[vgl.][S.~9]{play_for_scala}.
+
+% section installation (end)
+
+% chapter anhang_vorbereitung (end)
