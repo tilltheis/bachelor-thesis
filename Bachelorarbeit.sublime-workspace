@@ -4,6 +4,118 @@
 		"selected_items":
 		[
 			[
+				"En",
+				"Enumeratee"
+			],
+			[
+				"it",
+				"Iteratee"
+			],
+			[
+				"Enuera",
+				"Enumeratee"
+			],
+			[
+				"Enu",
+				"Enumerator"
+			],
+			[
+				"EVe",
+				"EventSource"
+			],
+			[
+				"lst",
+				"lstinline"
+			],
+			[
+				"Twi",
+				"Twitter-API"
+			],
+			[
+				"meistdiskutier",
+				"meistdiskutierten"
+			],
+			[
+				"meistdi",
+				"meistdiskutiert"
+			],
+			[
+				"anal",
+				"analyze_tweets"
+			],
+			[
+				"ana",
+				"analyze_tweets"
+			],
+			[
+				"ti",
+				"tikzstyle"
+			],
+			[
+				"releva",
+				"relevantTweets"
+			],
+			[
+				"rele",
+				"relevantDuration"
+			],
+			[
+				"mostTw",
+				"mostTweetedWords"
+			],
+			[
+				"mostT",
+				"mostTweetedWords"
+			],
+			[
+				"updatedMost",
+				"updatedMostRetweeted"
+			],
+			[
+				"relev",
+				"relevantTweets"
+			],
+			[
+				"Twin",
+				"TwitterNews"
+			],
+			[
+				"tik",
+				"tikzpicture"
+			],
+			[
+				"Twit",
+				"TwitterNews"
+			],
+			[
+				"arrow_ex",
+				"arrow_ex_start"
+			],
+			[
+				"twitterne",
+				"twitter_news"
+			],
+			[
+				"user",
+				"userScreenName"
+			],
+			[
+				"datada",
+				"dateDataString"
+			],
+			[
+				"twee",
+				"tweetElement"
+			],
+			[
+				"twe",
+				"tweetElement"
+			],
+			[
+				"elem",
+				"mostRetweetedListElement"
+			],
+			[
 				"ite",
 				"iterateeM"
 			],
@@ -18,10 +130,6 @@
 			[
 				"nu",
 				"numberEnumeratorFromUnicast"
-			],
-			[
-				"En",
-				"Enumerator"
 			],
 			[
 				"Unter",
@@ -44,10 +152,6 @@
 				"CometMessage"
 			],
 			[
-				"Enu",
-				"Enumerator"
-			],
-			[
 				"Evens",
 				"EventSource"
 			],
@@ -61,10 +165,6 @@
 			],
 			[
 				"iter",
-				"iteratee"
-			],
-			[
-				"it",
 				"iteratee"
 			],
 			[
@@ -202,10 +302,6 @@
 			[
 				"ls",
 				"lstinline"
-			],
-			[
-				"lst",
-				"lstlisting"
 			],
 			[
 				"l",
@@ -418,115 +514,16 @@
 			[
 				"simp",
 				"simplify"
-			],
-			[
-				"eve",
-				"evenManager"
-			],
-			[
-				"data",
-				"dataTransfer"
-			],
-			[
-				"grou",
-				"groupWithPhotos"
-			],
-			[
-				"page",
-				"pageNumber"
-			],
-			[
-				"gr",
-				"groupPhoto"
-			],
-			[
-				"url",
-				"urlWithParams"
-			],
-			[
-				"photo",
-				"photoForGroup"
-			],
-			[
-				"KE",
-				"KEventMenuBarShown"
-			],
-			[
-				"MAX",
-				"MAX_ADJUSTMENT_TIME"
-			],
-			[
-				"Se",
-				"SendingTimeDifferenceQueue"
-			],
-			[
-				"Sen",
-				"SendingTimeDifference"
-			],
-			[
-				"atom",
-				"atom_to_list"
-			],
-			[
-				"Enc",
-				"EncodedData"
-			],
-			[
-				"E",
-				"EncodedTimestamp"
-			],
-			[
-				"req",
-				"require_login"
-			],
-			[
-				"RSAKeyGenParameterSpe",
-				"RSAKeyGenParameterSpec"
-			],
-			[
-				"RSAK",
-				"RSAKeyGenParameterSpec"
-			],
-			[
-				"sta",
-				"state_name"
-			],
-			[
-				"have",
-				"have_many"
-			],
-			[
-				"shou",
-				"should"
-			],
-			[
-				"res",
-				"resources"
-			],
-			[
-				"resol",
-				"resolve_neighbor_to_pid"
-			],
-			[
-				"unbin",
-				"unbind_from_name_service"
-			],
-			[
-				"Ne",
-				"NewNumberSafe"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"contents": "\\documentclass[draft=false\n              ,paper=a4\n              ,twoside=false\n              ,fontsize=11pt\n              ,headsepline\n              ,BCOR10mm\n              ,DIV11\n              ]{scrbook}\n\\usepackage[ngerman,english]{babel}\n%% see http://www.tex.ac.uk/cgi-bin/texfaq2html?label=uselmfonts\n\\usepackage[T1]{fontenc}\n\\usepackage[utf8]{inputenc}\n% \\usepackage[latin1]{inputenc}\n\\usepackage{libertine}\n\\usepackage{pifont}\n\\usepackage{microtype}\n\\usepackage{textcomp}\n\\usepackage[german,refpage]{nomencl}\n\\usepackage{setspace}\n\\usepackage{makeidx}\n\\usepackage{listings}\n\\usepackage{natbib}\n\\usepackage[ngerman,colorlinks=true]{hyperref}\n\\usepackage{soul}\n\\usepackage{hawstyle}\n\\usepackage{lipsum} %% for sample text\n\\usepackage{scrhack} %% remove warning http://tex.stackexchange.com/questions/51867/koma-warning-about-toc\n\\usepackage{todonotes}\n\\usepackage[nomain,acronym,toc]{glossaries}\n\\usepackage{enumitem} % aligned description lists\n\\usepackage{amstext} % \\text{} within math-mode for text in normal font instead of italics\n\\usepackage{mathtools} % begin{align} for math block mode\n\\usepackage{fixltx2e} % for $g \\circ f$\n\\usepackage{color} % for listings javascript definition\n\n\n\\makeglossaries\n\n\\bibpunct[, ]{(}{)}{,}{a}{}{;} % correct citation format (no comma before year)\n\n\\includeonly{glossar,ch01-einleitest\nung,ch02-grundlagen,ch03-reaktive-programmierung,ch04-real-time-web,ch05-anwendung,ch06-schluss}\n\n\\graphicspath{{./logo/}{./img/}} % {./logo/} comes from hawstyle.sty (this \\graphicspath overrides that one)\n\n\\lstset{literate={/}{}{0\\discretionary{/}{}{/}}} % break on /\n\\lstset{literate={.}{}{0\\discretionary{.}{}{.}}} % break on .\n\n\\lstset{breaklines=true}\n\\lstset{breakatwhitespace=true}\n\n\n%% define some colors\n\\colorlet{BackgroundColor}{gray!20}\n\\colorlet{KeywordColor}{blue}\n\\colorlet{CommentColor}{black!60}\n%% for tables\n\\colorlet{HeadColor}{gray!60}\n\\colorlet{Color1}{blue!10}\n\\colorlet{Color2}{white}\n\n%% configure colors\n\\HAWifprinter{\n  \\colorlet{BackgroundColor}{gray!20}\n  \\colorlet{KeywordColor}{black}\n  \\colorlet{CommentColor}{gray}\n  % for tables\n  \\colorlet{HeadColor}{gray!60}\n  \\colorlet{Color1}{gray!40}\n  \\colorlet{Color2}{white}\n}{}\n\\lstset{%\n  numbers=left,\n  numberstyle=\\tiny,\n  stepnumber=1,\n  numbersep=5pt,\n  basicstyle=\\ttfamily\\small,\n  keywordstyle=\\color{KeywordColor}\\bfseries,\n  identifierstyle=\\color{black},\n  commentstyle=\\color{CommentColor},\n  backgroundcolor=\\color{BackgroundColor},\n  captionpos=b,\n  fontadjust=true\n}\n\\lstset{escapeinside={(*@}{@*)}, % used to enter latex code inside listings\n        morekeywords={uint32_t, int32_t}\n}\n\\ifpdfoutput{\n  \\hypersetup{bookmarksopen=false,bookmarksnumbered,linktocpage}\n}{}\n\n% \"define\" Scala http://tex.stackexchange.com/questions/47175/scala-support-in-listings-package\n\\lstdefinelanguage{scala}{\n  morekeywords={abstract,case,catch,class,def,%\n    do,else,extends,false,final,finally,%\n    for,if,implicit,import,match,mixin,%\n    new,null,object,override,package,%\n    private,protected,requires,return,sealed,%\n    super,this,throw,trait,true,try,%\n    type,val,var,while,with,yield},\n  otherkeywords={=>,<-,<\\%,<:,>:,\\#,@},\n  sensitive=true,\n  morecomment=[l]{//},\n  morecomment=[n]{/*}{*/},\n  morestring=[b]\",\n  morestring=[b]',\n  morestring=[b]\"\"\"\n}\n\n% \"define\" JavaScript http://tex.stackexchange.com/questions/89574/language-option-supported-in-listings\n\\definecolor{lightgray}{rgb}{.9,.9,.9}\n\\definecolor{darkgray}{rgb}{.4,.4,.4}\n\\definecolor{purple}{rgb}{0.65, 0.12, 0.82}\n\n\\lstdefinelanguage{JavaScript}{\n  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},\n  keywordstyle=\\color{blue}\\bfseries,\n  ndkeywords={class, export, boolean, throw, implements, import, this},\n  ndkeywordstyle=\\color{darkgray}\\bfseries,\n  identifierstyle=\\color{black},\n  sensitive=false,\n  comment=[l]{//},\n  morecomment=[s]{/*}{*/},\n  commentstyle=\\color{purple}\\ttfamily,\n  stringstyle=\\color{red}\\ttfamily,\n  morestring=[b]',\n  morestring=[b]\"\n}\n\n%% more fancy C++\n\\DeclareRobustCommand{\\cxx}{C\\raisebox{0.25ex}{{\\scriptsize +\\kern-0.25ex +}}}\n\n\\clubpenalty=10000\n\\widowpenalty=10000\n\\displaywidowpenalty=10000\n\n% unknown hyphenations\n\\hyphenation{\n}\n\n%% recalculate text area\n\\typearea[current]{last}\n\n\\makeindex\n\\makenomenclature\n\n\\begin{document}\n\\selectlanguage{ngerman}\n\\lstset{language=Scala}\n\n%%%%%\n%% customize (see readme.pdf for supported values)\n\\HAWThesisProperties{Author={Till Theis}\n                    ,Title={Das Play-Framework und dessen Einsatz zur Entwicklung von Real-Time-Web-Anwendungen}\n                    ,EnglishTitle={The Play Framework and its Use for Developing Real-Time Web Applications}\n                    ,ThesisType={Bachelorarbeit}\n                    ,ExaminationType={Bachelorprüfung}\n                    ,DegreeProgramme={Bachelor of Science Angewandte Informatik}\n                    ,ThesisExperts={Prof.\nDr.\nFriedrich Esser \\and Prof.\nDr.\nZweitprüfer}\n                    ,ReleaseDate={1.\nJanuar 2345}\n                  }\n\n%% title\n\\frontmatter\n\n%% output title page\n\\maketitle\n\n\\onehalfspacing\n\n%% add abstract pages\n%% note: this is one command on multiple lines\n\\HAWAbstractPage\n%% German abstract\n{Schlüsselwort 1, Schlüsselwort 2}%\n{Dieses Dokument \\ldots}\n%% English abstract\n{keyword 1, keyword 2}%\n{This document \\ldots}\n\n\\newpage\n\\singlespacing\n\n\\tableofcontents\n\\newpage\n%% enable if these lists should be shown on their own page\n%%\\listoftables\n\\listoffigures\n\\lstlistoflistings\n\n%% main\n\\mainmatter\n\\onehalfspacing\n%% write to the log/stdout\n\\typeout{===== File: chapter 1}\n%% include chapter file (chapter1.tex)\n%%\\include{chapter1}\n\n%%%%\n\n\n\n\n\\include{glossar}\n\n\\include{ch01-einleitung}\n\\include{ch02-grundlagen}\n\\include{ch03-reaktive-programmierung}\n\\include{ch04-real-time-web}\n\\include{ch05-anwendung}\n\\include{ch06-schluss}\n\n\n\n\n%%%%\n\n%% appendix if used\n%%\\appendix\n%%\\typeout{===== File: appendix}\n%%\\include{appendix}\n\n% bibliography and other stuff\n\\backmatter\n\n\\typeout{===== Section: literature}\n%% read the documentation for customizing the style\n\\bibliographystyle{dinat}\n\\bibliography{thesis}\n\n\\typeout{===== Section: nomenclature}\n%% uncomment if a TOC entry is needed\n% \\addcontentsline{toc}{chapter}{Glossar} % done via \\usepackage[toc]{glossaries}\n\\renewcommand{\\nomname}{Glossar}\n\n% s/Glossary/Glossar/\n% \\renewcommand*{\\glossaryname}{Glossar}\n% \\deftranslation{Glossary}{Glossar}\n\\renewcommand*{\\acronymname}{Glossar}\n\\deftranslation{Acronyms}{Glossar}\n\n\\printglossaries\n\\clearpage\n\\markboth{\\nomname}{\\nomname} %% see nomencl doc, page 9, section 4.1\n\\printnomenclature\n\n%% index\n\\typeout{===== Section: index}\n\\printindex\n\n\\HAWasurency\n\n\\end{document}\n",
 			"file": "thesis/thesis.tex",
-			"file_size": 6719,
-			"file_write_time": 130244304440000000,
 			"settings":
 			{
-				"buffer_size": 6719,
+				"buffer_size": 8550,
 				"line_ending": "Unix"
 			}
 		},
@@ -534,55 +531,15 @@
 			"file": "thesis/thesis.bib",
 			"settings":
 			{
-				"buffer_size": 18826,
+				"buffer_size": 21868,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "thesis/glossar.tex",
+			"file": "thesis/ch05-anwendung.tex",
 			"settings":
 			{
-				"buffer_size": 2136,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "thesis/ch04-real-time-web.tex",
-			"settings":
-			{
-				"buffer_size": 17854,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "code/age_statistics_sse/conf/routes",
-			"settings":
-			{
-				"buffer_size": 459,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "code/age_statistics_sse/app/controllers/Application.scala",
-			"settings":
-			{
-				"buffer_size": 983,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "code/age_statistics_http/app/views/index.scala.html",
-			"settings":
-			{
-				"buffer_size": 1314,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "code/age_statistics_ws/public/javascripts/main.js",
-			"settings":
-			{
-				"buffer_size": 2688,
+				"buffer_size": 22956,
 				"line_ending": "Unix"
 			}
 		}
@@ -590,7 +547,7 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 49.0,
+		"height": 27.0,
 		"selected_items":
 		[
 			[
@@ -719,16 +676,35 @@
 	},
 	"file_history":
 	[
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch02-grundlagen.tex",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/anhang.tex",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch03-reaktive-programmierung.tex",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch04-real-time-web.tex",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch05-anwendung.tex",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch06-schluss.tex",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/glossar.tex",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/twitter_news/conf/twitter.conf.example",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/twitter_news/app/models/TwitterNews.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/twitter_news/conf/twitter.conf",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/twitter_news/app/views/index.scala.html",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/twitter_news/app/controllers/Application.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/twitter_news/app/models/TwitterImpl.scala",
+		"/Users/till/Desktop/bak.txt",
 		"/Users/till/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/CHANGELOG",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/twitter_news/app/models/Twitter.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/IterateesSpec.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/build.sbt",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/LawSpec.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_sse/app/views/index.scala.html",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch01-einleitung.tex",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_sse/conf/routes",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_sse/app/controllers/Application.scala",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/app/views/index.scala.html",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_ws/public/javascripts/main.js",
+		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/thesis.tex",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_sse/public/javascripts/main.js",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/public/javascripts/main.js",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_ws/app/views/index.scala.html",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_sse/app/views/index.scala.html",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/app/views/index.scala.html",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_ws/public/javascripts/main.js",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_sse/app/controllers/Application.scala",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch02-grundlagen.tex",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch01-einleitung.tex",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/public/javascripts/webSocketCommunication.js",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/public/javascripts/serverSentEventsCommunication.js",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/public/javascripts/httpCommunication.js",
@@ -740,17 +716,13 @@
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_sse/app/views/exampleIndex.scala.html",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_ws/app/views/exampleIndex.scala.html",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/app/views/simpleIndex.scala.html",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/build.sbt",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/prototype/app/views/index.scala.html",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/EnumeratorsSpec.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/streams/Enumerators.scala",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch03-reaktive-programmierung.tex",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/LawSpec.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/streams/Composition.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/streams/Enumeratees.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/streams/Iteratees.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/app/controllers/Application.scala",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/ch04-real-time-web.tex",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/Helpers.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/conf/routes",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics/project/Build.scala",
@@ -760,13 +732,11 @@
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/app/controllers/Application.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_http/project/Build.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/age_statistics_ws/app/controllers/Application.scala",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/thesis/glossar.tex",
 		"/Users/till/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/Users/till/Dropbox/Entwicklung/github/tilltheis.github.com/index.html",
 		"/Users/till/Dropbox/Entwicklung/github/tilltheis.github.com/projects/pile-the-pieces/index.html",
 		"/Users/till/Dropbox/Entwicklung/github/tilltheis.github.com/projects/index.html",
 		"/Users/till/Library/Application Support/Sublime Text 3/Packages/User/Package Control.sublime-settings",
-		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/IterateesSpec.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/CompositionSpec.scala",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/test/reactive/streams/EnumeratorsSpec",
 		"/Users/till/Dropbox/Studium/Bachelorarbeit/Arbeit/code/examples/src/reactive/Streams.scala",
@@ -833,20 +803,7 @@
 		"/Users/till/Dropbox/Entwicklung/Studium/D-MARLA/Documentation/DoxygenDocumentation/html/doxygen.css",
 		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/sessions/new.html.slim",
 		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/parents/new.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/children/new.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/groups/new.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/accounts/new.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/kindergartens/new.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/fees/new.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/admin/managers/new.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/admin/kindergartens/new.html.slim",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/parents/index.html.slim",
-		"/Users/till/Desktop/filiale/branch_access/ManagerSkeletonThread.java",
-		"/Users/till/Dropbox/Entwicklung/Studium/wpitsec/a3/RSAKeyCreation.java",
-		"/Users/till/.gitconfig",
-		"/Users/till/.gitignore",
-		"/Users/till/Dropbox/Entwicklung/Studium/wpitsec/a3/crypto.scala",
-		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/db/schema.rb"
+		"/Users/till/Dropbox/Entwicklung/Studium/AISP-2012-WS-brdlfhrwtt/app/views/manager/children/new.html.slim"
 	],
 	"find":
 	{
@@ -854,7 +811,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 95.0,
 		"where_history":
 		[
 			"/Users/till/Dropbox/Entwicklung/Studium/VS-2012-WS-A4-PDTTDLFH",
@@ -866,6 +823,108 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"CHAPTER 6 - SCHLUSS",
+			"_",
+			"ssub",
+			"Unterabschnitt",
+			"_im_con",
+			"Unterabschnitt",
+			"absch",
+			"subsubsection",
+			"subsection",
+			"subsubsection",
+			"subsection",
+			"subs",
+			"ssub",
+			"par:",
+			"par",
+			"subs:",
+			"subs",
+			"anhang",
+			"sub",
+			"Sub",
+			"sub",
+			"Sub",
+			"sub",
+			"Sub",
+			"sub",
+			"subsection",
+			"lau",
+			"citetitle",
+			"cite",
+			"5 - ANWENDUNG",
+			"keyw",
+			"|Future",
+			"ajax",
+			"dom",
+			"gls{cont",
+			"was in diese",
+			"der nicht unb",
+			"teratees sequentiell zu kombinie",
+			"Zwei Iteratees sequentiell zu kombinie",
+			"Zwei Iteratees sequentiell zu kombinieren, bedeutet zuerst den",
+			"Zwei Iteratees sequentiell zu kombinieren, bedeutet zuerst den ersten Iteratee und dann",
+			"der_mostdiscussed_enumerator",
+			"^\\s*\\.",
+			"^\\s+\\.",
+			"^\\.",
+			"keep",
+			"\\todo",
+			"slopp",
+			"Sequentielle Komposition zweier",
+			"nothing",
+			"architektur",
+			"sub:architektur",
+			"Nothing",
+			"Aufgabe",
+			"process",
+			"class",
+			"very",
+			"resolve_tweet_id",
+			"request_tweets",
+			"analyze_tweets",
+			"tweet_buffer",
+			"\\\\",
+			"pt",
+			"tikzpicture",
+			"_",
+			"TweetedWords",
+			"broadcast",
+			"legend, ",
+			"}",
+			"application",
+			"twitter_news",
+			"above",
+			"web_browser",
+			"val",
+			"node ",
+			".5cm",
+			"2cm",
+			"1em",
+			".5em",
+			"right=1em of ",
+			"2em",
+			"1em",
+			"arrow_desc_end",
+			"arrow_desc_start",
+			"legend, ",
+			"[",
+			"525",
+			"=5em",
+			"\"POST\", \"/",
+			", ",
+			"catch",
+			"=",
+			"@routes",
+			"kap.",
+			"an monad",
+			"monad",
+			"an monad",
+			"abschnitt",
+			"kap.",
+			"kap",
+			"gls",
+			"exec",
 			"json",
 			"val",
 			"{\n",
@@ -891,109 +950,7 @@
 			"eventso",
 			"server_seite",
 			"client_seite",
-			"work.com",
-			"anwendung_von_enumerators",
-			"anwendung_",
-			"unterabsch",
-			"json",
-			"subsection",
-			"sub:die_list_monade",
-			"der_routen_eintrag_fuer_den_websocket_pfad",
-			"die_websocket_definition_im_controller",
-			"date",
-			"datei",
-			"unicast",
-			"EventOrString",
-			"=> Unit",
-			"folder",
-			"package examples.reactive.streams\n\nimport play.api.libs.iteratee._\nimport scala.concurrent._\nimport ExecutionContext.Implicits.global\n",
-			"folder",
-			"\nfolder",
-			"folder",
-			"gekaps",
-			"input",
-			"Container",
-			"EOF",
-			"Funktion",
-			"funktion",
-			"streams_in_play",
-			"Stream",
-			"stream",
-			"Stream",
-			"der_enumeratee_datentyp",
-			"input",
-			"ssub:input",
-			"enumerators",
-			"Enumerators",
-			"IDE",
-			"ide",
-			"ssub:iteratee",
-			"ssub",
-			"subsubsection",
-			"par",
-			"paragraph",
-			"ssub",
-			"subsubsection",
-			"enumeratees",
-			"By",
-			"\"",
-			"bib",
-			"par:iteratee",
-			"iteratee",
-			"itemize",
-			"ist somit die",
-			"Konstruktor",
-			"Sec",
-			"sec",
-			"Sec",
-			"sec",
-			"ssub",
-			"subsection",
-			"ssec",
-			"style",
-			"bib",
-			"desweiteren",
-			"subsubsection",
-			",",
-			". ",
-			".",
-			"zum Beispiel",
-			"zum",
-			"pages",
-			"{",
-			"bib",
-			"MaleCousin",
-			"Uncle",
-			"Left",
-			"Brother",
-			"\\==",
-			"Person",
-			"Brother",
-			"Father",
-			"father_of",
-			"(-bound to +bound)",
-			"exists",
-			"forall",
-			"combineWith",
-			"filter",
-			"SetResultCombinator",
-			"defaults",
-			"clock_windows",
-			"FullscreenObserver.sharedFullscreenObserver",
-			"clock_windows",
-			"clean_up",
-			"t",
-			"scr",
-			"w",
-			"simplify",
-			"petrick",
-			"file",
-			"g(file.n",
-			"/projects/timetable-widget",
-			"h4",
-			"h3",
-			"src=\"",
-			"io:format"
+			"work.com"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1001,6 +958,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"Abschnitt",
 			"{play_for_scala}",
 			"From",
 			".\n",
@@ -1044,160 +1002,27 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6719,
+						"buffer_size": 8550,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								196,
-								196
+								5618,
+								5618
 							]
 						],
 						"settings":
 						{
 							"WordCountShouldRun": true,
-							"annotations":
-							[
-								"TODO",
-								"README",
-								"FIXME"
-							],
-							"bh_regions":
-							[
-								"bh_regex",
-								"bh_regex_center",
-								"bh_regex_open",
-								"bh_regex_close",
-								"bh_double_quote",
-								"bh_double_quote_center",
-								"bh_double_quote_open",
-								"bh_double_quote_close",
-								"bh_square",
-								"bh_square_center",
-								"bh_square_open",
-								"bh_square_close",
-								"bh_angle",
-								"bh_angle_center",
-								"bh_angle_open",
-								"bh_angle_close",
-								"bh_curly",
-								"bh_curly_center",
-								"bh_curly_open",
-								"bh_curly_close",
-								"bh_default",
-								"bh_default_center",
-								"bh_default_open",
-								"bh_default_close",
-								"bh_unmatched",
-								"bh_unmatched_center",
-								"bh_unmatched_open",
-								"bh_unmatched_close",
-								"bh_round",
-								"bh_round_center",
-								"bh_round_open",
-								"bh_round_close",
-								"bh_tag",
-								"bh_tag_center",
-								"bh_tag_open",
-								"bh_tag_close",
-								"bh_single_quote",
-								"bh_single_quote_center",
-								"bh_single_quote_open",
-								"bh_single_quote_close"
-							],
-							"csslint_options":
-							{
-								"adjoining-classes": "warning",
-								"box-model": true,
-								"box-sizing": "warning",
-								"compatible-vendor-prefixes": "warning",
-								"display-property-grouping": true,
-								"duplicate-background-images": "warning",
-								"duplicate-properties": true,
-								"empty-rules": true,
-								"errors": true,
-								"fallback-colors": "warning",
-								"floats": "warning",
-								"font-faces": "warning",
-								"font-sizes": "warning",
-								"gradients": "warning",
-								"ids": "warning",
-								"import": "warning",
-								"important": "warning",
-								"known-properties": true,
-								"outline-none": "warning",
-								"overqualified-elements": "warning",
-								"qualified-headings": "warning",
-								"regex-selectors": "warning",
-								"rules-count": "warning",
-								"shorthand": "warning",
-								"star-property-hack": "warning",
-								"text-indent": "warning",
-								"underscore-property-hack": "warning",
-								"unique-headings": "warning",
-								"universal-selector": "warning",
-								"vendor-prefix": true,
-								"zero-units": "warning"
-							},
-							"gjslint_ignore":
-							[
-								110.0
-							],
-							"gjslint_options":
-							[
-							],
-							"javascript_linter": "jshint",
-							"jshint_options":
-							{
-								"browser": true,
-								"evil": true,
-								"regexdash": true,
-								"sub": true,
-								"trailing": true,
-								"wsh": true
-							},
-							"pep8": true,
-							"pep8_ignore":
-							[
-								"E501"
-							],
-							"perl_linter": "perlcritic",
-							"pyflakes_ignore":
-							[
-							],
-							"pyflakes_ignore_import_*": true,
 							"spell_check": true,
-							"sublimelinter": true,
-							"sublimelinter_delay": 2.0,
-							"sublimelinter_disable":
-							[
-							],
-							"sublimelinter_executable_map":
-							{
-								"ruby": "~/bin/rbenv-auto-ruby"
-							},
-							"sublimelinter_fill_outlines": false,
-							"sublimelinter_gutter_marks": true,
-							"sublimelinter_gutter_marks_theme": "simple",
-							"sublimelinter_mark_style": "none",
-							"sublimelinter_notes": false,
-							"sublimelinter_objj_check_ascii": false,
-							"sublimelinter_popup_errors_on_save": false,
-							"sublimelinter_syntax_map":
-							{
-								"C++": "c",
-								"Python Django": "python",
-								"Ruby on Rails": "ruby"
-							},
-							"sublimelinter_wrap_find": true,
 							"syntax": "Packages/LaTeX/LaTeX.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2657.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1208,15 +1033,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 18826,
+						"buffer_size": 21868,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								14175,
-								14175
+								21847,
+								21847
 							]
 						],
 						"settings":
@@ -1317,26 +1142,26 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 7109.0,
+						"translation.y": 12244.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "thesis/glossar.tex",
+					"file": "thesis/ch05-anwendung.tex",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2136,
+						"buffer_size": 22956,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								280,
-								280
+								17387,
+								17387
 							]
 						],
 						"settings":
@@ -1347,155 +1172,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 26.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "thesis/ch04-real-time-web.tex",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 17854,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6664,
-								6664
-							]
-						],
-						"settings":
-						{
-							"WordCountShouldRun": true,
-							"syntax": "Packages/LaTeX/LaTeX.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1554.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "code/age_statistics_sse/conf/routes",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 459,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								271,
-								271
-							]
-						],
-						"settings":
-						{
-							"WordCountShouldRun": false,
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "code/age_statistics_sse/app/controllers/Application.scala",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 983,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								342,
-								342
-							]
-						],
-						"settings":
-						{
-							"WordCountShouldRun": false,
-							"syntax": "Packages/Scala/Scala.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "code/age_statistics_http/app/views/index.scala.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1314,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1091,
-								1091
-							]
-						],
-						"settings":
-						{
-							"WordCountShouldRun": false,
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 66.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "code/age_statistics_ws/public/javascripts/main.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2688,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2688,
-								2688
-							]
-						],
-						"settings":
-						{
-							"WordCountShouldRun": false,
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 990.0,
+						"translation.y": 5711.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -1550,6 +1227,74 @@
 		"selected_items":
 		[
 			[
+				"ch05",
+				"thesis/ch05-anwendung.tex"
+			],
+			[
+				"ch02",
+				"thesis/ch02-grundlagen.tex"
+			],
+			[
+				"ch03",
+				"thesis/ch03-reaktive-programmierung.tex"
+			],
+			[
+				"ch04",
+				"thesis/ch04-real-time-web.tex"
+			],
+			[
+				"schluss",
+				"thesis/ch06-schluss.tex"
+			],
+			[
+				"twconex",
+				"code/twitter_news/conf/twitter.conf.example"
+			],
+			[
+				"twitternews",
+				"code/twitter_news/app/models/TwitterNews.scala"
+			],
+			[
+				"twconf",
+				"code/twitter_news/conf/twitter.conf"
+			],
+			[
+				"twnewscahtm",
+				"code/twitter_news/app/views/index.scala.html"
+			],
+			[
+				"twnewappsca",
+				"code/twitter_news/app/controllers/Application.scala"
+			],
+			[
+				"twnewscal",
+				"code/twitter_news/app/models/TwitterNews.scala"
+			],
+			[
+				"twitterimpl",
+				"code/twitter_news/app/models/TwitterImpl.scala"
+			],
+			[
+				"twitterscala",
+				"code/twitter_news/app/models/Twitter.scala"
+			],
+			[
+				"build",
+				"code/examples/build.sbt"
+			],
+			[
+				"bui",
+				"code/examples/build.sbt"
+			],
+			[
+				"ch01",
+				"thesis/ch01-einleitung.tex"
+			],
+			[
+				"thesistex",
+				"thesis/thesis.tex"
+			],
+			[
 				"wsmain",
 				"code/age_statistics_ws/public/javascripts/main.js"
 			],
@@ -1598,10 +1343,6 @@
 				"code/age_statistics/public/javascripts/serverSentEventsCommunication.js"
 			],
 			[
-				"ch01",
-				"thesis/ch01-einleitung.tex"
-			],
-			[
 				"exind",
 				"code/age_statistics_ws/app/views/exampleIndex.scala.html"
 			],
@@ -1618,28 +1359,12 @@
 				"code/age_statistics/app/views/simpleIndex.scala.html"
 			],
 			[
-				"ch02",
-				"thesis/ch02-grundlagen.tex"
-			],
-			[
-				"build",
-				"code/examples/build.sbt"
-			],
-			[
 				"enumeratorspe",
 				"code/examples/test/reactive/streams/EnumeratorsSpec.scala"
 			],
 			[
 				"enumerator",
 				"code/examples/src/reactive/streams/Enumerators.scala"
-			],
-			[
-				"ch03",
-				"thesis/ch03-reaktive-programmierung.tex"
-			],
-			[
-				"ch04",
-				"thesis/ch04-real-time-web.tex"
 			],
 			[
 				"app",
