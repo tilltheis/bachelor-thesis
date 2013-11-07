@@ -295,7 +295,7 @@ Play liefert bereits einen passenden Buffer-\lstinline|Enumeratee|, der im \lsti
 Anschließend werden die Elemente aus dem Buffer durch einen weiteren \lstinline|Enumeratee| transformiert, der das jeweilige Element vom Typ \lstinline|Map[Long, Int]| nimmt und die Tweet-IDs mit Hilfe der \lstinline|Twitter|-Klasse auflösen lässt.
 \lstinline|twitter.fetchTweets| gibt ein \lstinline|Future[Seq[Tweet]]| zurück, dessen zukünftiges Ergebnis mit Hilfe der \lstinline|map|-Methode dann in \lstinline|Map[Tweet, Int]| transformiert wird.
 Falls die Tweet-IDs nicht aufgelöst werden konnten, ist das \lstinline|Future| fehlgeschlagen und kann mit einer Prüfung auf die Ursache, in diesem Fall ein Wert von Typ \lstinline|TimeoutException| oder \lstinline|InvalidTweetFormatException|, in einen erfolgreichen Zustand gebracht werden.
-Der verwendete \lstinline|Enumeratee| \lstinline|mapM| ist extra für asynchrone Berechnungen wie diese ausgelegt, weshalb der \lstinline|Future|-Wert als Ergebnis ausreicht, ohne dass in der Berechnung selber auf ein Ergebnis gewartet werden muss.
+Der verwendete \lstinline|Enumeratee| \lstinline|mapM| ist extra für asynchrone Berechnungen wie diese ausgelegt, weshalb der monadische \lstinline|Future|-Wert als Ergebnis ausreicht, ohne dass in der Berechnung selber auf ein Ergebnis gewartet werden muss.
 Im letzten Schritt werden die positiven Ergebnisse herausgefiltert und als Elemente des \lstinline|mostDiscussedEnumerator|s generiert.
 
 \begin{lstlisting}[caption=Der mostDiscussedEnumerator, label=lst:der_mostdiscussedenumerator]
