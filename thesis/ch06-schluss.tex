@@ -9,18 +9,17 @@ Anschließend wird ein Ausblick gegeben, was in dieser Arbeit nicht behandelt we
 \section{Fazit} % (fold)
 \label{sec:fazit}
 
-Die Grundlagen des Play-Frameworks wurden erklärt, indem eine einfache statische Web-Anwendung gebaut wurde.
+Ziel dieser Arbeit war es, herauszufinden, wie mit Play Web-Anwendungen für das Real-Time-Web entwickelt werden können.
+Dazu wurde in den Grundlagen erklärt, wie eine einfache statische Web-Anwendung entwickelt wird.
 Diese Anwendung wurde mit den Erkenntnissen der Arbeit später um den Real-Time-Aspekt erweitert.
 Dies ließ sich mit den Möglichkeiten des Frameworks verhältnismäßig leicht umsetzen.
-Der komplizierteste Teil war das Verständnis der Iteratee-Streams und das Wissen um die dazugehörigen Teile, wie Monaden und speziell die \lstinline|Future|-Monade.
+Der komplizierteste Teil war das Verständnis der Iteratee-Streams und das Wissen um die denen zugrundeliegenden Konzepte, wie Monaden und speziell die \lstinline|Future|-Monade.
 
 Iteratee-Streams bestehen aus den drei Teilen \lstinline|Enumerator|s, \lstinline|Iteratee|s und \lstinline|Enumeratee|s, also den Datenquellen, den Datensenken und den Stream-Transformatoren.
 In dieser Arbeit wurde nicht nur gezeigt, wie diese Komponenten angewendet werden, sondern auch, wie eigene \lstinline|Enumerator|s, \lstinline|Iteratee|s und \lstinline|Enumeratee|s erstellt werden können.
 Dieser Blick auf die Implementierungsebene ermöglicht aus Sicht des Autors ein wesentlich umfassenderes Verständnis von Plays Iteratee-Streams.
 
-\lstinline|Iteratee|s bieten monadische Operationen an, wodurch das Bearbeiten von gestreamten Elementen auf konsistente Art und Weise erreicht wird.
-Die Ergebnisse, die von \lstinline|Iteratee|s berechnet werden, befinden sich immer in der \lstinline|Future|-Monade.
-Dies steht im Gegensatz zur ursprünglichen Iteratee-Stream-Implementierung von Oleg Kiselyov, bei der die Monade frei wählbar ist.
+Plays Implementierung der Iteratee-Streams weicht von der ursprünglichen Implementierung Kiselyovs vor allem in dem Punkt ab, dass sie nicht mit beliebigen Monaden sondern nur mit \lstinline|Future|-Monaden arbeitet.
 Der Grund hierfür wird sein, dass Play das Ziel hat, durch reaktive Programmierung ohne zu Blockieren möglichst effizient zu sein, weshalb sich die \lstinline|Future|-Monade anbietet, auch wenn im Gegenzug Flexibilität eingebüßt wird.
 Dies ist aus Sicht des Autors vertretbar und hat für ihn beim Arbeiten mit Play keine Probleme dargestellt.
 
@@ -28,7 +27,7 @@ Dass durch diese Streams aber auch komplexere Prozesse als die erste Beispielanw
 Dabei wurden mit \lstinline|Iteratee|s Daten von der Twitter-API empfangen und verarbeitet.
 Mit verknüpften \lstinline|Enumeratee|s wurden weitere Tweets heruntergeladen und zwischengespeichert.
 Erst nach vollständiger Verarbeitung wurden diese Daten wieder als \lstinline|Enumerator|s der Außenwelt zur Verfügung gestellt und deren Elemente an die verbundenen Clients gesendet.
-Insgesamt bilden die von Play zur Verfügung gestellten Werkzeuge aus Sicht des Autors eine solide Grundlage, um Real-Time Web-Anwendungen in einem reaktiven Stil zu entwickeln.
+Insgesamt bilden die von Play zur Verfügung gestellten Werkzeuge aus Sicht des Autors eine solide Grundlage, um Real-Time-Web-Anwendungen in einem reaktiven Stil zu entwickeln.
 
 % section fazit (end)
 
