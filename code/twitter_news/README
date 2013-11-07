@@ -1,4 +1,3 @@
-This is your new Play application
-=====================================
+# Twitter New
 
-This file will be packaged with your application, when using `play dist`.
+To run this app, rename conf/twitter.conf.example to conf/twitter.conf and fill in your Twitter-API credentials.
