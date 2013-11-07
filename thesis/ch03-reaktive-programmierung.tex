@@ -6,9 +6,11 @@
 Reaktive Programmierung ist die Programmierung von reaktiven Systemen.
 Ein reaktives System ist ein System, das von seiner Umgebung kontinuierlich Daten empfängt und darauf reagiert.
 In nebenläufigen Systemen können gleich mehrere solcher Datenströme unabhängig voneinander existieren \cite[vgl.][S.~1]{reactive_programming}.
-
 Reaktive Prozesse haben die Eigenschaft, schrittweise, immer wenn sie neue Daten empfangen, ein Ergebnis aufzubauen.
 Deshalb sind sie bei Berechnungen essentiell, bei denen nicht nur das Endergebnis wichtig ist, sondern auch die Schritte, die dazu geführt haben \cite[vgl.][S.~2]{reactive_programming1}.
+
+In diesem Kapitel werden mit Monaden und speziell der \lstinline|Future|-Monade die Grundbausteine der reaktiven Programmierung mit Play vorgestellt.
+Anschließend daran wird Plays Iteratee-Bibliothek vorgestellt, die die zuvor vorgestellten Konzepte nutzt, um eine Stream-Implementierung anzubieten, die zugleich effizient und flexibel ist.
 
 \section{Monaden} % (fold)
 \label{sec:monaden}
