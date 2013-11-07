@@ -3,15 +3,15 @@
 \chapter{Einleitung} % (fold)
 \label{cha:einleitung}
 
-In diesem Kapitel wird erläutert, was das Real-Time-Web ausmacht und weshalb sich das Play-Framework besonders eignet, Anwendungen dafür zu schreiben.
-Es wird ein Überblick über die bisherige Entwicklung des Webs gegeben und klargestellt, womit sich diese Arbeit genau beschäftigt und womit nicht.
-Anschließend wird aufgelistet, wie die weitere Struktur dieser Arbeit aussieht.
+In diesem Kapitel wird erläutert, was das Real-Time-Web ausmacht und was mit dem Play-Framework und dieser Arbeit erreicht werden soll.
+Es wird ein Überblick über die bisherige Entwicklung des Webs gegeben und differenziert, womit sich diese Arbeit genau beschäftigt und womit nicht.
+Anschließend wird beschrieben, wie die weitere Struktur dieser Arbeit aussieht.
 
 
 \section{Entwicklung des Webs} % (fold)
 \label{sec:entwicklung_des_webs}
 
-Nach \citealt{tavalsaari2011}~(S.~1--3) war das World Wide Web der 1990er Jahre ein Medium, bei dem einzelne Dokumente im Vordergrund standen.
+Nach \citealt{evolution_of_the_web}~(S.~1--3) war das World Wide Web der 1990er Jahre ein Medium, bei dem einzelne Dokumente im Vordergrund standen.
 Das klassische Web der ersten Hälfte des Jahrzehnts bestand aus Dokumenten mit Text, Bildern und Links.
 Die zweite Hälfte machte das Hybrid Web aus.
 Browsertechnologien, wie Javascript und CSS, sowie Plugins wie Flash und QuickTime wurden entwickelt und erweiterten die statischen Dokumente um interaktive Elemente.
@@ -27,47 +27,44 @@ Gegen Ende des Jahrzehnts wurden die vorhandenen Technologien genutzt, um ganze 
 
 Eine Real-Time-Web-Anwendung ist eine Web-Anwendung, die automatisch neue Daten an den Client sendet, sobald diese dem Server bekannt werden.
 Dies unterscheidet sich vom klassischen Pull-Prinzip, in dem nur der Client per Anfrage eine neue Seite beim Server anfordern kann.
-Bei Real-Time-Events ist es stattdessen notwendig, dass der Server mittels Push-Prinzip neue Informationen an den Client sendet \cite[vgl.][S.~1]{bozdag2007}.
+Bei Real-Time-Events ist es stattdessen notwendig, dass der Server mittels Push-Prinzip neue Informationen an den Client sendet \cite[vgl.][S.~1]{real_time_web}.
 Facebook beispielsweise zeigt neue Statusmeldungen von Freunden an, ohne dass manuell die Seite neu geladen werden muss.
 
 % section real-time-web (end)
 
 
-\section{Motivation} % (fold)
-\label{sec:motivation}
+\section{Motivation und Ziel} % (fold)
+\label{sec:motivation_und_ziel}
 
 Wenn man die in Abschnitt~\ref{sec:entwicklung_des_webs} beschriebene Entwicklung des Webs betrachtet, knüpft das Real-Time-Web genau daran an.
 Der Nachrichtenverkehr verläuft nicht mehr nur vom Client zum Server, sondern auch in umgekehrter Richtung vom Server zum Client.
-Das Play-Framework besitzt Werkzeuge, mit dieser Art der Kommunikation umzugehen~\cite[vgl.][S.~5]{drobi2012}.
+Das Play-Framework wird von Typesafe, der Firma von Scalas Begründer Martin Odersky, unterstützt und wirbt damit, die passenden Werkzeuge zur Entwicklung moderner Web-Anwendungen zu besitzen \cite[vgl.][]{play}.
+Ziel dieser Arbeit ist es, herauszufinden, wie mit Scala und Play diese Art von Anwendungen entwickelt werden kann.
+Dazu sollen die dafür benötigten Kernkomponenten vorgestellt und analysiert werden, um damit schließlich eine eigene Real-Time-Web-Anwendung zu entwickeln.
 
-% section motivation (end)
+% section motivation_und_ziel (end)
 
 
 \section{Themenabgrenzung} % (fold)
 \label{sec:themenabgrenzung}
 
-Diese Arbeit beschäftigt sich in erster Linie mit der Architektur und den Grundlagen des Play-Frameworks und den Teilen, die zur Entwicklung von Real-Time-Web-Anwendungen benötigt werden.
+Diese Arbeit beschäftigt sich in erster Linie mit den Teilen des Play-Frameworks, die benötigt werden, um Real-Time-Web-Anwendungen damit zu entwickeln und stellt zusätzlich benötigtes Wissen, wie Architektur und Grundlagen des Frameworks zur Verfügung.
 Einige Themenbereiche, die dafür nicht elementar sind, wie z.~B. Datenbanken, werden nicht behandelt.
-Des Weiteren wird vorausgesetzt, dass der/die LeserIn bereits mit den Grundtechnologien der Web-Entwicklung, wie HTML, CSS und Javascript vertraut ist.
+Des Weiteren wird vorausgesetzt, dass der/die LeserIn bereits mit den Grundtechnologien der Web-Entwicklung, wie HTML, CSS und JavaScript vertraut ist.
+Ein JavaScript-Framework wird aber nicht verwendet, um kein weiteres Vorwissen vorauszusetzen.
 
 % section themenabgrenzung (end)
 
 
-\section{Ziel} % (fold)
-\label{sec:ziel}
-
-Ziel dieser Arbeit ist es, zu zeigen, wie mit dem Play-Framework Real-Time-Web-Anwendungen entwickelt werden können.
-Es wird gezeigt, welche Werkzeuge das Framwework dafür besitzt und wie diese zu verwenden sind.
-Dazu wird zunächst erklärt, wie eine statische Website erstellt wird, um diese später um Real-Time-Komponenten zu erweitern.
-Nachdem die Grundtechniken zur Handhabung des Frameworks aufgezeigt worden sind, wird in die reaktive Programmierung eingeführt.
-Diese ist grundlegend, um Plays Stream-Bibliothek zu verstehen, die im Mittelpunkt der Entwicklung von Real-Time-Web-Anwendungen steht.
-Mit diesem Wissen wird schließlich eine Anwendung erstellt, die all die behandelten Punkte in praktischer Art und Weise zusammenführt.
-
-% section ziel (end)
-
-
 \section{Struktur} % (fold)
 \label{sec:struktur}
+
+Im \hyperref[cha:grundlagen]{zweiten Kapitel} wird gezeigt, welche grundlegenden Werkzeuge das Framwework für die Entwicklung von Web-Anwendungen besitzt und wie diese zu verwenden sind.
+Dazu wird zunächst erklärt, wie eine statische Website erstellt wird, um diese später um Real-Time-Komponenten zu erweitern.
+Nachdem die Grundtechniken zur Handhabung des Frameworks aufgezeigt worden sind, wird im \hyperref[cha:reaktive_programmierung]{dritten Kapitel} in die reaktive Programmierung eingeführt.
+Diese ist grundlegend, um Plays Stream-Bibliothek zu verstehen, die im Mittelpunkt der Entwicklung von Real-Time-Web-Anwendungen steht.
+Das \hyperref[cha:real_time_web]{vierte Kapitel} erklärt, wie auf der Client-Seite mittels JavaScript mit dem Server kommuniziert wird.
+Mit diesem Wissen wird im \hyperref[cha:anwendung]{fünften Kapitel} schließlich eine Anwendung erstellt, die all die behandelten Punkte in praktischer Art und Weise zusammenführt.
 
 % section struktur (end)
 
