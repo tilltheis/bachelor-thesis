@@ -1273,7 +1273,7 @@ Die in den Code-Ausschnitten gezeigten Variablen \lstinline|left| und \lstinline
     \begin{lstlisting}[caption=Kompositionsregel, label=lst:kompositionsregel]
 val left: Enumerator[E] = en_str(s1 + s2)
 val right: Enumerator[E] = en_str(s1).andThen(en_str(s2))
-    \end{lstlisting}
+\end{lstlisting}
 
   \item Verkettung
 
@@ -1287,7 +1287,7 @@ def flatMap[A, B](m: IM[A], f: A => IM[B]): IM[B] =
 val left: IM[String] = en_str(s1 + s2)(i.flatMap(f))
 val right: IM[String] =
   flatMap(en_str(s1)(i), (x: String) => en_str(s2)(f(x)))
-    \end{lstlisting}
+\end{lstlisting}
 
     Die in Listing~\ref{lst:verkettungsregel1} verwendete Funktion \lstinline|flatMap| verhält sich wie auch andere \lstinline|flatMap|-Methoden.
     Diese Implementierung arbeitet allerdigns auf der Monade \lstinline|IM|, die aus \lstinline|Future| und \lstinline|Iteratee| zusammengesetzt ist.
@@ -1296,7 +1296,7 @@ val right: IM[String] =
     \begin{lstlisting}[caption={Verkettungsregel, wenn ein Iteratee die Eingabe nicht erkennt}, label=lst:verkettungsregel2]
 val left: IM[String] = en_str(s)(i.flatMap(f))
 val right: IM[String] = en_str(s)(i).map(_.flatMap(f))
-    \end{lstlisting}
+\end{lstlisting}
 
   \item Nullelement
 
@@ -1311,7 +1311,7 @@ def failure[A]: I[A] = Cont(_ => failure)
 
 val left: I[String] = failure.flatMap(f)
 val right: I[String] = failure
-    \end{lstlisting}
+\end{lstlisting}
 
   \item Rechtsdistributivität
 
@@ -1323,7 +1323,7 @@ val left: I[String] =
   i.flatMap(x => alternative(k1(x), k2(x)))
 val right: I[String] =
   alternative(i.flatMap(k1), i.flatMap(k2))
-    \end{lstlisting}
+\end{lstlisting}
 
     \lstinline|alternative| komponiert die Ergebnis-\lstinline|Iteratee|s der beiden Funktionen \lstinline|k1| und \lstinline|k2|.
     Der resultierende \lstinline|Iteratee| erkennt, was der am schnellsten erkennende Eingabe-\lstinline|Iteratee| erkennt.
@@ -1335,7 +1335,7 @@ val left: M[(I[A], I[A])] =
 val right: M[(I[A], I[A])] =
   en_str(s)(i).flatMap(x =>
     en_str(s)(i).flatMap(y => Future((x, y))))
-    \end{lstlisting}
+\end{lstlisting}
 \end{enumerate}
 
 % subsection iteratee_gesetze (end)
