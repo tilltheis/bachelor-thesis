@@ -28,7 +28,7 @@ Eine Monade in einer Kategorie $C$ ist ein Tripel $T = (T, \eta, \mu)$, wobei $T
 Um diese Definition in den Kontext der Programmierung zu übersetzen, soll folgende vereinfachte Erklärung dienen \cite[vgl.][S.~2--3]{monads_programming}:
 Eine Kategorie in der Mathematik ist, sehr vereinfacht dargestellt, eine Menge von Objekten und den Operationen auf diesen Objekten \cite[vgl.][S.~7]{monads_category_theory}.
 Als die Kategorie $C$ kann die Programmiersprache selber, mitsamt ihrer Typen und den Operationen auf den Werten dieser Typen gesehen werden\cite[vgl.][S.~6--8]{category_theory_and_programming}.
-Ein Funktor $T$ ist eine Struktur mit einem einem Operator, der Funktionen $A \to B$ zu Funktionen $T A \to T B$ transformiert.
+Ein Funktor $T$ ist eine Struktur mit einem Operator, der Funktionen $A \to B$ zu Funktionen $T A \to T B$ transformiert.
 Natürliche Transformationen können als Funktionen aufgefasst werden.
 $\eta$ hebt einen Wert in die Monade und $\mu$ macht aus einer verschachtelten Monade ein nicht-verschachtelte Monade.
 
@@ -86,7 +86,7 @@ class M[A] {
 }
 \end{lstlisting}
 
-Die \lstinline|map|-Methode entspricht hierbei der \lstinline|map|-Funktion des vorletzten Unterabschnitts und die \lstinline|flatMap|-Methode entspricht der \lstinline|bind|-Funktion des letzten Unterabschnitt.
+Die \lstinline|map|-Methode entspricht hierbei der \lstinline|map|-Funktion des vorletzten Unterabschnitts und die \lstinline|flatMap|-Methode entspricht der \lstinline|bind|-Funktion des letzten Unterabschnitts.
 Für die \lstinline|unit|-Funktion gibt es in Scala kein standardisiertes Pendant.
 Stattdessen wird der jeweilige Konstruktor der Monade oder die Konstruktormethode des Companion-Objekts verwendet, sofern diese existieren.
 Auch wenn Scalas \lstinline|for|-Comprehensions sie nicht verlangen, so haben die Implementationen der Monaden in der Standardbibliothek i.~d.~R. auch die Methode \lstinline|flatten|, die der als \lstinline|join| vorgestellten Funktion entspricht.
