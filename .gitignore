@@ -14,3 +14,9 @@ Icon
 .Trashes
 
 
+# Global/SublimeText
+
+# SublimeText project files
+*.sublime-workspace
+
+
