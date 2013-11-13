@@ -1,0 +1,103 @@
+http://memeburn.com/2010/09/the-100-most-influential-news-media-twitter-accounts/
+
+Number  @name Name  Followers Influence Rank
+1 @mashable Pete Cashmore 2037840 59
+2 @cnnbrk CNN Breaking News 3224475 71
+3 @big_picture  The Big Picture 23666 92
+4 @theonion The Onion 2289939 116
+5 @time TIME.com  2111832 143
+6 @breakingnews Breaking News 1795976 147
+7 @bbcbreaking  BBC Breaking News 509756  168
+8 @espn ESPN  572577  187
+9 @harvardbiz Harvard Business Rev  219039  227
+10  @gizmodo  Gizmodo 111025  237
+11  @techcrunch TechCrunch  1402254 319
+12  @wired  Wired 547187  322
+13  @wsj  Wall Street Journal 366133  358
+14  @smashingmag  Smashing Magazine 224333  360
+15  @pitchforkmedia Pitchfork 1494896 384
+16  @rollingstone Rolling Stone 133999  436
+17  @whitehouse The White House 1794544 448
+18  @cnn  CNN 1196719 473
+19  @tweetmeme  TweetMeme 52386 515
+20  @peoplemag  People magazine 2099081 565
+21  @natgeosociety  National Geographic 274851  603
+22  @nytimes  The New York Times  2502914 705
+23  @lifehacker Lifehacker  62302 708
+24  @foxnews  Fox News  260081  710
+25  @waitwait waitwait  32895 824
+26  @newsweek Newsweek  1250884 844
+27  @huffingtonpost Huffington Post 632555  849
+28  @newscientist New Scientist 144355  852
+29  @mental_floss Mental Floss  68975 874
+30  @theeconomist The Economist 311109  902
+31  @emarketer  eMarketer 30235 906
+32  @engadget Engadget  135418  999
+33  @cracked  Cracked.com 110611  1037
+34  @slate  Slate 71091 1040
+35  @bbcclick BBC Click 1749470 1041
+36  @fastcompany  Fast Company  148292  1056
+37  @reuters  Reuters Top News  194429  1119
+38  @incmagazine  Inc. Magazine 109256  1143
+39  @eonline  E! Online 2271026 1227
+40  @rww  Richard MacManus  1037907 1232
+41  @gdgt gdgt  20556 1315
+42  @instyle  InStyle 1716786 1330
+43  @mckquarterly McKinsey Quarterly  90981 1354
+44  @enews  E! News 279737  1540
+45  @nprnews  NPR News  270561  1572
+46  @usatoday USA TODAY Top News  62790 1628
+47  @mtv  MTV 648014  1714
+48  @freakonomics freakonomics  124751  1784
+49  @boingboing Boing Boing 48649 1811
+50  @billboarddotcom  Billboard.com 63766 1818
+51  @empiremagazine Empire Magazine 33335 1905
+52  @todayshow  The Today Show  620413  1927
+53  @good GOOD  414956  2003
+54  @gawker Gawker  37980 2027
+55  @msnbc_breaking msnbc Breaking News 59375 2088
+56  @cbsnews  CBS News  1575638 2090
+57  @guardiantech Guardian Tech 1592067 2139
+58  @usweekly Us Weekly 228728  2233
+59  @life LIFE.com  1270303 2277
+60  @sciam  Scientific American 88336 2373
+61  @pastemagazine  Paste Magazine  64642 2379
+62  @drudge_report  Drudge Report 100558  2468
+63  @parisreview  The Paris Review  22127 2599
+64  @latimes  Los Angeles Times 71287 2625
+65  @telegraphnews  Daily Telegraph News  17325 2629
+66  @abc7 ABC7 Eyewitness News  36343 2638
+67  @arstechnica  Ars Technica  82051 2692
+68  @cnnmoney CNNMoney.com  219552  2777
+69  @nprpolitics  NPR Politics  1801871 2882
+70  @nytimesphoto New York Times Photo  79443 2927
+71  @nybooks  NY Review of Books  89827 2966
+72  @nielsenwire  Nielsen Wire  13840 2994
+73  @io9  io9 12152 3023
+74  @sciencechannel Science Channel 82514 3064
+75  @usabreakingnews  USA Breaking News 13987 3120
+76  @vanityfairmag  VANITY FAIR 76282 3182
+77  @cw_network CW Network  70031 3183
+78  @bbcworld BBC World News  262857  3202
+79  @abc  ABCNews.com 1119958 3411
+80  @themoment  The Moment  1580569 3413
+81  @socialmedia2day  Social Media Today  34516 3510
+82  @slashdot Slashdot  29011 3527
+83  @washingtonpost The Washington Post 149617  3636
+84  @tpmmedia Talking Points Memo 15438 3678
+85  @msnbc  msnbc.com 41155 3696
+86  @wnycradiolab Radiolab  9591  3776
+87  @cnnlive  CNN Live  39260 3793
+88  @davos  World Economic Forum  1508772 3891
+89  @planetmoney  NPR’s Planet Money  81309 3965
+90  @cnetnews CNET News.com 75730 3981
+91  @politico POLITICO  83729 4048
+92  @tvnewser TVNewser  12301 4427
+93  @guardiannews The Guardian  75198 4665
+94  @yahoonews  Yahoo! News 37154 4668
+95  @seedmag  Seed Magazine 9898  4696
+96  @tvguide  TV Guide  586240  4757
+97  @travlandleisure  Travel + Leisure  84029 4767
+98  @newyorkpost  New York Post 43334 4790
+99  @discovermag  DISCOVER Magazine 71913 4816
+100 @sciencenewsorg Science News  75665 4888
