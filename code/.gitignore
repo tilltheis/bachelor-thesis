@@ -1,0 +1,8 @@
+# Global/IntelliJ
+
+*.iml
+*.ipr
+*.iws
+.idea/
+
+
