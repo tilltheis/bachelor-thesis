@@ -215,7 +215,7 @@ Dieser Helper nimmt als Argument einen String und fügt diesen unverändert an d
 \label{sub:altersstatistiken_view}
 
 Das eigentliche View-Template unter \lstinline|app/views/index.scala.html| ist etwas umfangreicher.
-Das Zeichnen des Diagramms erfolgt Client-seitig via JS und ist in \lstinline|public/javascripts/main.js| ausgelagert.
+Das Zeichnen des Diagramms erfolgt cientseitig via JS und ist in \lstinline|public/javascripts/main.js| ausgelagert.
 Dieses Script wird wie auch alle anderen Dateien im \lstinline|public/|-Ordner via \lstinline|@routes.Assets.at("javascripts/main.js")| adressiert \cite[vgl.][S.~111]{play_for_scala}.
 Das gesamte Template hat den in Listing~\ref{lst:das_view_template} vereinfacht dargestellten Inhalt.
 
@@ -323,7 +323,7 @@ def input = Action { implicit request =>
 }
 \end{lstlisting}
 
-Das obige Listing beginnt mit der Definition der Server-seitigen Formulardarstellung.
+Das obige Listing beginnt mit der Definition der serverseitigen Formulardarstellung.
 \lstinline|ageForm| enthält die Formulardefinition für die Altersangabe.
 \lstinline|play.api.data.Form.apply| erstellt aus einem \lstinline|play.api.data.Mapping| ein \lstinline|play.api.data.Form|-Objekt.
 Ein \lstinline|Mapping| bildet ein oder mehrere Formularfelder auf einen Wert mit assoziiertem Datentyp ab.
@@ -334,7 +334,7 @@ Für den Fall dass nur ein Formularfeld erwartet wird, gibt es eine weitere Vari
 Dem verwendeten \lstinline|number|-Mapping werden außerdem noch Mindest- und Höchstwert mitgeteilt, damit nur glaubwürdige Werte in die Statistik gelangen.
 
 Die \lstinline|input|-Action benötigt einen \lstinline|Request|-Parameter, um die Formulardaten lesen zu können.
-\lstinline|ageForm.bindFromRequest| füllt die Server-seitige Darstellung des Formulars über den impliziten \lstinline|Request|-Parameter mit Daten, womit mittels der \lstinline|fold|-Methode dann weitergearbeitet werden kann \cite[vgl.][S.~179]{play_for_scala}.
+\lstinline|ageForm.bindFromRequest| füllt die serverseitige Darstellung des Formulars über den impliziten \lstinline|Request|-Parameter mit Daten, womit mittels der \lstinline|fold|-Methode dann weitergearbeitet werden kann \cite[vgl.][S.~179]{play_for_scala}.
 \lstinline|fold| nimmt als Argumente zwei Funktionen.
 Die erste Funktion wird ausgeführt, wenn die Formulardaten nicht auf die interne Formulardarstellung abgebildet werden konnten.
 Die zweite Funktion wird ausgeführt, wenn es keine Fehler gab, dann kann mit den übergebenen Formulardaten weitergearbeitet werden \cite[vgl.][S.~176]{play_for_scala}.

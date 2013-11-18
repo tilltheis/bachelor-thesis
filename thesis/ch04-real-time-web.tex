@@ -4,7 +4,7 @@
 \label{cha:real_time_web}
 
 Nachdem im vorigen Kapitel Plays Streams vorgestellt wurden, wird in diesem Kapitel der letzte Teil vorgestellt, der für den Real-Time-Aspekt von Web-Anwendungen notwendig ist.
-In diesem Kapitel sollen die client-seitigen Werkzeuge vorgestellt werden, die Real-Time-Web-Anwendungen möglich machen.
+In diesem Kapitel sollen die clientseitigen Werkzeuge vorgestellt werden, die Real-Time-Web-Anwendungen möglich machen.
 Dafür gibt es zwei Techniken.
 Diese sind Web-Sockets und Server Sent Events.
 Erstere bildeten das bekannte Socket-Konzept im Browser ab, wohingegen letztere eine Einweg-Kommunikation vom Server zum Client ermöglichen.
@@ -126,7 +126,7 @@ ws.onmessage = function(event) {
 };
 \end{lstlisting}
 
-Bevor das \lstinline|WebSocket| geöffnet und nachdem es geschlossen wurde, muss verhindert werden, dass das Formular abgeschickt werden kann, weil Server-seitig keine \lstinline|Action| für das Formular existiert.
+Bevor das \lstinline|WebSocket| geöffnet und nachdem es geschlossen wurde, muss verhindert werden, dass das Formular abgeschickt werden kann, weil serverseitig keine \lstinline|Action| für das Formular existiert.
 Der Code dafür soll an dieser Stelle aber nicht gezeigt werden werden.
 Die verwendeten Variablen \lstinline|form| und \lstinline|input| enthalten Referenzen auf die HTML-Elemente für das Formular und das Eingabefeld.
 Sobald das \lstinline|WebSocket| geöffnet ist, wird dafür gesorgt, dass bei Formularabsendung das \lstinline|WebSocket| verwendet wird, statt einer regulären Formularübertragung.
