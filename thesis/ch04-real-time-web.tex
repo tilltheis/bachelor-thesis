@@ -18,7 +18,7 @@ Auf Client-Seite gibt es hierfür den \lstinline|WebSocket|-Typ.
 Auf Server-Seite (Play) gibt es ebenfalls eine Klasse namens \lstinline|WebSocket|, die im Controller anstelle von \lstinline|Action| als Request-Handler verwendet werden kann.
 Web-Sockets werden von Chrome 14, Firefox 11 und Internet Explorer 10 und in neueren Versionen unterstützt \cite[vgl.][]{js_websocket_compatibility}.
 
-\subsection{Web-Sockets auf der Client-Seite} % (fold)
+\subsection{Client-Seite} % (fold)
 \label{sub:web_sockets_auf_client_seite}
 
 \citealt{js_websockets} definiert das Interface für Web-Sockets in JavaScript.
@@ -45,7 +45,7 @@ Die \lstinline|close|-Methode schließt das \lstinline|WebSocket| wieder.
 
 % subsection web_sockets_auf_client_seite (end)
 
-\subsection{Web-Sockets auf der Server-Seite} % (fold)
+\subsection{Server-Seite} % (fold)
 \label{sub:web_sockets_auf_server_seite}
 
 \begin{sloppypar} % larger word spacing so that \lstinline will not go out of line margin
@@ -63,7 +63,7 @@ Dieser Eintrag unterscheidet sich nicht von denen für reguläre \lstinline|Acti
 
 % subsection web_sockets_auf_server_seite (end)
 
-\subsection{Web-Sockets in der Altersstatistiken-Anwendung} % (fold)
+\subsection{Altersstatistiken-Anwendung} % (fold)
 \label{sub:web_sockets_in_der_altersstatistiken_anwendung}
 
 Um die statische Anwendung zur Erfassung von Altersstatistiken soll dynamisch werden und neue Einträge in Echtzeit anzuzeigen.
@@ -144,7 +144,7 @@ Server Sent Events ist eine Technologie, bei der die Server-Seite Nachrichten an
 Dabei wird im Gegensatz zu Web-Sockets kein eigenständiges Protokoll verwendet, sondern auf HTTP zurückgegriffen.
 Server Sent Events wird von Chrome 6 und Firefox 6 und in neueren Versionen, nicht aber von Internet Explorer unterstützt \cite[vgl.][]{js_eventsource_compatibility}.
 
-\subsection{Server Sent Events auf der Client-Seite} % (fold)
+\subsection{Client-Seite} % (fold)
 \label{sub:server_sent_events_auf_client_seite}
 
 Auf der Client-Seite gibt es das \lstinline|EventSource|-Interface, das, wie der Name schon sagt, die serverseitige Datenquelle repräsentiert.
@@ -166,7 +166,7 @@ Die empfangenen Nachrichten sind \lstinline|String|s \cite[vgl.][]{js_eventsourc
 
 % subsection server_sent_events_auf_client_seite (end)
 
-\subsection{Server Sent Events auf der Server-Seite} % (fold)
+\subsection{Server-Seite} % (fold)
 \label{sub:server_sent_events_auf_der_server_seite}
 
 Play unterstützt Server Sent Events mit Hilfe von Actions, die statt einer einfachen Antwort einen Datenstrom zurückliefern.
@@ -188,7 +188,7 @@ def eventSource = Action {
 
 % subsection server_seite (end)
 
-\subsection{Server Sent Events in der Altersstatistiken-Anwendung} % (fold)
+\subsection{Altersstatistiken-Anwendung} % (fold)
 \label{sub:server_sent_events_in_der_altersstatistiken_anwendung}
 
 Die Altersangaben werden wie bei der statischen Variante über separate HTTP-Nachrichten empfangen, wofür nach wie vor im Controller die \lstinline|input|-Action zuständig ist.
