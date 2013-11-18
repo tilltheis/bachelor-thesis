@@ -12,8 +12,9 @@ Anschließend wird ein Ausblick gegeben, was in dieser Arbeit nicht behandelt we
 Ziel dieser Arbeit war es, herauszufinden, wie mit Play Web-Anwendungen für das Real-Time-Web entwickelt werden können.
 Dazu wurde in den Grundlagen erklärt, wie eine einfache statische Web-Anwendung entwickelt wird.
 Diese Anwendung wurde mit den Erkenntnissen der Arbeit später um den Real-Time-Aspekt erweitert.
-Dies ließ sich mit den Möglichkeiten des Frameworks verhältnismäßig leicht umsetzen.
+Der statische Teil ließ sich ohne Schwierigkeiten umsetzen, wohingegen der dynamische Teil komplizierter war.
 Der komplizierteste Teil war das Verständnis der Iteratee-Streams und das Wissen um die denen zugrundeliegenden Konzepte, wie Monaden und speziell die \lstinline|Future|-Monade.
+Erschwerend hinzu kamen die Entdeckung eines Bugs, wodurch die Implementierung verkompliziert wurde.
 
 Iteratee-Streams bestehen aus den drei Teilen \lstinline|Enumerator|s, \lstinline|Iteratee|s und \lstinline|Enumeratee|s, also den Datenquellen, den Datensenken und den Stream-Transformatoren.
 In dieser Arbeit wurde nicht nur gezeigt, wie diese Komponenten angewendet werden, sondern auch, wie eigene \lstinline|Enumerator|s, \lstinline|Iteratee|s und \lstinline|Enumeratee|s erstellt werden können.
@@ -27,6 +28,11 @@ Dass durch diese Streams aber auch komplexere Prozesse als die erste Beispielanw
 Dabei wurden mit \lstinline|Iteratee|s Daten von der Twitter-API empfangen und verarbeitet.
 Mit verknüpften \lstinline|Enumeratee|s wurden weitere Tweets heruntergeladen und zwischengespeichert.
 Erst nach vollständiger Verarbeitung wurden diese Daten wieder als \lstinline|Enumerator|s der Außenwelt zur Verfügung gestellt und deren Elemente an die verbundenen Clients gesendet.
+
+Play wird aktiv entwickelt und es wurden während der Entstehung dieser Arbeit mehrere neue Versionen veröffentlicht.
+Bei der Aktualisierung von Play 2.1 auf Play 2.2 mussten Teile des Codes angepasst werden, was bei einem solchen Versionssprung zu erwarten ist, bei häufigen Versionsänderungen aber zur Last werden kann.
+Außerdem wurde beim Schreiben dieser Arbeit ein Bug entdeckt, der aber in der nächsten Version korrigiert wird.
+Durch die aktive Entwicklung und Erweiterung des Frameworks ist Play möglicherweise weniger stabil, als ältere Frameworks, bekanntgewordene Fehler werden aber dadurch auch schnell korrigiert.
 Insgesamt bilden die von Play zur Verfügung gestellten Werkzeuge aus Sicht des Autors eine solide Grundlage, um Real-Time-Web-Anwendungen in einem reaktiven Stil zu entwickeln.
 
 % section fazit (end)
