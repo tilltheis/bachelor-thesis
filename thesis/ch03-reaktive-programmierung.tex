@@ -374,10 +374,10 @@ Diese Implementierung hält genau ein Element aus der Datenquelle.
 Außerdem findet es im Kontext von \lstinline|Iteratee|s Verwendung, um zu signalisieren, dass kein Teil der Eingabe übriggebliebenen ist.
 Wenn die Datenquelle erschöpft ist, wird dies mit dem Objekt \lstinline|Input.EOF| mitgeteilt.
 
-Sowohl \lstinline|Input.Empty|, als auch \lstinline|Input.EOF| sind vom Typ \lstinline[mathescape]|$\text{\gls{nothing}}$|.
-\lstinline[mathescape]|$\text{\gls{nothing}}$| ist ein besonderer Typ in Scala, ein so genannter Bottom-Typ.
+Sowohl \lstinline|Input.Empty|, als auch \lstinline|Input.EOF| sind vom Typ \lstinline|Nothing|.
+\lstinline|Nothing| ist ein besonderer Typ in Scala, ein so genannter Bottom-Typ.
 Das bedeutet, dass er ganz unten in der Klassenhierarchie steht und eine Spezialisierung jedes anderen Typs ist.
-Es gibt keine Instanz vom Typ \lstinline[mathescape]|$\text{\gls{nothing}}$|, aufgrund seiner Position in der Klassenhierarchie kann er jedoch jeden anderen Typ annehmen \cite[vgl.][S.~216]{programming_in_scala}.
+Es gibt keine Instanz vom Typ \lstinline|Nothing|, aufgrund seiner Position in der Klassenhierarchie kann er jedoch jeden anderen Typ annehmen \cite[vgl.][S.~216]{programming_in_scala}.
 Weil der Typparameter des \lstinline|Input|-Datentyps kovariant ist, lassen sich \lstinline|Input.Empty| und \lstinline|Input.EOF| mit jedem anderen \lstinline|Input| kombinieren.
 
 Ein Wert vom Typ \lstinline|Input| hat also drei mögliche Zustände:
@@ -412,7 +412,7 @@ Der algebraische Datentyp ist über die zwei Typen \lstinline|E| und \lstinline|
 \lstinline|E| ist der Typ der zu konsumierenden Elemente.
 \lstinline|A| ist der Typ des zu berechnenden Ergebnisses.
 \lstinline|A| ist kovariant, sodass auch Spezialisierungen von \lstinline|A| als Werte verwendet werden können.
-Die Kovarianz über den Typ \lstinline|A| ermöglicht es auch hier wieder \lstinline[mathescape]|$\text{\gls{nothing}}$| in den Konstruktoren zu verwenden, wie im vorigen Unterabschnitt beschrieben.
+Die Kovarianz über den Typ \lstinline|A| ermöglicht es auch hier wieder \lstinline|Nothing| in den Konstruktoren zu verwenden, wie im vorigen Unterabschnitt beschrieben.
 
 Ein \lstinline|Iteratee|, der mit seiner Berechnung fertig ist, ist im Zustand \lstinline|Step.Done|.
 Ein solcher \lstinline|Iteratee| hält sein berechnetes Ergebnis und den Teil der letzten Eingabe, der nicht mehr verarbeitet wurde.
