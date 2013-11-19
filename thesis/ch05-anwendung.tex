@@ -64,7 +64,7 @@ Der Autor hat keinen Code von BirdWatch verwendet, sondern die Twitter News-Anwe
 In diesem Abschnitt sollen die Werkzeuge identifiziert werden, mit denen die zuvor definierte Idee umgesetzt werden kann.
 Um an die Daten von Twitter zu gelangen, stellt Twitter sog. Streaming APIs zur Verfügung \cite[vgl.][]{twitter_streaming_apis}.
 Mit Hilfe der Streaming APIs kann der globale Twitter-Verkehr gefiltert werden, sodass z.~B. nur Tweets von ausgewählten Nachrichtenseiten empfangen werden.
-Diese Streams werden über eine HTTP-Verbindung als \gls{json}-Nachrichten übertragen.
+Diese Streams werden über eine HTTP-Verbindung als JSON-Nachrichten übertragen.
 
 Dieser eingehende Nachrichten-Stream kann auf Seite der Anwendung mit Hilfe von \lstinline|Iteratee|s verarbeitet werden.
 Das Play-Framework enthält Werkzeuge, um HTTP-Anfragen zu versenden und die Antwort mit \lstinline|Iteratee|s nach und nach zu verarbeiten.
@@ -139,7 +139,7 @@ Die Anwendungslogik besteht im Kern aus den zwei Klassen \lstinline|Twitter| und
 \lstinline|TwitterNews| liest diesen Tweet-Stream und und erstellt daraus Statistiken über Tweets für einen bestimmten Zeitraum.
 Diese Statistiken bestehen aus den meistgetweeteten Worten, den meistgeretweeteten Tweets und den meistdiskutierten Tweets.
 Für jede dieser drei Teilstatistiken wird ein Stream bereitgestellt, der immer aktualisiert wird, sobald ein neuer Tweet analysiert wird.
-Diese drei Streams werden schließlich vom \lstinline|Application|-Controller im \gls{json}-Format an die verbundenen Clients gesendet, wo die Daten im Web-Browser angezeigt werden.
+Diese drei Streams werden schließlich vom \lstinline|Application|-Controller im JSON-Format an die verbundenen Clients gesendet, wo die Daten im Web-Browser angezeigt werden.
 Abb.~\ref{fig:der_datenfluss_der_twitter_news_anwendung} stellt den beschriebenen Datenfluss grafisch dar.
 
 % subsection architektur_twitter_news (end)

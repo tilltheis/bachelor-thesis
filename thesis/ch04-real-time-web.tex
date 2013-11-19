@@ -77,7 +77,7 @@ GET    /input    controllers.Application.input
 
 Die \lstinline|input|-\lstinline|Action| wird durch einen im vorigen Unterabschnitt eingeführten \lstinline|WebSocket.using|-Block ersetzt, der in Listing~\ref{lst:web_sockets_im_controller_der_altersstatistiken_anwendung} zu sehen ist.
 Als Nachrichtentyp ist hierbei \lstinline|String| gewählt, weil sowohl Client, als auch Server gut damit arbeiten können.
-Denkbar wären auch \lstinline|Int| oder \lstinline|JsValue| für \gls{json}-Nachrichten, diese würden das Beispiel allerdings verkomplizieren.
+Denkbar wären auch \lstinline|Int| oder \lstinline|JsValue| für JSON-Nachrichten, diese würden das Beispiel allerdings verkomplizieren.
 Um möglichst einfach alle aktiven Clients erreichen zu können, wird mit Hilfe der Konstruktormethode \lstinline|Concurrent.broadcast|, die in Unterabschnitt~\ref{sub:enumerators} (\nameref{sub:enumerators}) vorgestellt wurde, ein \lstinline|Enumerator| mit assoziiertem \lstinline|Channel| erstellt.
 Über diesen \lstinline|Channel| können imperativ Elemente an den \lstinline|Enumerator| übergeben werden.
 Sobald eine neue Altersangabe über den \lstinline|Iteratee| bekannt wird, wird diese über den \lstinline|Enumerator| an alle Clients verbreitet, damit sie ihre Datendarstellung aktualisieren können.

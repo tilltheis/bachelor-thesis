@@ -339,7 +339,7 @@ Die \lstinline|input|-Action benötigt einen \lstinline|Request|-Parameter, um d
 Die erste Funktion wird ausgeführt, wenn die Formulardaten nicht auf die interne Formulardarstellung abgebildet werden konnten.
 Die zweite Funktion wird ausgeführt, wenn es keine Fehler gab, dann kann mit den übergebenen Formulardaten weitergearbeitet werden \cite[vgl.][S.~176]{play_for_scala}.
 
-In der \lstinline|input|-Action wird im Fehlerfall eine Fehlermeldung angezeigt, die zum Zwecke dieses Beispiels nur im \gls{json}-Format vorliegt, die von Play automatisch generiert wird.
+In der \lstinline|input|-Action wird im Fehlerfall eine Fehlermeldung angezeigt, die zum Zwecke dieses Beispiels nur ein einfacher JSON (JavaScript Object Notation)-String ist.
 Der Fehlerfall kann eintreten, obwohl in der View Minimum und Maximum des Altersfeldes angegeben sind, wenn z.~B. der Nutzer die Prüfung aus dem ausgelieferten HTML-Code entfernt.
 Tritt kein Fehler auf, so werden die Altersstatistiken aktualisiert und eine Weiterleitung auf die \lstinline|index|-Action ausgelöst.
 Dadurch landet der Nutzer/die Nutzerin nach Versendung des Formulars wieder auf der Hauptseite und sieht die aktualisierte Statistik.
