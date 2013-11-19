@@ -45,7 +45,7 @@ Hierbei wird in erster Linie demonstriert, wie Plays reaktive Komponenten einges
 \section{Idee} % (fold)
 \label{sec:idee}
 
-\begin{figure}[htb]
+\begin{figure}[tb]
 \centering
 \includegraphics[width=\textwidth]{twitter_news.png}
 \caption{Die TwitterNews-Anwendung}
@@ -93,7 +93,7 @@ Es werden konkret verwendete Teile der Iteratee-Streams-Bibliothek gezeigt und e
 \subsection{Architektur} % (fold)
 \label{sub:architektur_twitter_news}
 
-\begin{figure}
+\begin{figure}[tb]
 \centering
 
 \resizebox{\linewidth}{!}{%
@@ -208,17 +208,7 @@ twitter.statusStream(Iteratee.foreach[Tweet] { tweet =>
 \subsubsection{Sonderfall: meistdiskutierte Tweets} % (fold)
 \label{ssub:sonderfall_meistdiskutierte_tweets}
 
-Bei der Elementgenerierung für den Stream der meistdiskutierten Tweets besteht folgende Herausforderung:
-Tweets die eine Antwort auf einen anderen Tweet sind, beinhalten nicht den gesamten Tweet, auf den sie antworten, sondern nur die ID des anderen Tweets.
-Im Gegensatz zu Retweets, über die der originale Tweet ausgelesen werden kann, muss für jeden diskutierten Tweet eine Anfrage an die Twitter-API gesendet werden, um den ursprünglichen Tweet zu empfangen.
-Um nicht für jede Antwort auf jeden Tweet eine HTTP-Anfrage versenden zu müssen, erfolgen einige aufwandsersparende Maßnahmen.
-
-Intern wird ein Stream der meistdiskutierten Tweet-IDs vom Typ \lstinline|Enumerator[Map[Long, Int]]| erstellt, wobei die IDs durch \lstinline|Long|s und die Anzahl der Antworten durch \lstinline|Int|s repräsentiert werden.
-Um für diesen \lstinline|Enumerator| den \lstinline|Enumerator[Map[Tweet, Int]]| mit den eigentlichen Tweets zu erstellen, werden die Tweet-IDs jedes generierten Elements des \lstinline|mostDiscussedIdsEnumerator| über die Twitter-API zu Tweets aufgelöst.
-Die Kommunikation mit der Twitter-API wird wieder von der \lstinline|Twitter|-Klasse erledigt, die Tweets zu aufgelösten Tweet-IDs cached, damit für eine ID nicht mehrere Anfragen gesendet werden müssen.
-Diese aufgelösten Tweets werden dann zusammen mit dem jeweiligen Antwortzähler als Element des \lstinline|mostDiscussedEnumerator|s generiert.
-
-\begin{figure}
+\begin{figure}[tb]
 \centering
 
 \resizebox{\linewidth}{!}{%
@@ -287,6 +277,16 @@ Diese aufgelösten Tweets werden dann zusammen mit dem jeweiligen Antwortzähler
 \caption{Der Datenfluss zur Auflösung meistdiskutierter Tweet-IDs}
 \label{fig:der_datenfluss_zur_aufloesung_meistdikutierter_tweet_ids}
 \end{figure}
+
+Bei der Elementgenerierung für den Stream der meistdiskutierten Tweets besteht folgende Herausforderung:
+Tweets die eine Antwort auf einen anderen Tweet sind, beinhalten nicht den gesamten Tweet, auf den sie antworten, sondern nur die ID des anderen Tweets.
+Im Gegensatz zu Retweets, über die der originale Tweet ausgelesen werden kann, muss für jeden diskutierten Tweet eine Anfrage an die Twitter-API gesendet werden, um den ursprünglichen Tweet zu empfangen.
+Um nicht für jede Antwort auf jeden Tweet eine HTTP-Anfrage versenden zu müssen, erfolgen einige aufwandsersparende Maßnahmen.
+
+Intern wird ein Stream der meistdiskutierten Tweet-IDs vom Typ \lstinline|Enumerator[Map[Long, Int]]| erstellt, wobei die IDs durch \lstinline|Long|s und die Anzahl der Antworten durch \lstinline|Int|s repräsentiert werden.
+Um für diesen \lstinline|Enumerator| den \lstinline|Enumerator[Map[Tweet, Int]]| mit den eigentlichen Tweets zu erstellen, werden die Tweet-IDs jedes generierten Elements des \lstinline|mostDiscussedIdsEnumerator| über die Twitter-API zu Tweets aufgelöst.
+Die Kommunikation mit der Twitter-API wird wieder von der \lstinline|Twitter|-Klasse erledigt, die Tweets zu aufgelösten Tweet-IDs cached, damit für eine ID nicht mehrere Anfragen gesendet werden müssen.
+Diese aufgelösten Tweets werden dann zusammen mit dem jeweiligen Antwortzähler als Element des \lstinline|mostDiscussedEnumerator|s generiert.
 
 Weil das Auflösen der IDs einige Zeit in Anspruch nimmt, ist es wahrscheinlich, dass in der Zwischenzeit mehrere Element des \lstinline|mostDiscussedIdsEnumerator| generiert worden sind.
 Deshalb werden die Elemente des Tweet-IDs-Streams vor der Verarbeitung in einen Buffer geschrieben.
