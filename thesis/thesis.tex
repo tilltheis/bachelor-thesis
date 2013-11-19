@@ -26,7 +26,6 @@
 \usepackage{lipsum} %% for sample text
 \usepackage{scrhack} %% remove warning http://tex.stackexchange.com/questions/51867/koma-warning-about-toc
 \usepackage{todonotes}
-\usepackage[nomain,acronym,toc]{glossaries}
 \usepackage{enumitem} % aligned description lists
 \usepackage{amstext} % \text{} within math-mode for text in normal font instead of italics
 \usepackage{mathtools} % begin{align} for math block mode
@@ -40,11 +39,9 @@
 \usetikzlibrary{shapes,arrows,fit,calc,positioning}
 
 
-\makeglossaries
-
 \bibpunct[, ]{(}{)}{,}{a}{}{;} % correct citation format (no comma before year)
 
-\includeonly{glossar,ch01-einleitung,ch02-grundlagen,ch03-reaktive-programmierung,ch04-real-time-web,ch05-anwendung,ch06-schluss,anhang}
+\includeonly{ch01-einleitung,ch02-grundlagen,ch03-reaktive-programmierung,ch04-real-time-web,ch05-anwendung,ch06-schluss,anhang}
 
 \graphicspath{{./logo/}{./img/}} % {./logo/} comes from hawstyle.sty (this \graphicspath overrides that one)
 
@@ -232,8 +229,6 @@
 
 
 
-\include{glossar}
-
 \include{ch01-einleitung}
 \include{ch02-grundlagen}
 \include{ch03-reaktive-programmierung}
@@ -261,16 +256,8 @@
 
 \typeout{===== Section: nomenclature}
 %% uncomment if a TOC entry is needed
-% \addcontentsline{toc}{chapter}{Glossar} % done via \usepackage[toc]{glossaries}
+%%\addcontentsline{toc}{chapter}{Glossar}
 \renewcommand{\nomname}{Glossar}
-
-% s/Glossary/Glossar/
-% \renewcommand*{\glossaryname}{Glossar}
-% \deftranslation{Glossary}{Glossar}
-\renewcommand*{\acronymname}{Glossar}
-\deftranslation{Acronyms}{Glossar}
-
-\printglossaries
 \clearpage
 \markboth{\nomname}{\nomname} %% see nomencl doc, page 9, section 4.1
 \printnomenclature
