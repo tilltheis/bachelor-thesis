@@ -176,7 +176,7 @@ Diese Methode lässt aus einem übergebenen \lstinline|Enumerator| die Inhalte d
 
 Ein solcher Stream ist allerdings noch keine gültige Datenquelle für Server Sent Events.
 Um das zu ändern muss der übergebene \lstinline|Enumerator| durch den \lstinline|play.api.libs.EventSource|-\lstinline|Enumeratee| transformiert werden, wodurch die Stream-Elemente korrekt kodiert werden.
-Anschließend muss der MIME-Type auf \lstinline|text/event-stream| gesetzt werden.\todo{Glossareintrag fuer MIME}
+Anschließend muss der Dokumenttyp auf \lstinline|text/event-stream| gesetzt werden, damit der Stream clientseitig korrekt erkannt wird \cite[vgl.][]{js_eventsource}.
 Eine gültige \lstinline|EventSource| ist in Listing~\ref{lst:server_sent_events_auf_server_seite} zu sehen.
 
 \begin{lstlisting}[caption=Server Sent Events auf Server-Seite, label=lst:server_sent_events_auf_server_seite]
