@@ -45,11 +45,18 @@ Hierbei wird in erster Linie demonstriert, wie Plays reaktive Komponenten einges
 \section{Idee} % (fold)
 \label{sec:idee}
 
+\begin{figure}[htb]
+\centering
+\includegraphics[width=\textwidth]{twitter_news.png}
+\caption{Die TwitterNews-Anwendung}
+\label{fig:die_twitternews_anwendung}
+\end{figure}
+
 Twitter News soll in anschaulicher Art und Weise die meistgetweeteten Wörter, die meistretweeteten und die meistdiskutierten Tweets von Nachrichtenseiten darstellen.
 Die dargestellten Daten sollen immer aktuell sein, weshalb sie auf einen bestimmten Zeitraum beschränkt werden, wie z.~B. die letzten fünf Minuten.
 Zusätzlich sollen die im Browser dargestellten Daten aktualisiert werden, sobald der Server neue Daten empfängt, sodass zu jeder Zeit nur relevante Nachrichten angezeigt werden.
-Abb.~\ref{fig:die_twitternews_anwendung} auf S.~\pageref{fig:die_twitternews_anwendung} zeigt einen Screenshot der fertigen Anwendung.
-In den folgenden Abschnitten wird aber in erster Linie auf die Anwendungslogik eingegangen.\todo{Verweis angebracht? Oder Bild besser hier und nicht weiter hinten?}
+Abb.~\ref{fig:die_twitternews_anwendung} zeigt einen Screenshot der fertigen Anwendung, um die beschriebene Idee zu verdeutlichen.
+In den folgenden Abschnitten wird aber in erster Linie auf die Anwendungslogik eingegangen.
 
 Es existiert bereits eine ähnliche Anwendung namens BirdWatch \cite[vgl.][]{bird_watch}, die allerdings umfangreicher ist und einen etwas anderen Ansatz verfolgt.
 BirdWatch filtert Tweets nach einem Text, der vom Nutzer eingegeben wurde, wohingegen Twitter News eine eigene Liste von Twitter-Accounts besitzt, deren Tweets dargestellt werden.
@@ -341,14 +348,7 @@ Aufgabe der Client-Seite ist hierbei nur die Veranschaulichung der Daten.
 Dazu werden die meistgetweeteten Wörter in einer Word-Cloud angezeigt, die sich im Sekundentakt aktualisiert und so die meistgetweeteten Wörter der letzten zwei Minuten darstellt.
 Die meistgeretweeteten und meistdiskutierten Tweets werden in einer jeweils eigenen Spalte dargestellt und zeigen neben den jeweiligen Tweets auch die Anzahl der Retweets, bzw. Antworten, nach denen sie auch sortiert sind.
 Diese beiden Spalten werden alle fünf Sekunden aktualisiert, weil diese weniger Veränderungen unterliegen.
-Abb.~\ref{fig:die_twitternews_anwendung} zeigt einen Screenshot der fertigen TwitterNews-Anwendung.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=\textwidth]{twitter_news.png}
-\caption{Die TwitterNews-Anwendung}
-\label{fig:die_twitternews_anwendung}
-\end{figure}
+Abb.~\ref{fig:die_twitternews_anwendung} auf S.~\pageref{fig:die_twitternews_anwendung} zeigt einen Screenshot der fertigen TwitterNews-Anwendung.
 
 % subsection die_client_seite (end)
 
