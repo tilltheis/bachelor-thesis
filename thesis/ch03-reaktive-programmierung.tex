@@ -352,10 +352,10 @@ object Input {
 }
 \end{lstlisting}
 
-Der Datentyp ist über den \glslink{kovarianz}{kovarianten} Typ \lstinline|E| der gehaltenen Elemente parametrisiert.
-\gls{kovarianz} eines Typs \lstinline|E| ist in Scala am \lstinline|+|-Prefix zu erkennen und bedeutet, dass wenn \lstinline|F| ein spezialisierter Typ von \lstinline|E| ist, \lstinline|Input[F]| auch ein spezialisierter Typ von \lstinline|Input[E]| ist \cite[vgl.][S.~393]{programming_in_scala}.
+Der Datentyp ist über den kovarianten Typ \lstinline|E| der gehaltenen Elemente parametrisiert.
+Kovarianz eines Typs \lstinline|E| ist in Scala am \lstinline|+|-Prefix zu erkennen und bedeutet, dass wenn \lstinline|F| ein spezialisierter Typ von \lstinline|E| ist, \lstinline|Input[F]| auch ein spezialisierter Typ von \lstinline|Input[E]| ist \cite[vgl.][S.~393]{programming_in_scala}.
 Dadurch wären beispielsweise sowohl \lstinline|Input[Cat]|, als auch \lstinline|Input[Dog]| Spezialisierungen von \lstinline|Input[Animal]|.
-Wäre \lstinline|Input| nicht \glslink{kovarianz}{kovariant} über den Typ der der gehaltenen Elemente, wären \lstinline|Input[Cat]|, \lstinline|Input[Dog]| und \lstinline|Input[Animal]| völlig unterschiedliche Typen.
+Wäre \lstinline|Input| nicht kovariant über den Typ der der gehaltenen Elemente, wären \lstinline|Input[Cat]|, \lstinline|Input[Dog]| und \lstinline|Input[Animal]| völlig unterschiedliche Typen.
 
 Des Weiteren ist anzumerken, dass \lstinline|Input| ein algebraischer Datentyp ist.
 Ein algebraischer Datentyp ist ein Datentyp mit mehreren, alternativen Konstruktoren, die jeweils eigene Felder besitzen.
@@ -378,7 +378,7 @@ Sowohl \lstinline|Input.Empty|, als auch \lstinline|Input.EOF| sind vom Typ \lst
 \lstinline[mathescape]|$\text{\gls{nothing}}$| ist ein besonderer Typ in Scala, ein so genannter Bottom-Typ.
 Das bedeutet, dass er ganz unten in der Klassenhierarchie steht und eine Spezialisierung jedes anderen Typs ist.
 Es gibt keine Instanz vom Typ \lstinline[mathescape]|$\text{\gls{nothing}}$|, aufgrund seiner Position in der Klassenhierarchie kann er jedoch jeden anderen Typ annehmen \cite[vgl.][S.~216]{programming_in_scala}.
-Weil der Typparameter des \lstinline|Input|-Datentyps \glslink{kovarianz}{kovariant} ist, lassen sich \lstinline|Input.Empty| und \lstinline|Input.EOF| mit jedem anderen \lstinline|Input| kombinieren.
+Weil der Typparameter des \lstinline|Input|-Datentyps kovariant ist, lassen sich \lstinline|Input.Empty| und \lstinline|Input.EOF| mit jedem anderen \lstinline|Input| kombinieren.
 
 Ein Wert vom Typ \lstinline|Input| hat also drei mögliche Zustände:
 \begin{enumerate}
@@ -411,8 +411,8 @@ object Step {
 Der algebraische Datentyp ist über die zwei Typen \lstinline|E| und \lstinline|A| parametrisiert.
 \lstinline|E| ist der Typ der zu konsumierenden Elemente.
 \lstinline|A| ist der Typ des zu berechnenden Ergebnisses.
-\lstinline|A| ist \glslink{kovarianz}{kovariant}, sodass auch Spezialisierungen von \lstinline|A| als Werte verwendet werden können.
-Die \gls{kovarianz} über den Typ \lstinline|A| ermöglicht es auch hier wieder \lstinline[mathescape]|$\text{\gls{nothing}}$| in den Konstruktoren zu verwenden, wie im vorigen Unterabschnitt beschrieben.
+\lstinline|A| ist kovariant, sodass auch Spezialisierungen von \lstinline|A| als Werte verwendet werden können.
+Die Kovarianz über den Typ \lstinline|A| ermöglicht es auch hier wieder \lstinline[mathescape]|$\text{\gls{nothing}}$| in den Konstruktoren zu verwenden, wie im vorigen Unterabschnitt beschrieben.
 
 Ein \lstinline|Iteratee|, der mit seiner Berechnung fertig ist, ist im Zustand \lstinline|Step.Done|.
 Ein solcher \lstinline|Iteratee| hält sein berechnetes Ergebnis und den Teil der letzten Eingabe, der nicht mehr verarbeitet wurde.
