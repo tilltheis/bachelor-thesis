@@ -1,5 +1,6 @@
 Die Verzeichnisstruktur dieser CD sieht folgendermassen aus:
 
+/README.txt             die Verzeichnisstruktur dieser CD
 /thesis.pdf             die Bachelorarbeit im PDF-Format
 /age_statistics_http/   die in Kap. 2 entwickelte Altersstatistikenanwendung
 /age_statistics_sse/    die in Kap. 2 entwickelte Anwendung mit den in Unterabschnitt 4.2.3 eingefuehrten Server Sent Events-Erweiterungen
