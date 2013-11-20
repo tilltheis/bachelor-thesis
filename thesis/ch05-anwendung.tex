@@ -60,7 +60,7 @@ In den folgenden Abschnitten wird aber in erster Linie auf die Anwendungslogik e
 
 Es existiert bereits eine ähnliche Anwendung namens BirdWatch \cite[vgl.][]{bird_watch}, die allerdings umfangreicher ist und einen etwas anderen Ansatz verfolgt.
 BirdWatch filtert Tweets nach einem Text, der vom Nutzer eingegeben wurde, wohingegen Twitter News eine eigene Liste von Twitter-Accounts besitzt, deren Tweets dargestellt werden.
-Des Weiteren besitzt BirdWatch ein umfangreicheres User-Interface, als Twitter News, weil Twitter News in erster Linie eine Demonstration der in dieser Arbeit vorgestellten Techniken ist und keine vollwertige Web-Anwendung sein soll.
+Des Weiteren besitzt BirdWatch ein umfangreicheres User-Interface als Twitter News, weil Twitter News in erster Linie eine Demonstration der in dieser Arbeit vorgestellten Techniken ist und keine vollwertige Web-Anwendung sein soll.
 Der Autor hat keinen Code von BirdWatch verwendet, sondern die Twitter News-Anwendung eigenständig entwickelt.
 
 % section idee (end)
@@ -73,7 +73,7 @@ Um an die Daten von Twitter zu gelangen, stellt Twitter sog. Streaming APIs zur 
 Mit Hilfe der Streaming APIs kann der globale Twitter-Verkehr gefiltert werden, sodass z.~B. nur Tweets von ausgewählten Nachrichtenseiten empfangen werden.
 Diese Streams werden über eine HTTP-Verbindung als JSON-Nachrichten übertragen.
 
-Dieser eingehende Nachrichten-Stream kann auf Seite der Anwendung mit Hilfe von \lstinline|Iteratee|s verarbeitet werden.
+Dieser eingehende Nachrichten-Stream kann auf Server-Seite mit Hilfe von \lstinline|Iteratee|s verarbeitet werden.
 Das Play-Framework enthält Werkzeuge, um HTTP-Anfragen zu versenden und die Antwort mit \lstinline|Iteratee|s nach und nach zu verarbeiten.
 
 Nach Verarbeitung der eingehenden Tweet-Daten müssen die Nachrichten schließlich an die verbundenen Clients gesendet werden.
@@ -87,7 +87,7 @@ Diese Daten werden auf Client-Seite dann möglichst ansprechend dargestellt.
 
 In diesem Abschnitt wird beschrieben, wie die zuvor genannten Werkzeuge genutzt werden, um die Anwendung zu implementieren.
 Dabei wird nicht Schritt für Schritt durch den Entwicklungsprozess geführt, sondern die bereits geschriebene Anwendung vorgestellt.
-Es werden die Teile vorgestellt, die  von den im Hauptteil der Arbeit behandelten Komponenten Gebrauch machen.
+Es werden die Teile gezeigt, die  von den im Hauptteil der Arbeit behandelten Komponenten Gebrauch machen.
 Es werden konkret verwendete Teile der Iteratee-Streams-Bibliothek gezeigt und es wird auf besondere Implementierungsentscheidungen eingegangen.
 
 \subsection{Architektur} % (fold)
@@ -143,7 +143,7 @@ Es werden konkret verwendete Teile der Iteratee-Streams-Bibliothek gezeigt und e
 
 Die Anwendungslogik besteht im Kern aus den zwei Klassen \lstinline|Twitter| und \lstinline|TwitterNews|.
 \lstinline|Twitter| ist dafür zuständig, mit der Twitter-API zu kommunizieren und die empfangenen Daten als Tweet-Stream bereitzustellen.
-\lstinline|TwitterNews| liest diesen Tweet-Stream und und erstellt daraus Statistiken über Tweets für einen bestimmten Zeitraum.
+\lstinline|TwitterNews| liest diesen Tweet-Stream und erstellt daraus Statistiken über Tweets für einen bestimmten Zeitraum.
 Diese Statistiken bestehen aus den meistgetweeteten Worten, den meistgeretweeteten Tweets und den meistdiskutierten Tweets.
 Für jede dieser drei Teilstatistiken wird ein Stream bereitgestellt, der immer aktualisiert wird, sobald ein neuer Tweet analysiert wird.
 Diese drei Streams werden schließlich vom \lstinline|Application|-Controller im JSON-Format an die verbundenen Clients gesendet, wo die Daten im Web-Browser angezeigt werden.
@@ -158,8 +158,8 @@ Die \lstinline|Twitter|-Klasse ist für die Kommunikation mit der Twitter-API zu
 Sobald der Tweet-Stream angefordert wird, wird eine Verbindung zur Twitter-API aufgebaut.
 Die daraufhin empfangenen Tweets werden in eine interne \lstinline|Tweet|-Repräsentation konvertiert und schließlich als Tweet-Stream ausgeliefert.
 Die Besonderheit hierbei ist, dass die Twitter-API nach einiger Zeit keine Tweets mehr versendet und die Verbindung erneuert werden muss, bevor neue Tweets empfangen werden können.
-Mögliche Gründe hierfür sind beispielsweise das Öffnen einer weiteren Verbindung mit dem gleichen API-Schlüssel (es ist nur eine einzige Verbindung erlaubt) oder das Neustarten eines Streaming-Servers auf Twitters Seite \cite[vgl.][]{twitter_connecting_to_streaming_endpoint}.
-Der Autor beobachtet allerdings, dass ca. alle 90 Sekunden keine Tweets mehr empfangen werden, was nach seinem Verständnis nicht mit den oben beschriebenen Gründen vereinbar ist.
+Mögliche Gründe hierfür sind beispielsweise das Öffnen einer weiteren Verbindung mit dem gleichen API-Schlüssel (es ist nur eine einzige Verbindung erlaubt) oder das Neustarten eines Streaming-Servers auf Seiten Twitters \cite[vgl.][]{twitter_connecting_to_streaming_endpoint}.
+Der Autor beobachtet allerdings, dass ca. alle 90 Sekunden keine Tweets mehr empfangen werden, was seinem Verständnis nach nicht mit den oben beschriebenen Gründen vereinbar ist.
 
 Um zu erkennen, wann die Verbindung erneuert werden muss, wird bei Empfang neuer Daten ein Timer gesetzt, der nach Ablauf einer bestimmten Zeitspanne eine neue Verbindung aufbaut.
 Sobald aber weitere Daten empfangen werden, wird der zuvor erstellte Timer gestoppt und erneut gestellt.
@@ -172,7 +172,7 @@ Um letzteres zu ermöglichen, wird der Tweet-\lstinline|Enumerator| zusammen mit
 \subsection{Das TwitterNews-Model} % (fold)
 \label{sub:die_twitternews_klasse}
 
-\lstinline|TwitterNews| konsumiert den von \lstinline|Twitter| bereitgestellten Tweet-Stream und stellt auf Basis von diesem selber drei Streams bereit, wie in Listing~\ref{lst:die_twitternews_klasse} zu sehen.
+\lstinline|TwitterNews| konsumiert den von \lstinline|Twitter| bereitgestellten Tweet-Stream und stellt auf Basis dieses Streams selber drei eigene Streams bereit, wie in Listing~\ref{lst:die_twitternews_klasse} zu sehen.
 
 \begin{lstlisting}[caption=Die TwitterNews-Klasse, label=lst:die_twitternews_klasse]
 class TwitterNews(twitter: Twitter, relevantDuration: Duration) {
@@ -279,21 +279,22 @@ twitter.statusStream(Iteratee.foreach[Tweet] { tweet =>
 \end{figure}
 
 Bei der Elementgenerierung für den Stream der meistdiskutierten Tweets besteht folgende Herausforderung:
-Tweets die eine Antwort auf einen anderen Tweet sind, beinhalten nicht den gesamten Tweet, auf den sie antworten, sondern nur die ID des anderen Tweets.
+Tweets, die eine Antwort auf einen anderen Tweet sind, beinhalten nicht den gesamten Tweet, auf den sie antworten, sondern nur die ID des anderen Tweets.
 Im Gegensatz zu Retweets, über die der originale Tweet ausgelesen werden kann, muss für jeden diskutierten Tweet eine Anfrage an die Twitter-API gesendet werden, um den ursprünglichen Tweet zu empfangen.
-Um nicht für jede Antwort auf jeden Tweet eine HTTP-Anfrage versenden zu müssen, erfolgen einige aufwandsersparende Maßnahmen.
+Um nicht für jede einzelne Tweetantwort eine HTTP-Anfrage versenden zu müssen, erfolgen einige aufwandsersparende Maßnahmen.
 
 Intern wird ein Stream der meistdiskutierten Tweet-IDs vom Typ \lstinline|Enumerator[Map[Long, Int]]| erstellt, wobei die IDs durch \lstinline|Long|s und die Anzahl der Antworten durch \lstinline|Int|s repräsentiert werden.
 Um für diesen \lstinline|Enumerator| den \lstinline|Enumerator[Map[Tweet, Int]]| mit den eigentlichen Tweets zu erstellen, werden die Tweet-IDs jedes generierten Elements des \lstinline|mostDiscussedIdsEnumerator| über die Twitter-API zu Tweets aufgelöst.
-Die Kommunikation mit der Twitter-API wird wieder von der \lstinline|Twitter|-Klasse erledigt, die Tweets zu aufgelösten Tweet-IDs cached, damit für eine ID nicht mehrere Anfragen gesendet werden müssen.
+Die Kommunikation mit der Twitter-API wird wieder von der \lstinline|Twitter|-Klasse erledigt, die die Tweets zu aufgelösten Tweet-IDs cached, damit für einen Tweet nicht mehrere Anfragen gesendet werden müssen.
 Diese aufgelösten Tweets werden dann zusammen mit dem jeweiligen Antwortzähler als Element des \lstinline|mostDiscussedEnumerator|s generiert.
 
 Weil das Auflösen der IDs einige Zeit in Anspruch nimmt, ist es wahrscheinlich, dass in der Zwischenzeit mehrere Element des \lstinline|mostDiscussedIdsEnumerator| generiert worden sind.
 Deshalb werden die Elemente des Tweet-IDs-Streams vor der Verarbeitung in einen Buffer geschrieben.
-Dieser Buffer fasst immer nur ein Element, also die immer die aktuellste \lstinline|Map| der meistdiskutierten Tweet-IDs.
-Der \lstinline|mostDiscussedEnumerator| übersetzt also nicht alle Elemente des Tweet-IDs-Streams, aber immer die aktuellsten.
-Das Übersetzen aller Elemente ist aufgrund des Zeitaufwands für die HTTP-Anfragen an die Twitter-API schlicht unmöglich, der Durchsatz wird durch das Cachen der Antworten allerdings wesentlich erhöht.
-Wird nach dem Versenden einer Anfrage an die Twitter-API nach dem Verlauf einer bestimmten Zeitspanne keine Antwort oder eine Antwort, die kein Tweet ist, empfangen, so wird kein Element für den \lstinline|mostDiscussedEnumerator| generiert.
+Dieser Buffer fasst immer nur ein Element, und zwar immer die neueste \lstinline|Map| der meistdiskutierten Tweet-IDs.
+Der \lstinline|mostDiscussedEnumerator| übersetzt also nicht alle Elemente des Tweet-IDs-Streams, aber immer die neuesten.
+Das Übersetzen aller Elemente ist aufgrund des Zeitaufwands für die HTTP-Anfragen an die Twitter-API schlicht unmöglich.
+Der Durchsatz wird durch das Cachen der Antworten allerdings wesentlich erhöht.
+Falls nach dem Versenden einer Anfrage an die Twitter-API nach dem Verlauf einer bestimmten Zeitspanne keine Antwort oder eine Antwort, die kein Tweet ist, empfangen wird, so wird kein Element für den \lstinline|mostDiscussedEnumerator| generiert.
 Abb.~\ref{fig:der_datenfluss_zur_aufloesung_meistdikutierter_tweet_ids} zeigt das beschriebene Verfahren als Diagramm.
 
 In Listing~\ref{lst:der_mostdiscussedenumerator} ist zu sehen, wie der \lstinline|mostDiscussedEnumerator| mit Hilfe von \lstinline|Enumeratee|s implementiert worden ist.
@@ -331,10 +332,10 @@ val mostDiscussedEnumerator: Enumerator[Map[Tweet, Int]] =
 \label{sub:der_application_controller}
 
 Der \lstinline|Application|-Controller ist der Teil der Anwendung, der direkt mit den Nutzern zu tun hat.
-Dieser Controller sorgt dafür dass Anfragen für die Hauptseite und die \lstinline|EventSource|s für die Server Sent Events beantwortet werden.
+Dieser Controller sorgt dafür, dass Anfragen für die Hauptseite und die \lstinline|EventSource|s für die Server Sent Events beantwortet werden.
 Für die Hauptseite wird ein passendes View-Template gerendert.
 Für die einzelnen \lstinline|EventSource|s werden die jeweiligen Streams des \lstinline|TwitterNews|-Models verwendet.
-Die verwendeten Streams werden allerdings so verlangsamt, dass z.~B. nur alle fünf Sekunden ein Element generiert wird.
+Diese Streams werden allerdings so verlangsamt, dass z.~B. nur alle fünf Sekunden ein Element generiert wird.
 Elemente, die in der Zwischenzeit generiert werden, werden ignoriert, sodass z.~B. nur alle fünf Sekunden das aktuellste Element an die Clients versendet wird.
 Würden die Elemente sofort an die Clients gesendet, so könnte die ständige Neudarstellung der Daten so viel Rechenaufwand bei den Clients erzeugen, dass der gesamte PC des Nutzers/der Nutzerin ausgebremst würde.
 
@@ -347,7 +348,7 @@ Auf der Client-Seite werden mittels Server Sent Events die Streams der meistgetw
 Aufgabe der Client-Seite ist hierbei nur die Veranschaulichung der Daten.
 Dazu werden die meistgetweeteten Wörter in einer Word-Cloud angezeigt, die sich im Sekundentakt aktualisiert und so die meistgetweeteten Wörter der letzten zwei Minuten darstellt.
 Die meistgeretweeteten und meistdiskutierten Tweets werden in einer jeweils eigenen Spalte dargestellt und zeigen neben den jeweiligen Tweets auch die Anzahl der Retweets, bzw. Antworten, nach denen sie auch sortiert sind.
-Diese beiden Spalten werden alle fünf Sekunden aktualisiert, weil diese weniger Veränderungen unterliegen.
+Diese beiden Spalten werden nur alle fünf Sekunden aktualisiert, weil die angezeigten Daten weniger Veränderungen unterliegen, als die meistgetweeteten Wörter.
 Abb.~\ref{fig:die_twitternews_anwendung} auf S.~\pageref{fig:die_twitternews_anwendung} zeigt einen Screenshot der fertigen TwitterNews-Anwendung.
 
 % subsection die_client_seite (end)

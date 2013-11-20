@@ -4,7 +4,7 @@
 \label{cha:fazit_und_ausblick}
 
 In diesem abschließenden Kapitel wird ein Fazit aus den in dieser Arbeit vorgestellten Inhalten gezogen.
-Anschließend wird ein Ausblick gegeben, was in dieser Arbeit nicht behandelt werden konnte, aber was aufbauend auf dieser oder in ihrem thematischen Umfeld für Vorschungsmöglichkeiten bestehen.
+Anschließend wird ein Ausblick gegeben, was in dieser Arbeit nicht behandelt werden konnte, aber was aufbauend auf dieser Arbeit oder in ihrem thematischen Umfeld für Forschungsmöglichkeiten bestehen.
 
 \section{Fazit} % (fold)
 \label{sec:fazit}
@@ -14,14 +14,14 @@ Dazu wurde in den Grundlagen erklärt, wie eine einfache statische Web-Anwendung
 Diese Anwendung wurde mit den Erkenntnissen der Arbeit später um den Real-Time-Aspekt erweitert.
 Der statische Teil ließ sich ohne Schwierigkeiten umsetzen, wohingegen der dynamische Teil komplizierter war.
 Der komplizierteste Teil war das Verständnis der Iteratee-Streams und das Wissen um die denen zugrundeliegenden Konzepte, wie Monaden und speziell die \lstinline|Future|-Monade.
-Erschwerend hinzu kamen die Entdeckung eines Bugs, wodurch die Implementierung verkompliziert wurde.
+Erschwerend hinzu kam die Entdeckung eines Bugs, wodurch die Implementierung verkompliziert wurde.
 
 Iteratee-Streams bestehen aus den drei Teilen \lstinline|Enumerator|s, \lstinline|Iteratee|s und \lstinline|Enumeratee|s, also den Datenquellen, den Datensenken und den Stream-Transformatoren.
 In dieser Arbeit wurde nicht nur gezeigt, wie diese Komponenten angewendet werden, sondern auch, wie eigene \lstinline|Enumerator|s, \lstinline|Iteratee|s und \lstinline|Enumeratee|s erstellt werden können.
 Dieser Blick auf die Implementierungsebene ermöglicht aus Sicht des Autors ein wesentlich umfassenderes Verständnis von Plays Iteratee-Streams.
 
-Plays Implementierung der Iteratee-Streams weicht von der ursprünglichen Implementierung Kiselyovs vor allem in dem Punkt ab, dass sie nicht mit beliebigen Monaden sondern nur mit \lstinline|Future|-Monaden arbeitet.
-Der Grund hierfür wird sein, dass Play das Ziel hat, durch reaktive Programmierung ohne zu Blockieren möglichst effizient zu sein, weshalb sich die \lstinline|Future|-Monade anbietet, auch wenn im Gegenzug Flexibilität eingebüßt wird.
+Plays Implementierung der Iteratee-Streams weicht von der ursprünglichen Implementierung Kiselyovs vor allem in dem Punkt ab, dass sie nicht mit beliebigen Monaden, sondern nur mit \lstinline|Future|-Monaden arbeitet.
+Der Grund hierfür wird sein, dass Play das Ziel hat, durch reaktive Programmierung, ohne zu Blockieren, möglichst effizient zu sein, weshalb sich die \lstinline|Future|-Monade anbietet, auch wenn im Gegenzug Flexibilität eingebüßt wird.
 Dies ist aus Sicht des Autors vertretbar und hat für ihn beim Arbeiten mit Play keine Probleme dargestellt.
 
 Dass durch diese Streams aber auch komplexere Prozesse als die erste Beispielanwendung implementiert werden können, wurde mit der Twitter News-Anwendung gezeigt.
@@ -30,7 +30,7 @@ Mit verknüpften \lstinline|Enumeratee|s wurden weitere Tweets heruntergeladen u
 Erst nach vollständiger Verarbeitung wurden diese Daten wieder als \lstinline|Enumerator|s der Außenwelt zur Verfügung gestellt und deren Elemente an die verbundenen Clients gesendet.
 
 Play wird aktiv entwickelt und es wurden während der Entstehung dieser Arbeit mehrere neue Versionen veröffentlicht.
-Bei der Aktualisierung von Play 2.1 auf Play 2.2 mussten Teile des Codes angepasst werden, was bei einem solchen Versionssprung zu erwarten ist, bei häufigen Versionsänderungen aber zur Last werden kann.
+Bei der Aktualisierung von Play 2.1 auf Play 2.2 mussten Teile des Codes angepasst werden, was bei einem solchen Versionssprung zwar zu erwarten ist, bei häufigen Versionsänderungen aber zur Last werden kann.
 Außerdem wurde beim Schreiben dieser Arbeit ein Bug entdeckt, der aber in der nächsten Version korrigiert wird.
 Durch die aktive Entwicklung und Erweiterung des Frameworks ist Play möglicherweise weniger stabil, als ältere Frameworks, bekanntgewordene Fehler werden aber dadurch auch schnell korrigiert.
 Insgesamt bilden die von Play zur Verfügung gestellten Werkzeuge aus Sicht des Autors eine solide Grundlage, um Real-Time-Web-Anwendungen in einem reaktiven Stil zu entwickeln.
@@ -40,7 +40,7 @@ Insgesamt bilden die von Play zur Verfügung gestellten Werkzeuge aus Sicht des 
 \section{Ausblick} % (fold)
 \label{sec:ausblick}
 
-In dieser Arbeit wurde das Hauptaugenmerk auf Play, also die Server-Seite gerichtet und die Client-Seite nur oberflächlich behandelt.
+In dieser Arbeit wurde das Hauptaugenmerk auf Play, also die Server-Seite, gerichtet und die Client-Seite nur oberflächlich behandelt.
 Durch Einsatz eines passenden JavaScript-Frameworks könnte der clientseitige Code wesentlich besser strukturiert werden, wodurch sich Anwendungen mit einer komplexeren Client-Seite besser umsetzen ließen.
 Eine weitere Arbeit könnte sich auf die Programmierung der Browser-Seite mit z.~B. AngularJS \cite[vgl.][]{angular_js} oder \mbox{Ember.js} \cite[vgl.][]{ember_js} konzentrieren, die mit einem in Play geschriebenen Server-Backend kommuniziert. % \mbox to prevent line break
 
@@ -53,7 +53,7 @@ Play legt großen Wert auf reaktive Programmierung.
 Dieser Trend reduziert sich allerdings nicht alleine auf Play, sondern wird auch von Martin Odersky, dem Begründer von Scala, in einer Online-Vorlesung \cite[vgl.][]{principles_of_reactive_programming} gelehrt.
 Die in dieser Arbeit vorgestellten reaktiven Konzepte sind nur ein kleiner Teil der Dinge, die reaktive Programmierung ausmachen.
 Jonas Bonér, der Mitarbeiter bei Typesafe ist, hat unter Mitwirkung anderer Persönlichkeiten der Scala-Community das Reactive Manifesto \cite[vgl.][]{reactive_manifesto} veröffentlicht, in dem die Kernpunkte reaktiver Programmierung beschrieben werden.
-Dieses Thema bietet genügend Stoff für eine weiterführende Arbeit darüber.
+Dieses Thema bietet genügend Stoff für eine weiterführende Arbeit.
 
 % section ausblick (end)
 
